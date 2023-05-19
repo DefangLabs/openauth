@@ -3,7 +3,10 @@
 {
 	"name": "Docker in Docker",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
 			"version": "20.10",
@@ -29,7 +32,8 @@
 	"containerEnv": {
 		"COMPOSE_PROJECT_NAME": "defang-portal"
 	},
-	"postCreateCommand": ""
+	"postCreateCommand": "./.devcontainer/post-create-command.sh",
+	// "initializeCommand": "./.devcontainer/initialize-command.sh",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.

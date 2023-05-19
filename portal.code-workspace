@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "oathkeeper"
+		},
+		{
+			"path": "hasura"
 		}
 	],
 	"settings": {
@@ -33,17 +36,17 @@
 			{
 				"label": "Docker-Compose Up",
 				"type": "shell",
-				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml up -d",
+				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml up -d",
 			},
 			{
 				"label": "Docker-Compose Stop",
 				"type": "shell",
-				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml stop",
+				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml stop",
 			},
 			{
 				"label": "Docker-Compose Down",
 				"type": "shell",
-				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml down",
+				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml down",
 			},
 		]
 	},
