@@ -1,7 +1,5 @@
 version: "3.7"
 
-name: defang-portal
-
 services:
   kratos-migrate:
     image: oryd/kratos:v0.13.0
@@ -9,15 +7,15 @@ services:
       - DSN=postgres://kratos:secret@kratos-postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
     volumes:
       - type: bind
-        source: ./config
+        source: ./kratos/config
         target: /etc/config/kratos
     command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
     restart: on-failure
 
   kratos-selfservice-ui-node:
     image: oryd/kratos-selfservice-ui-node:v0.13.0
-    ports:
-      - "4455:4455"
+    # ports:
+    #   - "4455:4455"
     environment:
       - PORT=4455
       - SECURITY_MODE=
@@ -39,7 +37,7 @@ services:
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
     volumes:
       - type: bind
-        source: ./config
+        source: ./kratos/config
         target: /etc/config/kratos
 
   mailslurper:
@@ -56,3 +54,8 @@ services:
       - POSTGRES_USER=kratos
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=kratos
+    volumes:
+      - "kratos-postgres:/var/lib/postgresql/data:rw"
+
+volumes:
+  kratos-postgres:
