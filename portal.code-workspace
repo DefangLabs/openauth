@@ -27,6 +27,7 @@
 			"**/CVS": true,
 			"**/.DS_Store": true,
 			"**/Thumbs.db": true,
+			".pnpm-store": true,
 			"web": true,
 			"kratos": true,
 			"oathkeeper": true,
