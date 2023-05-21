@@ -33,6 +33,7 @@
 		"COMPOSE_PROJECT_NAME": "defang-portal"
 	},
 	"postCreateCommand": "./.devcontainer/post-create-command.sh",
+	"postStartCommand": "pnpm run nps start",
 	// "initializeCommand": "./.devcontainer/initialize-command.sh",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],

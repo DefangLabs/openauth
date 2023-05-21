@@ -2,7 +2,7 @@ import express from 'express';
 
 const app = express();
 
-app.get('/', (req, res) => {
+app.get('/jwt', (req, res) => {
     // check if we have an authorization header
     const authHeader = req.headers.authorization;
     if (!authHeader) {

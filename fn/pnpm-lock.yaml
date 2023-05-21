@@ -20,7 +20,7 @@ importers:
         specifier: ^1.9.7
         version: 1.9.7
 
-  apps/fetch-jwt:
+  apps/api:
     dependencies:
       '@types/express':
         specifier: ^4.17.17
