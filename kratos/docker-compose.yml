@@ -53,7 +53,4 @@ services:
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=kratos
     volumes:
-      - "kratos-postgres:/var/lib/postgresql/data:rw"
-
-volumes:
-  kratos-postgres:
+      - "./.data/kratos-postgres:/var/lib/postgresql/data:rw"

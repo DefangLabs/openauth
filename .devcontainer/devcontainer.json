@@ -25,7 +25,9 @@
 				"GitHub.copilot",
 				"GitHub.vscode-pull-request-github",
 				"dbaeumer.vscode-eslint",
-				"esbenp.prettier-vscode"
+				"esbenp.prettier-vscode",
+				"ms-azuretools.vscode-docker",
+				"ms-vscode-remote.remote-containers"
 			]
 		}
 	},
@@ -33,7 +35,7 @@
 		"COMPOSE_PROJECT_NAME": "defang-portal"
 	},
 	"postCreateCommand": "./.devcontainer/post-create-command.sh",
-	"postStartCommand": "pnpm run nps start",
+	"postStartCommand": "pnpm run nps",
 	// "initializeCommand": "./.devcontainer/initialize-command.sh",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],

@@ -19,6 +19,7 @@ module.exports = {
         default: npsUtils.concurrent.nps("dev.web", "dev.server"),
         server: {
             default: `${dockerComposeBase} up --build --force-recreate --remove-orphans`,
+            down: `${dockerComposeBase} down`,
         },
         web: {
             default: "cd web && pnpm dev",
