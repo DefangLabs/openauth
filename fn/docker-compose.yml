@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  fn:
+    build: 
+      context: ./fn
+      dockerfile: Dockerfile
+    command: dev
+    ports:
+      - 5001:5001
+    volumes:
+      - ./fn:/app

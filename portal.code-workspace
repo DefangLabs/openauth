@@ -1,0 +1,63 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "web"
+		},
+		{
+			"path": "kratos"
+		},
+		{
+			"path": "oathkeeper"
+		},
+		{
+			"path": "hasura"
+		},
+		{
+			"path": "fn"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/Thumbs.db": true,
+			".pnpm-store": true,
+			"web": true,
+			"kratos": true,
+			"oathkeeper": true,
+			"hasura": true,
+			"fn": true,
+		}
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Docker-Compose Up",
+				"type": "shell",
+				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml up -d",
+			},
+			{
+				"label": "Docker-Compose Stop",
+				"type": "shell",
+				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml stop",
+			},
+			{
+				"label": "Docker-Compose Down",
+				"type": "shell",
+				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml down",
+			},
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-azuretools.vscode-docker"
+		]
+	}
+}

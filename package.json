@@ -1,0 +1,16 @@
+{
+  "name": "portal-scripts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "nps": "nps"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nps": "^5.10.0",
+    "nps-utils": "^1.7.0"
+  }
+}
