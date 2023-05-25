@@ -34,7 +34,7 @@ errors:
     redirect:
       enabled: true
       config:
-        to: http://127.0.0.1:4455/login
+        to: http://127.0.0.1:3000/auth
         when:
           - error:
               - unauthorized
@@ -61,6 +61,12 @@ authenticators:
 
   noop:
     enabled: true
+
+  bearer_token:
+    enabled: false
+    config:
+      check_session_url: http://kratos:4433/sessions/whoami
+      preserve_path: true
 
 authorizers:
   allow:

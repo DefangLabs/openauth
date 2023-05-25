@@ -28,6 +28,17 @@ selfservice:
       enabled: true
     code:
       enabled: true
+    oidc:
+      enabled: true
+      config:
+        providers:
+          - id: github
+            provider: github
+            client_id: Iv1.ff8c6a9ba1eb04c3
+            client_secret: 094c54d3554f78be3cec944734a81e79a0c1196a
+            mapper_url: file:///etc/config/kratos/github-data-mapping.jsonnet
+            scope:
+              - user:email
 
   flows:
     error:

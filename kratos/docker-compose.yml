@@ -14,10 +14,8 @@ services:
 
   kratos-selfservice-ui-node:
     image: oryd/kratos-selfservice-ui-node:v0.13.0
-    # ports:
-    #   - "4455:4455"
     environment:
-      - PORT=4455
+      - PORT=4435
       - SECURITY_MODE=
       - KRATOS_PUBLIC_URL=http://kratos:4433/
       - KRATOS_BROWSER_URL=http://127.0.0.1:4433/
@@ -27,9 +25,6 @@ services:
     depends_on:
       - kratos-migrate
     image: oryd/kratos:v0.13.0
-    ports:
-      - "4433:4433" # public
-      - "4434:4434" # admin
     restart: unless-stopped
     environment:
       - DSN=postgres://kratos:secret@kratos-postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4

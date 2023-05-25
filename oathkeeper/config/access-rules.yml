@@ -4,8 +4,8 @@
     url: "http://kratos:4433"
     # strip_path: /.ory/kratos/public
   match:
-    # url: "http://127.0.0.1:4455/.ory/kratos/public/<**>"
-    url: "http://127.0.0.1:4455/<**>"
+    # url: "http://127.0.0.1:4433/.ory/kratos/public/<**>"
+    url: "http://127.0.0.1:4433/<**>"
     methods:
       - GET
       - POST
