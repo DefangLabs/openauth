@@ -23,7 +23,14 @@ module.exports = {
         },
         web: {
             default: "cd web && pnpm dev",
+        },
+        hasura: {
+            default: "cd hasura && hasura console",
         }
+    },
+    // docker-compose
+    dc: {
+      default: dockerComposeBase,
     }
   },
 };
