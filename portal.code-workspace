@@ -17,6 +17,9 @@
 		},
 		{
 			"path": "fn"
+		},
+		{
+			"path": "pulumi"
 		}
 	],
 	"settings": {
@@ -33,6 +36,7 @@
 			"oathkeeper": true,
 			"hasura": true,
 			"fn": true,
+			"pulumi": true,
 		}
 	},
 	"tasks": {
