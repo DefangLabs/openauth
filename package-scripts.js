@@ -16,16 +16,21 @@ module.exports = {
       script: "nps dev",
     },
     dev: {
-        default: npsUtils.concurrent.nps("dev.web", "dev.server"),
+        default: npsUtils.concurrent.nps("dev.server"),
         server: {
             default: `${dockerComposeBase} up --build --force-recreate --remove-orphans`,
             down: `${dockerComposeBase} down`,
         },
+        // Generally don't use this. We run the web client separately from this stuff.
         web: {
             default: "cd web && pnpm dev",
         },
         hasura: {
             default: "cd hasura && hasura console",
+        },
+        auth: {
+          restart: "nps 'dc stop oathkeeper kratos' && nps 'dc up -d --force-recreate oathkeeper kratos'",
+          logs: "nps 'dc logs -f --tail=400 oathkeeper kratos'",
         }
     },
     // docker-compose

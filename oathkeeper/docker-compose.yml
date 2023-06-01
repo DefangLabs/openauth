@@ -4,11 +4,7 @@ services:
   oathkeeper:
     image: oryd/oathkeeper:v0.40
     ports:
-      - 4433:4455 # Kratos public
-      - 4434:4455 # Kratos admin
-      - 4435:4455 # Kratos admin
-      - 5000:4455 # Hasura
-      - 5001:4455 # Fn
+      - 5000:4455 # App
       - 4455:4455 # Oathkeeper proxy
       - 4456:4456 # Oathkeeper aip
     depends_on:
@@ -20,3 +16,5 @@ services:
     restart: on-failure
     volumes:
       - ./oathkeeper/config:/etc/config/oathkeeper
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

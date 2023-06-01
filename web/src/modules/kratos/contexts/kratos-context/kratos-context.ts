@@ -1,17 +1,13 @@
+import { FrontendApi } from "@ory/client";
 import { createContext } from "react";
-import { FrontendApi } from "@ory/kratos-client";
+import { kratosClient } from "../../lib/kratos-client/kratos-client";
 
-const kratosClient = new FrontendApi(
-    undefined,
-    process.env.NEXT_PUBLIC_KRATOS_PUBLIC_URL
-);
-
-if (typeof window !== 'undefined') {
-    (window as any).kratos = kratosClient;
+interface KratosContext {
+  kratosClient: FrontendApi;
 }
 
 export const kratosContextDefaultValue = {
-    kratosClient: kratosClient,
+  kratosClient: kratosClient,
 };
 
 export const KratosContext = createContext(kratosContextDefaultValue);

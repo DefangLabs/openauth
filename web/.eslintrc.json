@@ -1,3 +1,16 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
+  "plugins": ["check-file"],
+  "rules": {
+    "check-file/filename-naming-convention": [
+      "error",
+      {
+        "**/*.{js,jsx,ts,tsx}": "KEBAB_CASE"
+      },
+      {
+        "ignoreMiddleExtensions": true
+      }
+    ]
+  },
+  "ignorePatterns": ["node_modules", ".next", "out", "**/supabase.types.ts"]
 }

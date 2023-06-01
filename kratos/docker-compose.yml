@@ -30,6 +30,9 @@ services:
       - DSN=postgres://kratos:secret@kratos-postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
       - LOG_LEVEL=trace
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+    expose:
+      - 4433 # Public port
+      - 4434 # Admin port
     volumes:
       - type: bind
         source: ./kratos/config

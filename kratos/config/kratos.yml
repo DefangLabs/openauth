@@ -4,20 +4,34 @@ dsn: memory
 
 serve:
   public:
-    base_url: http://127.0.0.1:4433/
+    base_url: http://localhost:5000/.ory/kratos/public/
     cors:
       enabled: true
+      allowed_origins:
+        - "http://localhost:5000"
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Cookie
+        - Content-Type
+      exposed_headers:
+        - Content-Type
+        - Set-Cookie
   admin:
     base_url: http://kratos:4434/
 
 selfservice:
-  default_browser_return_url: http://127.0.0.1:4455/
+  default_browser_return_url: http://localhost:5000/auth/
   allowed_return_urls:
-    - http://127.0.0.1:4455
+    - http://localhost:5000/auth/
+    - http://localhost:5000
 
   methods:
-    password:
-      enabled: true
     totp:
       config:
         issuer: Kratos
@@ -34,44 +48,44 @@ selfservice:
         providers:
           - id: github
             provider: github
-            client_id: Iv1.ff8c6a9ba1eb04c3
-            client_secret: 094c54d3554f78be3cec944734a81e79a0c1196a
+            client_id: 530ac29eb81d95ec590e
+            client_secret: 4896183459ab24a1ffc5bfe1092e5679a7eccc21
             mapper_url: file:///etc/config/kratos/github-data-mapping.jsonnet
             scope:
               - user:email
 
   flows:
     error:
-      ui_url: http://127.0.0.1:4455/error
+      ui_url: http://localhost:5000/auth/error
 
     settings:
-      ui_url: http://127.0.0.1:4455/settings
+      ui_url: http://localhost:5000/auth/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
 
     recovery:
       enabled: true
-      ui_url: http://127.0.0.1:4455/recovery
+      ui_url: http://localhost:5000/auth/recovery
       use: code
 
     verification:
       enabled: true
-      ui_url: http://127.0.0.1:4455/verification
+      ui_url: http://localhost:5000/auth/verification
       use: code
       after:
-        default_browser_return_url: http://127.0.0.1:4455/
+        default_browser_return_url: http://localhost:5000/auth/login
 
     logout:
       after:
-        default_browser_return_url: http://127.0.0.1:4455/login
+        default_browser_return_url: http://localhost:5000/auth/login
 
     login:
-      ui_url: http://127.0.0.1:4455/login
+      ui_url: http://localhost:5000/auth/login
       lifespan: 10m
 
     registration:
       lifespan: 10m
-      ui_url: http://127.0.0.1:4455/registration
+      ui_url: http://localhost:5000/auth/registration
       after:
         password:
           hooks:

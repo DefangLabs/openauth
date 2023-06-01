@@ -37,31 +37,51 @@
 			"hasura": true,
 			"fn": true,
 			"pulumi": true,
-		}
+		},
+		"eslint.probe": [
+			"javascript",
+			"javascriptreact",
+			"typescript",
+			"typescriptreact",
+			"html",
+			"vue",
+			"markdown",
+			"json"
+		]
 	},
 	"tasks": {
 		"version": "2.0.0",
 		"tasks": [
 			{
-				"label": "Docker-Compose Up",
+				"label": "server: docker-compose up",
 				"type": "shell",
 				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml up -d",
 			},
 			{
-				"label": "Docker-Compose Stop",
+				"label": "server: docker-compose stop",
 				"type": "shell",
 				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml stop",
 			},
 			{
-				"label": "Docker-Compose Down",
+				"label": "server: docker-compose down",
 				"type": "shell",
 				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml down",
 			},
+			{
+				"label": "web: run dev",
+				"type": "npm",
+				"script": "dev",
+				"runOptions": {
+					"runOn": "folderOpen",
+				},
+			}
 		]
 	},
 	"extensions": {
 		"recommendations": [
-			"ms-azuretools.vscode-docker"
+			"ms-azuretools.vscode-docker",
+			"dbaeumer.vscode-eslint",
+			"esbenp.prettier-vscode"
 		]
 	}
 }

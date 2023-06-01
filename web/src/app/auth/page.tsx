@@ -1,10 +1,11 @@
-import { Button, Typography } from "@mui/material";
+"use client";
 
-export function Auth() {
+import { Typography } from "@mui/material";
+
+export default function AuthPage() {
   return (
     <div>
       <Typography>Auth</Typography>
-      <Button>Login with GitHub</Button>
     </div>
   );
 }
