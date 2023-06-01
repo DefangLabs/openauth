@@ -3,11 +3,14 @@ log:
   format: json
 
 serve:
+  api:
+    port: 4456
   proxy:
+    port: 4455
     cors:
       enabled: true
       allowed_origins:
-        - "*"
+        - "http://localhost:5000"
       allowed_methods:
         - POST
         - GET
@@ -15,8 +18,9 @@ serve:
         - PATCH
         - DELETE
       allowed_headers:
-        - Authorization
-        - Content-Type
+        - "*"
+        # - Authorization
+        # - Content-Type
       exposed_headers:
         - Content-Type
       allow_credentials: true
@@ -30,7 +34,7 @@ errors:
     redirect:
       enabled: true
       config:
-        to: http://127.0.0.1:4455/login
+        to: http://127.0.0.1:3000/auth
         when:
           - error:
               - unauthorized
@@ -45,7 +49,7 @@ errors:
         verbose: true
 
 access_rules:
-  matching_strategy: glob
+  matching_strategy: regexp
   repositories:
     - file:///etc/config/oathkeeper/access-rules.yml
 
@@ -55,21 +59,19 @@ authenticators:
     config:
       subject: guest
 
-  cookie_session:
-    enabled: true
-    config:
-      check_session_url: http://kratos:4433/sessions/whoami
-      preserve_path: true
-      extra_from: "@this"
-      subject_from: "identity.id"
-      only:
-        - ory_kratos_session
-
   noop:
     enabled: true
 
+  bearer_token:
+    enabled: false
+    config:
+      check_session_url: http://kratos:4433/sessions/whoami
+      preserve_path: true
+
 authorizers:
   allow:
+    enabled: true
+  deny:
     enabled: true
 
 mutators:
