@@ -94,10 +94,13 @@
       - DELETE
       - PATCH
   authenticators:
-    - handler: noop
+    - handler: cookie_session
+    # - handler: bearer_token
+    # - handler: noop
   authorizer:
     handler: allow
   mutators:
-    - handler: noop
+    - handler: id_token
+    # - handler: noop
 
 

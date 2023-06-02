@@ -3,7 +3,7 @@
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
 import { kratosClient } from "@/modules/kratos/lib/kratos-client/kratos-client";
 import { Typography } from "@mui/material";
-import { LoginFlow, UpdateLoginFlowBody } from "@ory/client";
+import { LoginFlow, UpdateLoginFlowBody, GenericError } from "@ory/client";
 import { UserAuthCard } from "@ory/elements";
 import { AxiosError } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -30,7 +30,7 @@ export default function LoginPage() {
       kratosClient
         .getLoginFlow({ id })
         .then(({ data }) => setFlow(data))
-        .catch(handleError),
+        .catch(() => console.log("@@ getFlow error")),
     []
   );
 
@@ -46,7 +46,15 @@ export default function LoginPage() {
           setFlow(data);
           setUriFlow(data.id);
         })
-        .catch(handleError),
+        .catch((error: AxiosError) => {
+          const data = error.response?.data as { error: GenericError };
+          const errorId = data?.error?.id;
+          switch (errorId) {
+            case "session_already_available":
+              router.push("/auth");
+              break;
+          }
+        }),
     [handleError, setUriFlow]
   );
 

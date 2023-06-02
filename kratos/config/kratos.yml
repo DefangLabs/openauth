@@ -32,16 +32,16 @@ selfservice:
     - http://localhost:5000
 
   methods:
-    totp:
-      config:
-        issuer: Kratos
-      enabled: true
-    lookup_secret:
-      enabled: true
-    link:
-      enabled: true
-    code:
-      enabled: true
+    # totp:
+    #   config:
+    #     issuer: Kratos
+    #   enabled: true
+    # lookup_secret:
+    #   enabled: true
+    # link:
+    #   enabled: true
+    # code:
+    #   enabled: true
     oidc:
       enabled: true
       config:

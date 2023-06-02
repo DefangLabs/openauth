@@ -62,11 +62,24 @@ authenticators:
   noop:
     enabled: true
 
-  bearer_token:
-    enabled: false
+  cookie_session:
+    enabled: true
     config:
       check_session_url: http://kratos:4433/sessions/whoami
       preserve_path: true
+      extra_from: "@this"
+      subject_from: "identity.id"
+      only:
+        - ory_kratos_session
+
+  bearer_token:
+    enabled: true
+    config:
+      check_session_url: http://kratos:4433/sessions/whoami
+      preserve_path: true
+      preserve_query: true
+      token_from:
+        query_parameter: auth-token
 
 authorizers:
   allow:
@@ -81,9 +94,14 @@ mutators:
   id_token:
     enabled: true
     config:
-      issuer_url: http://127.0.0.1:4455/
+      issuer_url: http://localhost:5000/.ory/kratos/public
       jwks_url: file:///etc/config/oathkeeper/id_token.jwks.json
       claims: |
         {
-          "session": {{ .Extra | toJson }}
+          "identity": {{ .Extra.identity | toJson }},
+          "https://hasura.io/jwt/claims": {
+            "x-hasura-default-role": "user",
+            "x-hasura-allowed-roles": ["user"],
+            "x-hasura-user-id": {{ .Extra.identity.id | toJson }}
+          }
         }
