@@ -95,8 +95,8 @@
       - PATCH
   authenticators:
     - handler: cookie_session
-    # - handler: bearer_token
-    # - handler: noop
+    - handler: bearer_token
+    - handler: noop
   authorizer:
     handler: allow
   mutators:

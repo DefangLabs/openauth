@@ -57,7 +57,7 @@ authenticators:
   anonymous:
     enabled: true
     config:
-      subject: guest
+      subject: public
 
   noop:
     enabled: true
@@ -98,10 +98,12 @@ mutators:
       jwks_url: file:///etc/config/oathkeeper/id_token.jwks.json
       claims: |
         {
-          "identity": {{ .Extra.identity | toJson }},
+          {{- $identity := .Extra.identity -}}
+          "identity": {{ $identity | toJson }}{{ if $identity -}},
           "https://hasura.io/jwt/claims": {
             "x-hasura-default-role": "user",
             "x-hasura-allowed-roles": ["user"],
             "x-hasura-user-id": {{ .Extra.identity.id | toJson }}
           }
+          {{- end }}
         }

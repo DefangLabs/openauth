@@ -55,6 +55,7 @@ selfservice:
             mapper_url: file:///etc/config/kratos/github-data-mapping.jsonnet
             scope:
               - user:email
+              - read:user
 
   flows:
     error:
@@ -87,12 +88,12 @@ selfservice:
 
     registration:
       lifespan: 10m
-      ui_url: http://localhost:5000/auth/registration
-      after:
-        password:
-          hooks:
-            - hook: session
-            - hook: show_verification_ui
+      ui_url: http://localhost:5000/auth/login
+      # after:
+      #   password:
+      #     hooks:
+      #       - hook: session
+      #       - hook: show_verification_ui
 
 log:
   level: debug
