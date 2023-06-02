@@ -42,6 +42,8 @@ selfservice:
     #   enabled: true
     # code:
     #   enabled: true
+    password:
+      enabled: false
     oidc:
       enabled: true
       config:
