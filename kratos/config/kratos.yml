@@ -26,22 +26,24 @@ serve:
     base_url: http://kratos:4434/
 
 selfservice:
-  default_browser_return_url: http://localhost:5000/auth/
+  default_browser_return_url: http://localhost:5000
   allowed_return_urls:
-    - http://localhost:5000/auth/
+    - http://localhost:5000/auth
     - http://localhost:5000
 
   methods:
-    totp:
-      config:
-        issuer: Kratos
-      enabled: true
-    lookup_secret:
-      enabled: true
-    link:
-      enabled: true
-    code:
-      enabled: true
+    # totp:
+    #   config:
+    #     issuer: Kratos
+    #   enabled: true
+    # lookup_secret:
+    #   enabled: true
+    # link:
+    #   enabled: true
+    # code:
+    #   enabled: true
+    password:
+      enabled: false
     oidc:
       enabled: true
       config:
@@ -53,6 +55,7 @@ selfservice:
             mapper_url: file:///etc/config/kratos/github-data-mapping.jsonnet
             scope:
               - user:email
+              - read:user
 
   flows:
     error:
@@ -85,12 +88,12 @@ selfservice:
 
     registration:
       lifespan: 10m
-      ui_url: http://localhost:5000/auth/registration
-      after:
-        password:
-          hooks:
-            - hook: session
-            - hook: show_verification_ui
+      ui_url: http://localhost:5000/auth/login
+      # after:
+      #   password:
+      #     hooks:
+      #       - hook: session
+      #       - hook: show_verification_ui
 
 log:
   level: debug

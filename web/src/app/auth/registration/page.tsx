@@ -2,8 +2,12 @@
 
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
 import { kratosClient } from "@/modules/kratos/lib/kratos-client/kratos-client";
-import { Typography } from "@mui/material";
-import { RegistrationFlow, UpdateRegistrationFlowBody } from "@ory/client";
+import { Button, Typography } from "@mui/material";
+import {
+  GenericError,
+  RegistrationFlow,
+  UpdateRegistrationFlowBody,
+} from "@ory/client";
 import { UserAuthCard } from "@ory/elements";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -52,6 +56,7 @@ export default function LoginPage() {
   }, [createFlow, flowId, getFlow, returnTo]);
 
   const submitFlow = (values: UpdateRegistrationFlowBody) => {
+    console.log("@@ reg flow values", values);
     kratosClient
       .updateRegistrationFlow({
         flow: flowId,
@@ -67,7 +72,29 @@ export default function LoginPage() {
 
   return flow ? (
     <>
-      <Typography variant="h1">Login</Typography>
+      <Button
+        onClick={async () => {
+          kratosClient
+            .updateRegistrationFlow({
+              flow: flowId,
+              updateRegistrationFlowBody: {
+                method: "oidc",
+                provider: "github",
+              },
+            })
+            .catch((e) => {
+              const data = e.response?.data as {
+                error: GenericError;
+                redirect_browser_to: string;
+              };
+              if (data?.redirect_browser_to) {
+                window.location.href = data.redirect_browser_to;
+              }
+            });
+        }}
+      >
+        Register
+      </Button>
       <UserAuthCard
         title="Register"
         flowType="registration"

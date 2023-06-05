@@ -9,7 +9,6 @@ export function KratosProvider({ children }: KratosProviderProps) {
   const updateSession = useUpdateSession();
   useEffect(() => {
     updateSession();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [updateSession]);
   return <>{children}</>;
 }

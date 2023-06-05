@@ -1,1 +1,11 @@
-[]
+- name: Primary
+  kind: postgres
+  configuration:
+    connection_info:
+      database_url:
+        from_env: HASURA_GRAPHQL_DATABASE_URL
+      isolation_level: read-committed
+      use_prepared_statements: false
+  customization:
+    naming_convention: graphql-default
+  tables: "!include Primary/tables/tables.yaml"

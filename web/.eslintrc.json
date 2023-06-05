@@ -12,5 +12,5 @@
       }
     ]
   },
-  "ignorePatterns": ["node_modules", ".next", "out", "**/supabase.types.ts"]
+  "ignorePatterns": ["node_modules", ".next", "out"]
 }
