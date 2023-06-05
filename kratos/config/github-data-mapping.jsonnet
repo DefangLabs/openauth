@@ -12,7 +12,7 @@ local claims = {
       // by GitHub.
       [if 'email' in claims && claims.email_verified then 'email' else null]: claims.email,
       name: {
-        [if claims.name then 'first' else 'potato']: claims.name,
+        [if claims.name then 'first' else null]: claims.name,
       },
     },
   },

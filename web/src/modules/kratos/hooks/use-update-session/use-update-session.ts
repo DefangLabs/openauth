@@ -1,37 +1,42 @@
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { Session } from "@ory/client";
+import { useCallback } from "react";
 import { kratosClient } from "../../lib/kratos-client/kratos-client";
 import { useSession } from "../use-session/use-session";
 
+interface UseUpdateSessionOptions {
+  onSuccess?: (session: Session) => void;
+  onError?: (error: any) => void;
+}
+
 export function useUpdateSession() {
   const { setSession } = useSession();
-  const router = useRouter();
 
   return useCallback(
-    (redirect: boolean) => {
-      kratosClient
-        .toSession()
-        .then(({ data: session }) => {
-          setSession(session);
-        })
-        .catch((error) => {
-          setSession(null);
-          if (error.message) {
-            return (
-              redirect &&
-              router.push(
-                `/auth/login?error=${encodeURIComponent(error.message)}`
-              )
-            );
-          }
-          return (
-            redirect &&
-            router.push(
-              `/auth/login?error=${encodeURIComponent(JSON.stringify(error))}`
-            )
-          );
-        });
+    async ({ onSuccess, onError }: UseUpdateSessionOptions = {}) => {
+      setSession((prev) => ({
+        ...prev,
+        loading: true,
+      }));
+
+      try {
+        const { data } = await kratosClient.toSession();
+        const session = data;
+        setSession((prev) => ({
+          ...prev,
+          session,
+          loading: false,
+        }));
+        onSuccess?.(session);
+      } catch (error: any) {
+        setSession((prev) => ({
+          ...prev,
+          session: undefined,
+          error,
+          loading: false,
+        }));
+        onError?.(error);
+      }
     },
-    [router, setSession]
+    [setSession]
   );
 }

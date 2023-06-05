@@ -6,7 +6,7 @@ services:
     ports:
       - 5000:4455 # App
       - 4455:4455 # Oathkeeper proxy
-      - 4456:4456 # Oathkeeper aip
+      - 4456:4456 # Oathkeeper api
     depends_on:
       - kratos
     command:

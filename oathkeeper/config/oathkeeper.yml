@@ -11,6 +11,8 @@ serve:
       enabled: true
       allowed_origins:
         - "http://localhost:5000"
+        - "http://localhost:9695"
+        - "http://localhost:9693"
       allowed_methods:
         - POST
         - GET

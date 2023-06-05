@@ -26,9 +26,9 @@ serve:
     base_url: http://kratos:4434/
 
 selfservice:
-  default_browser_return_url: http://localhost:5000/auth/
+  default_browser_return_url: http://localhost:5000
   allowed_return_urls:
-    - http://localhost:5000/auth/
+    - http://localhost:5000/auth
     - http://localhost:5000
 
   methods:

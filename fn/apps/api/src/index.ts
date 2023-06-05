@@ -2,13 +2,12 @@ import express from 'express';
 
 const app = express();
 
-const TOKEN_HEADER = 'X-Session-Token';
 
 app.get('/jwt', (req, res) => {
     // check if we have an authorization header
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-        console.error(`Did you set the ${TOKEN_HEADER} header?`)
+        console.error(`Did you set the authorization header?`)
         res.status(401).send({ error: 'No authorization header found' });
         return;
     }
