@@ -63,21 +63,37 @@
 	},
 	"tasks": {
 		"version": "2.0.0",
+		"inputs": [
+			{
+				"id": "dockerComposeCommand",
+				"description": "docker-compose command",
+				"type": "promptString",
+			}
+		],
 		"tasks": [
 			{
-				"label": "server: docker-compose up",
+				"label": "backend: up",
 				"type": "shell",
-				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml up -d",
+				"command": "pnpm nps 'dc up -d'",
+				"problemMatcher": [],
 			},
 			{
-				"label": "server: docker-compose stop",
+				"label": "backend: stop",
 				"type": "shell",
-				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml stop",
+				"command": "pnpm nps 'dc stop'",
+				"problemMatcher": [],
 			},
 			{
-				"label": "server: docker-compose down",
+				"label": "backend: down",
 				"type": "shell",
-				"command": "docker-compose -f docker-compose.yml -f kratos/docker-compose.yml -f oathkeeper/docker-compose.yml -f hasura/docker-compose.yml down",
+				"command": "pnpm nps 'dc down'",
+				"problemMatcher": [],
+			},
+			{
+				"label": "backend: docker-compose",
+				"type": "shell",
+				"command": "pnpm nps 'dc ${input:dockerComposeCommand}'",
+				"problemMatcher": [],
 			},
 			{
 				"label": "web: run dev",
@@ -86,6 +102,16 @@
 				"runOptions": {
 					"runOn": "folderOpen",
 				},
+				"problemMatcher": [],
+			},
+			{
+				"label": "web: graphql watch",
+				"type": "npm",
+				"script": "graphql-codegen",
+				"runOptions": {
+					"runOn": "folderOpen",
+				},
+				"problemMatcher": [],
 			},
 			{
 				"label": "hasura: console",
