@@ -11,9 +11,9 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <ThemeProvider>
-      <KratosProvider>
-        <ApolloProvider>{children}</ApolloProvider>
-      </KratosProvider>
+      <ApolloProvider>
+        <KratosProvider>{children}</KratosProvider>
+      </ApolloProvider>
     </ThemeProvider>
   );
 }

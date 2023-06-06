@@ -75,56 +75,62 @@
 				"label": "backend: up",
 				"type": "shell",
 				"command": "pnpm nps 'dc up -d'",
-				"problemMatcher": [],
+				"problemMatcher": []
 			},
 			{
 				"label": "backend: stop",
 				"type": "shell",
 				"command": "pnpm nps 'dc stop'",
-				"problemMatcher": [],
+				"problemMatcher": []
 			},
 			{
 				"label": "backend: down",
 				"type": "shell",
 				"command": "pnpm nps 'dc down'",
-				"problemMatcher": [],
+				"problemMatcher": []
 			},
 			{
 				"label": "backend: docker-compose",
 				"type": "shell",
 				"command": "pnpm nps 'dc ${input:dockerComposeCommand}'",
-				"problemMatcher": [],
+				"problemMatcher": []
 			},
 			{
 				"label": "web: run dev",
 				"type": "npm",
 				"script": "dev",
 				"runOptions": {
-					"runOn": "folderOpen",
+					"runOn": "folderOpen"
 				},
-				"problemMatcher": [],
+				"options": {
+					"cwd": "${workspaceFolder}/web"
+				},
+				"problemMatcher": []
 			},
 			{
 				"label": "web: graphql watch",
-				"type": "npm",
-				"script": "graphql-codegen",
+				"type": "shell",
+				"command": "pnpm graphql-codegen --watch",
 				"runOptions": {
-					"runOn": "folderOpen",
+					"runOn": "folderOpen"
 				},
-				"problemMatcher": [],
+				"options": {
+					"cwd": "${workspaceFolder}/web"
+				},
+				"problemMatcher": []
 			},
 			{
 				"label": "hasura: console",
 				"type": "shell",
 				"command": "hasura console",
 				"runOptions": {
-					"runOn": "folderOpen",
+					"runOn": "folderOpen"
 				},
 				"options": {
-					"cwd": "${workspaceFolder}/hasura",
+					"cwd": "${workspaceFolder}/hasura"
 				},
-				"problemMatcher": [],
-			}
+				"problemMatcher": []
+			},
 		]
 	},
 	"extensions": {

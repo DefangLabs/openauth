@@ -1,7 +1,11 @@
 import { useSession } from "@/modules/kratos/hooks/use-session/use-session";
-import { useUserProfileQuery } from "../use-user-profile-query/use-user-profile-query";
+import { useQuery } from "@apollo/client";
+import { ProfileQuery } from "../../graphql/queries/profile-query";
 
 export function useCurrentUserProfileQuery() {
   const { session } = useSession();
-  return useUserProfileQuery({ id: session?.identity.id });
+  return useQuery(ProfileQuery, {
+    variables: { id: session?.identity.id },
+    skip: !session?.identity.id,
+  });
 }

@@ -13,10 +13,10 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  "\n  mutation InsertUserProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(object: $object) {\n      id\n      name\n    }\n  }\n":
-    types.InsertUserProfileMutationDocument,
-  "\n  query UserProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n":
-    types.UserProfileQueryDocument,
+  "\n  mutation InsertProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(object: $object) {\n      id\n      name\n    }\n  }\n":
+    types.InsertProfileMutationDocument,
+  "\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n":
+    types.ProfileQueryDocument,
 };
 
 /**
@@ -37,14 +37,14 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  mutation InsertUserProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(object: $object) {\n      id\n      name\n    }\n  }\n"
-): (typeof documents)["\n  mutation InsertUserProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(object: $object) {\n      id\n      name\n    }\n  }\n"];
+  source: "\n  mutation InsertProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(object: $object) {\n      id\n      name\n    }\n  }\n"
+): (typeof documents)["\n  mutation InsertProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(object: $object) {\n      id\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query UserProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n"
-): (typeof documents)["\n  query UserProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n"];
+  source: "\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n"
+): (typeof documents)["\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

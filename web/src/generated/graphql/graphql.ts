@@ -300,11 +300,11 @@ export type Subscription_RootProfilesStreamArgs = {
   where?: InputMaybe<ProfilesBoolExp>;
 };
 
-export type InsertUserProfileMutationMutationVariables = Exact<{
+export type InsertProfileMutationMutationVariables = Exact<{
   object: ProfilesInsertInput;
 }>;
 
-export type InsertUserProfileMutationMutation = {
+export type InsertProfileMutationMutation = {
   __typename?: "mutation_root";
   insertProfilesOne?: {
     __typename?: "Profiles";
@@ -313,11 +313,11 @@ export type InsertUserProfileMutationMutation = {
   } | null;
 };
 
-export type UserProfileQueryQueryVariables = Exact<{
+export type ProfileQueryQueryVariables = Exact<{
   id: Scalars["uuid"]["input"];
 }>;
 
-export type UserProfileQueryQuery = {
+export type ProfileQueryQuery = {
   __typename?: "query_root";
   profilesByPk?: {
     __typename?: "Profiles";
@@ -326,13 +326,13 @@ export type UserProfileQueryQuery = {
   } | null;
 };
 
-export const InsertUserProfileMutationDocument = {
+export const InsertProfileMutationDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "InsertUserProfileMutation" },
+      name: { kind: "Name", value: "InsertProfileMutation" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -378,16 +378,16 @@ export const InsertUserProfileMutationDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  InsertUserProfileMutationMutation,
-  InsertUserProfileMutationMutationVariables
+  InsertProfileMutationMutation,
+  InsertProfileMutationMutationVariables
 >;
-export const UserProfileQueryDocument = {
+export const ProfileQueryDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "UserProfileQuery" },
+      name: { kind: "Name", value: "ProfileQuery" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -426,7 +426,4 @@ export const UserProfileQueryDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<
-  UserProfileQueryQuery,
-  UserProfileQueryQueryVariables
->;
+} as unknown as DocumentNode<ProfileQueryQuery, ProfileQueryQueryVariables>;
