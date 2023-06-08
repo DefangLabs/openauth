@@ -14,7 +14,8 @@ export function useCreateProfile() {
 
   useEffect(() => {
     (async () => {
-      if (id) {
+      if (false) {
+      // if (id) {
         let profile = await profileQuery({
           id,
         });

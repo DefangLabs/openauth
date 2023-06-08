@@ -16,6 +16,7 @@
     "@graphql-codegen/client-preset": "^4.0.0",
     "@graphql-codegen/introspection": "^4.0.0",
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.2",
     "@ory/client": "^1.1.33",
     "@ory/elements": "0.0.1-beta.6",

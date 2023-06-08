@@ -1,6 +1,7 @@
 log:
-  level: debug
+  level: trace
   format: json
+  leak_sensitive_values: true
 
 serve:
   api:
@@ -101,11 +102,7 @@ mutators:
       claims: |
         {
           {{- $identity := .Extra.identity -}}
-          "identity": {{ $identity | toJson }}{{ if $identity -}},
-          "https://hasura.io/jwt/claims": {
-            "x-hasura-default-role": "user",
-            "x-hasura-allowed-roles": ["user"],
-            "x-hasura-user-id": {{ .Extra.identity.id | toJson }}
-          }
+          {{ if $identity -}}
+          "https://hasura.io/jwt/claims": "{\"x-hasura-default-role\": \"user\",\"x-hasura-allowed-roles\": [\"user\"],\"x-hasura-user-id\": \"{{ $identity.id }}\"}"
           {{- end }}
         }

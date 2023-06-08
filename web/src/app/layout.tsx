@@ -1,8 +1,8 @@
 import { Providers } from "@/helpers/providers/providers";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
 import { Layout } from "./components/layout/layout";
 
-const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata = {
   title: "Defang Portal",
@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={roboto.className}>
         <Providers>
           <Layout>{children}</Layout>
         </Providers>

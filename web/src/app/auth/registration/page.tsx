@@ -12,7 +12,7 @@ import { UserAuthCard } from "@ory/elements";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-export default function LoginPage() {
+export default function RegistrationPage() {
   const [flow, setFlow] = useState<RegistrationFlow>();
   const router = useRouter();
   const search = useSearchParams();

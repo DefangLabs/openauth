@@ -30,7 +30,8 @@
 				"ms-vscode-remote.remote-containers",
 				"Grafana.vscode-jsonnet",
 				"mtxr.sqltools",
-				"mtxr.sqltools-driver-pg"
+				"mtxr.sqltools-driver-pg",
+				"styled-components.vscode-styled-components"
 			]
 		}
 	},
@@ -41,7 +42,11 @@
 	"postStartCommand": "pnpm run nps",
 	// "initializeCommand": "./.devcontainer/initialize-command.sh",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [
+		5000,
+		9695,
+		9693,
+	],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "docker --version",
 	// Configure tool-specific properties.
