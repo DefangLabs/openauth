@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  heimdall:
+    build: 
+      context: ./heimdall
+      dockerfile: Dockerfile
+    volumes:
+      - ./heimdall/config:/heimdall/conf
+      - ./heimdall/config/keys/dev/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
+    depends_on:
+      - kratos
+    ports:
+      - 5000:4455
+      - 5001:4455
+      - 5002:4455
+      - 5003:4455
+      - 4457:4457
+    command: -c /heimdall/conf/config.yaml serve proxy
+    environment:
+      - RULES_FILE_PATH=/heimdall/conf/rules/dev.rules.yaml
+      - KEYSTORE_FILE_PATH=/heimdall/conf/keys/dev/keystore.pem

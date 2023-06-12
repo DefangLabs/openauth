@@ -1,12 +1,15 @@
-from node:19-alpine
+FROM node:19-alpine as builder
 
-USER node
-
-# install pnpm
-RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
+COPY . /app
 
 WORKDIR /app
 
-ENV PATH="/home/node/.local/share/pnpm:${PATH}"
+RUN npm install -g pnpm && pnpm install && pnpm build
+
+ARG APP=api
+
+WORKDIR /app/apps/${APP}
 
 ENTRYPOINT [ "pnpm" ]
+
+CMD [ "start" ]

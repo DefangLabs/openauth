@@ -20,6 +20,12 @@
 		},
 		{
 			"path": "pulumi"
+		},
+		{
+			"path": "heimdall"
+		},
+		{
+			"path": "../heimdall"
 		}
 	],
 	"settings": {
@@ -34,6 +40,7 @@
 			"web": true,
 			"kratos": true,
 			"oathkeeper": true,
+			"heimdall": true,
 			"hasura": true,
 			"fn": true,
 			"pulumi": true,

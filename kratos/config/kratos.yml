@@ -4,7 +4,7 @@ dsn: memory
 
 serve:
   public:
-    base_url: http://localhost:5000/.ory/kratos/public/
+    base_url: http://localhost:5001
     cors:
       enabled: true
       allowed_origins:

@@ -12,5 +12,10 @@
   "devDependencies": {
     "nps": "^5.10.0",
     "nps-utils": "^1.7.0"
+  },
+  "dependencies": {
+    "cryptography": "^1.2.3",
+    "node-jose": "^2.2.0",
+    "pem-jwk": "^2.0.0"
   }
 }

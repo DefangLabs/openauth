@@ -1,0 +1,6 @@
+config:
+  defang-portal:NEXT_PUBLIC_FN_URL: x
+  defang-portal:NEXT_PUBLIC_GRAPHQL_URL: x
+  defang-portal:NEXT_PUBLIC_KRATOS_PUBLIC_URL: x
+  defang-portal:dockerHubToken:
+    secure: AAABALtIrsLVKwyeeU80EQd1FP1idZHAdXILLdcpwK1MhmMFrgst8zxW4ejB1cSgpJPKma1H9gDtESSrW6GUh/Te/dY=

@@ -1,7 +1,12 @@
 import express from 'express';
+import cors from 'cors';
 
 const app = express();
 
+app.use(cors({
+    origin: '*', // Our IAP will prevent unauthorized access from the outside world. 
+    credentials: true,
+}));
 
 app.get('/jwt', (req, res) => {
     // check if we have an authorization header

@@ -3,8 +3,7 @@
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
 import { kratosClient } from "@/modules/kratos/lib/kratos-client/kratos-client";
 import { Button, Typography } from "@mui/material";
-import { LoginFlow, UpdateLoginFlowBody, GenericError } from "@ory/client";
-import { UserAuthCard } from "@ory/elements";
+import { GenericError, LoginFlow, UpdateLoginFlowBody } from "@ory/client";
 import { AxiosError } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";

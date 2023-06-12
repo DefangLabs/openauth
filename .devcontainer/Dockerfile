@@ -5,3 +5,5 @@ RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bas
 RUN cd ~ && curl https://raw.githubusercontent.com/ory/meta/master/install.sh | sh -s ory && \
     ls -a && \
     mv ./bin/ory /usr/local/bin/ory
+
+ENV PATH="/workspaces/portal/bin:$PATH"

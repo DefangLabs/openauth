@@ -1,0 +1,87 @@
+log:
+  level: debug
+
+# serve:
+#   proxy:
+#     cors:
+#       allowed_origins:
+#         - http://localhost:9695
+#         - http://localhost:5000
+#         - http://localhost:5001
+#         - http://localhost:5002
+#         - http://localhost:5003
+#       allowed_methods:
+#         - GET
+#         - HEAD
+#         - POST
+#         - PUT
+#         - DELETE
+#         - TRACE
+#         - PATCH
+
+signer:
+  key_store:
+    path: ${KEYSTORE_FILE_PATH:="/heimdall/conf/keys/dev/keystore.pem"}
+
+rules:
+  mechanisms:
+    authenticators:
+      - id: anonymous_authenticator
+        type: anonymous
+      - id: noop
+        type: noop
+      - id: kratos_session_cookie
+        type: generic
+        config:
+          identity_info_endpoint: http://kratos:4433/sessions/whoami
+          authentication_data_source:
+            - cookie: ory_kratos_session
+          forward_cookies:
+            - ory_kratos_session
+          subject:
+            id: "identity.id"
+          cache_ttl: 5m
+          session_lifespan:
+            active: active
+            issued_at: issued_at
+            not_before: authenticated_at
+            not_after: expires_at
+            time_format: "2006-01-02T15:04:05.999999Z07"
+            validity_leeway: 10s
+    authorizers:
+      - id: deny_all_requests
+        type: deny
+      - id: allow_all_requests
+        type: allow
+    unifiers:
+      - id: create_jwt
+        type: jwt
+        config:
+          ttl: 5m
+          claims: |
+            {
+              {{- $identity := .Subject.Attributes.identity -}}
+              {{ if $identity -}}
+              "https://hasura.io/jwt/claims": {
+                "x-hasura-default-role": "user",
+                "x-hasura-allowed-roles": ["user"],
+                "x-hasura-user-id": "{{ $identity.id }}"
+              }
+              {{- end }}
+            }
+      - id: noop
+        type: noop
+
+  default:
+    methods:
+      - GET
+      - POST
+    execute:
+      - authenticator: anonymous_authenticator
+      - authorizer: deny_all_requests
+      - unifier: create_jwt
+
+  providers:
+    file_system:
+      src: ${RULES_FILE_PATH:="/heimdall/conf/dev.rules.yaml"}
+      watch: true

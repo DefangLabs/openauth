@@ -5,7 +5,8 @@
         "@types/node": "^16"
     },
     "dependencies": {
-        "@defang-io/pulumi-defang": "^0.3.0",
+        "@defang-io/pulumi-defang": "^0.4.2",
+        "@pulumi/docker": "^4.2.4",
         "@pulumi/pulumi": "^3.0.0"
     }
 }

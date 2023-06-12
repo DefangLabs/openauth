@@ -103,6 +103,10 @@ mutators:
         {
           {{- $identity := .Extra.identity -}}
           {{ if $identity -}}
-          "https://hasura.io/jwt/claims": "{\"x-hasura-default-role\": \"user\",\"x-hasura-allowed-roles\": [\"user\"],\"x-hasura-user-id\": \"{{ $identity.id }}\"}"
+          "https://hasura.io/jwt/claims": {
+            "x-hasura-default-role": "user",
+            "x-hasura-allowed-roles": ["user"],
+            "x-hasura-user-id": "{{ $identity.id }}"
+          }
           {{- end }}
         }

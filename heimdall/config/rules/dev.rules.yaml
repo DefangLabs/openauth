@@ -1,0 +1,70 @@
+version: "1"
+rules:
+  - id: "nextjs:public"
+    upstream: http://host.docker.internal:3000
+    match:
+      url: "http://localhost:5000<(?!\\/svc).*>"
+      strategy: regex
+    methods:
+      - HEAD
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+    execute:
+      - authenticator: noop
+      - authorizer: allow_all_requests
+      - unifier: noop
+
+  - id: "kratos:public-api"
+    upstream: "http://kratos:4433"
+    strip_prefix: /svc/kratos
+    match:
+      url: "http://localhost:5000/svc/kratos/<**>"
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+    execute:
+      - authenticator: noop
+      - authorizer: allow_all_requests
+      - unifier: noop
+
+  - id: "hasura:public-api"
+    upstream: "http://hasura:8080"
+    strip_prefix: /svc/hasura
+    match:
+      url: "http://localhost:5000/svc/hasura/<**>"
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+    execute:
+      - authenticator: noop
+      - authorizer: allow_all_requests
+      - unifier: noop
+
+  - id: "fn:public-api"
+    upstream: "http://fn:5001"
+    strip_prefix: /svc/fn
+    match:
+      url: "http://localhost:5000/svc/fn/<**>"
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+    execute:
+      - authenticator: kratos_session_cookie
+      - authorizer: allow_all_requests
+      - unifier: create_jwt

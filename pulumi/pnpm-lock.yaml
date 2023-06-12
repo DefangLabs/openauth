@@ -2,8 +2,11 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@defang-io/pulumi-defang':
-    specifier: ^0.3.0
-    version: 0.3.0
+    specifier: ^0.4.2
+    version: 0.4.2
+  '@pulumi/docker':
+    specifier: ^4.2.4
+    version: 4.2.4
   '@pulumi/pulumi':
     specifier: ^3.0.0
     version: 3.0.0
@@ -15,9 +18,9 @@ devDependencies:
 
 packages:
 
-  /@defang-io/pulumi-defang@0.3.0:
-    resolution: {integrity: sha512-ezs6/9YgKiP+FvxGcDMvD8YL49PYxoFn2PwQM/aFcZS3JWfL2UcoJM0csbwXJ5RI2PbGmF+SuVS1TkHB0jldaw==}
-    engines: {node: '>=16'}
+  /@defang-io/pulumi-defang@0.4.2:
+    resolution: {integrity: sha512-MetRGPcOfHLvKySoYL80/CCZ4uCvlLv4jPJnCNddpCkvRI4oDo5rEGT2pzRA006j9AS4ZOzfWLbCHUJmzhbeUA==}
+    engines: {node: '>=14'}
     dependencies:
       '@grpc/grpc-js': 1.8.14
       '@pulumi/pulumi': 3.69.0
@@ -234,6 +237,16 @@ packages:
 
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
+    dev: false
+
+  /@pulumi/docker@4.2.4:
+    resolution: {integrity: sha512-nxuZR658NZRh1ObmjMa+QoByBYeuUBy0rjvmvqAhvbd0r1orBcZHYiHG6YSMTwK+fQ5J2As6Esekuu6BY2HV+Q==}
+    requiresBuild: true
+    dependencies:
+      '@pulumi/pulumi': 3.69.0
+      semver: 5.7.1
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /@pulumi/pulumi@3.0.0:

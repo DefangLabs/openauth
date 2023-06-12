@@ -2,7 +2,8 @@ const npsUtils = require("nps-utils");
 
 const dockerComposeDirs = [
     'kratos',
-    'oathkeeper',
+    // 'oathkeeper',
+    'heimdall',
     'hasura',
     'fn',
 ];

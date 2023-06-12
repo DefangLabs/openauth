@@ -4,7 +4,9 @@ services:
   fn:
     build: 
       context: ./fn
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
+      args:
+        - APP=/app
     command: dev
     volumes:
       - ./fn:/app
