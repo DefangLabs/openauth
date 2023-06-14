@@ -1,7 +1,7 @@
-FROM node:19-alpine
+FROM node:19-alpine as builder
 
-RUN npm install -g pnpm && pnpm install
+COPY . /app
 
 WORKDIR /app
 
-ENTRYPOINT [ "pnpm" ]
+RUN npm install -g pnpm

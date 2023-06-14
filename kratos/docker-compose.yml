@@ -12,15 +12,6 @@ services:
     command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
     restart: on-failure
 
-  kratos-selfservice-ui-node:
-    image: oryd/kratos-selfservice-ui-node:v0.13.0
-    environment:
-      - PORT=4435
-      - SECURITY_MODE=
-      - KRATOS_PUBLIC_URL=http://kratos:4433/
-      - KRATOS_BROWSER_URL=http://127.0.0.1:4433/
-    restart: on-failure
-
   kratos:
     depends_on:
       - kratos-migrate

@@ -20,3 +20,5 @@ services:
     environment:
       - RULES_FILE_PATH=/heimdall/conf/rules/dev.rules.yaml
       - KEYSTORE_FILE_PATH=/heimdall/conf/keys/dev/keystore.pem
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
