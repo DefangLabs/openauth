@@ -10,7 +10,7 @@ RUN cp /tmp/config.yaml /heimdall/conf/config.yaml
 RUN cp /tmp/rules/${ENV}.rules.yaml /heimdall/conf/rules/${ENV}.rules.yaml
 RUN cp -r /tmp/keys/${ENV} /heimdall/conf/keys/${ENV}
 
-FROM defangportal/heimdall-base:latest
+FROM defangportal/heimdall-base:path-rewrite.1
 
 COPY --from=builder /heimdall /heimdall
 COPY ./config/keys/dev/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt

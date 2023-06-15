@@ -1,7 +1,19 @@
-import { ThemeProvider as MuiThemeProvider, createTheme } from "@mui/material";
+import {
+  GlobalStyles,
+  ThemeProvider as MuiThemeProvider,
+  createTheme,
+} from "@mui/material";
+
+export const COLORS = {
+  primary: "#4491fd",
+  secondary: "#283665",
+} as const;
 
 const theme = createTheme({
-  palette: {},
+  palette: {
+    primary: { main: COLORS.primary },
+    secondary: { main: COLORS.secondary },
+  },
   typography: {
     fontFamily: 'Roboto, "Helvetica Neue", Arial, sans-serif',
     h1: {
@@ -29,5 +41,17 @@ const theme = createTheme({
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  return <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>;
+  return (
+    <MuiThemeProvider theme={theme}>
+      <GlobalStyles
+        styles={{
+          body: {
+            margin: 0,
+            padding: 0,
+          },
+        }}
+      />
+      {children}
+    </MuiThemeProvider>
+  );
 }

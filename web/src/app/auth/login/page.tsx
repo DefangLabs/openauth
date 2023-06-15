@@ -2,11 +2,12 @@
 
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
 import { kratosClient } from "@/modules/kratos/lib/kratos-client/kratos-client";
-import { Button, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { GenericError, LoginFlow, UpdateLoginFlowBody } from "@ory/client";
 import { AxiosError } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { SideBar } from "./components/sidebar/sidebar";
 
 export default function LoginPage() {
   const [flow, setFlow] = useState<LoginFlow>();
@@ -18,10 +19,6 @@ export default function LoginPage() {
   const returnTo = search.get("return_to") || "";
   const refresh = Boolean(search.get("refresh"));
   const aal = String(search.get("aal") || "");
-
-  const handleError = useCallback((error: AxiosError) => {
-    console.error(error);
-  }, []);
 
   const getFlow = useCallback(
     (id: string) =>
@@ -62,7 +59,7 @@ export default function LoginPage() {
               break;
           }
         }),
-    [handleError, setUriFlow]
+    [router, setUriFlow]
   );
 
   useEffect(() => {
@@ -77,49 +74,42 @@ export default function LoginPage() {
     createFlow(refresh, aal, returnTo);
   }, [aal, createFlow, flowId, getFlow, refresh, returnTo]);
 
-  const submitFlow = (values: UpdateLoginFlowBody) =>
-    kratosClient
-      .updateLoginFlow({
-        flow: String(flow?.id),
-        updateLoginFlowBody: values,
-      })
-      // We logged in successfully! Let's bring the user home.
-      .then(() => {
-        if (flow?.return_to) {
-          window.location.href = flow?.return_to;
-          return;
-        }
-        router.push("/");
-      })
-      .catch(handleError);
+  const login = useCallback(
+    () =>
+      kratosClient
+        .updateLoginFlow({
+          flow: String(flow?.id),
+          updateLoginFlowBody: {
+            method: "oidc",
+            provider: "github",
+          },
+        })
+        .catch((e) => {
+          const data = e.response?.data as {
+            error: GenericError;
+            redirect_browser_to: string;
+          };
+          if (data?.redirect_browser_to) {
+            window.location.href = data.redirect_browser_to;
+          }
+        }),
+    [flow?.id]
+  );
 
-  return flow ? (
+  return (
     <>
-      <Button
-        onClick={() =>
-          kratosClient
-            .updateLoginFlow({
-              flow: String(flow?.id),
-              updateLoginFlowBody: {
-                method: "oidc",
-                provider: "github",
-              },
-            })
-            .catch((e) => {
-              const data = e.response?.data as {
-                error: GenericError;
-                redirect_browser_to: string;
-              };
-              if (data?.redirect_browser_to) {
-                window.location.href = data.redirect_browser_to;
-              }
-            })
-        }
-      >
-        Login
-      </Button>
+      <Grid container sx={{ minHeight: "100vh" }}>
+        <Grid item sx={{ display: { xs: "none", sm: "block" } }} sm={6}>
+          <SideBar />
+        </Grid>
+        <Grid item sm={6}>
+          {flow ? (
+            <Button onClick={login}>Login</Button>
+          ) : (
+            <Typography>Loading...</Typography>
+          )}
+        </Grid>
+      </Grid>
     </>
-  ) : (
-    <Typography>Loading...</Typography>
   );
 }

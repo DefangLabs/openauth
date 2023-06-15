@@ -11,7 +11,7 @@ const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}
 export const service = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
-    ports: [{target: 8080, protocol: 'http'}],
+    ports: [{target: 4433, protocol: 'http'}],
     platform: 'linux/arm64',
     environment: {
         DSN: pulumi.interpolate`${kratosDatabaseUri}?sslmode=require&max_conns=5&max_idle_conns=2`

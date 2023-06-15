@@ -36,7 +36,7 @@ rules:
 
   - id: "fn:public-api"
     upstream: "http://fn:5001"
-    strip_prefix: svc
+    strip_prefix: /svc/fn
     match:
       url: "http://localhost:5000/svc/fn/<**>"
     methods:
