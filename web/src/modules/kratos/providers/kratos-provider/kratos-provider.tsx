@@ -14,7 +14,7 @@ export function KratosProvider({ children }: KratosProviderProps) {
   useEffect(() => {
     updateSession({
       onError: () => {
-        // router.push("/auth/login");
+        router.push("/auth/login");
       },
     });
   }, [router, updateSession]);

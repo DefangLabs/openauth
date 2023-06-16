@@ -2,12 +2,14 @@
 
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
 import { kratosClient } from "@/modules/kratos/lib/kratos-client/kratos-client";
-import { Button, Grid, Typography } from "@mui/material";
-import { GenericError, LoginFlow, UpdateLoginFlowBody } from "@ory/client";
+import { Grid } from "@mui/material";
+import { GenericError, LoginFlow } from "@ory/client";
 import { AxiosError } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { Main } from "./components/main/main";
 import { SideBar } from "./components/sidebar/sidebar";
+import { GRADIENTS } from "@/modules/mui/providers/theme-provider/theme-provider";
 
 export default function LoginPage() {
   const [flow, setFlow] = useState<LoginFlow>();
@@ -98,16 +100,15 @@ export default function LoginPage() {
 
   return (
     <>
-      <Grid container sx={{ minHeight: "100vh" }}>
-        <Grid item sx={{ display: { xs: "none", sm: "block" } }} sm={6}>
+      <Grid
+        container
+        sx={{ minHeight: "100vh", backgroundImage: GRADIENTS.primary }}
+      >
+        <Grid item sx={{ display: { xs: "none", sm: "flex" } }} sm={6}>
           <SideBar />
         </Grid>
-        <Grid item sm={6}>
-          {flow ? (
-            <Button onClick={login}>Login</Button>
-          ) : (
-            <Typography>Loading...</Typography>
-          )}
+        <Grid item sx={{ display: { xs: "none", sm: "flex" } }} sm={6}>
+          <Main login={login} loading={!flow} />
         </Grid>
       </Grid>
     </>
