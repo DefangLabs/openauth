@@ -57,15 +57,20 @@ rules:
       - id: create_jwt
         type: jwt
         config:
-          ttl: 5m
+          ttl: 1m
           claims: |
             {
-              {{- $identity := .Subject.Attributes.identity -}}
-              {{ if $identity -}}
+              {{ with .Subject.Attributes.identity -}}
               "https://hasura.io/jwt/claims": {
                 "x-hasura-default-role": "user",
                 "x-hasura-allowed-roles": ["user"],
-                "x-hasura-user-id": "{{ $identity.id }}"
+                "x-hasura-user-id": "{{ .id }}"
+              }
+              {{- else -}}
+              "https://hasura.io/jwt/claims": {
+                "x-hasura-default-role": "public",
+                "x-hasura-allowed-roles": ["public"],
+                "x-hasura-user-id": "anonymous"
               }
               {{- end }}
             }

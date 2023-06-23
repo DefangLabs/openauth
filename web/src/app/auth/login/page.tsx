@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Main } from "./components/main/main";
 import { SideBar } from "./components/sidebar/sidebar";
-import { GRADIENTS } from "@/modules/mui/providers/theme-provider/theme-provider";
+import { GRADIENTS } from "@/modules/mui/constants";
 
 export default function LoginPage() {
   const [flow, setFlow] = useState<LoginFlow>();

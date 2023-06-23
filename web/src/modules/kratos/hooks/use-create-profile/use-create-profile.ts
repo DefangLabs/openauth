@@ -3,9 +3,11 @@ import { ProfileQuery } from "@/modules/profiles/graphql/queries/profile-query";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { useSession } from "../use-session/use-session";
+import { useName } from "@/modules/profiles/hooks/use-name/use-name";
 
 export function useCreateProfile() {
   const { session } = useSession();
+  const name = useName();
   const id = session?.identity.id;
   const { refetch: profileQuery } = useQuery(ProfileQuery, {
     skip: true,
@@ -14,8 +16,7 @@ export function useCreateProfile() {
 
   useEffect(() => {
     (async () => {
-      if (false) {
-        // if (id) {
+      if (id) {
         let profile = await profileQuery({
           id,
         });
@@ -26,7 +27,7 @@ export function useCreateProfile() {
         await insertProfileMutation({
           variables: {
             object: {
-              name: session?.identity.traits.name,
+              name,
             },
           },
         });
@@ -36,5 +37,5 @@ export function useCreateProfile() {
         console.log("@@ post: profile", profile);
       }
     })();
-  }, [id]);
+  }, [id, insertProfileMutation, name, profileQuery]);
 }

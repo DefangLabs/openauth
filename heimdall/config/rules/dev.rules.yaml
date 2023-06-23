@@ -1,10 +1,13 @@
-version: "1"
+version: "1alpha2"
 rules:
   - id: "kratos:public-api"
-    upstream: "http://kratos:4433"
-    strip_prefix: /svc/kratos
     match:
       url: "http://localhost:5000/svc/kratos/<**>"
+    forward_to:
+      host: kratos:4433
+      rewrite:
+        scheme: http
+        strip_path_prefix: /svc/kratos
     methods:
       - GET
       - POST
@@ -18,10 +21,13 @@ rules:
       - unifier: noop
 
   - id: "hasura:public-api"
-    upstream: "http://hasura:8080"
-    strip_prefix: /svc/hasura
     match:
       url: "http://localhost:5000/svc/hasura/<**>"
+    forward_to:
+      host: hasura:8080
+      rewrite:
+        scheme: http
+        strip_path_prefix: /svc/hasura
     methods:
       - GET
       - POST
@@ -30,15 +36,19 @@ rules:
       - PATCH
       - OPTIONS
     execute:
+      - authenticator: kratos_session_cookie
       - authenticator: noop
       - authorizer: allow_all_requests
-      - unifier: noop
+      - unifier: create_jwt
 
   - id: "fn:public-api"
-    upstream: "http://fn:5001"
-    strip_prefix: /svc/fn
     match:
       url: "http://localhost:5000/svc/fn/<**>"
+    forward_to:
+      host: fn:5001
+      rewrite:
+        scheme: http
+        strip_path_prefix: /svc/fn
     methods:
       - GET
       - POST
@@ -53,9 +63,12 @@ rules:
       - unifier: create_jwt
 
   - id: "nextjs:public"
-    upstream: http://host.docker.internal:3000
     match:
       url: "http://localhost:5000<**>"
+    forward_to:
+      host: host.docker.internal:3000
+      rewrite:
+        scheme: http
     methods:
       - HEAD
       - GET

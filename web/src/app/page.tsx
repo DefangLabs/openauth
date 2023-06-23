@@ -1,10 +1,12 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function HomePage() {
-  return (
-    <div>
-      <h1>DOP</h1>
-    </div>
-  );
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/service");
+  }, [router]);
+  return <></>;
 }

@@ -43,9 +43,10 @@ export function SideBar() {
         <Typography color="white">
           With support for popular container runtimes like Docker and
           Kubernetes, container infrastructure platforms provide a flexible and
-          powerful foundation for modern application development. Whether you're
-          deploying to the cloud or on-premises, these platforms make it easy to
-          build, test, and deploy your applications with confidence.
+          powerful foundation for modern application development. Whether
+          you&apos;re deploying to the cloud or on-premises, these platforms
+          make it easy to build, test, and deploy your applications with
+          confidence.
         </Typography>
       </div>
     </Stack>

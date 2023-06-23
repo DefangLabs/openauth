@@ -18,11 +18,13 @@
     "@graphql-typed-document-node/core": "^3.2.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.2",
+    "@mui/x-data-grid": "^6.9.0",
     "@ory/client": "^1.1.33",
     "@ory/elements": "0.0.1-beta.6",
     "@types/node": "20.1.5",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
+    "@types/react-syntax-highlighter": "^15.5.7",
     "axios": "^1.4.0",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
@@ -34,6 +36,7 @@
     "next": "13.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-syntax-highlighter": "^15.5.0",
     "ts-node": "^10.9.1",
     "typescript": "5.0.4"
   }

@@ -1,6 +1,6 @@
 import { Providers } from "@/helpers/providers/providers";
 import { Roboto } from "next/font/google";
-import { Layout } from "./components/layout/layout";
+import { Layout } from "../components/layout/layout";
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
 
