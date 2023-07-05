@@ -4,7 +4,7 @@ import { dockerHubToken } from '../common/config';
 import { SERVICE_NAME, SERVICE_ROOT_PATH } from './constants';
 import { DOCKER_HUB_USERNAME } from '../common/constants';
 
-const imageName = `docker.io/defangportal/${SERVICE_NAME}:${pulumi.getStack()}`;
+const imageName = `docker.io/defangportal/${SERVICE_NAME}:${pulumi.getStack()}-${Math.floor(+new Date() / 1000)}`;
 
 export const image = new docker.Image(SERVICE_NAME, {
     imageName,

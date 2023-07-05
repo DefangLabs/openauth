@@ -66,6 +66,16 @@ rules:
                 "x-hasura-allowed-roles": ["user"],
                 "x-hasura-user-id": "{{ .id }}"
               }
+              {{- with .traits -}}
+                {{- with .github -}}
+                  {{- if .username -}}
+                    ,
+                    "https://defang.io/jwt/claims": {
+                      "github-username": "{{ .username }}"
+                    }
+                  {{- end -}}
+                {{- end -}}
+              {{- end -}}
               {{- else -}}
               "https://hasura.io/jwt/claims": {
                 "x-hasura-default-role": "public",

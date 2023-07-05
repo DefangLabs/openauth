@@ -26,6 +26,15 @@
               }
             }
           },
+          "github": {
+            "type": "object",
+            "properties": {
+              "username": {
+                "title": "Username",
+                "type": "string"
+              }
+            }
+          },
           "name": {
             "type": "object",
             "properties": {

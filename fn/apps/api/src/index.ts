@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import { jwtRouter } from './modules/jwt/jwt.router';
+import { servicesRouter } from './modules/services/services.router';
 
 const app = express();
 
@@ -8,26 +10,12 @@ app.use(cors({
     credentials: true,
 }));
 
-app.get('/jwt', (req, res) => {
-    // check if we have an authorization header
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-        console.error(`Did you set the authorization header?`)
-        res.status(401).send({ error: 'No authorization header found' });
-        return;
-    }
-
-    // check if the authorization header is a bearer token
-    const authHeaderParts = authHeader.split(' ');
-    if (authHeaderParts.length !== 2) {
-        res.status(401).send({ error: 'No bearer token found' });
-        return;
-    }
-
-    // return the token
-    const token = authHeaderParts[1];
-    res.send({ token });
+app.get('/', (req, res) => {
+    res.status(200).send({ message: 'I\'m alive, thank you very much.' });
 });
+
+app.use(jwtRouter)
+app.use(servicesRouter)
 
 app.listen(5001, () => {
     console.log('Server is listening on port 5001');

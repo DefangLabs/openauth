@@ -5,6 +5,9 @@ services:
     build: 
       context: ./heimdall
       dockerfile: Dockerfile
+      args:
+        - ENV=dev
+        - PUBLIC_ROOT_URL=http://localhost:5000
     volumes:
       - ./heimdall/config:/heimdall/conf
       - ./heimdall/config/keys/dev/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
