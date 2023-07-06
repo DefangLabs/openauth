@@ -1,5 +1,11 @@
+import { useServicesRequest } from "../use-services-request/use-services-request";
+
 export function useServices() {
-  return [
+  return useServicesRequest().data?.servicesList;
+}
+
+/**
+ * return [
     {
       id: "a2f10232-42dd-4f8a-8e5b-92d0c5b87276",
       name: "Service 1",
@@ -75,4 +81,4 @@ export function useServices() {
       },
     },
   ];
-}
+ */

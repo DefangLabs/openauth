@@ -37,6 +37,9 @@ module.exports = {
     // docker-compose
     dc: {
       default: dockerComposeBase,
+    },
+    build: {
+      web: 'cd web && pnpm build',
     }
   },
 };

@@ -11,24 +11,24 @@ export function Usage() {
       </Box>
       <Stack p={2} justifyContent="space-evenly" direction="row">
         <Stack>
-          <Typography variant="h3">{service?.vcpus}</Typography>
+          {/* <Typography variant="h3">{service?.vcpus}</Typography> */}
           <Typography>CPU</Typography>
         </Stack>
         <Stack>
-          <Typography variant="h3">{service?.tpu}</Typography>
+          {/* <Typography variant="h3">{service?.tpu}</Typography> */}
           <Typography>TPU</Typography>
         </Stack>
         <Stack>
-          <Typography variant="h3">{service?.memory}</Typography>
+          {/* <Typography variant="h3">{service?.memory}</Typography> */}
           <Typography>GB</Typography>
         </Stack>
         <Stack>
-          <Typography variant="h3">{service?.latencyMs}</Typography>
+          {/* <Typography variant="h3">{service?.latencyMs}</Typography> */}
           <Typography>Latency</Typography>
         </Stack>
         <Stack>
           <Typography variant="h3">
-            ${((service?.hourlyUsageCents || 0) / 100).toFixed(2)}
+            {/* ${((service?.hourlyUsageCents || 0) / 100).toFixed(2)} */}
           </Typography>
           <Typography>Usage</Typography>
         </Stack>

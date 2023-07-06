@@ -2,6 +2,8 @@ version: '3.7'
 
 services:
   fn:
+    env_file:
+      - ./fn/.env.local
     build: 
       context: ./fn
       dockerfile: dev.Dockerfile

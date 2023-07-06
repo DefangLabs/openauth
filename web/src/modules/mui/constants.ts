@@ -1,4 +1,4 @@
-import { hexToRgba } from "@/helpers/hex-to-rgba/hex-to-rgba";
+import { hexToRgba } from "@/lib/hex-to-rgba/hex-to-rgba";
 
 export const COLORS = {
   primary: "#283766",

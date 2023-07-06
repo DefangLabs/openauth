@@ -5,6 +5,7 @@ import { dockerHubToken } from '../common/config';
 import { SERVICE_NAME } from './constants';
 import { hasuraDatabaseUri } from './database';
 import { image } from './image';
+import { ROOT_URL } from '../common/constants';
 
 const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.imageName}`;
 
@@ -23,7 +24,7 @@ export const service = new DefangService(SERVICE_NAME, {
         HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: 'true',
         DEFANG_FN_ENDPOINT: pulumi.interpolate`https://${apiService.fqdn}`,
         HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: 'naming_convention',
-        // HASURA_GRAPHQL_JWT_SECRET: `${heimdallUrl}`
+        HASURA_GRAPHQL_JWT_SECRET: `${ROOT_URL}/.well-known/jwks`,
     },
     platform: 'linux/arm64',
     healthcheck: {

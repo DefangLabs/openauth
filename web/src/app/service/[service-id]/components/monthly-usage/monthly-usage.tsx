@@ -12,27 +12,27 @@ export function MonthlyUsage() {
       <Stack p={2} justifyContent="space-evenly" direction="row">
         <Stack>
           <Typography variant="h3">
-            {service?.monthlyUsage.vcpuHours}
+            {/* {service?.monthlyUsage.vcpuHours} */}
           </Typography>
           <Typography>vCPU Hours</Typography>
         </Stack>
         <Stack>
-          <Typography variant="h3">{service?.monthlyUsage.tpuHours}</Typography>
+          {/* <Typography variant="h3">{service?.monthlyUsage.tpuHours}</Typography> */}
           <Typography>TPU Hours</Typography>
         </Stack>
         <Stack>
-          <Typography variant="h3">{service?.monthlyUsage.gbHours}</Typography>
+          {/* <Typography variant="h3">{service?.monthlyUsage.gbHours}</Typography> */}
           <Typography>GB Hours</Typography>
         </Stack>
         <Stack>
           <Typography variant="h3">
-            {service?.monthlyUsage.avgLatency}
+            {/* {service?.monthlyUsage.avgLatency} */}
           </Typography>
           <Typography>Avg Latency</Typography>
         </Stack>
         <Stack>
           <Typography variant="h3">
-            ${((service?.monthlyUsage.usageMTD || 0) / 100).toFixed(2)}
+            {/* ${((service?.monthlyUsage.usageMTD || 0) / 100).toFixed(2)} */}
           </Typography>
           <Typography>Month-to-date</Typography>
         </Stack>

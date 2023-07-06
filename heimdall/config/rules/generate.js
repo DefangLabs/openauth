@@ -4,7 +4,7 @@ const path = require("path");
 
 
 // Define the input and output file paths
-const input_file = path.join(__dirname, "rules.yaml");
+const input_file = path.join(__dirname, "dev.rules.yaml");
 const output_file = path.join(__dirname, process.env.ENV+".rules.yaml");
 
 // Check if we have the required environment variables
@@ -28,30 +28,31 @@ fs.readFile(input_file, "utf8", (err, data) => {
   }
 
   // Replace heimdall dev domain with actal domain
-  let replaced_content = data.replace(
+  let replacedContent = data.replace(
     new RegExp("http://localhost:5000", "g"),
     process.env.PUBLIC_ROOT_URL
   );
+
   // Replace hasura dev domain with actual domain
-  replaced_content = data.replace(
+  replacedContent = replacedContent.replace(
     new RegExp("hasura:8080", "g"),
     process.env.HASURA_DOMAIN
   );
   // Replace hasura dev domain with actual domain
-  replaced_content = data.replace(
+  replacedContent = replacedContent.replace(
     new RegExp("fn:5001", "g"),
     process.env.FN_DOMAIN
   );
   // Replace nextjs dev domain with actual domain
-  replaced_content = data.replace(
+  replacedContent = replacedContent.replace(
     new RegExp("host.docker.internal:3000", "g"),
     process.env.NEXTJS_DOMAIN
   );
   // Production Scheme
-  replaced_content = data.replace(new RegExp("http", "g"), "https");
+  replacedContent = replacedContent.replace(new RegExp("http", "g"), "https");
 
   // Write the modified contents to the output file
-  fs.writeFile(output_file, replaced_content, "utf8", (err) => {
+  fs.writeFile(output_file, replacedContent, "utf8", (err) => {
     if (err) {
       console.error(err);
       return;

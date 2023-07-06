@@ -12,8 +12,6 @@ RUN mkdir -p /heimdall/conf/rules && mkdir -p /heimdall/conf/keys
 
 RUN node /tmp/rules/generate.js
 
-RUN cat /tmp/rules/${ENV}.rules.yaml
-
 RUN cp /tmp/config.yaml /heimdall/conf/config.yaml
 RUN cp /tmp/rules/${ENV}.rules.yaml /heimdall/conf/rules/rules.yaml
 RUN cp -r /tmp/keys/${ENV} /heimdall/conf/keys
@@ -22,3 +20,5 @@ FROM dadrus/heimdall:0.10.1-alpha
 
 COPY --from=builder /heimdall /heimdall
 COPY ./config/keys/dev/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+
+CMD [ "-c", "/heimdall/conf/config.yaml", "serve", "proxy" ]

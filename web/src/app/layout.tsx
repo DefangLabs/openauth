@@ -1,4 +1,4 @@
-import { Providers } from "@/helpers/providers/providers";
+import { Providers } from "@/lib/providers/providers";
 import { Roboto } from "next/font/google";
 import { Layout } from "../components/layout/layout";
 

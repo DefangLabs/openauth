@@ -16,3 +16,4 @@ config:
     secure: AAABAFgg+h7sGx3hEjSD3DJ0J4794rZPR0sp7+dUkyafk17W0E0gDdu8DeG4ulaB4Om+PX41ahpExEYlv+00R0+gUfr8CXoF8weXDQ==
   defang-portal:kratosSecretsCookie0:
     secure: AAABAJooImUMWhMa8s4bqxvoj4ncFrNb1EKorgmJnRpKGIADb3aJkw+pRp4XQunmhQC9+PRnxvQLmsBHa6K8OkgkkpyTiLDbUwVPlQ==
+  defang-portal:rootUrl: https://raphaeltm-heimdall-staging.prod1.defang.dev

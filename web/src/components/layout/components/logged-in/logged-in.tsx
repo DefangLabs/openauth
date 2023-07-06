@@ -84,9 +84,8 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               />
             </Link>
           </div>
-          <ServiceStats />
+          {/* <ServiceStats /> */}
           <NavButton href="/service">Services</NavButton>
-          <NavButton href="/account/test">Test</NavButton>
           <Grow />
           <div>
             <LogoutChip

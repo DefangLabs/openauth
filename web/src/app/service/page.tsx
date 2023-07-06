@@ -28,13 +28,13 @@ export default LoginRequired(function ServicesPage() {
         columns={[
           { field: "name", headerName: "Name", flex: 1 },
           { field: "fqdn", headerName: "Public URL", flex: 1 },
-          { field: "privateDomain", headerName: "Private URL", flex: 1 },
+          // { field: "privateDomain", headerName: "Private URL", flex: 1 },
           { field: "dockerImage", headerName: "Image", flex: 1 },
           { field: "port", headerName: "Port", flex: 1 },
-          { field: "latencyMs", headerName: "Latency", flex: 1 },
+          // { field: "latencyMs", headerName: "Latency", flex: 1 },
         ]}
         onRowClick={(params) => {
-          router.push(`/service/details?id=${params.row.id}`);
+          router.push(`/service/${params.row.id}`);
         }}
         sx={{
           "& .MuiDataGrid-cell": { cursor: "pointer" },
