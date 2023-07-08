@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@defang-io/pulumi-defang':
-    specifier: ^0.6.10
-    version: 0.6.10
+    specifier: ^0.7.0
+    version: 0.7.0
   '@pulumi/aiven':
     specifier: ^6.3.1
     version: 6.3.1
@@ -27,8 +27,8 @@ devDependencies:
 
 packages:
 
-  /@defang-io/pulumi-defang@0.6.10:
-    resolution: {integrity: sha512-/8riBBMcl4sqChogagfMiXwrJU+rAxK0kxV3LbSuZyDIyGeuZdNxk5gpiokT/NeMGGKAcr66JPp1CNO5PxYnSA==}
+  /@defang-io/pulumi-defang@0.7.0:
+    resolution: {integrity: sha512-T66TXrPlijGzNGmL2dYQTwgT2O0ghOA0pSO9Bm3nAFd4/l2IknD1UmlZFyD8mbW31m7IHlNq3+EPQefVXlqpJw==}
     engines: {node: '>=16'}
     dependencies:
       '@pulumi/pulumi': 3.69.0

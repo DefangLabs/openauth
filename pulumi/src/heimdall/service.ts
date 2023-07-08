@@ -10,11 +10,17 @@ const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}
 export const service = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
-    ports: [{target: 4455, protocol: 'http', mode: 'ingress'}],
+    ports: [
+        {target: 4457, protocol: 'http', mode: 'ingress'},
+        {target: 4455, protocol: 'http', mode: 'ingress'},
+    ],
     environment: {
         RULES_FILE_PATH: '/heimdall/conf/rules/rules.yaml',
         KEYSTORE_FILE_PATH: '/heimdall/conf/keys/keystore.pem',
         RULES_MECHANISMS_AUTHENTICATORS_2_CONFIG_IDENTITY_INFO_ENDPOINT: pulumi.interpolate`https://${kratosService.fqdn}/sessions/whoami`
     },
     platform: 'linux/arm64',
+    healthcheck: {
+        test: ['CMD', '/.well-known/health']
+    }
 }, {dependsOn: [image, kratosService]});

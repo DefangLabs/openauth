@@ -14,11 +14,14 @@ RUN node /tmp/rules/generate.js
 
 RUN cp /tmp/config.yaml /heimdall/conf/config.yaml
 RUN cp /tmp/rules/${ENV}.rules.yaml /heimdall/conf/rules/rules.yaml
-RUN cp -r /tmp/keys/${ENV} /heimdall/conf/keys
+RUN cp -r /tmp/keys/${ENV}/* /heimdall/conf/keys
 
 FROM dadrus/heimdall:0.10.1-alpha
 
 COPY --from=builder /heimdall /heimdall
-COPY ./config/keys/dev/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=builder /heimdall/conf/keys/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+
+ENV RULES_FILE_PATH='/heimdall/conf/rules/rules.yaml'
+ENV KEYSTORE_FILE_PATH='/heimdall/conf/keys/keystore.pem'
 
 CMD [ "-c", "/heimdall/conf/config.yaml", "serve", "proxy" ]

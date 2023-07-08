@@ -32,7 +32,10 @@ module.exports = {
         auth: {
           restart: "nps 'dc stop oathkeeper kratos' && nps 'dc up -d --force-recreate oathkeeper kratos'",
           logs: "nps 'dc logs -f --tail=400 oathkeeper kratos'",
-        }
+        },
+        heimdall: {
+          generateCerts: "docker run --rm -v ./:/portal -w /portal/heimdall/config/keys ubuntu ./generate.sh",
+        },
     },
     // docker-compose
     dc: {
