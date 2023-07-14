@@ -24,10 +24,10 @@ export const service = new DefangService(SERVICE_NAME, {
         HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: 'true',
         DEFANG_FN_ENDPOINT: pulumi.interpolate`https://${apiService.fqdn}`,
         HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: 'naming_convention',
-        HASURA_GRAPHQL_JWT_SECRET: `${ROOT_URL}/.well-known/jwks`,
+        HASURA_GRAPHQL_JWT_SECRET: `{"jwk_url":"${ROOT_URL.replace('--4455', '')}/.well-known/jwks"}`,
     },
     platform: 'linux/arm64',
     healthcheck: {
-        test: ['HTTP', '/healthz']
+        test: ['CMD', 'curl', 'http://localhost:8080/healthz']
     }
 }, {dependsOn: [image, apiService]});

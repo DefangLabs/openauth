@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon src/* --exec \"ts-node src/index.ts\"",
-    "build": "tsc",
+    "dev": "nodemon src/* --exec \"ts-node src/index.ts\" --exitcrash",
+    "build": "tsc && cp -r src/lib dist/lib",
     "start": "node dist/index.js",
     "lint": "echo lint"
   },
@@ -21,8 +21,10 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.8.17",
+    "@types/express-ws": "^3.0.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-ws": "^5.0.2",
     "google-protobuf": "^3.21.2"
   }
 }

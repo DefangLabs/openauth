@@ -15,9 +15,6 @@ services:
       - kratos
     ports:
       - 5000:4455
-      - 5001:4455
-      - 5002:4455
-      - 5003:4455
       - 4457:4457
     command: -c /heimdall/conf/config.yaml serve proxy
     environment:

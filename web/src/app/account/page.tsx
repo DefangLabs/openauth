@@ -28,11 +28,8 @@ export default LoginRequired(function AccountPage() {
     InsertProfileMutation
   );
 
-  console.log("test");
-
   useEffect(() => {
     if (profile) {
-      console.log("@@ profile", profile);
       setForm({
         name: profile?.name || "",
       });

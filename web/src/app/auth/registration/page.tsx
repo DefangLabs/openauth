@@ -56,7 +56,6 @@ export default function RegistrationPage() {
   }, [createFlow, flowId, getFlow, returnTo]);
 
   const submitFlow = (values: UpdateRegistrationFlowBody) => {
-    console.log("@@ reg flow values", values);
     kratosClient
       .updateRegistrationFlow({
         flow: flowId,

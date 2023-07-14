@@ -1,23 +1,10 @@
 log:
   level: debug
 
-# serve:
-#   proxy:
-#     cors:
-#       allowed_origins:
-#         - http://localhost:9695
-#         - http://localhost:5000
-#         - http://localhost:5001
-#         - http://localhost:5002
-#         - http://localhost:5003
-#       allowed_methods:
-#         - GET
-#         - HEAD
-#         - POST
-#         - PUT
-#         - DELETE
-#         - TRACE
-#         - PATCH
+serve:
+  proxy:
+    trusted_proxies:
+      - 10.0.0.8
 
 signer:
   key_store:

@@ -3,6 +3,9 @@
   "compilerOptions": {
     "isolatedModules": false,
     "outDir": "dist",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
   },
   "include": ["src/index.ts"],
   "exclude": ["node_modules"]

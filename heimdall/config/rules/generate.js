@@ -35,6 +35,11 @@ fs.readFile(input_file, "utf8", (err, data) => {
 
   // Replace hasura dev domain with actual domain
   replacedContent = replacedContent.replace(
+    new RegExp("kratos:4433", "g"),
+    process.env.KRATOS_DOMAIN
+  );
+  // Replace hasura dev domain with actual domain
+  replacedContent = replacedContent.replace(
     new RegExp("hasura:8080", "g"),
     process.env.HASURA_DOMAIN
   );
@@ -49,8 +54,8 @@ fs.readFile(input_file, "utf8", (err, data) => {
     process.env.NEXTJS_DOMAIN
   );
   // Production Scheme
-  replacedContent = replacedContent.replace(new RegExp("http", "g"), "https");
-
+  replacedContent = replacedContent.replace(/scheme:\s*http/g, "scheme: https");
+  
   // Write the modified contents to the output file
   fs.writeFile(output_file, replacedContent, "utf8", (err) => {
     if (err) {

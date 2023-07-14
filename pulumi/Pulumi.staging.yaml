@@ -13,7 +13,9 @@ config:
   defang-portal:kratosDatabasePassword:
     secure: AAABABF6h45Q7UQtN4yutGPricZ0X8vyk9AtZ0b3X+eGfQsyGJO0HEMcq18UHXAMogtUNHehIw6t
   defang-portal:kratosSecretsCipher0:
-    secure: AAABAFgg+h7sGx3hEjSD3DJ0J4794rZPR0sp7+dUkyafk17W0E0gDdu8DeG4ulaB4Om+PX41ahpExEYlv+00R0+gUfr8CXoF8weXDQ==
+    secure: AAABAKpzgsT7rIQ/P9VGews/oXcAMOBYAk64I2BHsVHolekwBhQEKQnVpwFsc8JSLh7xk33dlhs+9yOQKNqdgA==
   defang-portal:kratosSecretsCookie0:
     secure: AAABAJooImUMWhMa8s4bqxvoj4ncFrNb1EKorgmJnRpKGIADb3aJkw+pRp4XQunmhQC9+PRnxvQLmsBHa6K8OkgkkpyTiLDbUwVPlQ==
-  defang-portal:rootUrl: https://raphaeltm-heimdall-staging.prod1.defang.dev
+  defang-portal:rootUrl: https://raphaeltm-heimdall-staging--4455.prod1.defang.dev
+  defang-portal:fabric: fabric-prod1.defang.dev:443
+  defang-portal:signer: heimdall

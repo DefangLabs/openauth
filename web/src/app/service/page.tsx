@@ -34,7 +34,7 @@ export default LoginRequired(function ServicesPage() {
           // { field: "latencyMs", headerName: "Latency", flex: 1 },
         ]}
         onRowClick={(params) => {
-          router.push(`/service/${params.row.id}`);
+          router.push(`/service/${params.row.name}`);
         }}
         sx={{
           "& .MuiDataGrid-cell": { cursor: "pointer" },

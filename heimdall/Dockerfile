@@ -3,6 +3,7 @@ FROM node:18.16.1-alpine as builder
 ARG ENV=dev
 ARG PUBLIC_ROOT_URL="http://localhost:5000"
 ARG HASURA_DOMAIN="hasura:8080"
+ARG KRATOS_DOMAIN="kratos:4433"
 ARG FN_DOMAIN="fn:5001"
 ARG NEXTJS_DOMAIN="host.docker.internal:3000"
 

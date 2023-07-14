@@ -1,0 +1,13 @@
+15:04:02.191744 2023-07-11T22:04:02Z INF TX started _client_ip=10.0.34.31 _http_host=raphaeltm-heimdall-staging--4455.prod1.defang.dev _http_method=GET _http_path=/svc/fn/services _http_scheme=http _http_user_agent=PostmanRuntime/7.32.3 _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534 _tx_start=1689113042
+15:04:02.191821 2023-07-11T22:04:02Z DBG Proxy endpoint called _method=GET _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534 _url=http://raphaeltm-heimdall-staging--4455.prod1.defang.dev/svc/fn/services
+15:04:02.191840 2023-07-11T22:04:02Z DBG Executing rule _id=fn:public-api _span_id=fe762de91c9d4656 _src=file_system:/heimdall/conf/rules/rules.yaml _trace_id=9aaf7819e74205bec194de8a2fe40534
+15:04:02.191848 2023-07-11T22:04:02Z DBG Authenticating using generic authenticator _id=kratos_session_cookie _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534
+15:04:02.191854 2023-07-11T22:04:02Z INF Pipeline step execution failed error="authentication error: failed to get authentication data from request: argument error: no 'ory_kratos_session' cookie present" _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534
+15:04:02.191880 2023-07-11T22:04:02Z INF Falling back to next configured one. _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534
+15:04:02.191889 2023-07-11T22:04:02Z DBG Authenticating using noop authenticator _id=noop _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534
+15:04:02.191895 2023-07-11T22:04:02Z DBG Authorizing using allow authorizer _id=allow_all_requests _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534
+15:04:02.191912 2023-07-11T22:04:02Z DBG Unifying using JWT unifier _id=create_jwt _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534
+15:04:02.191920 2023-07-11T22:04:02Z DBG Reusing JWT from cache _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534
+15:04:02.191940 2023-07-11T22:04:02Z DBG Finalizing request _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534
+15:04:02.191956 2023-07-11T22:04:02Z INF Forwarding request _method=GET _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534 _upstream=http://raphaeltm-api-staging.prod1.defang.dev/services
+15:04:07.192982 2023-07-11T22:04:07Z ERR Internal error occurred error="dialing to the given TCP address timed out" _span_id=fe762de91c9d4656 _trace_id=9aaf7819e74205bec194de8a2fe40534

@@ -20,7 +20,6 @@ export function useCreateProfile() {
         let profile = await profileQuery({
           id,
         });
-        console.log("@@ pre: profile", profile);
 
         if (!!profile.data.profilesByPk) return;
 
@@ -33,8 +32,6 @@ export function useCreateProfile() {
         });
 
         profile = await profileQuery({ id });
-
-        console.log("@@ post: profile", profile);
       }
     })();
   }, [id, insertProfileMutation, name, profileQuery]);

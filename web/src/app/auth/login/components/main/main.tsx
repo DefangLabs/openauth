@@ -35,7 +35,11 @@ export function Main({ login, loading }: MainProps) {
         </Button>
       )}
       <Typography>
-        By proceeding you are agreeing to our terms of service.
+        By proceeding you are agreeing to our{" "}
+        <a href="https://defang.io/terms-conditions.html" target="_blank">
+          Terms and Conditions
+        </a>
+        .
       </Typography>
     </Stack>
   );
