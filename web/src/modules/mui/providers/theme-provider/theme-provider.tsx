@@ -58,11 +58,11 @@ const theme = createTheme({
         disableElevation: true,
       },
     },
-    MuiPaper: {
-      defaultProps: {
-        elevation: 0,
-      },
-    },
+    // MuiPaper: {
+    //   defaultProps: {
+    //     elevation: 1,
+    //   },
+    // },
   },
 });
 

@@ -18,6 +18,7 @@ export default LoginRequired(function ServicesPage() {
         <Box flexGrow={1} />
         <TextField
           label="Search"
+          size="small"
           variant="outlined"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -26,7 +27,7 @@ export default LoginRequired(function ServicesPage() {
       <DataGrid
         style={{ minHeight: "calc(100vh - 200px)" }}
         columns={[
-          { field: "name", headerName: "Name", flex: 1 },
+          { field: "name", headerName: "Name", width: 150 },
           { field: "fqdn", headerName: "Public URL", flex: 1 },
           // { field: "privateDomain", headerName: "Private URL", flex: 1 },
           { field: "dockerImage", headerName: "Image", flex: 1 },

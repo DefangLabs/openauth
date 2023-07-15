@@ -1,0 +1,56 @@
+import {
+  Stack,
+  Typography,
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  IconButton,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useService } from "../../hooks/use-service/use-service";
+import { useState } from "react";
+
+function Hideable({ children }: { children: React.ReactNode }) {
+  const [hidden, setHidden] = useState(true);
+  return (
+    <Stack direction="row" spacing={2} justifyContent="space-between">
+      <span>{hidden ? "***********" : children}</span>
+      <IconButton onClick={() => setHidden((prev) => !prev)}>
+        {hidden ? <Visibility /> : <VisibilityOff />}
+      </IconButton>
+    </Stack>
+  );
+}
+
+export function Environment() {
+  const { service } = useService();
+  return Object.keys(service?.service?.environment || {}).length > 1 ? (
+    <Stack spacing={2}>
+      <Typography variant="h2">Environment</Typography>
+      <TableContainer component={Paper}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Variable</TableCell>
+              <TableCell>Value</TableCell>
+            </TableRow>
+          </TableHead>
+          {Object.entries(service?.service?.environment || {}).map(
+            ([key, value], i) => (
+              <TableRow key={key}>
+                <TableCell>{key}</TableCell>
+                <TableCell>
+                  <Hideable>{value}</Hideable>
+                </TableCell>
+              </TableRow>
+            )
+          )}
+        </Table>
+      </TableContainer>
+    </Stack>
+  ) : null;
+}

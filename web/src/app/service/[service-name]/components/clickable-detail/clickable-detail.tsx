@@ -10,7 +10,7 @@ import { MouseEvent, useState } from "react";
 
 interface ClickableDetailProps {
   title: string;
-  content: string | number;
+  content: string | number | undefined;
 }
 
 const ClickableTypography = styled(Typography)`
@@ -28,6 +28,8 @@ export function ClickableDetail({ title, content }: ClickableDetailProps) {
     navigator.clipboard.writeText((e.target as any).textContent || "error");
     setOpen(true);
   };
+
+  if (!content) return null;
 
   return (
     <Box>
