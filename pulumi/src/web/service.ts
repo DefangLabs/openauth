@@ -9,7 +9,7 @@ const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}
 export const service = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
-    ports: [{target: 3000, protocol: 'http', mode: 'ingress'}],
+    ports: [{target: 3000, protocol: 'http', mode: 'host'}],
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:3000/']
     },

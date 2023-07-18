@@ -12,7 +12,7 @@ const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}
 export const service = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
-    ports: [{ target: 4433, protocol: 'http', mode: 'ingress' }],
+    ports: [{ target: 4433, protocol: 'http', mode: 'host' }],
     platform: 'linux/arm64',
     environment: {
         DSN: pulumi.interpolate`${kratosDatabaseUri}?sslmode=require&max_conns=5&max_idle_conns=2`,
@@ -37,5 +37,6 @@ export const service = new DefangService(SERVICE_NAME, {
     },
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:4433/health/alive'],
-    }
+    },
+    internal: false,
 }, { dependsOn: [image, migrationCommand, kratosDatabase, kratosUser] });

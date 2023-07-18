@@ -11,9 +11,12 @@ COPY ./config /tmp
 
 RUN mkdir -p /heimdall/conf/rules && mkdir -p /heimdall/conf/keys
 
-RUN node /tmp/rules/generate.js
+RUN node /tmp/rules/generateRules.js
+RUN node /tmp/generateConfig.js
+RUN cat /tmp/config.yaml
 
 RUN cp /tmp/config.yaml /heimdall/conf/config.yaml
+RUN cat /heimdall/conf/config.yaml
 RUN cp /tmp/rules/${ENV}.rules.yaml /heimdall/conf/rules/rules.yaml
 RUN cp -r /tmp/keys/${ENV}/* /heimdall/conf/keys
 

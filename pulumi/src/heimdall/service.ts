@@ -17,8 +17,6 @@ export const service = new DefangService(SERVICE_NAME, {
     environment: {
         RULES_FILE_PATH: '/heimdall/conf/rules/rules.yaml',
         KEYSTORE_FILE_PATH: '/heimdall/conf/keys/keystore.pem',
-        RULES_MECHANISMS_AUTHENTICATORS_2_CONFIG_IDENTITY_INFO_ENDPOINT: pulumi.interpolate`https://${kratosService.endpoints?.[0]}/sessions/whoami`,
-        SERVE_PROXY_TRUSTED_PROXIES_0: '10.0.0.0/8',
     },
     platform: 'linux/arm64',
     healthcheck: {
@@ -26,14 +24,14 @@ export const service = new DefangService(SERVICE_NAME, {
     }
 }, {dependsOn: [image, kratosService]});
 
-new DefangService('echo', {
-    name: `echo-${pulumi.getStack()}`,
-    image: 'ealen/echo-server',
-    ports: [
-        {target: 8080, protocol: 'http', mode: 'ingress'},
-    ],
-    environment: {
-        PORT: '8080',
-    },
-    platform: 'linux/arm64',
-});
+// new DefangService('echo', {
+//     name: `echo-${pulumi.getStack()}`,
+//     image: 'ealen/echo-server',
+//     ports: [
+//         {target: 8080, protocol: 'http', mode: 'ingress'},
+//     ],
+//     environment: {
+//         PORT: '8080',
+//     },
+//     platform: 'linux/arm64',
+// });

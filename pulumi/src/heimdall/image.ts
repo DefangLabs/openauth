@@ -22,7 +22,7 @@ export const image = new docker.Image(SERVICE_NAME, {
         platform: 'linux/arm64',
         args: {
             ENV: pulumi.getStack(),
-            PUBLIC_ROOT_URL: ROOT_URL.replace('https://', 'http://'),
+            PUBLIC_ROOT_URL: ROOT_URL,
             HASURA_DOMAIN: hasuraDomain,
             FN_DOMAIN: fnDomain,
             NEXTJS_DOMAIN: nextjsDomain,

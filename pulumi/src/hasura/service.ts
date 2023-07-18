@@ -12,7 +12,7 @@ const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}
 export const service = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
-    ports: [{target: 8080, protocol: 'http', mode: 'ingress'}],
+    ports: [{target: 8080, protocol: 'http', mode: 'host'}],
     environment: {
         HASURA_GRAPHQL_DATABASE_URL: pulumi.interpolate`${hasuraDatabaseUri}?sslmode=require`,
         HASURA_GRAPHQL_ENABLE_CONSOLE: 'false',
@@ -29,5 +29,6 @@ export const service = new DefangService(SERVICE_NAME, {
     platform: 'linux/arm64',
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:8080/healthz']
-    }
+    },
+    internal: false,
 }, {dependsOn: [image, apiService]});

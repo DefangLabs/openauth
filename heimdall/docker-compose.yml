@@ -16,7 +16,7 @@ services:
     ports:
       - 5000:4455
       - 4457:4457
-    command: -c /heimdall/conf/config.yaml serve proxy
+    command: -c /heimdall/conf/dev.config.yaml serve proxy
     environment:
       - RULES_FILE_PATH=/heimdall/conf/rules/dev.rules.yaml
       - KEYSTORE_FILE_PATH=/heimdall/conf/keys/dev/keystore.pem
