@@ -32,6 +32,8 @@ export const service = new DefangService(SERVICE_NAME, {
         LOG_LEAK_SENSITIVE_VALUES: 'false',
         SECRETS_COOKIE_0: config.requireSecret('kratosSecretsCookie0'),
         SECRETS_CIPHER_0: config.requireSecret('kratosSecretsCipher0'),
+        SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_ID: config.require('githubClientId'),
+        SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_SECRET: config.require('githubClientSecret'),
     },
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:4433/health/alive'],

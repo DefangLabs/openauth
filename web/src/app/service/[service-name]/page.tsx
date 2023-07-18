@@ -8,7 +8,7 @@ import {
   CircularProgress,
   Stack,
   Typography,
-  styled
+  styled,
 } from "@mui/material";
 import { ClickableDetail } from "./components/clickable-detail/clickable-detail";
 import { Endpoints } from "./components/endpoints/endpoints";
@@ -83,31 +83,15 @@ export default LoginRequired(function ServicePage() {
             content={service?.endpoints?.[0] || ""}
           />
         )}
-        {/* <ClickableDetail
-          title="Private URL"
-          content={service?.privateDomain || ""}
-        /> */}
         {service?.endpoints.length === 1 && (
           <ClickableDetail
             title="Port"
             content={service?.service?.ports?.[0]?.target || ""}
           />
         )}
-        {/* <ClickableDetail title="vCPU" content={service?.vcpus || ""} />
-        <ClickableDetail title="Memory" content={service?.memory || ""} />
-        <ClickableDetail
-          title="KV Store"
-          content={service?.kvConnectionUrl || ""}
-        />
-        <ClickableDetail
-          title="Prometheus"
-          content={service?.prometheusUrl || ""}
-        /> */}
       </Stack>
       <Endpoints />
       <Environment />
-      {/* <Usage />
-      <MonthlyUsage /> */}
       <Logs />
     </Stack>
   );

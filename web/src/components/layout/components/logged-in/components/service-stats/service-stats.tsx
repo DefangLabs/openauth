@@ -15,7 +15,7 @@ const ServicePaper = styled(Paper)`
 
 export function ServiceStats() {
   return null;
-  // const services = useServices();
+  // const {services} = useServices();
   // const count = services.length;
   // const vcpus = services.reduce((acc, service) => acc + service.vcpus, 0);
   // const memoryInGb = services.reduce(

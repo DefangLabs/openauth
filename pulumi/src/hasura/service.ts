@@ -22,7 +22,7 @@ export const service = new DefangService(SERVICE_NAME, {
         HASURA_GRAPHQL_METADATA_DIR: '/project/metadata',
         HASURA_GRAPHQL_MIGRATIONS_DIR: '/project/migrations',
         HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: 'true',
-        DEFANG_FN_ENDPOINT: pulumi.interpolate`https://${apiService.fqdn}`,
+        DEFANG_FN_ENDPOINT: pulumi.interpolate`https://${apiService.endpoints?.[0]}`,
         HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: 'naming_convention',
         HASURA_GRAPHQL_JWT_SECRET: `{"jwk_url":"${ROOT_URL.replace('--4455', '')}/.well-known/jwks"}`,
     },

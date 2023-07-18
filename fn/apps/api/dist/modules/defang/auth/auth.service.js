@@ -59,75 +59,63 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getService = exports.getServices = void 0;
-var fabric = __importStar(require("../../lib/fabric/v1/fabric_grpc_pb"));
+exports.getDefangToken = void 0;
 var grpc = __importStar(require("@grpc/grpc-js"));
-var fabric_pb_1 = require("../../lib/fabric/v1/fabric_pb");
-var getToken = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var token;
+var fabric = __importStar(require("../../../lib/io/defang/v1/fabric_grpc_pb"));
+var fabric_pb_1 = require("../../../lib/io/defang/v1/fabric_pb");
+var getHeimdallJWT = function (req) { return __awaiter(void 0, void 0, void 0, function () {
+    var authHeader, authHeaderParts;
     return __generator(this, function (_a) {
-        token = undefined;
-        return [2 /*return*/, process.env["DEFANG_TOKEN"] || '']; // for now we will use a static token
+        authHeader = req.headers.authorization;
+        if (authHeader) {
+            authHeaderParts = authHeader.split(' ');
+            if (authHeaderParts.length === 2) {
+                return [2 /*return*/, authHeaderParts[1]];
+            }
+        }
+        return [2 /*return*/];
     });
 }); };
-var getClient = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var defaultFabric, token;
+var getUnauthedClient = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var defaultFabric;
+    return __generator(this, function (_a) {
+        defaultFabric = process.env["DEFANG_FABRIC"] || "fabric-prod1.defang.dev:443";
+        return [2 /*return*/, new fabric.FabricControllerClient(defaultFabric, grpc.credentials.combineChannelCredentials(grpc.credentials.createSsl(), grpc.credentials.createFromMetadataGenerator(function (_, callback) {
+                var metadata = new grpc.Metadata();
+                callback(null, metadata);
+            })))];
+    });
+}); };
+var getDefangToken = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var token, heimdallJWT, client_1, tokenRequest_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                defaultFabric = process.env["DEFANG_FABRIC"] || "fabric-prod1.defang.dev:443";
-                return [4 /*yield*/, getToken()];
+            case 0: return [4 /*yield*/, getHeimdallJWT(req)];
             case 1:
+                heimdallJWT = _a.sent();
+                if (!heimdallJWT) return [3 /*break*/, 4];
+                return [4 /*yield*/, getUnauthedClient()];
+            case 2:
+                client_1 = _a.sent();
+                tokenRequest_1 = new fabric_pb_1.TokenRequest();
+                tokenRequest_1.setAssertion(heimdallJWT);
+                return [4 /*yield*/, new Promise(function (resolve, reject) {
+                        client_1.token(tokenRequest_1, function (err, response) {
+                            if (err) {
+                                reject(err);
+                            }
+                            else {
+                                resolve((response === null || response === void 0 ? void 0 : response.toString()) || undefined);
+                            }
+                        });
+                    })];
+            case 3:
                 token = _a.sent();
-                return [2 /*return*/, new fabric.FabricControllerClient(defaultFabric, grpc.credentials.combineChannelCredentials(grpc.credentials.createSsl(), grpc.credentials.createFromMetadataGenerator(function (_, callback) {
-                        var metadata = new grpc.Metadata();
-                        metadata.set("authorization", "Bearer " + token);
-                        callback(null, metadata);
-                    })))];
+                _a.label = 4;
+            case 4:
+                res.status(201).json({ token: token });
+                return [2 /*return*/];
         }
     });
 }); };
-function getServices(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var client;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, getClient()];
-                case 1:
-                    client = _a.sent();
-                    client.getServices(new fabric_pb_1.Void, function (err, response) {
-                        console.log(response);
-                        res.send((response === null || response === void 0 ? void 0 : response.toObject()) || {});
-                    });
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.getServices = getServices;
-function getService(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var id, client;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    id = req.params.serviceId;
-                    return [4 /*yield*/, getClient()];
-                case 1:
-                    client = _a.sent();
-                    client.getServices(new fabric_pb_1.Void, function (err, response) {
-                        console.log(response);
-                        var service = response === null || response === void 0 ? void 0 : response.toObject().servicesList.find(function (service) { return service.etag === id; });
-                        if (service) {
-                            res.send(service);
-                        }
-                        else {
-                            res.status(404).send();
-                        }
-                    });
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.getService = getService;
+exports.getDefangToken = getDefangToken;

@@ -14,8 +14,11 @@ app.get('/', (req, res) => {
     res.status(200).send({ message: 'I\'m alive, thank you very much.' });
 });
 
-app.use(require('./modules/jwt/jwt.router').jwtRouter);
-app.use('/defang', require('./modules/defang/defang.router').defangRouter);
+import { jwtRouter } from './modules/jwt/jwt.router';
+import { defangRouter } from './modules/defang/defang.router';
+
+app.use(jwtRouter);
+app.use('/defang', defangRouter);
 
 app.listen(5001, () => {
     console.log('Server is listening on port 5001');

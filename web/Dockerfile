@@ -1,4 +1,4 @@
-FROM --platform=${TARGETPLATFORM} node:18-alpine3.18
+FROM --platform=${TARGETPLATFORM} node:18-alpine3.18 as builder
 
 WORKDIR /app
 
@@ -10,12 +10,26 @@ RUN pnpm install
 
 COPY . .
 
+ARG PORT
+ARG NEXT_PUBLIC_KRATOS_PUBLIC_URL
+ARG NEXT_PUBLIC_GRAPHQL_URL
+ARG NEXT_PUBLIC_FN_URL
+ARG NEXT_PUBLIC_FABRIC
+
 RUN pnpm build
+
+FROM --platform=${TARGETPLATFORM} node:18-alpine3.18 as runtime
+
+COPY --from=builder /app/.next/standalone /app
+COPY --from=builder /app/.next/static /app/.next/static
+COPY --from=builder /app/public /app/public
 
 USER node
 
 EXPOSE 3000
 
-ENTRYPOINT [ "node_modules/.bin/next" ]
+ENTRYPOINT [ "/usr/local/bin/node" ]
 
-CMD [ "start" ]
+WORKDIR /app
+
+CMD [ "server.js" ]

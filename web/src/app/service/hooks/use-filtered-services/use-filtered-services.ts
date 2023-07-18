@@ -8,9 +8,12 @@ export function useFilteredServices() {
   return (services || [])
     .filter(
       (service) =>
-        service.service?.name.toLowerCase().includes(search.toLowerCase()) ||
-        service.endpoints.join().toLowerCase().includes(search.toLowerCase()) ||
-        service.service?.image.toLowerCase().includes(search.toLowerCase())
+        service?.service?.name?.toLowerCase().includes(search.toLowerCase()) ||
+        service?.endpoints
+          ?.join()
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        service?.service?.image?.toLowerCase().includes(search.toLowerCase())
     )
     .map((service) => {
       return {

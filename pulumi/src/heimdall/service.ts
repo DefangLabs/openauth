@@ -17,7 +17,7 @@ export const service = new DefangService(SERVICE_NAME, {
     environment: {
         RULES_FILE_PATH: '/heimdall/conf/rules/rules.yaml',
         KEYSTORE_FILE_PATH: '/heimdall/conf/keys/keystore.pem',
-        RULES_MECHANISMS_AUTHENTICATORS_2_CONFIG_IDENTITY_INFO_ENDPOINT: pulumi.interpolate`https://${kratosService.fqdn}/sessions/whoami`,
+        RULES_MECHANISMS_AUTHENTICATORS_2_CONFIG_IDENTITY_INFO_ENDPOINT: pulumi.interpolate`https://${kratosService.endpoints?.[0]}/sessions/whoami`,
         SERVE_PROXY_TRUSTED_PROXIES_0: '10.0.0.0/8',
     },
     platform: 'linux/arm64',

@@ -50,8 +50,8 @@ selfservice:
         providers:
           - id: github
             provider: github
-            client_id: 530ac29eb81d95ec590e
-            client_secret: 4896183459ab24a1ffc5bfe1092e5679a7eccc21
+            client_id: 649f64f0070dff45066a
+            client_secret: 8efd46a33b87a3e20051cdf4a9787d27e399fce5
             mapper_url: file:///etc/config/kratos/github-data-mapping.jsonnet
             scope:
               - user:email

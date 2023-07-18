@@ -1,10 +1,10 @@
 import { createCallbackClient } from "@bufbuild/connect";
 import { createGrpcWebTransport } from "@bufbuild/connect-web";
 import { atom, useAtom } from "jotai";
+import jwtDecode, { JwtHeader, JwtPayload } from "jwt-decode";
 import { useEffect, useMemo } from "react";
 import { FabricController } from "../../generated/fabric_connect";
 import { useTokenRequest } from "../use-token-request/use-token-request";
-import jwtDecode, { JwtHeader, JwtPayload } from "jwt-decode";
 
 let _token: string | undefined;
 type Client =

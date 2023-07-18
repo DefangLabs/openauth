@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
-var jwt_router_1 = require("./modules/jwt/jwt.router");
-var services_router_1 = require("./modules/services/services.router");
+var express_ws_1 = __importDefault(require("express-ws"));
 var app = (0, express_1["default"])();
+(0, express_ws_1["default"])(app);
 app.use((0, cors_1["default"])({
     origin: '*',
     credentials: true
@@ -15,8 +15,10 @@ app.use((0, cors_1["default"])({
 app.get('/', function (req, res) {
     res.status(200).send({ message: 'I\'m alive, thank you very much.' });
 });
+var jwt_router_1 = require("./modules/jwt/jwt.router");
+var defang_router_1 = require("./modules/defang/defang.router");
 app.use(jwt_router_1.jwtRouter);
-app.use(services_router_1.servicesRouter);
+app.use('/defang', defang_router_1.defangRouter);
 app.listen(5001, function () {
     console.log('Server is listening on port 5001');
 });

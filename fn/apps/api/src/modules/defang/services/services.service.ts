@@ -37,6 +37,7 @@ const getDefangToken = async (req: Request) => {
         const client = await getUnauthedClient();
         const tokenRequest = new TokenRequest();
         tokenRequest.setAssertion(heimdallJWT);
+        tokenRequest.setScopeList(["tail", "read"]);
         token = await new Promise((resolve, reject) => {
             client.token(tokenRequest, (err, response) => {
                 if (err) {

@@ -1,8 +1,8 @@
 import {
-  createHttpLink,
+  ApolloProvider as AP,
   ApolloClient,
   InMemoryCache,
-  ApolloProvider as AP,
+  createHttpLink,
 } from "@apollo/client";
 
 export function ApolloProvider({ children }: { children: React.ReactNode }) {
