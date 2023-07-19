@@ -19,6 +19,7 @@ import { Endpoints } from "./components/endpoints/endpoints";
 import { Environment } from "./components/environment/environment";
 import { Logs } from "./components/logs/logs";
 import { useService } from "./hooks/use-service/use-service";
+import { Mode } from "@/modules/defang/generated/fabric_pb";
 
 const Small = styled("small")`
   color: ${COLORS.darkGrey};
@@ -51,6 +52,9 @@ export default LoginRequired(function ServicePage() {
     );
   }
 
+  const firstEndpoint = service?.endpoints?.[0];
+  const isPublic = service?.service.ports?.[0]?.mode === Mode.INGRESS;
+
   return (
     <Stack p={2} spacing={4}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -69,9 +73,13 @@ export default LoginRequired(function ServicePage() {
           {service?.service?.name}
           <Small>
             {` service `}
-            <OpenIcon
-              onClick={() => window.open(`https://${service?.endpoints?.[0]}`)}
-            />
+            {firstEndpoint && isPublic && (
+              <OpenIcon
+                onClick={() =>
+                  window.open(`https://${service?.endpoints?.[0]}`)
+                }
+              />
+            )}
           </Small>
         </Typography>
       </Stack>
@@ -94,18 +102,6 @@ export default LoginRequired(function ServicePage() {
           title="Public FQDN"
           content={service?.publicFqdn || ""}
         />
-        {service?.endpoints.length === 1 && (
-          <ClickableDetail
-            title="Public URL"
-            content={service?.endpoints?.[0] || ""}
-          />
-        )}
-        {service?.endpoints.length === 1 && (
-          <ClickableDetail
-            title="Port"
-            content={service?.service?.ports?.[0]?.target || ""}
-          />
-        )}
       </Stack>
       <Endpoints />
       <Logs />

@@ -19,7 +19,7 @@ interface ClickableDetailProps {
 
 const ClickableTypography = styled(Typography)`
   cursor: pointer;
-  max-width: 120px;
+  /* max-width: 120px; */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -50,7 +50,20 @@ export function ClickableDetail({ title, content }: ClickableDetailProps) {
   if (!content) return null;
 
   return (
-    <Box width={isMobile ? "100%" : undefined}>
+    <Box
+      sx={{
+        width: {
+          xs: "100%",
+          sm: "50%",
+          md: "25%",
+          lg: "20%",
+        },
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        p: 1,
+        boxSizing: "border-box",
+      }}
+    >
       <Typography variant="h5" fontWeight="700">
         {title}
       </Typography>

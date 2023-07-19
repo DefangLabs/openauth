@@ -20,8 +20,8 @@ import Link from "next/link";
 import { SIDEBAR_WIDTH } from "../../constants";
 import { NavButton } from "./components/nav-button/nav-button";
 import { NAV_SURFACE } from "./constants";
-import { useState } from "react";
 import { useSidebarOpen } from "./hooks/use-sidebar-open/use-sidebar-open";
+import md5 from "md5";
 
 const UserChip = styled(Chip)`
   ${NAV_SURFACE}
@@ -55,6 +55,8 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
   const logout = useLogout();
   const { session } = useSession();
   const name = useName();
+  const email =
+    (useSession()?.session?.identity?.traits?.email as string) || "";
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { sidebarOpen, setSidebarOpen } = useSidebarOpen();
@@ -82,6 +84,9 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
                 avatar={
                   <UserAvatar
                     style={{ width: 60, height: 60, backgroundColor: "white" }}
+                    src={`https://www.gravatar.com/avatar/${md5(
+                      (email || "").toLowerCase().trim()
+                    )}`}
                   >
                     {(name || "U").charAt(0)}
                   </UserAvatar>
@@ -116,15 +121,40 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
         </Stack>
       </Drawer>
       <Stack direction={isMobile ? "column" : "row"} width="100%">
-        {!isMobile && <div style={{ width: SIDEBAR_WIDTH }} />}
         {!!isMobile && (
-          <Box>
+          <Box
+            sx={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              paddingTop: "5px",
+              paddingLeft: "5px",
+              height: "50px",
+              background: "rgba(255,255,255,0.8)",
+              boxSizing: "border-box",
+              boxShadow: (theme) => theme.shadows[1],
+              backdropFilter: "blur(5px)",
+            }}
+          >
             <IconButton onClick={() => setSidebarOpen(true)}>
               <Menu />
             </IconButton>
           </Box>
         )}
-        <Box flexGrow={1} width={isMobile ? "100%" : undefined}>
+        <Box
+          flexGrow={1}
+          width={isMobile ? "100%" : undefined}
+          sx={{
+            marginLeft: {
+              xs: 0,
+              sm: SIDEBAR_WIDTH,
+            },
+            marginTop: {
+              xs: isMobile ? "50px" : 0,
+            },
+          }}
+        >
           {children}
         </Box>
       </Stack>

@@ -12,7 +12,8 @@ import { useService } from "../../hooks/use-service/use-service";
 
 export function Endpoints() {
   const { service } = useService();
-  return (service?.endpoints?.length || 0) > 1 ? (
+  console.log(service);
+  return (service?.endpoints?.length || 0) > 0 ? (
     <Stack spacing={2}>
       <Typography variant="h2">Endpoints</Typography>
       <TableContainer component={Paper}>
@@ -27,7 +28,14 @@ export function Endpoints() {
             <TableRow key={endpoint}>
               <TableCell>{service.service?.ports?.[i]?.target}</TableCell>
               <TableCell>
-                <a href={`https://${endpoint}`}>{endpoint}</a>
+                {endpoint.endsWith(".internal") ||
+                endpoint.includes(".internal:") ? (
+                  endpoint
+                ) : (
+                  <a href={`https://${endpoint}`} target="_blank">
+                    {endpoint}
+                  </a>
+                )}
               </TableCell>
             </TableRow>
           ))}
