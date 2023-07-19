@@ -3,8 +3,12 @@ import {
   Box,
   Snackbar,
   Tooltip,
+  TooltipProps,
   Typography,
   styled,
+  tooltipClasses,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
 
@@ -19,10 +23,24 @@ const ClickableTypography = styled(Typography)`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  ${({ theme }) => theme.breakpoints.down("sm")} {
+    max-width: 100%;
+  }
 `;
+
+const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    fontSize: "1rem",
+  },
+}));
 
 export function ClickableDetail({ title, content }: ClickableDetailProps) {
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const clickToCopy = (e: MouseEvent<HTMLSpanElement>) => {
     navigator.clipboard.writeText((e.target as any).textContent || "error");
@@ -32,15 +50,15 @@ export function ClickableDetail({ title, content }: ClickableDetailProps) {
   if (!content) return null;
 
   return (
-    <Box>
+    <Box width={isMobile ? "100%" : undefined}>
       <Typography variant="h5" fontWeight="700">
         {title}
       </Typography>
-      <Tooltip title={`Click to copy: ${content}`} placement="top">
+      <CustomTooltip title={`Click to copy: \n${content}`} placement="bottom">
         <ClickableTypography onClick={clickToCopy}>
           {content}
         </ClickableTypography>
-      </Tooltip>
+      </CustomTooltip>
       <Snackbar
         open={open}
         onClose={() => setOpen(false)}

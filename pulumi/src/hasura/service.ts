@@ -30,5 +30,4 @@ export const service = new DefangService(SERVICE_NAME, {
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:8080/healthz']
     },
-    internal: false,
 }, {dependsOn: [image, apiService]});

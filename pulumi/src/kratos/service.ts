@@ -38,5 +38,4 @@ export const service = new DefangService(SERVICE_NAME, {
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:4433/health/alive'],
     },
-    internal: false,
 }, { dependsOn: [image, migrationCommand, kratosDatabase, kratosUser] });

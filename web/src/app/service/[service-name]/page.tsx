@@ -2,13 +2,17 @@
 
 import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
 import { COLORS } from "@/modules/mui/constants";
-import { OpenInNew } from "@mui/icons-material";
+import { Circle, OpenInNew } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
+  Icon,
   Stack,
+  Tooltip,
   Typography,
   styled,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { ClickableDetail } from "./components/clickable-detail/clickable-detail";
 import { Endpoints } from "./components/endpoints/endpoints";
@@ -27,8 +31,8 @@ const OpenIcon = styled(OpenInNew)`
 
 export default LoginRequired(function ServicePage() {
   const { service, loading } = useService();
-
-  console.log("@@ service: ", service);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   if (loading) {
     return (
@@ -48,9 +52,20 @@ export default LoginRequired(function ServicePage() {
   }
 
   return (
-    <Stack p={2} spacing={4} flexWrap="wrap">
+    <Stack p={2} spacing={4}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">
+          <Tooltip title={service?.status}>
+            <Icon
+              style={{
+                color:
+                  service?.status === "SERVICE_STEADY_STATE" ? "green" : "red",
+              }}
+              sx={{ mr: 1 }}
+            >
+              <Circle />
+            </Icon>
+          </Tooltip>
           {service?.service?.name}
           <Small>
             {` service `}
@@ -59,11 +74,13 @@ export default LoginRequired(function ServicePage() {
             />
           </Small>
         </Typography>
-        <Stack direction="row" spacing={2}>
-          <Typography fontFamily="monospace">{service?.status}</Typography>
-        </Stack>
       </Stack>
-      <Stack direction="row" spacing={4} flexWrap="wrap">
+      <Stack
+        direction={isMobile ? "column" : "row"}
+        spacing={isMobile ? 2 : 4}
+        flexWrap="wrap"
+        width="100%"
+      >
         <ClickableDetail
           title="Image"
           content={service?.service?.image || ""}
@@ -91,8 +108,8 @@ export default LoginRequired(function ServicePage() {
         )}
       </Stack>
       <Endpoints />
-      <Environment />
       <Logs />
+      <Environment />
     </Stack>
   );
 }) as any;

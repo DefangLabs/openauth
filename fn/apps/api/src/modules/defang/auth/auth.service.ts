@@ -35,17 +35,22 @@ export const getDefangToken = async (req: Request, res: Response) => {
         const client = await getUnauthedClient();
         const tokenRequest = new TokenRequest();
         tokenRequest.setAssertion(heimdallJWT);
-        token = await new Promise((resolve, reject) => {
-            client.token(tokenRequest, (err, response) => {
-                if (err) {
-                    reject(err);
-                }
-                else {
-                    resolve(response?.toString() || undefined);
-                }
+        tokenRequest.setScopeList(["tail", "read"]);
+        try {
+            token = await new Promise((resolve, reject) => {
+                client.token(tokenRequest, (err, response) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        resolve(response?.toString() || undefined);
+                    }
+                });
             });
-        });
+            return res.status(201).json({ token });
+        }
+        catch (e) {
+            return res.status(500).json({ error: e });
+        }
     }
-    
-    res.status(201).json({ token })
 }

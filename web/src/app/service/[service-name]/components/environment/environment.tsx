@@ -35,14 +35,14 @@ export function Environment() {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Variable</TableCell>
+              <TableCell width={250}>Variable</TableCell>
               <TableCell>Value</TableCell>
             </TableRow>
           </TableHead>
           {Object.entries(service?.service?.environment || {}).map(
             ([key, value], i) => (
               <TableRow key={key}>
-                <TableCell>{key}</TableCell>
+                <TableCell width={250}>{key}</TableCell>
                 <TableCell>
                   <Hideable>{value}</Hideable>
                 </TableCell>

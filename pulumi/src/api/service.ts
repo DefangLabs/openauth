@@ -17,5 +17,4 @@ export const service = new DefangService(SERVICE_NAME, {
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:5001/']
     },
-    internal: false,
 }, {dependsOn: image});

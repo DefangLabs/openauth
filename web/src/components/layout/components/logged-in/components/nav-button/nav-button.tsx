@@ -3,6 +3,7 @@ import { Button, styled } from "@mui/material";
 import Link from "next/link";
 import { ComponentProps } from "react";
 import { NAV_SURFACE } from "../../constants";
+import { useSidebarOpen } from "../../hooks/use-sidebar-open/use-sidebar-open";
 
 const InnerNavButton = styled(Button)`
   ${NAV_SURFACE}
@@ -26,8 +27,16 @@ type NavButtonProps = ComponentProps<typeof InnerNavButton> & {
 };
 
 export function NavButton({ href, ...props }: NavButtonProps) {
+  const { setSidebarOpen } = useSidebarOpen();
   return (
-    <Link href={href}>
+    <Link
+      href={href}
+      onClick={() => {
+        console.log("@@ NavButton onClick");
+        setSidebarOpen(false);
+      }}
+      target={href.startsWith("http") ? "_blank" : undefined}
+    >
       <InnerNavButton {...props}></InnerNavButton>
     </Link>
   );

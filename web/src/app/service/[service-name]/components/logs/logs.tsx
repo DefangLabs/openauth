@@ -17,11 +17,14 @@ const LogContainer = styled("div")`
   background-color: #111;
   color: ${COLORS.secondary};
   overflow-x: scroll;
-  width: 800px;
-  max-width: calc(100vw - 400px);
   max-height: 50vh;
   border-radius: ${({ theme }) => theme.shape.borderRadius}px;
   padding: ${({ theme }) => theme.spacing(2).toString()};
+
+  ${({ theme }) => theme.breakpoints.up("md")} {
+    width: 800px;
+    max-width: calc(100vw - 400px);
+  }
 `;
 
 export function Logs() {

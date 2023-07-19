@@ -11,5 +11,14 @@ interface TokenRequestOpts {
 
 export function useTokenRequest(opts: TokenRequestOpts = {}) {
   const { swrOpts } = opts;
-  return useSWR<TokenRequestResponse>("defang/auth/token", fetcher, swrOpts);
+  const combinedOpts: TokenRequestOpts["swrOpts"] = {
+    errorRetryCount: 20,
+    errorRetryInterval: 1000,
+    ...swrOpts,
+  };
+  return useSWR<TokenRequestResponse>(
+    "defang/auth/token",
+    fetcher,
+    combinedOpts
+  );
 }
