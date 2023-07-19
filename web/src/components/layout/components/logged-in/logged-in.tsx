@@ -148,7 +148,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
           sx={{
             marginLeft: {
               xs: 0,
-              sm: SIDEBAR_WIDTH,
+              sm: `${SIDEBAR_WIDTH}px`,
             },
             marginTop: {
               xs: isMobile ? "50px" : 0,

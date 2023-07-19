@@ -30,7 +30,6 @@ export default LoginRequired(function ServicesPage() {
           variant="outlined"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          fullWidth
         />
       </Stack>
       <Box style={{ minHeight: "calc(100vh - 200px)", width: "100%" }}>
