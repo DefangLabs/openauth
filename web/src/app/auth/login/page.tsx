@@ -102,12 +102,37 @@ export default function LoginPage() {
     <>
       <Grid
         container
-        sx={{ minHeight: "100vh", backgroundImage: GRADIENTS.primary }}
+        sx={{
+          minHeight: "100vh",
+          backgroundImage: GRADIENTS.primary,
+          flexDirection: {
+            xs: "column-reverse",
+            sm: "row",
+          },
+        }}
       >
-        <Grid item sx={{ display: { xs: "none", sm: "flex" } }} sm={6}>
+        <Grid
+          item
+          sx={{
+            minHeight: { xs: "100vh" },
+            display: { xs: "flex" },
+            flexDirection: { xs: "column" },
+          }}
+          sm={6}
+          xs={12}
+        >
           <SideBar />
         </Grid>
-        <Grid item sx={{ display: { xs: "none", sm: "flex" } }} sm={6}>
+        <Grid
+          item
+          sx={{
+            minHeight: { xs: "100vh" },
+            display: { xs: "flex" },
+            flexDirection: { xs: "column" },
+          }}
+          sm={6}
+          xs={12}
+        >
           <Main login={login} loading={!flow} />
         </Grid>
       </Grid>

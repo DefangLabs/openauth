@@ -22,6 +22,9 @@ export function Main({ login, loading }: MainProps) {
           xs: 1,
           sm: 2,
         },
+        height: {
+          xs: "100%",
+        },
       }}
       spacing={2}
     >
