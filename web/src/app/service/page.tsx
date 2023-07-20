@@ -1,19 +1,12 @@
 "use client";
 
+import { StatusIcon } from "@/components/status-icon/status-icon";
 import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
-import {
-  Box,
-  Icon,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Stack, TextField, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { useRouter } from "next/navigation";
 import { useFilteredServices } from "./hooks/use-filtered-services/use-filtered-services";
 import { useSearch } from "./hooks/use-search/use-search";
-import { useRouter } from "next/navigation";
-import Circle from "@mui/icons-material/Circle";
 
 export default LoginRequired(function ServicesPage() {
   const services = useFilteredServices();
@@ -40,24 +33,10 @@ export default LoginRequired(function ServicesPage() {
               field: "status",
               headerName: "Status",
               width: 80,
-              renderCell: (params) => (
-                <Tooltip title={params.value}>
-                  <Icon
-                    style={{
-                      color:
-                        params.value === "SERVICE_STEADY_STATE"
-                          ? "green"
-                          : "red",
-                    }}
-                  >
-                    <Circle />
-                  </Icon>
-                </Tooltip>
-              ),
+              renderCell: (params) => <StatusIcon status={params.value} />,
             },
             { field: "name", headerName: "Name", width: 150 },
             { field: "fqdn", headerName: "Public URL", flex: 1, minWidth: 250 },
-            // { field: "privateDomain", headerName: "Private URL", flex: 1 },
             {
               field: "dockerImage",
               headerName: "Image",
@@ -65,7 +44,6 @@ export default LoginRequired(function ServicesPage() {
               minWidth: 250,
             },
             { field: "port", headerName: "Port", flex: 1, minWidth: 150 },
-            // { field: "latencyMs", headerName: "Latency", flex: 1 },
           ]}
           onRowClick={(params) => {
             router.push(`/service/${params.row.name}`);

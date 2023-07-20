@@ -1,6 +1,8 @@
+import { thinGreyBorder } from "@/modules/mui/constants";
 import {
   Alert,
   Box,
+  Paper,
   Snackbar,
   Tooltip,
   TooltipProps,
@@ -50,7 +52,7 @@ export function ClickableDetail({ title, content }: ClickableDetailProps) {
   if (!content) return null;
 
   return (
-    <Box
+    <Paper
       sx={{
         width: {
           xs: "100%",
@@ -58,10 +60,8 @@ export function ClickableDetail({ title, content }: ClickableDetailProps) {
           md: "25%",
           lg: "20%",
         },
-        border: "1px solid #ccc",
-        borderRadius: "8px",
         p: 1,
-        boxSizing: "border-box",
+        ...thinGreyBorder,
       }}
     >
       <Typography variant="h5" fontWeight="700">
@@ -80,6 +80,6 @@ export function ClickableDetail({ title, content }: ClickableDetailProps) {
       >
         <Alert severity="success">Copied to clipboard!</Alert>
       </Snackbar>
-    </Box>
+    </Paper>
   );
 }

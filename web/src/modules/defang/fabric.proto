@@ -100,8 +100,9 @@ message Version {
 
 message TailRequest {
   string service = 1; // was "name"
-  // google.protobuf.Timestamp since = 3;
-  // string etag = 3;
+  google.protobuf.Timestamp since = 2;
+  string etag = 3;
+  // string host = 4;
 }
 
 message LogEntry {
@@ -110,8 +111,11 @@ message LogEntry {
 }
 
 message TailResponse {
-  string raw = 1; // obsolete
+  reserved 1; // was "string raw"
   repeated LogEntry entries = 2;
+  string service = 3;
+  string etag = 4;
+  string host = 5;
 }
 
 message Services { repeated ServiceInfo services = 1; }
@@ -235,10 +239,7 @@ message Service {
   repeated Secret secrets = 9;
   HealthCheck healthcheck = 10;
   repeated string command = 11;
-
-  // uint64 etag = 8; TODO: this could be useful for optimistic concurrency from
-  // the clients repeated Range expose = 7; only for taskdef? repeated string
-  // profiles = 8; bool init = 10; repeated string entrypoint string domainname
+  string domainname = 12;
 }
 
 message Event {

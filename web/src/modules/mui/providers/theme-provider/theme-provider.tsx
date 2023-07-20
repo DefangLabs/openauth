@@ -4,7 +4,7 @@ import {
   createTheme,
 } from "@mui/material";
 import { Inter, Exo } from "next/font/google";
-import { COLORS } from "../../constants";
+import { COLORS, thinGreyBorder } from "../../constants";
 
 const body = Inter({ variable: "--body-font", subsets: ["latin-ext"] });
 const headers = Exo({ variable: "--headers-font", subsets: ["latin-ext"] });
@@ -58,11 +58,26 @@ const theme = createTheme({
         disableElevation: true,
       },
     },
-    // MuiPaper: {
-    //   defaultProps: {
-    //     elevation: 1,
-    //   },
-    // },
+    MuiTable: {
+      styleOverrides: {
+        root: {
+          backgroundColor: COLORS.white,
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: COLORS.white,
+        },
+      },
+    },
+    MuiPaper: {
+      defaultProps: {
+        elevation: 0,
+        ...(thinGreyBorder as any),
+      },
+    },
   },
 });
 
@@ -75,6 +90,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             body: {
               margin: 0,
               padding: 0,
+              backgroundColor: COLORS.background,
+            },
+            [".MuiDataGrid-root"]: {
+              backgroundColor: COLORS.white,
             },
           }}
         />

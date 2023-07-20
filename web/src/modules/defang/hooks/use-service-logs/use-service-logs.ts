@@ -16,13 +16,13 @@ export function useServiceLogs() {
   const client = useDefangClient();
   const name = useServiceName();
   const { filter, negativeFilter } = useLogsFilter();
-  const deferredFilter = useDeferredValue(filter);
+  const deferredFilter = useDeferredValue(filter).toLocaleLowerCase();
+  const deferredLogs = useDeferredValue(logs);
 
   const callback = useCallback((res: TailResponse) => {
-    setLogs((logs) => [
-      ...res.entries.map((entry) => entry),
-      ...logs.slice(0, 400),
-    ]);
+    setLogs((logs) =>
+      [...res.entries.map((entry) => entry), ...logs].slice(0, 1000)
+    );
   }, []);
 
   useEffect(() => {
@@ -30,7 +30,11 @@ export function useServiceLogs() {
 
     (window as any).client = client;
 
-    const stopTail = client.tail({ service: `${name}.` }, callback, () => {});
+    const stopTail = client.tail(
+      { service: `${name}.`, since: { seconds: BigInt(60 * 60 * 24) } },
+      callback,
+      () => {}
+    );
 
     return () => {
       try {
@@ -42,14 +46,15 @@ export function useServiceLogs() {
   }, [callback, client, name]);
 
   return useMemo(() => {
-    return logs.filter((log) => {
+    console.log("@@ logs", deferredLogs.length);
+    return deferredLogs.slice(0, 200).filter((log) => {
       if (!deferredFilter) {
         return true;
       }
-      const logText = strip(log.message);
+      const logText = strip(log.message).toLocaleLowerCase();
       return negativeFilter
         ? !logText.includes(deferredFilter)
         : logText.includes(deferredFilter);
     });
-  }, [deferredFilter, logs, negativeFilter]);
+  }, [deferredFilter, deferredLogs, negativeFilter]);
 }

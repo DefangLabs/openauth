@@ -12,7 +12,8 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useService } from "../../hooks/use-service/use-service";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
+import { thinGreyBorder } from "@/modules/mui/constants";
 
 function Hideable({ children }: { children: React.ReactNode }) {
   const [hidden, setHidden] = useState(true);
@@ -31,7 +32,13 @@ export function Environment() {
   return Object.keys(service?.service?.environment || {}).length > 1 ? (
     <Stack spacing={2}>
       <Typography variant="h2">Environment</Typography>
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={({ children }: { children: ReactNode }) => (
+          <Paper elevation={0} sx={thinGreyBorder}>
+            {children}
+          </Paper>
+        )}
+      >
         <Table size="small">
           <TableHead>
             <TableRow>

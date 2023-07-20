@@ -9,6 +9,8 @@ import {
   TableCell,
 } from "@mui/material";
 import { useService } from "../../hooks/use-service/use-service";
+import { ReactNode } from "react";
+import { thinGreyBorder } from "@/modules/mui/constants";
 
 export function Endpoints() {
   const { service } = useService();
@@ -16,7 +18,13 @@ export function Endpoints() {
   return (service?.endpoints?.length || 0) > 0 ? (
     <Stack spacing={2}>
       <Typography variant="h2">Endpoints</Typography>
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={({ children }: { children: ReactNode }) => (
+          <Paper elevation={0} sx={thinGreyBorder}>
+            {children}
+          </Paper>
+        )}
+      >
         <Table size="small">
           <TableHead>
             <TableRow>

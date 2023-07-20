@@ -177,6 +177,8 @@ export const TailRequest = proto3.makeMessageType(
   "io.defang.v1.TailRequest",
   () => [
     { no: 1, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "since", kind: "message", T: Timestamp },
+    { no: 3, name: "etag", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -197,8 +199,10 @@ export const LogEntry = proto3.makeMessageType(
 export const TailResponse = proto3.makeMessageType(
   "io.defang.v1.TailResponse",
   () => [
-    { no: 1, name: "raw", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "entries", kind: "message", T: LogEntry, repeated: true },
+    { no: 3, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "etag", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "host", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -328,6 +332,7 @@ export const Service = proto3.makeMessageType(
     { no: 9, name: "secrets", kind: "message", T: Secret, repeated: true },
     { no: 10, name: "healthcheck", kind: "message", T: HealthCheck },
     { no: 11, name: "command", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 12, name: "domainname", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 

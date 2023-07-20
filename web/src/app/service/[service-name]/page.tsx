@@ -20,6 +20,7 @@ import { Environment } from "./components/environment/environment";
 import { Logs } from "./components/logs/logs";
 import { useService } from "./hooks/use-service/use-service";
 import { Mode } from "@/modules/defang/generated/fabric_pb";
+import { StatusIcon } from "@/components/status-icon/status-icon";
 
 const Small = styled("small")`
   color: ${COLORS.darkGrey};
@@ -59,17 +60,7 @@ export default LoginRequired(function ServicePage() {
     <Stack p={2} spacing={4}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">
-          <Tooltip title={service?.status}>
-            <Icon
-              style={{
-                color:
-                  service?.status === "SERVICE_STEADY_STATE" ? "green" : "red",
-              }}
-              sx={{ mr: 1 }}
-            >
-              <Circle />
-            </Icon>
-          </Tooltip>
+          <StatusIcon status={service?.status} />
           {service?.service?.name}
           <Small>
             {` service `}

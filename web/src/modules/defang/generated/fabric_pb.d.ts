@@ -456,6 +456,18 @@ export declare class TailRequest extends Message<TailRequest> {
    */
   service: string;
 
+  /**
+   * @generated from field: google.protobuf.Timestamp since = 2;
+   */
+  since?: Timestamp;
+
+  /**
+   * string host = 4;
+   *
+   * @generated from field: string etag = 3;
+   */
+  etag: string;
+
   constructor(data?: PartialMessage<TailRequest>);
 
   static readonly runtime: typeof proto3;
@@ -505,16 +517,24 @@ export declare class LogEntry extends Message<LogEntry> {
  */
 export declare class TailResponse extends Message<TailResponse> {
   /**
-   * obsolete
-   *
-   * @generated from field: string raw = 1;
-   */
-  raw: string;
-
-  /**
    * @generated from field: repeated io.defang.v1.LogEntry entries = 2;
    */
   entries: LogEntry[];
+
+  /**
+   * @generated from field: string service = 3;
+   */
+  service: string;
+
+  /**
+   * @generated from field: string etag = 4;
+   */
+  etag: string;
+
+  /**
+   * @generated from field: string host = 5;
+   */
+  host: string;
 
   constructor(data?: PartialMessage<TailResponse>);
 
@@ -908,6 +928,11 @@ export declare class Service extends Message<Service> {
    * @generated from field: repeated string command = 11;
    */
   command: string[];
+
+  /**
+   * @generated from field: string domainname = 12;
+   */
+  domainname: string;
 
   constructor(data?: PartialMessage<Service>);
 
