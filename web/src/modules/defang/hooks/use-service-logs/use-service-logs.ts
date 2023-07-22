@@ -31,7 +31,7 @@ export function useServiceLogs() {
     (window as any).client = client;
 
     const stopTail = client.tail(
-      { service: `${name}.`, since: { seconds: BigInt(60 * 60 * 24) } },
+      { service: `${name}.`, since: { seconds: BigInt(60 * 20) } },
       callback,
       () => {}
     );
