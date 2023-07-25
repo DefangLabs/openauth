@@ -29,7 +29,10 @@ export function useServiceLogs() {
     if (!client || !name) return;
 
     const stopTail = client.tail(
-      { service: `${name}`, since: { seconds: BigInt(60 * 20) } },
+      {
+        service: `${name}`,
+        since: { seconds: BigInt(Math.floor(Date.now() / 1000) - 60 * 30) },
+      },
       callback,
       () => {}
     );

@@ -3,6 +3,8 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
+  ListItem,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -58,6 +60,10 @@ export function Logs() {
               }
               label="Negative Filter"
             />
+            <Select>
+              <ListItem value="service">Service Logs</ListItem>
+              <ListItem value="ci">CI Logs</ListItem>
+            </Select>
           </Stack>
         </Grid>
       </Grid>

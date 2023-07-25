@@ -16,7 +16,7 @@ export function KratosProvider({ children }: KratosProviderProps) {
     updateSession({
       onError: () => {
         if (!pathname.includes("/auth")) {
-          router.push("/auth/registration");
+          router.push("/auth/register");
         }
       },
     });
