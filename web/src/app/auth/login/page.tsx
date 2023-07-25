@@ -2,14 +2,13 @@
 
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
 import { kratosClient } from "@/modules/kratos/lib/kratos-client/kratos-client";
-import { Grid } from "@mui/material";
+import { GitHub } from "@mui/icons-material";
+import { Button, Divider, Typography } from "@mui/material";
 import { GenericError, LoginFlow } from "@ory/client";
 import { AxiosError } from "axios";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { Main } from "./components/main/main";
-import { SideBar } from "./components/sidebar/sidebar";
-import { GRADIENTS } from "@/modules/mui/constants";
 
 export default function LoginPage() {
   const [flow, setFlow] = useState<LoginFlow>();
@@ -57,7 +56,7 @@ export default function LoginPage() {
           const errorId = data?.error?.id;
           switch (errorId) {
             case "session_already_available":
-              router.push("/auth");
+              router.push("/");
               break;
           }
         }),
@@ -100,42 +99,20 @@ export default function LoginPage() {
 
   return (
     <>
-      <Grid
-        container
-        sx={{
-          minHeight: "100vh",
-          backgroundImage: GRADIENTS.primary,
-          flexDirection: {
-            xs: "column-reverse",
-            sm: "row",
-          },
-        }}
-      >
-        <Grid
-          item
-          sx={{
-            minHeight: { xs: "100vh" },
-            display: { xs: "flex" },
-            flexDirection: { xs: "column" },
-          }}
-          sm={6}
-          xs={12}
-        >
-          <SideBar />
-        </Grid>
-        <Grid
-          item
-          sx={{
-            minHeight: { xs: "100vh" },
-            display: { xs: "flex" },
-            flexDirection: { xs: "column" },
-          }}
-          sm={6}
-          xs={12}
-        >
-          <Main login={login} loading={!flow} />
-        </Grid>
-      </Grid>
+      <Typography variant="h2">Login to Defang</Typography>
+      {!flow ? (
+        "Loading..."
+      ) : (
+        <Button onClick={login} variant="contained" disableElevation>
+          <GitHub height={20} width={20} sx={{ mr: 1 }} />
+          Sign in with GitHub
+        </Button>
+      )}
+      <Divider />
+      <Typography>
+        If you do not have an account, please{" "}
+        <Link href="/auth/register">click here to register</Link>.
+      </Typography>
     </>
   );
 }

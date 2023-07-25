@@ -2,17 +2,26 @@
 
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
 import { kratosClient } from "@/modules/kratos/lib/kratos-client/kratos-client";
-import { Button, Typography } from "@mui/material";
+import { GitHub } from "@mui/icons-material";
+import {
+  Button,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  Typography,
+} from "@mui/material";
 import {
   GenericError,
   RegistrationFlow,
   UpdateRegistrationFlowBody,
 } from "@ory/client";
 import { UserAuthCard } from "@ory/elements";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-export default function RegistrationPage() {
+export default function RegisterPage() {
+  const [tosAgreed, setTosAgreed] = useState(false);
   const [flow, setFlow] = useState<RegistrationFlow>();
   const router = useRouter();
   const search = useSearchParams();
@@ -69,43 +78,64 @@ export default function RegistrationPage() {
       });
   };
 
-  return flow ? (
+  const register = useCallback(async () => {
+    kratosClient
+      .updateRegistrationFlow({
+        flow: flowId,
+        updateRegistrationFlowBody: {
+          method: "oidc",
+          provider: "github",
+        },
+      })
+      .catch((e) => {
+        const data = e.response?.data as {
+          error: GenericError;
+          redirect_browser_to: string;
+        };
+        if (data?.redirect_browser_to) {
+          window.location.href = data.redirect_browser_to;
+        }
+      });
+  }, [flowId]);
+
+  return (
     <>
-      <Button
-        onClick={async () => {
-          kratosClient
-            .updateRegistrationFlow({
-              flow: flowId,
-              updateRegistrationFlowBody: {
-                method: "oidc",
-                provider: "github",
-              },
-            })
-            .catch((e) => {
-              const data = e.response?.data as {
-                error: GenericError;
-                redirect_browser_to: string;
-              };
-              if (data?.redirect_browser_to) {
-                window.location.href = data.redirect_browser_to;
-              }
-            });
-        }}
-      >
-        Register
-      </Button>
-      <UserAuthCard
-        title="Register"
-        flowType="registration"
-        flow={flow}
-        additionalProps={{
-          loginURL: "/auth/login",
-        }}
-        includeScripts
-        onSubmit={({ body }) => submitFlow(body as UpdateRegistrationFlowBody)}
+      <Typography variant="h2">Welcome to Defang</Typography>
+      {!flow ? (
+        "Loading..."
+      ) : (
+        <Button
+          onClick={register}
+          variant="contained"
+          disableElevation
+          disabled={!tosAgreed}
+        >
+          <GitHub height={20} width={20} sx={{ mr: 1 }} />
+          Sign in with GitHub
+        </Button>
+      )}
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={tosAgreed}
+            onChange={(e) => setTosAgreed(e.target.checked)}
+          />
+        }
+        label={
+          <Typography fontSize={14} width={300}>
+            By proceeding you are agreeing to our{" "}
+            <a href="https://defang.io/terms-conditions.html" target="_blank">
+              Terms and Conditions
+            </a>
+            . Check the box to proceed.
+          </Typography>
+        }
       />
+      <Divider />
+      <Typography>
+        If you already have an account, please{" "}
+        <Link href="/auth/login">login</Link>.
+      </Typography>
     </>
-  ) : (
-    <Typography>Loading...</Typography>
   );
 }

@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useUpdateSession } from "../../hooks/use-update-session/use-update-session";
 import { useCreateProfile } from "../../hooks/use-create-profile/use-create-profile";
@@ -10,14 +10,17 @@ interface KratosProviderProps {
 export function KratosProvider({ children }: KratosProviderProps) {
   const updateSession = useUpdateSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     updateSession({
       onError: () => {
-        router.push("/auth/login");
+        if (!pathname.includes("/auth")) {
+          router.push("/auth/registration");
+        }
       },
     });
-  }, [router, updateSession]);
+  }, [pathname, router, updateSession]);
 
   useCreateProfile();
 

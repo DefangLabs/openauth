@@ -7,11 +7,17 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 import { useFilteredServices } from "./hooks/use-filtered-services/use-filtered-services";
 import { useSearch } from "./hooks/use-search/use-search";
+import { EmptyServices } from "./components/empty-services/empty-services";
 
 export default LoginRequired(function ServicesPage() {
   const services = useFilteredServices();
   const { search, setSearch } = useSearch();
   const router = useRouter();
+
+  if (!services.length) {
+    return <EmptyServices />;
+  }
+
   return (
     <Stack p={2} spacing={2} flexGrow={1}>
       <Stack direction="row" alignItems="center">

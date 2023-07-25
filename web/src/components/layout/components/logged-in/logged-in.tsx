@@ -9,6 +9,7 @@ import {
   Box,
   Chip,
   Drawer,
+  Icon,
   IconButton,
   Stack,
   Typography,
@@ -22,6 +23,7 @@ import { NavButton } from "./components/nav-button/nav-button";
 import { NAV_SURFACE } from "./constants";
 import { useSidebarOpen } from "./hooks/use-sidebar-open/use-sidebar-open";
 import md5 from "md5";
+import { OpenInNew } from "@mui/icons-material";
 
 const UserChip = styled(Chip)`
   ${NAV_SURFACE}
@@ -100,10 +102,12 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
           <Stack direction="column" spacing={1}>
             <NavButton href="/service">Services</NavButton>
             <NavButton href="https://docs.defang.io/docs/Intro">
-              Documentation
+              Documentation{" "}
+              <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
             </NavButton>
             <NavButton href="https://github.com/defang-io/defang/releases">
-              CLI Download
+              CLI Download{" "}
+              <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
             </NavButton>
           </Stack>
           <Grow />

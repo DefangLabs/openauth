@@ -20,8 +20,7 @@ RUN cat /heimdall/conf/config.yaml
 RUN cp /tmp/rules/${ENV}.rules.yaml /heimdall/conf/rules/rules.yaml
 RUN cp -r /tmp/keys/${ENV}/* /heimdall/conf/keys
 
-# FROM dadrus/heimdall:0.10.1-alpha
-FROM defangportal/heimdall-base:envs.1
+FROM dadrus/heimdall:0.10.1-alpha
 
 COPY --from=builder /heimdall /heimdall
 COPY --from=builder /heimdall/conf/keys/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt

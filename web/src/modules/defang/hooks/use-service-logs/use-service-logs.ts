@@ -21,17 +21,15 @@ export function useServiceLogs() {
 
   const callback = useCallback((res: TailResponse) => {
     setLogs((logs) =>
-      [...res.entries.map((entry) => entry), ...logs].slice(0, 1000)
+      [...res.entries.map((entry) => entry), ...logs].slice(0, 100)
     );
   }, []);
 
   useEffect(() => {
     if (!client || !name) return;
 
-    (window as any).client = client;
-
     const stopTail = client.tail(
-      { service: `${name}.`, since: { seconds: BigInt(60 * 20) } },
+      { service: `${name}`, since: { seconds: BigInt(60 * 20) } },
       callback,
       () => {}
     );
@@ -46,11 +44,10 @@ export function useServiceLogs() {
   }, [callback, client, name]);
 
   return useMemo(() => {
-    console.log("@@ logs", deferredLogs.length);
-    return deferredLogs.slice(0, 200).filter((log) => {
-      if (!deferredFilter) {
-        return true;
-      }
+    if (!deferredFilter) {
+      return deferredLogs;
+    }
+    return deferredLogs.filter((log) => {
       const logText = strip(log.message).toLocaleLowerCase();
       return negativeFilter
         ? !logText.includes(deferredFilter)

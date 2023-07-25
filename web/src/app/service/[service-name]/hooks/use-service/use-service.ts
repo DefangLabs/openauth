@@ -9,7 +9,7 @@ const serviceAtom = atom<
 
 export function useService() {
   const [service, setService] = useAtom(serviceAtom);
-  const { services, loading } = useServices({ skip: !!service });
+  const { services, loading } = useServices({ skip: !!service, poll: 5000 });
   const searchParams = useSearchParams();
   const params = useParams();
   const name =

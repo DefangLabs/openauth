@@ -1,20 +1,19 @@
+import { thinGreyBorder } from "@/modules/mui/constants";
 import {
-  Stack,
-  Typography,
-  TableContainer,
   Paper,
+  Stack,
   Table,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
+  Typography,
 } from "@mui/material";
-import { useService } from "../../hooks/use-service/use-service";
 import { ReactNode } from "react";
-import { thinGreyBorder } from "@/modules/mui/constants";
+import { useService } from "../../hooks/use-service/use-service";
 
 export function Endpoints() {
   const { service } = useService();
-  console.log(service);
   return (service?.endpoints?.length || 0) > 0 ? (
     <Stack spacing={2}>
       <Typography variant="h2">Endpoints</Typography>
