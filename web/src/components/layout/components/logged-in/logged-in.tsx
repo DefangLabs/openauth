@@ -2,28 +2,29 @@ import { useLogout } from "@/modules/kratos/hooks/use-logout/use-logout";
 import { useSession } from "@/modules/kratos/hooks/use-session/use-session";
 import { COLORS, GRADIENTS } from "@/modules/mui/constants";
 import { useName } from "@/modules/profiles/hooks/use-name/use-name";
-import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import { OpenInNew } from "@mui/icons-material";
 import Menu from "@mui/icons-material/Menu";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import {
   Avatar,
   Box,
   Chip,
   Drawer,
-  Icon,
   IconButton,
+  ListItem,
+  Select,
   Stack,
   Typography,
   styled,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import md5 from "md5";
 import Link from "next/link";
 import { SIDEBAR_WIDTH } from "../../constants";
 import { NavButton } from "./components/nav-button/nav-button";
 import { NAV_SURFACE } from "./constants";
 import { useSidebarOpen } from "./hooks/use-sidebar-open/use-sidebar-open";
-import md5 from "md5";
-import { OpenInNew } from "@mui/icons-material";
 
 const UserChip = styled(Chip)`
   ${NAV_SURFACE}
@@ -136,9 +137,11 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               paddingLeft: "5px",
               height: "50px",
               background: "rgba(255,255,255,0.8)",
-              boxSizing: "border-box",
               boxShadow: (theme) => theme.shadows[1],
               backdropFilter: "blur(5px)",
+            }}
+            style={{
+              boxSizing: "border-box",
             }}
           >
             <IconButton onClick={() => setSidebarOpen(true)}>

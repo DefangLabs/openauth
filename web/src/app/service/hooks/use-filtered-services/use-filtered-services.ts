@@ -2,11 +2,11 @@ import { useServices } from "@/modules/defang/hooks/use-services/use-services";
 import { useSearch } from "../use-search/use-search";
 
 export function useFilteredServices() {
-  const { services } = useServices({ poll: 5000 });
+  const { services, loading } = useServices({ poll: 5000 });
 
   const { search } = useSearch();
-  return (services || [])
-    .filter(
+  const filteredServices = services
+    ?.filter(
       (service) =>
         service?.service?.name?.toLowerCase().includes(search.toLowerCase()) ||
         service?.endpoints
@@ -25,4 +25,9 @@ export function useFilteredServices() {
         ...service,
       };
     });
+
+  return {
+    services: filteredServices,
+    loading,
+  };
 }

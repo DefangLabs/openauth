@@ -8,6 +8,7 @@ import {
   TableRow,
   TableCell,
   IconButton,
+  TableBody,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -46,16 +47,18 @@ export function Environment() {
               <TableCell>Value</TableCell>
             </TableRow>
           </TableHead>
-          {Object.entries(service?.service?.environment || {}).map(
-            ([key, value], i) => (
-              <TableRow key={key}>
-                <TableCell width={250}>{key}</TableCell>
-                <TableCell>
-                  <Hideable>{value}</Hideable>
-                </TableCell>
-              </TableRow>
-            )
-          )}
+          <TableBody>
+            {Object.entries(service?.service?.environment || {}).map(
+              ([key, value], i) => (
+                <TableRow key={key}>
+                  <TableCell width={250}>{key}</TableCell>
+                  <TableCell>
+                    <Hideable>{value}</Hideable>
+                  </TableCell>
+                </TableRow>
+              )
+            )}
+          </TableBody>
         </Table>
       </TableContainer>
     </Stack>

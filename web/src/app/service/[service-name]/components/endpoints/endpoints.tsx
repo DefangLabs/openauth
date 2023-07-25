@@ -3,6 +3,7 @@ import {
   Paper,
   Stack,
   Table,
+  TableBody,
   TableCell,
   TableContainer,
   TableHead,
@@ -31,21 +32,23 @@ export function Endpoints() {
               <TableCell>URL</TableCell>
             </TableRow>
           </TableHead>
-          {service?.endpoints.map((endpoint, i) => (
-            <TableRow key={endpoint}>
-              <TableCell>{service.service?.ports?.[i]?.target}</TableCell>
-              <TableCell>
-                {endpoint.endsWith(".internal") ||
-                endpoint.includes(".internal:") ? (
-                  endpoint
-                ) : (
-                  <a href={`https://${endpoint}`} target="_blank">
-                    {endpoint}
-                  </a>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
+          <TableBody>
+            {service?.endpoints.map((endpoint, i) => (
+              <TableRow key={endpoint}>
+                <TableCell>{service.service?.ports?.[i]?.target}</TableCell>
+                <TableCell>
+                  {endpoint.endsWith(".internal") ||
+                  endpoint.includes(".internal:") ? (
+                    endpoint
+                  ) : (
+                    <a href={`https://${endpoint}`} target="_blank">
+                      {endpoint}
+                    </a>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </TableContainer>
     </Stack>

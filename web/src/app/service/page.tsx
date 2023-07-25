@@ -2,7 +2,13 @@
 
 import { StatusIcon } from "@/components/status-icon/status-icon";
 import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
-import { Box, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 import { useFilteredServices } from "./hooks/use-filtered-services/use-filtered-services";
@@ -10,12 +16,26 @@ import { useSearch } from "./hooks/use-search/use-search";
 import { EmptyServices } from "./components/empty-services/empty-services";
 
 export default LoginRequired(function ServicesPage() {
-  const services = useFilteredServices();
+  const { services, loading } = useFilteredServices();
   const { search, setSearch } = useSearch();
   const router = useRouter();
 
-  if (!services.length) {
+  if (services?.length && services?.length === 0 && !loading) {
     return <EmptyServices />;
+  }
+
+  if (loading) {
+    return (
+      <Stack
+        height="100vh"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+      >
+        <CircularProgress />
+        <Typography variant="h2">Loading...</Typography>
+      </Stack>
+    );
   }
 
   return (
@@ -57,7 +77,7 @@ export default LoginRequired(function ServicesPage() {
           sx={{
             "& .MuiDataGrid-cell": { cursor: "pointer" },
           }}
-          rows={services}
+          rows={services || []}
         />
       </Box>
     </Stack>

@@ -8,7 +8,7 @@ interface UseServicesOpts {
   poll?: number;
 }
 
-const servicesAtom = atom<Services["services"]>([]);
+const servicesAtom = atom<Services["services"] | null>(null);
 
 export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
   const [services, setServices] = useAtom(servicesAtom);

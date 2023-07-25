@@ -7,17 +7,27 @@ import {
   useMemo,
   useState,
 } from "react";
-import { useLogsFilter } from "../../../../app/service/[service-name]/hooks/use-logs-filter/use-logs-filter";
-import { useServiceName } from "../../../../app/service/[service-name]/hooks/use-service-name/use-service-name";
 import { LogEntry, TailResponse } from "../../generated/fabric_pb";
 
-export function useServiceLogs() {
+interface UseServiceLogsOpts {
+  filter?: string;
+  negativeFilter?: boolean;
+  service?: string;
+  etag?: string;
+}
+
+export function useServiceLogs(opts: UseServiceLogsOpts) {
+  const { filter = "", negativeFilter = false } = opts;
+  const service = opts?.service;
+  const etag = opts?.etag;
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const client = useDefangClient();
-  const name = useServiceName();
-  const { filter, negativeFilter } = useLogsFilter();
   const deferredFilter = useDeferredValue(filter).toLocaleLowerCase();
   const deferredLogs = useDeferredValue(logs);
+
+  const resetLogs = useCallback(() => {
+    setLogs([]);
+  }, []);
 
   const callback = useCallback((res: TailResponse) => {
     setLogs((logs) =>
@@ -26,11 +36,12 @@ export function useServiceLogs() {
   }, []);
 
   useEffect(() => {
-    if (!client || !name) return;
+    if (!client || (!service && !etag)) return;
 
     const stopTail = client.tail(
       {
-        service: `${name}`,
+        service,
+        etag,
         since: { seconds: BigInt(Math.floor(Date.now() / 1000) - 60 * 30) },
       },
       callback,
@@ -44,17 +55,20 @@ export function useServiceLogs() {
         console.log("@@ error stopping tail", e);
       }
     };
-  }, [callback, client, name]);
+  }, [callback, client, etag, service]);
 
-  return useMemo(() => {
-    if (!deferredFilter) {
-      return deferredLogs;
-    }
-    return deferredLogs.filter((log) => {
-      const logText = strip(log.message).toLocaleLowerCase();
-      return negativeFilter
-        ? !logText.includes(deferredFilter)
-        : logText.includes(deferredFilter);
-    });
-  }, [deferredFilter, deferredLogs, negativeFilter]);
+  return {
+    logs: useMemo(() => {
+      if (!deferredFilter) {
+        return deferredLogs;
+      }
+      return deferredLogs.filter((log) => {
+        const logText = strip(log.message).toLocaleLowerCase();
+        return negativeFilter
+          ? !logText.includes(deferredFilter)
+          : logText.includes(deferredFilter);
+      });
+    }, [deferredFilter, deferredLogs, negativeFilter]),
+    resetLogs,
+  };
 }
