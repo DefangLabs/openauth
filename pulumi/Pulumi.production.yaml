@@ -1,0 +1,21 @@
+config:
+  aiven:apiToken:
+    secure: AAABAC23c/3iSPAsGPm2tx/wejAjXRaWpfL6C3Y3+j10+kzvqN/angjwKgCVzK0hRzAlBzcwOAd3JeOfxavA0OlhlvvxDYBBT4brcZKdxW7Uhd7a49DoXt4Macfj2SQep4d+hgH1OZq5MBVbP36NIPdgqHwxP2o1ufNtBsqzXbqj8Q03Y9hI+4iNCtnNdWh2cVo2Ls0Zo7goaV91hyI1GHDTMD9PmsWLfoT4KS7LAslgWk0kfkv6ZnizLaxMdQEzPg1Zt90JhIJOM4yABj8RoeFMeBRJ1Y+1RzEbtBsF1lLgAQgCrOwOJo+rgN/c3iKw2xNQHMS9HHLVt9JsDGxDECioxLn51n4Qr6NeZ5I7BVYLXxaRSG/CePJv5KzrAQ68NbDLgXtBqW9KejGJtifkUqWkk0rhfNWSYT4dmEZgJ2t7Ahcwq6ppDXNXXHeGevLPKDyH5dS63Y/FzOzzqo8Ov6okYUer4v5qrLXB/wc/8LgBRWL189r6/zsv9n4t0Vx5YX9qOI0n5UwXqIpg+E8A2AFgAoYoymAx2Fsk0dxvjARU0oLZ
+  defang-portal:aivenBillingGroup:
+    secure: AAABACYssb6InyMG8+yblNMObJSRBsBqocBay3MqWf7k7haci5++YkQiCU7D2OkkDxE8/kkqXrwc72SMNs3dZwYrjnQ=
+  defang-portal:dockerHubToken:
+    secure: AAABAMfXgE1PFefrTFFl4pRjjb6CkeNUi8+zhDDtLvkEjeI6hjJ0S4uhj4I9Z+bHSFXApKtefSFlbUQWwpslcorr0VY=
+  defang-portal:fabric: fabric-prod1.defang.dev:443
+  defang-portal:githubClientId: f4a7f6905b83028583d5
+  defang-portal:githubClientSecret:
+    secure: AAABAPhtZZb2PC3TXiw2419JNwMfAWko1DWtbqI+83vrENQ4kZZoYO/846K6L/Pdy52oWc0+dI1Bf7pXslbMsd1UoOPFuFz+
+  defang-portal:hasuraDatabasePassword:
+    secure: AAABAI5ZZZ6OIvLXSfFJPf7b40mowP45DeSxtTydwP3+9CHMjQFXDWg4QFciOXQyvTmdkp8HgZbv
+  defang-portal:kratosDatabasePassword:
+    secure: AAABAP8S9ykTymWcMfpxRiKytsG8ueV3zSxFaXa52V7X4uY6ZPpChaBmua/6BliCXei5hYo488zc
+  defang-portal:kratosSecretsCipher0:
+    secure: AAABAFSzkFVrrjQY6rGGVScEBaicn4TYkO4NJxnuEvPvkbFFJYn6UKLVRqsP2MRFE2PBJ9ul82azZiRvNbgluQ==
+  defang-portal:kratosSecretsCookie0:
+    secure: AAABAHtyPE5S4/pMmDyYKEUhWWpRS5ZwbxnBr1SJ1KW4/33rEV8BV7kjwlgiE/Gl46FistPYQT+TA51ZMUSyyViPuCKf4uP3yMrr8w==
+  defang-portal:rootUrl: https://lionello-heimdall-production--4455.prod1.defang.dev
+  defang-portal:signer: heimdall

@@ -5,11 +5,16 @@ import { service as kratosService } from '../kratos/service';
 import { SERVICE_NAME } from './constants';
 import { image } from './image';
 
-const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.imageName}`;
+const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
 
 export const service = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
+    deploy: {
+        resources: {
+            reservations: {memory: 1024}
+        }
+    },
     ports: [
         {target: 4457, protocol: 'http', mode: 'ingress'},
         {target: 4455, protocol: 'http', mode: 'ingress'},

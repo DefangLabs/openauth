@@ -7,7 +7,7 @@ import { hasuraDatabaseUri } from './database';
 import { image } from './image';
 import { ROOT_URL } from '../common/constants';
 
-const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.imageName}`;
+const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
 
 export const service = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
@@ -24,7 +24,7 @@ export const service = new DefangService(SERVICE_NAME, {
         HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: 'true',
         DEFANG_FN_ENDPOINT: pulumi.interpolate`https://${apiService.endpoints?.[0]}`,
         HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: 'naming_convention',
-        HASURA_GRAPHQL_JWT_SECRET: `{"jwk_url":"${ROOT_URL.replace('--4455', '')}/.well-known/jwks"}`,
+        HASURA_GRAPHQL_JWT_SECRET: `{"jwk_url":"${ROOT_URL.replace('--4455', '--4457')}/.well-known/jwks"}`,
     },
     platform: 'linux/arm64',
     healthcheck: {

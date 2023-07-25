@@ -4,7 +4,7 @@ import { SERVICE_NAME } from './constants';
 import { config, dockerHubToken } from '../common/config';
 import {image} from './image';
 
-const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.imageName}`;
+const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
 
 export const service = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,

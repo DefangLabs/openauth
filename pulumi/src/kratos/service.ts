@@ -7,7 +7,7 @@ import { kratosDatabase, kratosDatabaseUri, kratosUser } from './database';
 import { image } from './image';
 import { migrationCommand } from './migration';
 
-const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.imageName}`;
+const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
 
 export const service = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
