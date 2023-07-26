@@ -20,7 +20,7 @@ export default LoginRequired(function ServicesPage() {
   const { search, setSearch } = useSearch();
   const router = useRouter();
 
-  if (services?.length && services?.length === 0 && !loading) {
+  if (!services?.length && !loading) {
     return <EmptyServices />;
   }
 
