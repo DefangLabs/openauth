@@ -1,23 +1,25 @@
 import { DefangService } from '@defang-io/pulumi-defang/lib';
 import * as pulumi from '@pulumi/pulumi';
-import { dockerHubToken } from '../common/config';
+import { config, dockerHubToken } from '../common/config';
 import { service as kratosService } from '../kratos/service';
 import { SERVICE_NAME } from './constants';
 import { image } from './image';
+import { ROOT_URL } from '../common/constants';
 
-const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
+const authenticatedImageName: pulumi.Output<string> = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
 
-export const service = new DefangService(SERVICE_NAME, {
+export const service: DefangService = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
-    deploy: {
-        resources: {
-            reservations: {memory: 1024}
-        }
-    },
+    domainname: config.get("domainname"),
+    // deploy: {
+    //     resources: {
+    //         reservations: {memory: 1024}
+    //     }
+    // },
     ports: [
-        {target: 4457, protocol: 'http', mode: 'ingress'},
         {target: 4455, protocol: 'http', mode: 'ingress'},
+        {target: 4457, protocol: 'http', mode: 'ingress'},
     ],
     environment: {
         RULES_FILE_PATH: '/heimdall/conf/rules/rules.yaml',

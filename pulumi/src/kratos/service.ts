@@ -9,7 +9,7 @@ import { migrationCommand } from './migration';
 
 const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
 
-export const service = new DefangService(SERVICE_NAME, {
+export const service: DefangService = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
     ports: [{ target: 4433, protocol: 'http', mode: 'host' }],
@@ -30,11 +30,13 @@ export const service = new DefangService(SERVICE_NAME, {
         SELFSERVICE_FLOWS_LOGIN_UI_URL: `${ROOT_URL}/auth/login`,
         SELFSERVICE_FLOWS_REGISTRATION_UI_URL: `${ROOT_URL}/auth/login`,
         LOG_LEAK_SENSITIVE_VALUES: 'false',
-        SECRETS_COOKIE_0: config.requireSecret('kratosSecretsCookie0'),
-        SECRETS_CIPHER_0: config.requireSecret('kratosSecretsCipher0'),
         SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_ID: config.require('githubClientId'),
         SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_SECRET: config.require('githubClientSecret'),
     },
+    secrets: [
+        { source: 'SECRETS_COOKIE_0', value: config.getSecret('kratosSecretsCookie0') },
+        { source: 'SECRETS_CIPHER_0', value: config.getSecret('kratosSecretsCipher0') },
+    ],
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:4433/health/alive'],
     },

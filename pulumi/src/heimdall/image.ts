@@ -10,10 +10,10 @@ import {service as hasuraService} from '../hasura/service';
 
 const imageName = `docker.io/defangportal/${SERVICE_NAME}:${pulumi.getStack()}-${Math.floor(+new Date() / 1000)}`;
 
-const hasuraDomain = pulumi.runtime.isDryRun() ? '' : pulumi.interpolate`${hasuraService.endpoints?.[0]}`;
-const fnDomain = pulumi.runtime.isDryRun() ? '' : pulumi.interpolate`${apiService.endpoints?.[0]}`;
-const nextjsDomain = pulumi.runtime.isDryRun() ? '' : pulumi.interpolate`${webService.endpoints?.[0]}`;
-const kratosDomain = pulumi.runtime.isDryRun() ? '' : pulumi.interpolate`${kratosService.endpoints?.[0]}`;
+const hasuraDomain = pulumi.runtime.isDryRun() ? '' : pulumi.interpolate`${hasuraService.endpoints[0]}`;
+const fnDomain = pulumi.runtime.isDryRun() ? '' : pulumi.interpolate`${apiService.endpoints[0]}`;
+const nextjsDomain = pulumi.runtime.isDryRun() ? '' : pulumi.interpolate`${webService.endpoints[0]}`;
+const kratosDomain = pulumi.runtime.isDryRun() ? '' : pulumi.interpolate`${kratosService.endpoints[0]}`;
 
 export const image = new docker.Image(SERVICE_NAME, {
     imageName,
