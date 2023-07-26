@@ -1,9 +1,13 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@defang-io/pulumi-defang':
-    specifier: ^0.11.3
-    version: 0.11.3
+    specifier: ^0.11.7
+    version: 0.11.7
   '@pulumi/aiven':
     specifier: ^6.3.1
     version: 6.3.1
@@ -27,8 +31,8 @@ devDependencies:
 
 packages:
 
-  /@defang-io/pulumi-defang@0.11.3:
-    resolution: {integrity: sha512-vS48LDJhgm95G+tvpxjyKuE1TqfBh9ZF/iC5KY0uRurI+NGviGIWO59iqqLiSgVRgkqhtMt07xJFk10rsgFaKg==}
+  /@defang-io/pulumi-defang@0.11.7:
+    resolution: {integrity: sha512-qkUvvZV4mjweb5991Sr5v4o2e/dcFLfHcNRaegvr2tY6Kj7pZMlnzqmbPak6MNw8UW7c7XtcYFnguIW0O77Jhg==}
     engines: {node: '>=16'}
     dependencies:
       '@pulumi/pulumi': 3.69.0
