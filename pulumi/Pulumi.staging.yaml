@@ -12,6 +12,8 @@ config:
   defang-portal:githubClientId: 530ac29eb81d95ec590e
   defang-portal:githubClientSecret:
     secure: AAABAL/yY0DzvG3MBBvDV/hxd/sgEgLVgFINAIP8D/REKEZGLjqQSLbP6eZSDL/MJ9gWla35TkiruQS3c/c+hc6jdc7hAkgN
+  defang-portal:hasuraAdminSecret:
+    secure: AAABAKROLLxBQgYyzGT6UAOo+0o6JsqMCcXsK74OMhe+6LwhKLHatHvSNAOFYlnXujpkkwe/kYjZ
   defang-portal:hasuraDatabasePassword:
     secure: AAABAC4UkRkHh6aTqIf2YDdbxc70aytznG5q03czwGc+RddwWkdTIS+4JG0l+8ff60K9G7zHyiIz
   defang-portal:kratosDatabasePassword:
@@ -20,5 +22,6 @@ config:
     secure: AAABAKpzgsT7rIQ/P9VGews/oXcAMOBYAk64I2BHsVHolekwBhQEKQnVpwFsc8JSLh7xk33dlhs+9yOQKNqdgA==
   defang-portal:kratosSecretsCookie0:
     secure: AAABAJooImUMWhMa8s4bqxvoj4ncFrNb1EKorgmJnRpKGIADb3aJkw+pRp4XQunmhQC9+PRnxvQLmsBHa6K8OkgkkpyTiLDbUwVPlQ==
+  # defang-portal:domainname: portal-staging.defang.dev
   defang-portal:rootUrl: https://raphaeltm-heimdall-staging--4455.prod1.defang.dev
   defang-portal:signer: heimdall
