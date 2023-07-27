@@ -6,6 +6,7 @@ import { GitHub } from "@mui/icons-material";
 import { Button, Divider, Typography } from "@mui/material";
 import { GenericError, LoginFlow } from "@ory/client";
 import { AxiosError } from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -99,6 +100,12 @@ export default function LoginPage() {
 
   return (
     <>
+      <Image
+        src="/DEFANG-1_4x-no-text-256.svg"
+        height={100}
+        width={100}
+        alt="Defang logo"
+      />
       <Typography variant="h2">Login to Defang</Typography>
       {!flow ? (
         "Loading..."

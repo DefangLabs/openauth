@@ -13,25 +13,17 @@ export function SideBar() {
     >
       <div>
         <Typography variant="h2" color="white">
-          Complexity made simple
-        </Typography>
-        <Typography color="white">
-          Defang helps developers deploy and manage containerized applications
-          at scale. With features like automated scaling, load balancing, and
-          self-healing, we make it easy to build and run complex applications in
-          production.
+          AI-assisted Development
         </Typography>
       </div>
       <div>
         <Typography variant="h2" color="white">
-          Focus on building great software
+          Automated CI/CD
         </Typography>
-        <Typography color="white">
-          Whether you&apos;re building microservices, deploying machine learning
-          models, or running a large-scale web application, Defang can help you
-          streamline your development process and reduce operational overhead.
-          By abstracting away the underlying infrastructure, we allow you to
-          focus on building great software.
+      </div>
+      <div>
+        <Typography variant="h2" color="white">
+          Production-ready Environments
         </Typography>
       </div>
     </Stack>
