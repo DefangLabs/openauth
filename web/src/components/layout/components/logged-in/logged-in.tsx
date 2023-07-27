@@ -106,8 +106,12 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               Documentation{" "}
               <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
             </NavButton>
-            <NavButton href="https://github.com/defang-io/defang/releases">
+            <NavButton href="https://github.com/defang-io/defang/releases/latest">
               CLI Download{" "}
+              <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+            </NavButton>
+            <NavButton href="https://github.com/defang-io/defang/issues">
+              GitHub Issues{" "}
               <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
             </NavButton>
             <NavButton href="https://join.slack.com/share/enQtNTY2NzE1MTAzNDgzMi03M2YyZmZhYWE2YWNiMzFiYmI1MzJjMjUwNzVmZWIzOTYyZjhmOTlhYjU5ZTI1MGY4NjcwMGIzNzdkNWQ0ZWNi">
