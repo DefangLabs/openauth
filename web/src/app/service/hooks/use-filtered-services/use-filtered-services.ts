@@ -21,7 +21,7 @@ export function useFilteredServices() {
         name: service.service?.name,
         fqdn: service.endpoints?.[0],
         dockerImage: service.service?.image,
-        port: service.service?.ports?.[0]?.target,
+        port: service.service?.ports?.map((p) => p.target).join(" "),
         ...service,
       };
     });
