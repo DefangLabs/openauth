@@ -18,6 +18,7 @@ import { useState } from "react";
 import { ClickableDetail } from "./components/clickable-detail/clickable-detail";
 import { Endpoints } from "./components/endpoints/endpoints";
 import { Environment } from "./components/environment/environment";
+import { Secrets } from "./components/secrets/secrets";
 import { Logs } from "./components/logs/logs";
 import { useService } from "./hooks/use-service/use-service";
 
@@ -80,22 +81,26 @@ export default LoginRequired(function ServicePage() {
         width="100%"
       >
         <ClickableDetail
-          title="Image"
+          title="Container Image"
           content={service?.service?.image || ""}
         />
-        <ClickableDetail title="ETag" content={service?.etag || ""} />
         <ClickableDetail
-          title="Private FQDN"
+          title="Deployment ID / ETag"
+          content={service?.etag || ""}
+        />
+        <ClickableDetail
+          title="Private Domain Name"
           content={service?.privateFqdn || ""}
         />
         <ClickableDetail
-          title="Public FQDN"
+          title="Public Domain Name"
           content={service?.publicFqdn || ""}
         />
       </Stack>
       <Endpoints />
       <Logs />
       <Environment />
+      <Secrets />
     </Stack>
   );
 }) as any;

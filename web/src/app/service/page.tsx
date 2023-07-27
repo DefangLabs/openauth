@@ -62,10 +62,15 @@ export default LoginRequired(function ServicesPage() {
               renderCell: (params) => <StatusIcon status={params.value} />,
             },
             { field: "name", headerName: "Name", width: 150 },
-            { field: "fqdn", headerName: "FQDN", flex: 1, minWidth: 250 },
+            {
+              field: "fqdn",
+              headerName: "Domain Name",
+              flex: 1,
+              minWidth: 250,
+            },
             {
               field: "dockerImage",
-              headerName: "Image",
+              headerName: "Container Image",
               flex: 1,
               minWidth: 250,
             },
