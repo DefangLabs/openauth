@@ -102,15 +102,12 @@ export function Logs() {
                 0,
                 20
               )}`}
-              style={{ whiteSpace: "nowrap" }}
+              style={{ whiteSpace: "pre" }}
             >
               {parse(log.message).spans.map((span, i) => (
-                <span
-                  key={i}
-                  dangerouslySetInnerHTML={{
-                    __html: `<span style="${span.css}">${span.text}</span>`,
-                  }}
-                />
+                <span key={i} style={parseCss(span.css)}>
+                  {span.text}
+                </span>
               ))}
             </div>
           ))}
@@ -118,4 +115,12 @@ export function Logs() {
       </Stack>
     </>
   );
+}
+
+function parseCss(css: string): React.CSSProperties {
+  const styles = css.split(";").map((style) => {
+    const [key, value] = style.split(":", 2);
+    return [key.trim().replace(/-[a-z]/g, (m) => m[1].toUpperCase()), value];
+  });
+  return Object.fromEntries(styles) as React.CSSProperties;
 }
