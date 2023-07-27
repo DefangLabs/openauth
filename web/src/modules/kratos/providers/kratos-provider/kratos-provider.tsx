@@ -20,7 +20,8 @@ export function KratosProvider({ children }: KratosProviderProps) {
         }
       },
     });
-  }, [pathname, router, updateSession]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useCreateProfile();
 

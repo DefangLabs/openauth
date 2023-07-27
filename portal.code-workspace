@@ -101,6 +101,15 @@
 				"problemMatcher": []
 			},
 			{
+				"label": "backend: run",
+				"type": "npm",
+				"script": "nps",
+				"runOptions": {
+					"runOn": "folderOpen"
+				},
+				"problemMatcher": []
+			},
+			{
 				"label": "web: run dev",
 				"type": "npm",
 				"script": "dev",
