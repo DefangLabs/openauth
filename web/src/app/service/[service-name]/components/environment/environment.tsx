@@ -30,7 +30,7 @@ function Hideable({ children }: { children: React.ReactNode }) {
 
 export function Environment() {
   const { service } = useService();
-  return Object.keys(service?.service?.environment || {}).length > 1 ? (
+  return Object.keys(service?.service?.environment || {}).length > 0 ? (
     <Stack spacing={2}>
       <Typography variant="h2">Environment</Typography>
       <TableContainer
