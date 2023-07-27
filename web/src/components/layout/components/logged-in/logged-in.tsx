@@ -87,9 +87,9 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
                 avatar={
                   <UserAvatar
                     style={{ width: 60, height: 60, backgroundColor: "white" }}
-                    src={`https://www.gravatar.com/avatar/${md5(
+                    src={`//www.gravatar.com/avatar/${md5(
                       (email || "").toLowerCase().trim()
-                    )}`}
+                    )}?d=identicon`}
                   >
                     {(name || "U").charAt(0)}
                   </UserAvatar>
@@ -108,6 +108,10 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
             </NavButton>
             <NavButton href="https://github.com/defang-io/defang/releases">
               CLI Download{" "}
+              <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+            </NavButton>
+            <NavButton href="https://join.slack.com/share/enQtNTY2NzE1MTAzNDgzMi03M2YyZmZhYWE2YWNiMzFiYmI1MzJjMjUwNzVmZWIzOTYyZjhmOTlhYjU5ZTI1MGY4NjcwMGIzNzdkNWQ0ZWNi">
+              Join Slack{" "}
               <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
             </NavButton>
           </Stack>
