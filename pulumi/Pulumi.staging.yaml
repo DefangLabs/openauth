@@ -16,6 +16,7 @@ config:
     secure: AAABAKROLLxBQgYyzGT6UAOo+0o6JsqMCcXsK74OMhe+6LwhKLHatHvSNAOFYlnXujpkkwe/kYjZ
   defang-portal:hasuraDatabasePassword:
     secure: AAABAC4UkRkHh6aTqIf2YDdbxc70aytznG5q03czwGc+RddwWkdTIS+4JG0l+8ff60K9G7zHyiIz
+  defang-portal:heimdallJwksEndpoint: https://raphaeltm-heimdall-staging--4457.prod1.defang.dev/.well-known/jwks
   defang-portal:kratosDatabasePassword:
     secure: AAABABF6h45Q7UQtN4yutGPricZ0X8vyk9AtZ0b3X+eGfQsyGJO0HEMcq18UHXAMogtUNHehIw6t
   defang-portal:kratosSecretsCipher0:
