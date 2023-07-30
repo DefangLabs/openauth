@@ -12,7 +12,6 @@ export const image = new docker.Image(SERVICE_NAME, {
         context: SERVICE_ROOT_PATH,
         platform: 'linux/arm64',
         args: {
-            PORT: '3000',
             NEXT_PUBLIC_KRATOS_PUBLIC_URL: `${ROOT_URL}/svc/kratos`,
             NEXT_PUBLIC_GRAPHQL_URL: `${ROOT_URL}/svc/hasura/v1/graphql`,
             NEXT_PUBLIC_FN_URL: `${ROOT_URL}/svc/fn`,
