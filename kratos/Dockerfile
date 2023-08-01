@@ -1,4 +1,4 @@
-FROM oryd/kratos:v0.13.0
+FROM oryd/kratos:v1.0
 
 COPY ./config /etc/config/kratos
 
