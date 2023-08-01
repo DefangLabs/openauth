@@ -14,7 +14,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
 import { ClickableDetail } from "./components/clickable-detail/clickable-detail";
 import { Endpoints } from "./components/endpoints/endpoints";
 import { Environment } from "./components/environment/environment";
@@ -32,7 +31,7 @@ const OpenIcon = styled(OpenInNew)`
 `;
 
 export default LoginRequired(function ServicePage() {
-  const { service, loading } = useService();
+  const { service, loading } = useService({ poll: 5000 });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
