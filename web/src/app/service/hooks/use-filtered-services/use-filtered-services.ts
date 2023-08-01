@@ -19,7 +19,7 @@ export function useFilteredServices() {
       return {
         id: service.etag,
         name: service.service?.name,
-        fqdn: service.endpoints?.[0],
+        fqdn: service.service?.domainname || service.endpoints?.[0],
         dockerImage: service.service?.image,
         port: service.service?.ports?.map((p) => p.target).join(" "),
         ...service,

@@ -93,7 +93,7 @@ export default LoginRequired(function ServicePage() {
         />
         <ClickableDetail
           title="Public Domain Name"
-          content={service?.publicFqdn || ""}
+          content={service?.service?.domainname || service?.publicFqdn || ""}
         />
       </Stack>
       <Endpoints />
