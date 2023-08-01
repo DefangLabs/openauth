@@ -10,6 +10,8 @@ import {
   Select,
   Stack,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   styled,
 } from "@mui/material";
@@ -35,9 +37,11 @@ const LogContainer = styled("div")`
 `;
 
 type LogFilter = "all" | "current";
+type LogTime = "0" | "1" | "30" | "60" | "720";
 
 export function Logs() {
   const [logType, setLogType] = useState<LogFilter>("all");
+  const [logTime, setLogTime] = useState<LogTime>("30");
   const { filter, setFilter, negativeFilter, setNegativeFilter } =
     useLogsFilter();
   const { service, loading } = useService({ skip: true, poll: undefined });
@@ -46,6 +50,7 @@ export function Logs() {
     negativeFilter,
     service: service?.service?.name,
     etag: logType === "current" ? service?.etag : undefined,
+    sinceMins: parseInt(logTime),
   });
 
   return (
@@ -92,6 +97,21 @@ export function Logs() {
                   <MenuItem value="current">Current Deployment</MenuItem>
                 </Select>
               </FormControl>
+              <ToggleButtonGroup
+                value={logTime}
+                exclusive
+                size="small"
+                onChange={(e, v) => {
+                  resetLogs();
+                  setLogTime(v as LogTime);
+                }}
+              >
+                <ToggleButton value="0">clear</ToggleButton>
+                <ToggleButton value="1">1m</ToggleButton>
+                <ToggleButton value="30">30m</ToggleButton>
+                <ToggleButton value="60">1h</ToggleButton>
+                <ToggleButton value="720">12h</ToggleButton>
+              </ToggleButtonGroup>
             </Stack>
           </Grid>
         </Grid>

@@ -10,16 +10,18 @@ import {
 import { LogEntry, TailResponse } from "../../generated/fabric_pb";
 
 interface UseServiceLogsOpts {
+  etag?: string;
   filter?: string;
   negativeFilter?: boolean;
   service?: string;
-  etag?: string;
+  sinceMins?: number;
 }
 
 export function useServiceLogs(opts: UseServiceLogsOpts) {
   const { filter = "", negativeFilter = false } = opts;
   const service = opts?.service;
   const etag = opts?.etag;
+  const sinceMins = opts?.sinceMins;
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const client = useDefangClient();
   const deferredFilter = useDeferredValue(filter).toLocaleLowerCase();
@@ -42,7 +44,9 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
       {
         service,
         etag,
-        since: { seconds: BigInt(Math.floor(Date.now() / 1000) - 60 * 30) },
+        since: sinceMins
+          ? { seconds: BigInt(Math.floor(Date.now() / 1000) - 60 * sinceMins) }
+          : undefined,
       },
       callback,
       () => {}
@@ -55,7 +59,7 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
         console.log("@@ error stopping tail", e);
       }
     };
-  }, [callback, client, etag, service]);
+  }, [callback, client, etag, service, sinceMins]);
 
   return {
     logs: useMemo(() => {
