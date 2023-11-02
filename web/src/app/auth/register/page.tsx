@@ -1,5 +1,7 @@
 "use client";
 
+import { analytics } from "@/modules/analytics/lib/analytics";
+import { EVENTS } from "@/modules/analytics/lib/constants";
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
 import { kratosClient } from "@/modules/kratos/lib/kratos-client/kratos-client";
 import { GitHub } from "@mui/icons-material";
@@ -79,6 +81,7 @@ export default function RegisterPage() {
   };
 
   const register = useCallback(async () => {
+    analytics.track(EVENTS.register);
     kratosClient
       .updateRegistrationFlow({
         flow: flowId,

@@ -23,6 +23,7 @@
     "@mui/x-data-grid": "^6.9.0",
     "@ory/client": "^1.1.33",
     "@ory/elements": "0.0.1-beta.6",
+    "@segment/analytics-next": "^1.59.0",
     "@types/google-protobuf": "^3.15.6",
     "@types/md5": "^2.3.2",
     "@types/node": "20.1.5",

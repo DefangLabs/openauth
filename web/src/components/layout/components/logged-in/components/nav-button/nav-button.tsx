@@ -1,4 +1,3 @@
-import { COLORS } from "@/modules/mui/constants";
 import { Button, styled } from "@mui/material";
 import Link from "next/link";
 import { ComponentProps } from "react";
@@ -32,7 +31,6 @@ export function NavButton({ href, ...props }: NavButtonProps) {
     <Link
       href={href}
       onClick={() => {
-        console.log("@@ NavButton onClick");
         setSidebarOpen(false);
       }}
       target={href.startsWith("http") ? "_blank" : undefined}

@@ -1,5 +1,7 @@
 "use client";
 
+import { analytics } from "@/modules/analytics/lib/analytics";
+import { EVENTS } from "@/modules/analytics/lib/constants";
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
 import { kratosClient } from "@/modules/kratos/lib/kratos-client/kratos-client";
 import { GitHub } from "@mui/icons-material";
@@ -76,27 +78,26 @@ export default function LoginPage() {
     createFlow(refresh, aal, returnTo);
   }, [aal, createFlow, flowId, getFlow, refresh, returnTo]);
 
-  const login = useCallback(
-    () =>
-      kratosClient
-        .updateLoginFlow({
-          flow: String(flow?.id),
-          updateLoginFlowBody: {
-            method: "oidc",
-            provider: "github",
-          },
-        })
-        .catch((e) => {
-          const data = e.response?.data as {
-            error: GenericError;
-            redirect_browser_to: string;
-          };
-          if (data?.redirect_browser_to) {
-            window.location.href = data.redirect_browser_to;
-          }
-        }),
-    [flow?.id]
-  );
+  const login = useCallback(() => {
+    analytics.track(EVENTS.login);
+    return kratosClient
+      .updateLoginFlow({
+        flow: String(flow?.id),
+        updateLoginFlowBody: {
+          method: "oidc",
+          provider: "github",
+        },
+      })
+      .catch((e) => {
+        const data = e.response?.data as {
+          error: GenericError;
+          redirect_browser_to: string;
+        };
+        if (data?.redirect_browser_to) {
+          window.location.href = data.redirect_browser_to;
+        }
+      });
+  }, [flow?.id]);
 
   return (
     <>
