@@ -15,13 +15,24 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useService } from "../../hooks/use-service/use-service";
 import { ReactNode, useState } from "react";
 import { thinGreyBorder } from "@/modules/mui/constants";
+import { analytics } from "@/modules/analytics/lib/analytics";
+import { EVENTS } from "@/modules/analytics/lib/constants";
 
 function Hideable({ children }: { children: React.ReactNode }) {
   const [hidden, setHidden] = useState(true);
   return (
     <Stack direction="row" spacing={2} justifyContent="space-between">
       <span>{hidden ? "***********" : children}</span>
-      <IconButton onClick={() => setHidden((prev) => !prev)}>
+      <IconButton
+        onClick={() =>
+          setHidden((prev) => {
+            analytics.track(EVENTS.toggleEnvVisibility, {
+              visible: !prev,
+            });
+            return !prev;
+          })
+        }
+      >
         {hidden ? <Visibility /> : <VisibilityOff />}
       </IconButton>
     </Stack>

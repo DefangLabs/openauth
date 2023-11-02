@@ -1,0 +1,17 @@
+"use client";
+
+import { ReactNode, useEffect } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { analytics } from "../../lib/analytics";
+
+export function AnalyticsProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    console.log("@@ AnalyticsProvider: useEffect: pathname: ", pathname);
+    analytics.page();
+  }, [pathname, searchParams]);
+
+  return <>{children}</>;
+}

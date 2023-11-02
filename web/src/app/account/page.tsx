@@ -14,6 +14,8 @@ import {
 import { FormEvent, useCallback, useEffect } from "react";
 import { useAccountForm } from "./hooks/use-account-form/use-account-form";
 import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
+import { analytics } from "@/modules/analytics/lib/analytics";
+import { EVENTS } from "@/modules/analytics/lib/constants";
 
 export default LoginRequired(function AccountPage() {
   const {
@@ -39,6 +41,7 @@ export default LoginRequired(function AccountPage() {
   const onSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
+      analytics.track(EVENTS.updateProfile);
       const { errors } = await insertProfileMutation({
         variables: { object: form },
       });

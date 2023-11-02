@@ -12,8 +12,6 @@ update-ca-certificates
 # Folder passed as a parameter
 FOLDER=$1
 
-echo "@@ thing"
-
 # Create the folder if it does not exist
 mkdir -p $FOLDER
 

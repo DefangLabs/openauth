@@ -20,6 +20,8 @@ import { useState } from "react";
 import { useServiceLogs } from "../../../../../modules/defang/hooks/use-service-logs/use-service-logs";
 import { useLogsFilter } from "../../hooks/use-logs-filter/use-logs-filter";
 import { useService } from "../../hooks/use-service/use-service";
+import { analytics } from "@/modules/analytics/lib/analytics";
+import { EVENTS } from "@/modules/analytics/lib/constants";
 
 const LogContainer = styled("div")`
   font-family: "Courier New", Courier, monospace;
@@ -38,6 +40,14 @@ const LogContainer = styled("div")`
 
 type LogFilter = "all" | "current";
 type LogTime = "0" | "1" | "30" | "60" | "720";
+
+let filterTimeout: NodeJS.Timeout;
+const trackFilter = () => {
+  clearTimeout(filterTimeout);
+  filterTimeout = setTimeout(() => {
+    analytics.track(EVENTS.filterLogs);
+  }, 500);
+};
 
 export function Logs() {
   const [logType, setLogType] = useState<LogFilter>("all");
@@ -67,13 +77,21 @@ export function Logs() {
                 variant="outlined"
                 value={filter}
                 size="small"
-                onChange={(e) => setFilter(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length > 0) {
+                    trackFilter();
+                  }
+                  return setFilter(e.target.value);
+                }}
               />
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={negativeFilter}
                     onChange={(e) => {
+                      analytics.track(EVENTS.toggleNegativeFilter, {
+                        value: !!e.target.checked,
+                      });
                       return setNegativeFilter(!!e.target.checked);
                     }}
                   />
@@ -88,6 +106,9 @@ export function Logs() {
                   value={logType}
                   label="Logs for"
                   onChange={(e) => {
+                    analytics.track(EVENTS.toggleLogType, {
+                      type: e.target.value,
+                    });
                     resetLogs();
                     setLogType(e.target.value as LogFilter);
                   }}
@@ -102,6 +123,9 @@ export function Logs() {
                 exclusive
                 size="small"
                 onChange={(e, v) => {
+                  analytics.track(EVENTS.toggleLogTime, {
+                    time: v,
+                  });
                   resetLogs();
                   setLogTime(v as LogTime);
                 }}
