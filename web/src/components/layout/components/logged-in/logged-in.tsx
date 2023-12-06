@@ -112,7 +112,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               GitHub Issues{" "}
               <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
             </NavButton>
-            <NavButton href="https://join.slack.com/share/enQtNTY2NzE1MTAzNDgzMi03M2YyZmZhYWE2YWNiMzFiYmI1MzJjMjUwNzVmZWIzOTYyZjhmOTlhYjU5ZTI1MGY4NjcwMGIzNzdkNWQ0ZWNi">
+            <NavButton href="https://join.slack.com/share/enQtNTcyNDY0NDMyMzM3Ny00NmU3NzY1ZGI5NTY4ZDcyYjA4NDUzMTdlZjBlYmIzZTNhYTVhOGVjNDk0NWU5YmRmMzQzN2I0MzhjM2I0MjEx">
               Join Slack{" "}
               <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
             </NavButton>

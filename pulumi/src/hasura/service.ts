@@ -10,6 +10,7 @@ const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}
 const heimdallJwksEndpoint = config.require("heimdallJwksEndpoint"); // TODO: should be heimdallService.endpoints[1] but circular dependency
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
+    forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
     ports: [{target: 8080, protocol: 'http', mode: 'host'}],

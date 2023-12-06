@@ -10,17 +10,20 @@ import { migrationCommand } from './migration';
 const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
+    forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
     ports: [{ target: 4433, protocol: 'http', mode: 'host' }],
     platform: 'linux/arm64',
     environment: {
+        LOG_FORMAT: 'json',
         DSN: pulumi.interpolate`${kratosDatabaseUri}?sslmode=require&max_conns=5&max_idle_conns=2`,
         SERVE_PUBLIC_BASE_URL: `${ROOT_URL}/svc/kratos`,
         SERVE_PUBLIC_CORS_ALLOWED_ORIGINS_0: `${ROOT_URL}`,
         SELFSERVICE_DEFAULT_BROWSER_RETURN_URL: `${ROOT_URL}`,
         SELFSERVICE_ALLOWED_RETURN_URLS_0: `${ROOT_URL}/auth`,
         SELFSERVICE_ALLOWED_RETURN_URLS_1: `${ROOT_URL}`,
+        SELFSERVICE_ALLOWED_RETURN_URLS_2: `http://127.0.0.1:44444/auth`,
         SELFSERVICE_FLOWS_ERROR_UI_URL: `${ROOT_URL}/auth/error`,
         SELFSERVICE_FLOWS_SETTINGS_UI_URL: `${ROOT_URL}/auth/settings`,
         SELFSERVICE_FLOWS_RECOVERY_UI_URL: `${ROOT_URL}/auth/recovery`,

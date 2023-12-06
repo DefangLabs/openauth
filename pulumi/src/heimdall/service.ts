@@ -9,6 +9,7 @@ import { ROOT_URL } from '../common/constants';
 const authenticatedImageName: pulumi.Output<string> = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
+    forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     image: authenticatedImageName,
     domainname: config.get("domainname"),
