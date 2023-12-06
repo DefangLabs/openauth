@@ -1,17 +1,32 @@
 import { DefangService } from '@defang-io/pulumi-defang/lib';
 import * as pulumi from '@pulumi/pulumi';
-import { config, dockerHubToken } from '../common/config';
-import { service as kratosService } from '../kratos/service';
-import { SERVICE_NAME } from './constants';
-import { image } from './image';
+import { service as apiService } from '../api/service';
+import { config } from '../common/config';
 import { ROOT_URL } from '../common/constants';
+import { service as hasuraService } from '../hasura/service';
+import { service as kratosService } from '../kratos/service';
+import { service as webService } from '../web/service';
+import { SERVICE_NAME, SERVICE_ROOT_PATH } from './constants';
 
-const authenticatedImageName: pulumi.Output<string> = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
+const hasuraDomain = hasuraService.endpoints[0];
+const fnDomain = apiService.endpoints[0];
+const nextjsDomain = webService.endpoints[0];
+const kratosDomain = kratosService.endpoints[0];
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
     forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
-    image: authenticatedImageName,
+    build: {
+        context: SERVICE_ROOT_PATH,
+        args: {
+            ENV: pulumi.getStack(),
+            PUBLIC_ROOT_URL: ROOT_URL,
+            HASURA_DOMAIN: hasuraDomain,
+            FN_DOMAIN: fnDomain,
+            NEXTJS_DOMAIN: nextjsDomain,
+            KRATOS_DOMAIN: kratosDomain,
+        },
+    },
     domainname: config.get("domainname"),
     // deploy: {
     //     resources: {
@@ -30,7 +45,7 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:4457/.well-known/health']
     }
-}, {dependsOn: [image, kratosService]});
+}, {dependsOn: [kratosService]});
 
 // new DefangService('echo', {
 //     name: `echo-${pulumi.getStack()}`,

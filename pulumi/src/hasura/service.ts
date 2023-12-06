@@ -1,18 +1,18 @@
 import { DefangService } from '@defang-io/pulumi-defang/lib';
 import * as pulumi from '@pulumi/pulumi';
 import { service as apiService } from '../api/service';
-import { config, dockerHubToken } from '../common/config';
-import { SERVICE_NAME } from './constants';
+import { config } from '../common/config';
+import { SERVICE_NAME, SERVICE_ROOT_PATH } from './constants';
 import { hasuraDatabaseUri } from './database';
-import { image } from './image';
 
-const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
 const heimdallJwksEndpoint = config.require("heimdallJwksEndpoint"); // TODO: should be heimdallService.endpoints[1] but circular dependency
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
-    forceNewDeployment: true,
+    // forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
-    image: authenticatedImageName,
+    build: {
+        context: SERVICE_ROOT_PATH,
+    },
     ports: [{target: 8080, protocol: 'http', mode: 'host'}],
     environment: {
         HASURA_GRAPHQL_DATABASE_URL: pulumi.interpolate`${hasuraDatabaseUri}?sslmode=require`,
@@ -31,4 +31,4 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:8080/healthz']
     },
-}, {dependsOn: [image, apiService]});
+}, {dependsOn: [apiService]});
