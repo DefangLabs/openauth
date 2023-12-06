@@ -1,15 +1,17 @@
 import { DefangService } from '@defang-io/pulumi-defang/lib';
 import * as pulumi from '@pulumi/pulumi';
-import { SERVICE_NAME } from './constants';
-import { config, dockerHubToken } from '../common/config';
-import {image} from './image';
-
-const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
+import { SERVICE_NAME, SERVICE_ROOT_PATH } from './constants';
+import { config } from '../common/config';
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
-    forceNewDeployment: true,
+    // forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
-    image: authenticatedImageName,
+    build: {
+        context: SERVICE_ROOT_PATH,
+        args: {
+            APP: 'api',
+        },
+    },
     ports: [{target: 5001, protocol: 'http', mode: 'host'}],
     environment: {
         DEFANG_FABRIC: config.require('fabric'),
@@ -18,4 +20,4 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:5001/']
     },
-}, {dependsOn: image});
+});

@@ -1,18 +1,17 @@
 import { DefangService } from '@defang-io/pulumi-defang/lib';
 import * as pulumi from '@pulumi/pulumi';
-import { config, dockerHubToken } from '../common/config';
+import { config } from '../common/config';
 import {ROOT_URL } from '../common/constants';
-import { SERVICE_NAME } from './constants';
+import { SERVICE_NAME, SERVICE_ROOT_PATH } from './constants';
 import { kratosDatabase, kratosDatabaseUri, kratosUser } from './database';
-import { image } from './image';
 import { migrationCommand } from './migration';
-
-const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}@${image.repoDigest}`;
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
     forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
-    image: authenticatedImageName,
+    build: {
+        context: SERVICE_ROOT_PATH,
+    },
     ports: [{ target: 4433, protocol: 'http', mode: 'host' }],
     platform: 'linux/arm64',
     environment: {
@@ -43,4 +42,4 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     healthcheck: {
         test: ['CMD', 'curl', 'http://localhost:4433/health/alive'],
     },
-}, { dependsOn: [image, migrationCommand, kratosDatabase, kratosUser] });
+}, { dependsOn: [migrationCommand, kratosDatabase, kratosUser] });
