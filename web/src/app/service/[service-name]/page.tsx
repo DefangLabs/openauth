@@ -81,7 +81,7 @@ export default LoginRequired(function ServicePage() {
       >
         <ClickableDetail
           title="Container Image"
-          content={service?.service?.image || ""}
+          content={service?.service?.image || service?.service?.build?.context}
         />
         <ClickableDetail
           title="Deployment ID / ETag"
