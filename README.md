@@ -2,8 +2,8 @@
 
 
 ## Secrets
-- `aiven:apiToken`: created in Aiven dashboard; this expires when unused for 10 hours
-- `defang-portal:aivenBillingGroup`:
+- `aiven:apiToken`: created in Aiven dashboard; this expires when unused for 10 hours; **deprecated** use `AIVEN_TOKEN` env
+- `defang-portal:aivenBillingGroup`: from Aiven dashboard
 - `defang-portal:githubClientSecret`: created in GitHub settings, OAuth Apps
 - `defang-portal:hasuraAdminSecret`:
 - `defang-portal:hasuraDatabasePassword`:
