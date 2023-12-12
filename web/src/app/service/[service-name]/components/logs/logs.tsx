@@ -38,7 +38,7 @@ const LogContainer = styled("div")`
   }
 `;
 
-type LogFilter = "all" | "current";
+type LogFilter = "all" | "current" | "image";
 type LogTime = "0" | "1" | "30" | "60" | "720";
 
 let filterTimeout: NodeJS.Timeout;
@@ -58,8 +58,8 @@ export function Logs() {
   const { logs, resetLogs } = useServiceLogs({
     filter,
     negativeFilter,
-    service: service?.service?.name,
-    etag: logType === "current" ? service?.etag : undefined,
+    service: service?.service?.name?.concat(logType == "image" ? "-image" : ""),
+    etag: logType === "all" ? undefined : service?.etag,
     sinceMins: parseInt(logTime),
   });
 
@@ -116,6 +116,12 @@ export function Logs() {
                 >
                   <MenuItem value="all">All Deployments</MenuItem>
                   <MenuItem value="current">Current Deployment</MenuItem>
+                  <MenuItem
+                    disabled={!service?.service.build?.context}
+                    value="image"
+                  >
+                    Current Image Build
+                  </MenuItem>
                 </Select>
               </FormControl>
               <ToggleButtonGroup

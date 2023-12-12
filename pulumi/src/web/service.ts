@@ -9,8 +9,8 @@ const authenticatedImageName = pulumi.interpolate`defangportal:${dockerHubToken}
 export const service: DefangService = new DefangService(SERVICE_NAME, {
     forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
-    image: authenticatedImageName, // FIXME: Kaniko build fails
-    // build: {
+    image: authenticatedImageName,
+    // build: { FIXME: Kaniko build fails
     //     context: SERVICE_ROOT_PATH,
     //     platform: 'linux/arm64',
     //     args: {

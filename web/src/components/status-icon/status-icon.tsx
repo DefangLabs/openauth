@@ -9,15 +9,16 @@ const statusColorMap = {
   BUILD_DEPROVISIONING: "red",
   BUILD_STOPPED: "red",
   DEPLOYMENT_QUEUED: "red",
-  SERVICE_PROVISIONING: "red",
-  SERVICE_PENDING: "red",
-  SERVICE_ACTIVATING: "red",
-  SERVICE_RUNNING: "orange",
+  // from https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-lifecycle.html
+  TASK_PROVISIONING: "red",
+  TASK_PENDING: "red",
+  TASK_ACTIVATING: "red",
+  TASK_RUNNING: "orange",
   SERVICE_STEADY_STATE: "green",
-  SERVICE_DEACTIVATING: "red",
-  SERVICE_STOPPING: "red",
-  SERVICE_DEPROVISIONING: "red",
-  SERVICE_STOPPED: "red",
+  TASK_DEACTIVATING: "orange",
+  TASK_STOPPING: "orange",
+  TASK_DEPROVISIONING: "orange",
+  TASK_STOPPED: "orange", // StopCode=ServiceSchedulerInitiated
 } as const;
 
 export function StatusIcon({
