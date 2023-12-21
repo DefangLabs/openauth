@@ -7,7 +7,6 @@ import { kratosDatabase, kratosDatabaseUri, kratosUser } from './database';
 import { migrationCommand } from './migration';
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
-    forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     build: {
         context: SERVICE_ROOT_PATH,

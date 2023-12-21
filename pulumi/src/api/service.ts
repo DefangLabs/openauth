@@ -4,7 +4,6 @@ import { SERVICE_NAME, SERVICE_ROOT_PATH } from './constants';
 import { config } from '../common/config';
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
-    // forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     build: {
         context: SERVICE_ROOT_PATH,

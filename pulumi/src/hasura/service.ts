@@ -8,7 +8,6 @@ import { hasuraDatabaseUri } from './database';
 const heimdallJwksEndpoint = config.require("heimdallJwksEndpoint"); // TODO: should be heimdallService.endpoints[1] but circular dependency
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
-    // forceNewDeployment: true,
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
     build: {
         context: SERVICE_ROOT_PATH,
