@@ -8,6 +8,7 @@ config:
   defang-portal:githubClientId: f4a7f6905b83028583d5
   defang-portal:githubClientSecret:
     secure: AAABAPhtZZb2PC3TXiw2419JNwMfAWko1DWtbqI+83vrENQ4kZZoYO/846K6L/Pdy52oWc0+dI1Bf7pXslbMsd1UoOPFuFz+
+  defang-portal:googleAnalytics: G-QVJVWN44CW
   defang-portal:hasuraAdminSecret:
     secure: AAABALC9G4XTiCVQk8GP13NRWQYZ26xUfQqR6xNHdEC6hRaelhhRC51s0/2xGTPYTyw0MGex4ECP
   defang-portal:hasuraDatabasePassword:
@@ -20,4 +21,5 @@ config:
   defang-portal:kratosSecretsCookie0:
     secure: AAABAHtyPE5S4/pMmDyYKEUhWWpRS5ZwbxnBr1SJ1KW4/33rEV8BV7kjwlgiE/Gl46FistPYQT+TA51ZMUSyyViPuCKf4uP3yMrr8w==
   defang-portal:rootUrl: https://portal.defang.dev
+  defang-portal:segmentWriteKey: m952ndHzHDhYJF79uFlSb0Wgyv3aOU7B
   defang-portal:signer: heimdall

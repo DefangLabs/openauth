@@ -9,10 +9,12 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
   build: {
     context: SERVICE_ROOT_PATH,
     args: {
-      NEXT_PUBLIC_KRATOS_PUBLIC_URL: `${ROOT_URL}/svc/kratos`,
-      NEXT_PUBLIC_GRAPHQL_URL: `${ROOT_URL}/svc/hasura/v1/graphql`,
-      NEXT_PUBLIC_FN_URL: `${ROOT_URL}/svc/fn`,
       NEXT_PUBLIC_FABRIC: `https://${config.require("fabric")}`,
+      NEXT_PUBLIC_FN_URL: `${ROOT_URL}/svc/fn`,
+      NEXT_PUBLIC_GOOGLE_ANALYTICS: config.require("googleAnalytics"),
+      NEXT_PUBLIC_GRAPHQL_URL: `${ROOT_URL}/svc/hasura/v1/graphql`,
+      NEXT_PUBLIC_KRATOS_PUBLIC_URL: `${ROOT_URL}/svc/kratos`,
+      NEXT_PUBLIC_SEGMENT_WRITE_KEY: config.require("segmentWriteKey"),
     },
   },
   environment: { PORT: "3000" },
