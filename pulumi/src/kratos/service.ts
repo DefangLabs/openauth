@@ -39,6 +39,6 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
         { source: 'SECRETS_CIPHER_0', value: config.getSecret('kratosSecretsCipher0') },
     ],
     healthcheck: {
-        test: ['CMD', 'wget', 'http://localhost:4433/health/alive'],
+        test: ['CMD', 'wget', '--spider', 'http://localhost:4433/health/alive'],
     },
 }, { dependsOn: [migrationCommand, kratosDatabase, kratosUser] });

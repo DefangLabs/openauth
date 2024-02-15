@@ -17,6 +17,6 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     },
     platform: 'linux/arm64',
     healthcheck: {
-        test: ['CMD', 'wget', 'http://localhost:5001/']
+        test: ['CMD', 'wget', '--spider', 'http://localhost:5001/']
     },
 });

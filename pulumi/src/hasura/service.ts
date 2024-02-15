@@ -28,6 +28,6 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     secrets: [{source: "HASURA_GRAPHQL_ADMIN_SECRET", value: config.requireSecret("hasuraAdminSecret")}],
     platform: 'linux/arm64',
     healthcheck: {
-        test: ['CMD', 'curl', 'http://localhost:8080/healthz']
+        test: ['CMD', 'curl', '-f', 'http://localhost:8080/healthz']
     },
 }, {dependsOn: [apiService]});

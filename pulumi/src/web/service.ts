@@ -20,7 +20,7 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
   environment: { PORT: "3000" },
   ports: [{ target: 3000, protocol: "http", mode: "host" }],
   healthcheck: {
-    test: ["CMD", "curl", "http://localhost:3000/"],
+    test: ["CMD", "curl", "-f", "http://localhost:3000/"],
   },
   platform: "linux/arm64",
 });

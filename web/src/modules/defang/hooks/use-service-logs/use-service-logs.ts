@@ -32,8 +32,9 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
   }, []);
 
   const callback = useCallback((res: TailResponse) => {
-    setLogs((logs) =>
-      res.host === "fabric" ? logs : [...res.entries, ...logs].slice(0, 100) // ignore status messages
+    setLogs(
+      (logs) =>
+        res.host === "fabric" ? logs : [...res.entries, ...logs].slice(0, 100) // ignore status messages
     );
   }, []);
 
