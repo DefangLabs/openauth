@@ -17,10 +17,13 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
       NEXT_PUBLIC_SEGMENT_WRITE_KEY: config.require("segmentWriteKey"),
     },
   },
-  environment: { PORT: "3000" },
+  environment: {
+    PORT: "3000",
+    HOSTNAME: "0.0.0.0", // required for the healthcheck to work
+  },
   ports: [{ target: 3000, protocol: "http", mode: "host" }],
   healthcheck: {
-    test: ["CMD", "curl", "-f", "http://localhost:3000/"],
+    test: ["CMD", "wget", "--spider", "http://localhost:3000/"],
   },
   platform: "linux/arm64",
 });
