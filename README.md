@@ -14,5 +14,5 @@
 ## Deploy
 
 ```
-pulumi -C pulumi up
+AIVEN_TOKEN=… pulumi -C pulumi up
 ```
