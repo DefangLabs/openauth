@@ -29,3 +29,8 @@ ENV RULES_FILE_PATH='/heimdall/conf/rules/rules.yaml'
 ENV KEYSTORE_FILE_PATH='/heimdall/conf/keys/keystore.pem'
 
 CMD [ "-c", "/heimdall/conf/config.yaml", "serve", "proxy" ]
+
+# HACK: we need curl or wget for the healthcheck
+COPY --from=builder /bin/busybox /bin/busybox
+COPY --from=builder /lib/ld-musl* /lib/
+COPY --from=builder /usr/bin/wget /bin/wget

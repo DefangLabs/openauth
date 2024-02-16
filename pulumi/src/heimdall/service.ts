@@ -42,7 +42,10 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     },
     platform: 'linux/arm64',
     healthcheck: {
-        test: ['CMD', 'curl', '-f', 'http://localhost:4457/.well-known/health']
+        test: ['CMD', 'wget', '--spider', 'http://localhost:4457/.well-known/health'],
+        // interval: 30,
+        // timeout: 5,
+        // retries: 3,
     }
 }, {dependsOn: [kratosService]});
 
