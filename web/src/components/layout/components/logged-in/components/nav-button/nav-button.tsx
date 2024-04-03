@@ -23,9 +23,17 @@ InnerNavButton.defaultProps = {
 
 type NavButtonProps = ComponentProps<typeof InnerNavButton> & {
   href: string;
+  iconLeft?: React.ReactNode;
+  iconRight?: React.ReactNode;
 };
 
-export function NavButton({ href, ...props }: NavButtonProps) {
+export function NavButton({
+  href,
+  children,
+  iconLeft,
+  iconRight,
+  ...props
+}: NavButtonProps) {
   const { setSidebarOpen } = useSidebarOpen();
   return (
     <Link
@@ -35,7 +43,11 @@ export function NavButton({ href, ...props }: NavButtonProps) {
       }}
       target={href.startsWith("http") ? "_blank" : undefined}
     >
-      <InnerNavButton {...props}></InnerNavButton>
+      <InnerNavButton sx={{ justifyContent: "space-between" }} {...props}>
+        {iconLeft || <div style={{ width: 15 }} />}
+        <div style={{ marginBottom: -3 }}>{children}</div>
+        {iconRight || <div style={{ width: 15 }} />}
+      </InnerNavButton>
     </Link>
   );
 }

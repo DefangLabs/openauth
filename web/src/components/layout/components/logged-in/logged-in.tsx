@@ -2,7 +2,14 @@ import { useLogout } from "@/modules/kratos/hooks/use-logout/use-logout";
 import { useSession } from "@/modules/kratos/hooks/use-session/use-session";
 import { COLORS, GRADIENTS } from "@/modules/mui/constants";
 import { useName } from "@/modules/profiles/hooks/use-name/use-name";
-import { OpenInNew, Reddit } from "@mui/icons-material";
+import {
+  OpenInNew,
+  Reddit,
+  GitHub,
+  Download,
+  Article,
+  ChevronRight,
+} from "@mui/icons-material";
 import Menu from "@mui/icons-material/Menu";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import {
@@ -99,22 +106,47 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
           </div>
           {/* <ServiceStats /> */}
           <Stack direction="column" spacing={1}>
-            <NavButton href="/service">Services</NavButton>
-            <NavButton href="https://docs.defang.io/docs/Intro">
-              Documentation{" "}
-              <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+            <NavButton
+              href="/service"
+              iconLeft={<ChevronRight sx={{ mr: 1 }} />}
+            >
+              Services
             </NavButton>
-            <NavButton href="https://github.com/defang-io/defang/releases/latest">
-              CLI Download{" "}
-              <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+            <NavButton
+              href="https://docs.defang.io/docs/Intro"
+              iconLeft={<Article sx={{ mr: 1 }} />}
+              iconRight={
+                <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+              }
+            >
+              Documentation
             </NavButton>
-            <NavButton href="https://github.com/defang-io/defang/issues">
-              GitHub Issues{" "}
-              <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+            <NavButton
+              href="https://github.com/defang-io/defang/releases/latest"
+              iconLeft={<Download sx={{ mr: 1 }} />}
+              iconRight={
+                <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+              }
+            >
+              CLI Download
             </NavButton>
-            <NavButton href="https://www.reddit.com/r/defang/">
-              <Reddit sx={{ mr: 1 }} /> Community{" "}
-              <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+            <NavButton
+              href="https://github.com/defang-io/defang/issues"
+              iconLeft={<GitHub sx={{ mr: 1 }} />}
+              iconRight={
+                <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+              }
+            >
+              GitHub Issues
+            </NavButton>
+            <NavButton
+              href="https://www.reddit.com/r/defang/"
+              iconLeft={<Reddit sx={{ mr: 1 }} />}
+              iconRight={
+                <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+              }
+            >
+              Community{" "}
             </NavButton>
             {/* <NavButton href="https://join.slack.com/share/enQtNTcyNDY0NDMyMzM3Ny00NmU3NzY1ZGI5NTY4ZDcyYjA4NDUzMTdlZjBlYmIzZTNhYTVhOGVjNDk0NWU5YmRmMzQzN2I0MzhjM2I0MjEx">
               Join Slack{" "}
