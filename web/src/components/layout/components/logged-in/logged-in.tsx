@@ -2,7 +2,7 @@ import { useLogout } from "@/modules/kratos/hooks/use-logout/use-logout";
 import { useSession } from "@/modules/kratos/hooks/use-session/use-session";
 import { COLORS, GRADIENTS } from "@/modules/mui/constants";
 import { useName } from "@/modules/profiles/hooks/use-name/use-name";
-import { OpenInNew } from "@mui/icons-material";
+import { OpenInNew, Reddit } from "@mui/icons-material";
 import Menu from "@mui/icons-material/Menu";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import {
@@ -110,6 +110,10 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
             </NavButton>
             <NavButton href="https://github.com/defang-io/defang/issues">
               GitHub Issues{" "}
+              <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+            </NavButton>
+            <NavButton href="https://www.reddit.com/r/defang/">
+              <Reddit sx={{ mr: 1 }} /> Community{" "}
               <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
             </NavButton>
             {/* <NavButton href="https://join.slack.com/share/enQtNTcyNDY0NDMyMzM3Ny00NmU3NzY1ZGI5NTY4ZDcyYjA4NDUzMTdlZjBlYmIzZTNhYTVhOGVjNDk0NWU5YmRmMzQzN2I0MzhjM2I0MjEx">
