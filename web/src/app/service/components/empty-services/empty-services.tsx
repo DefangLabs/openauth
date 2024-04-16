@@ -38,7 +38,8 @@ export function EmptyServices() {
       </Typography>
       <CodeBlock>{"defang login"}</CodeBlock>
       <Typography>
-        Before you can deploy code you should read and agree to our the terms of service. You can do this by running:
+        Before you can deploy code you should read and agree to our the terms of
+        service. You can do this by running:
       </Typography>
       <CodeBlock>{"defang terms"}</CodeBlock>
       <Typography>
