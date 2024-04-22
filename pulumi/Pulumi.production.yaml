@@ -13,7 +13,7 @@ config:
     secure: AAABALC9G4XTiCVQk8GP13NRWQYZ26xUfQqR6xNHdEC6hRaelhhRC51s0/2xGTPYTyw0MGex4ECP
   defang-portal:hasuraDatabasePassword:
     secure: AAABAI5ZZZ6OIvLXSfFJPf7b40mowP45DeSxtTydwP3+9CHMjQFXDWg4QFciOXQyvTmdkp8HgZbv
-  defang-portal:heimdallJwksEndpoint: https://lionello-heimdall-production--4457.prod1.defang.dev/.well-known/jwks
+  defang-portal:heimdallJwksEndpoint: https://defang-heimdall-production--4457.prod1.defang.dev/.well-known/jwks
   defang-portal:kratosDatabasePassword:
     secure: AAABAP8S9ykTymWcMfpxRiKytsG8ueV3zSxFaXa52V7X4uY6ZPpChaBmua/6BliCXei5hYo488zc
   defang-portal:kratosSecretsCipher0:
