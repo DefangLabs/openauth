@@ -6,10 +6,12 @@ on:
     branches:
       - '**'
 
+permissions:
+  contents: read
+  id-token: write # for defang login
+
 jobs:
   up:
-    permissions:
-      id-token: write
     name: Pulumi Up
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch' # only runs on push/merge to main branch

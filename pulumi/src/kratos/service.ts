@@ -1,7 +1,7 @@
 import { DefangService } from '@defang-io/pulumi-defang/lib';
 import * as pulumi from '@pulumi/pulumi';
 import { config } from '../common/config';
-import {ROOT_URL } from '../common/constants';
+import { ROOT_URL } from '../common/constants';
 import { SERVICE_NAME, SERVICE_ROOT_PATH } from './constants';
 import { kratosDatabase, kratosDatabaseUri, kratosUser } from './database';
 import { migrationCommand } from './migration';

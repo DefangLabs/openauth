@@ -1,8 +1,7 @@
 import { local } from '@pulumi/command';
 import { interpolate } from "@pulumi/pulumi";
-import { kratosDatabase, kratosDatabaseUri, kratosUser } from "./database";
+import { kratosDatabaseUri } from "./database";
 import { image } from "./image";
-
 
 export const migrationCommand = new local.Command("migration-command", {
     create: interpolate`docker run --rm -e DSN ${image.imageName} -c /etc/config/kratos/kratos.yml migrate sql -e --yes`,
@@ -10,6 +9,4 @@ export const migrationCommand = new local.Command("migration-command", {
     environment: {
         DSN: interpolate`${kratosDatabaseUri}?sslmode=require&max_conns=5&max_idle_conns=2`
     },
-}, {
-    dependsOn: [image, kratosDatabase, kratosUser]
 });
