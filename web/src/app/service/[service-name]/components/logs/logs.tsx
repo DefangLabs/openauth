@@ -16,7 +16,7 @@ import {
   styled,
 } from "@mui/material";
 import { parse } from "ansicolor";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useServiceLogs } from "../../../../../modules/defang/hooks/use-service-logs/use-service-logs";
 import { useLogsFilter } from "../../hooks/use-logs-filter/use-logs-filter";
 import { useService } from "../../hooks/use-service/use-service";
@@ -29,7 +29,7 @@ const LogContainer = styled("div")`
   color: ${COLORS.secondary};
   overflow-x: scroll;
   height: 50vh;
-  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
+  border-radius: ${({ theme }) => theme.shape.borderRadius.toString()}px;
   padding: ${({ theme }) => theme.spacing(2).toString()};
 
   ${({ theme }) => theme.breakpoints.up("md")} {
@@ -50,17 +50,19 @@ const trackFilter = () => {
 };
 
 export function Logs() {
+  const [logContainer, setLogContainer] = useState<HTMLDivElement | null>(null);
   const [logType, setLogType] = useState<LogFilter>("all");
   const [logTime, setLogTime] = useState<LogTime>("30");
   const { filter, setFilter, negativeFilter, setNegativeFilter } =
     useLogsFilter();
   const { service, loading } = useService({ skip: true, poll: undefined });
-  const { logs, resetLogs } = useServiceLogs({
+  const { resetLogs } = useServiceLogs({
     filter,
     negativeFilter,
     service: service?.service?.name?.concat(logType == "image" ? "-image" : ""),
     etag: logType === "all" ? undefined : service?.etag,
     sinceMins: parseInt(logTime),
+    logContainer: logContainer,
   });
 
   return (
@@ -145,32 +147,12 @@ export function Logs() {
             </Stack>
           </Grid>
         </Grid>
-        <LogContainer>
-          {logs.map((log) => (
-            <div
-              key={`${log.timestamp?.toJsonString()} ${log.message.slice(
-                0,
-                20
-              )}`}
-              style={{ whiteSpace: "pre" }}
-            >
-              {parse(log.message).spans.map((span, i) => (
-                <span key={i} style={parseCss(span.css)}>
-                  {span.text}
-                </span>
-              ))}
-            </div>
-          ))}
-        </LogContainer>
+        <LogContainer
+          ref={(ref) => {
+            setLogContainer(ref);
+          }}
+        />
       </Stack>
     </>
   );
-}
-
-function parseCss(css: string): React.CSSProperties {
-  const styles = css.split(";").map((style) => {
-    const [key, value] = style.split(":", 2);
-    return [key.trim().replace(/-[a-z]/g, (m) => m[1].toUpperCase()), value];
-  });
-  return Object.fromEntries(styles) as React.CSSProperties;
 }
