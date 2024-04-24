@@ -56,7 +56,7 @@ export default LoginRequired(function ServicePage() {
   const isPublic = service?.service.ports?.[0]?.mode === Mode.INGRESS;
 
   return (
-    <Stack p={2} spacing={4}>
+    <Stack p={2} spacing={4} mb={10}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">
           <StatusIcon status={service?.status} />
@@ -99,7 +99,7 @@ export default LoginRequired(function ServicePage() {
       <Endpoints />
       <Logs />
       <Environment />
-      <Secrets />
+      {/* <Secrets /> */}
     </Stack>
   );
 }) as any;
