@@ -1,8 +1,6 @@
 config:
   defang-portal:aivenBillingGroup:
     secure: AAABACYssb6InyMG8+yblNMObJSRBsBqocBay3MqWf7k7haci5++YkQiCU7D2OkkDxE8/kkqXrwc72SMNs3dZwYrjnQ=
-  defang-portal:dockerHubToken:
-    secure: AAABAMfXgE1PFefrTFFl4pRjjb6CkeNUi8+zhDDtLvkEjeI6hjJ0S4uhj4I9Z+bHSFXApKtefSFlbUQWwpslcorr0VY=
   defang-portal:domainname: portal.defang.dev
   defang-portal:fabric: fabric-prod1.defang.dev:443
   defang-portal:githubClientId: f4a7f6905b83028583d5
