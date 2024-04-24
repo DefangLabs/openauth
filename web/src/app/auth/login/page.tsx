@@ -117,9 +117,11 @@ export default function LoginPage() {
         </Button>
       )}
       <Divider />
-      <Typography>
-        If you do not have an account, please{" "}
-        <Link href="/auth/register">click here to register</Link>.
+      <Typography fontSize={14} width={300} align="center">
+        By proceeding you are agreeing to our{" "}
+        <a href="https://defang.io/terms-conditions.html" target="_blank">
+          Terms and Conditions
+        </a>
       </Typography>
     </>
   );

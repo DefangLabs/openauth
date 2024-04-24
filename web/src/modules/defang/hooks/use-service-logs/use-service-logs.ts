@@ -1,45 +1,99 @@
+import { useLogsFilter } from "@/app/service/[service-name]/hooks/use-logs-filter/use-logs-filter";
 import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
-import { strip } from "ansicolor";
-import {
-  useCallback,
-  useDeferredValue,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { LogEntry, TailResponse } from "../../generated/fabric_pb";
+import { parse } from "ansicolor";
+import { useCallback, useEffect, useRef } from "react";
+import { TailResponse } from "../../generated/fabric_pb";
 
 interface UseServiceLogsOpts {
   etag?: string;
-  filter?: string;
-  negativeFilter?: boolean;
   service?: string;
   sinceMins?: number;
+  logContainer?: HTMLDivElement | null;
 }
 
 export function useServiceLogs(opts: UseServiceLogsOpts) {
-  const { filter = "", negativeFilter = false } = opts;
   const service = opts?.service;
   const etag = opts?.etag;
   const sinceMins = opts?.sinceMins;
-  const [logs, setLogs] = useState<LogEntry[]>([]);
   const client = useDefangClient();
-  const deferredFilter = useDeferredValue(filter).toLocaleLowerCase();
-  const deferredLogs = useDeferredValue(logs);
+  const container = opts.logContainer;
+  const scrolledRef = useRef(false);
+  const { filter, negativeFilter } = useLogsFilter();
 
   const resetLogs = useCallback(() => {
-    setLogs([]);
-  }, []);
-
-  const callback = useCallback((res: TailResponse) => {
-    setLogs(
-      (logs) =>
-        res.host === "fabric" ? logs : [...res.entries, ...logs].slice(0, 100) // ignore status messages
-    );
-  }, []);
+    if (container) {
+      container.innerHTML = "";
+    }
+  }, [container]);
 
   useEffect(() => {
-    if (!client || (!service && !etag)) return;
+    resetLogs();
+  }, [resetLogs, service, etag, sinceMins]);
+
+  useEffect(() => {
+    if (!container) return;
+    // hide logs based on filter
+    const logs = container.getElementsByClassName("log");
+    Array.from(logs).forEach((log) => {
+      const htmlLog = log as HTMLElement;
+      if (filter) {
+        if (negativeFilter) {
+          htmlLog.style.display = log.textContent?.includes(filter)
+            ? "none"
+            : "block";
+        } else {
+          htmlLog.style.display = log.textContent?.includes(filter)
+            ? "block"
+            : "none";
+        }
+      } else {
+        htmlLog.style.display = "block";
+      }
+    });
+  }, [container, filter, negativeFilter]);
+
+  const callback = useCallback(
+    (res: TailResponse) => {
+      // append logs to the container
+      if (!container) {
+        return;
+      }
+
+      const shouldScroll = !scrolledRef.current;
+
+      res.entries.forEach((log) => {
+        const div = document.createElement("div");
+        div.classList.add("log");
+        div.style.whiteSpace = "pre";
+
+        div.appendChild(
+          document.createTextNode(
+            `[${log.timestamp?.toDate().toISOString()}]` + " "
+          )
+        );
+
+        const parsedMessage = parse(log.message);
+        parsedMessage.spans.forEach((span, i) => {
+          const spanElement = document.createElement("span");
+          spanElement.setAttribute("key", i.toString());
+          spanElement.setAttribute("style", span.css);
+          spanElement.textContent = span.text;
+
+          div.appendChild(spanElement);
+        });
+
+        container.appendChild(div);
+      });
+      // scroll to bottom
+      if (shouldScroll) {
+        container.scrollTop = container.scrollHeight;
+      }
+    },
+    [container]
+  );
+
+  useEffect(() => {
+    if (!client || !container || (!service && !etag)) return;
 
     const stopTail = client.tail(
       {
@@ -60,20 +114,35 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
         console.log("@@ error stopping tail", e);
       }
     };
-  }, [callback, client, etag, service, sinceMins]);
+  }, [callback, client, container, etag, service, sinceMins]);
+
+  useEffect(() => {
+    if (!container) return;
+
+    container.scrollTop = container.scrollHeight;
+
+    // on scroll check if we are at the bottom, if so set scrolled to false, else true
+    function scrollCheck() {
+      if (!container) return;
+      if (
+        container.scrollHeight - container.scrollTop <=
+        container.clientHeight + 20
+      ) {
+        scrolledRef.current = false;
+        console.log("@@ scrolled to bottom");
+      } else {
+        scrolledRef.current = true;
+        console.log("@@ not scrolled to bottom");
+      }
+    }
+    container.addEventListener("scroll", scrollCheck);
+
+    return () => {
+      container.removeEventListener("scroll", scrollCheck);
+    };
+  }, [container]);
 
   return {
-    logs: useMemo(() => {
-      if (!deferredFilter) {
-        return deferredLogs;
-      }
-      return deferredLogs.filter((log) => {
-        const logText = strip(log.message).toLocaleLowerCase();
-        return negativeFilter
-          ? !logText.includes(deferredFilter)
-          : logText.includes(deferredFilter);
-      });
-    }, [deferredFilter, deferredLogs, negativeFilter]),
     resetLogs,
   };
 }

@@ -25,6 +25,7 @@ const ClickableTypography = styled(Typography)`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 30ch;
 
   ${({ theme }) => theme.breakpoints.down("sm")} {
     max-width: 100%;

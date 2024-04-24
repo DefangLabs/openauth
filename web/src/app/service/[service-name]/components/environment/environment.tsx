@@ -1,35 +1,51 @@
-import {
-  Stack,
-  Typography,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  IconButton,
-  TableBody,
-} from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useService } from "../../hooks/use-service/use-service";
-import { ReactNode, useState } from "react";
-import { thinGreyBorder } from "@/modules/mui/constants";
 import { analytics } from "@/modules/analytics/lib/analytics";
 import { EVENTS } from "@/modules/analytics/lib/constants";
+import { thinGreyBorder } from "@/modules/mui/constants";
+import { Lock, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  IconButton,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import { ReactNode, useState } from "react";
+import { useService } from "../../hooks/use-service/use-service";
+import { atom, useAtom, Provider } from "jotai";
 
-function Hideable({ children }: { children: React.ReactNode }) {
-  const [hidden, setHidden] = useState(true);
+const shownAtom = atom<Record<string, boolean>>({});
+
+function Hideable({
+  children,
+  valKey,
+}: {
+  children: React.ReactNode;
+  valKey: string;
+}) {
+  const [shownVals, setShownVals] = useAtom(shownAtom);
+  const hidden = !shownVals[valKey];
   return (
-    <Stack direction="row" spacing={2} justifyContent="space-between">
-      <span>{hidden ? "***********" : children}</span>
+    <Stack
+      direction="row"
+      spacing={2}
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      <Typography>{hidden ? "***********" : children}</Typography>
       <IconButton
         onClick={() =>
-          setHidden((prev) => {
+          setShownVals((prev) => {
+            const hide = !prev[valKey];
             analytics.track(EVENTS.toggleEnvVisibility, {
-              visible: !prev,
+              visible: hide,
             });
-            return !prev;
+            const next = { ...prev, [valKey]: hide };
+            return next;
           })
         }
       >
@@ -41,7 +57,12 @@ function Hideable({ children }: { children: React.ReactNode }) {
 
 export function Environment() {
   const { service } = useService();
-  return Object.keys(service?.service?.environment || {}).length > 0 ? (
+
+  const envs = service?.service?.environment || {};
+  const secrets = service?.service?.secrets || [];
+  const combined = [...secrets, ...Object.entries(envs)];
+
+  return Object.keys(combined || {}).length > 0 ? (
     <Stack spacing={2}>
       <Typography variant="h2">Environment</Typography>
       <TableContainer
@@ -59,16 +80,33 @@ export function Environment() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(service?.service?.environment || {}).map(
-              ([key, value], i) => (
+            {combined.map((config) => {
+              let key = "";
+              let value: string | undefined = undefined;
+
+              if (Array.isArray(config)) {
+                key = config[0];
+                value = config[1];
+              } else {
+                key = config.source;
+              }
+
+              return (
                 <TableRow key={key}>
                   <TableCell width={250}>{key}</TableCell>
                   <TableCell>
-                    <Hideable>{value}</Hideable>
+                    {value !== undefined ? (
+                      <Hideable valKey={key}>{value}</Hideable>
+                    ) : (
+                      <Stack direction="row" alignItems="center" gap={1}>
+                        <Lock />
+                        <Typography>Secret</Typography>
+                      </Stack>
+                    )}
                   </TableCell>
                 </TableRow>
-              )
-            )}
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
