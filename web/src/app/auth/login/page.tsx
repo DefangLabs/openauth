@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader } from "@/components/loader/loader";
 import { analytics } from "@/modules/analytics/lib/analytics";
 import { EVENTS } from "@/modules/analytics/lib/constants";
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
@@ -9,11 +10,10 @@ import { Button, Divider, Typography } from "@mui/material";
 import { GenericError, LoginFlow } from "@ory/client";
 import { AxiosError } from "axios";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-export default function LoginPage() {
+function LoginPage() {
   const [flow, setFlow] = useState<LoginFlow>();
   const router = useRouter();
   const search = useSearchParams();
@@ -124,5 +124,13 @@ export default function LoginPage() {
         </a>
       </Typography>
     </>
+  );
+}
+
+export default function Login() {
+  return (
+    <Loader>
+      <LoginPage />
+    </Loader>
   );
 }

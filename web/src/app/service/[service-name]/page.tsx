@@ -20,6 +20,7 @@ import { Environment } from "./components/environment/environment";
 import { Secrets } from "./components/secrets/secrets";
 import { Logs } from "./components/logs/logs";
 import { useService } from "./hooks/use-service/use-service";
+import { Loader } from "@/components/loader/loader";
 
 const Small = styled("small")`
   color: ${COLORS.darkGrey};
@@ -30,7 +31,7 @@ const OpenIcon = styled(OpenInNew)`
   cursor: pointer;
 `;
 
-export default LoginRequired(function ServicePage() {
+function ServicePage() {
   const { service, loading } = useService({ poll: 5000 });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -102,4 +103,10 @@ export default LoginRequired(function ServicePage() {
       {/* <Secrets /> */}
     </Stack>
   );
-}) as any;
+}
+
+export default LoginRequired(() => (
+  <Loader>
+    <ServicePage />
+  </Loader>
+)) as any;

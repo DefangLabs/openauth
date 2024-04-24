@@ -16,8 +16,9 @@ import { useAccountForm } from "./hooks/use-account-form/use-account-form";
 import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
 import { analytics } from "@/modules/analytics/lib/analytics";
 import { EVENTS } from "@/modules/analytics/lib/constants";
+import { Loader } from "@/components/loader/loader";
 
-export default LoginRequired(function AccountPage() {
+function AccountPage() {
   const {
     data: profileData,
     refetch,
@@ -88,4 +89,10 @@ export default LoginRequired(function AccountPage() {
       </form>
     </Stack>
   );
-}) as any;
+}
+
+export default LoginRequired(() => (
+  <Loader>
+    <AccountPage />
+  </Loader>
+)) as any;

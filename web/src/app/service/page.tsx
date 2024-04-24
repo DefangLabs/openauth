@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader } from "@/components/loader/loader";
 import { StatusIcon } from "@/components/status-icon/status-icon";
 import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
 import {
@@ -11,11 +12,11 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
+import { EmptyServices } from "./components/empty-services/empty-services";
 import { useFilteredServices } from "./hooks/use-filtered-services/use-filtered-services";
 import { useSearch } from "./hooks/use-search/use-search";
-import { EmptyServices } from "./components/empty-services/empty-services";
 
-export default LoginRequired(function ServicesPage() {
+function ServicesPage() {
   const { services, loading } = useFilteredServices();
   const { search, setSearch } = useSearch();
   const router = useRouter();
@@ -87,4 +88,10 @@ export default LoginRequired(function ServicesPage() {
       </Box>
     </Stack>
   );
-}) as any;
+}
+
+export default LoginRequired(() => (
+  <Loader>
+    <ServicesPage />
+  </Loader>
+)) as any;

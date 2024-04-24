@@ -7,6 +7,7 @@ const nextConfig = {
         transform: "@mui/icons-material/{{member}}",
       },
     },
+    missingSuspenseWithCSRBailout: false,
   },
   async headers() {
     return process.env.NODE_ENV !== "production"

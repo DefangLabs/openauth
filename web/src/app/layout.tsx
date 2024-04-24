@@ -1,5 +1,6 @@
 import { Providers } from "@/lib/providers/providers";
 import { Roboto } from "next/font/google";
+import { Suspense } from "react";
 import { Layout } from "../components/layout/layout";
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
@@ -18,7 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={roboto.className}>
         <Providers>
-          <Layout>{children}</Layout>
+          <Layout>
+            <Suspense fallback={null}>{children}</Suspense>
+          </Layout>
         </Providers>
       </body>
     </html>
