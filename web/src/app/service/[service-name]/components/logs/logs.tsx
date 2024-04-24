@@ -1,3 +1,5 @@
+import { analytics } from "@/modules/analytics/lib/analytics";
+import { EVENTS } from "@/modules/analytics/lib/constants";
 import { COLORS } from "@/modules/mui/constants";
 import {
   Checkbox,
@@ -5,7 +7,6 @@ import {
   FormControlLabel,
   Grid,
   InputLabel,
-  ListItem,
   MenuItem,
   Select,
   Stack,
@@ -15,13 +16,10 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import { parse } from "ansicolor";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useServiceLogs } from "../../../../../modules/defang/hooks/use-service-logs/use-service-logs";
 import { useLogsFilter } from "../../hooks/use-logs-filter/use-logs-filter";
 import { useService } from "../../hooks/use-service/use-service";
-import { analytics } from "@/modules/analytics/lib/analytics";
-import { EVENTS } from "@/modules/analytics/lib/constants";
 
 const LogContainer = styled("div")`
   font-family: "Courier New", Courier, monospace;
@@ -57,8 +55,6 @@ export function Logs() {
     useLogsFilter();
   const { service, loading } = useService({ skip: true, poll: undefined });
   const { resetLogs } = useServiceLogs({
-    filter,
-    negativeFilter,
     service: service?.service?.name?.concat(logType == "image" ? "-image" : ""),
     etag: logType === "all" ? undefined : service?.etag,
     sinceMins: parseInt(logTime),
