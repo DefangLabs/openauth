@@ -113,7 +113,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               Services
             </NavButton>
             <NavButton
-              href="https://docs.defang.io/docs/Intro"
+              href="https://docs.defang.io/docs/intro"
               iconLeft={<Article sx={{ mr: 1 }} />}
               iconRight={
                 <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />

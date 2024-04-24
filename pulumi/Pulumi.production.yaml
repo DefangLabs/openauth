@@ -1,8 +1,6 @@
 config:
   defang-portal:aivenBillingGroup:
     secure: AAABACYssb6InyMG8+yblNMObJSRBsBqocBay3MqWf7k7haci5++YkQiCU7D2OkkDxE8/kkqXrwc72SMNs3dZwYrjnQ=
-  defang-portal:dockerHubToken:
-    secure: AAABAMfXgE1PFefrTFFl4pRjjb6CkeNUi8+zhDDtLvkEjeI6hjJ0S4uhj4I9Z+bHSFXApKtefSFlbUQWwpslcorr0VY=
   defang-portal:domainname: portal.defang.dev
   defang-portal:fabric: fabric-prod1.defang.dev:443
   defang-portal:githubClientId: f4a7f6905b83028583d5
@@ -13,7 +11,7 @@ config:
     secure: AAABALC9G4XTiCVQk8GP13NRWQYZ26xUfQqR6xNHdEC6hRaelhhRC51s0/2xGTPYTyw0MGex4ECP
   defang-portal:hasuraDatabasePassword:
     secure: AAABAI5ZZZ6OIvLXSfFJPf7b40mowP45DeSxtTydwP3+9CHMjQFXDWg4QFciOXQyvTmdkp8HgZbv
-  defang-portal:heimdallJwksEndpoint: https://lionello-heimdall-production--4457.prod1.defang.dev/.well-known/jwks
+  defang-portal:heimdallJwksEndpoint: https://defang-heimdall-production--4457.prod1.defang.dev/.well-known/jwks
   defang-portal:kratosDatabasePassword:
     secure: AAABAP8S9ykTymWcMfpxRiKytsG8ueV3zSxFaXa52V7X4uY6ZPpChaBmua/6BliCXei5hYo488zc
   defang-portal:kratosSecretsCipher0:

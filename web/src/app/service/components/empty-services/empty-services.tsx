@@ -38,6 +38,11 @@ export function EmptyServices() {
       </Typography>
       <CodeBlock>{"defang login"}</CodeBlock>
       <Typography>
+        Before you can deploy code you should read and agree to our the terms of
+        service. You can do this by running:
+      </Typography>
+      <CodeBlock>{"defang terms"}</CodeBlock>
+      <Typography>
         Perfect. Now let&apos;s run the generate command. That will stand up a
         project for you with everything you need in the current directory:
       </Typography>

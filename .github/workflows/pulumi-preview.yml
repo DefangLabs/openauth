@@ -1,0 +1,40 @@
+name: Pulumi Preview Portal
+
+on:
+  - pull_request
+  - workflow_dispatch
+
+permissions:
+  contents: read
+  id-token: write # for defang login
+
+jobs:
+  preview:
+    name: Pulumi Preview
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log into Defang prod
+        run: |
+          . <(curl -s https://raw.githubusercontent.com/defang-io/defang/main/src/bin/install.sh)
+          defang --debug login
+
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false # we don't expect to do any pushes from this workflow
+
+      - uses: ./.github/actions/npm-ci
+        with:
+          cache-dependency-path: pulumi/package-lock.json
+          working-directory: pulumi
+
+      - name: Run pulumi preview (production)
+        uses: pulumi/actions@v5
+        with:
+          command: ${{ (github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'deploy')) && 'up' || 'preview' }} # TODO: doesn't work with `act`
+          stack-name: defang-io/production
+          work-dir: ./pulumi
+        env:
+          AIVEN_TOKEN: ${{ secrets.AIVEN_TOKEN }} # for connecting to Aiven
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # for downloading pulumi plugins
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          # PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}

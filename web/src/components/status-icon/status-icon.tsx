@@ -1,7 +1,7 @@
 import { Circle } from "@mui/icons-material";
 import { Tooltip, Icon } from "@mui/material";
 
-const statusColorMap = {
+const statusColorMap: Record<string, string> = {
   BUILD_QUEUED: "red",
   BUILD_PROVISIONING: "red",
   BUILD_PENDING: "red",
@@ -14,12 +14,19 @@ const statusColorMap = {
   TASK_PENDING: "red",
   TASK_ACTIVATING: "red",
   TASK_RUNNING: "orange",
-  SERVICE_STEADY_STATE: "green",
+  SERVICE_STEADY_STATE: "green", // FIXME: we can get this for rollbacks too
   TASK_DEACTIVATING: "orange",
   TASK_STOPPING: "orange",
   TASK_DEPROVISIONING: "orange",
   TASK_STOPPED: "orange", // StopCode=ServiceSchedulerInitiated
+  SERVICE_DEPLOYMENT_IN_PROGRESS: "orange",
+  SERVICE_DEPLOYMENT_COMPLETED: "green",
+  SERVICE_DEPLOYMENT_FAILED: "red",
 } as const;
+
+function color(status: string) {
+  return statusColorMap[status.split(" ", 1)[0]]; // strip of the status reason
+}
 
 export function StatusIcon({
   status,
@@ -31,7 +38,7 @@ export function StatusIcon({
     <Tooltip title={status}>
       <Icon
         sx={{
-          color: statusColorMap[status as keyof typeof statusColorMap],
+          color: color(status),
           mr: 1,
           position: "relative",
         }}
