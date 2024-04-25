@@ -154,7 +154,11 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
             </NavButton> */}
           </Stack>
           <Grow />
-          <div>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <LogoutChip
               avatar={
                 <Avatar style={{ backgroundColor: "white" }}>
@@ -164,7 +168,10 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               label="Logout"
               onClick={logout}
             />
-          </div>
+            <Typography color="gray">
+              {process.env.NEXT_PUBLIC_VERSION}
+            </Typography>
+          </Stack>
         </Stack>
       </Drawer>
       <Stack direction={isMobile ? "column" : "row"} width="100%">

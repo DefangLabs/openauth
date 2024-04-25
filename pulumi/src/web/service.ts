@@ -3,6 +3,7 @@ import * as pulumi from "@pulumi/pulumi";
 import { config } from "../common/config";
 import { ROOT_URL } from "../common/constants";
 import { SERVICE_NAME, SERVICE_ROOT_PATH } from "./constants";
+import { execFileSync } from "child_process";
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
   name: `${SERVICE_NAME}-${pulumi.getStack()}`,
@@ -15,6 +16,7 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
       NEXT_PUBLIC_GRAPHQL_URL: `${ROOT_URL}/svc/hasura/v1/graphql`,
       NEXT_PUBLIC_KRATOS_PUBLIC_URL: `${ROOT_URL}/svc/kratos`,
       NEXT_PUBLIC_SEGMENT_WRITE_KEY: config.require("segmentWriteKey"),
+      NEXT_PUBLIC_VERSION: gitDescribe() || "unknown",
     },
   },
   environment: {
@@ -27,3 +29,13 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
   },
   platform: "linux/arm64",
 });
+
+function gitDescribe(): string {
+  return (
+    execFileSync(
+      "/usr/bin/env",
+      ["git", "describe", "--tags", "--always", "--dirty"],
+      { encoding: "utf8", stdio: ["pipe", "pipe", "inherit"] }
+    ).trim()
+  );
+}
