@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Services } from "../../generated/fabric_pb";
+import { ListServicesResponse } from "../../generated/fabric_pb";
 import { useDefangClient } from "../use-defang-client/use-defang-client";
 import { atom, useAtom } from "jotai";
 
@@ -8,7 +8,7 @@ interface UseServicesOpts {
   poll?: number;
 }
 
-const servicesAtom = atom<Services["services"] | null>(null);
+const servicesAtom = atom<ListServicesResponse["services"] | null>(null);
 
 export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
   const [services, setServices] = useAtom(servicesAtom);

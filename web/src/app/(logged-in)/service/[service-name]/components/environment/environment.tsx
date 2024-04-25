@@ -100,7 +100,7 @@ export function Environment() {
                     ) : (
                       <Stack direction="row" alignItems="center" gap={1}>
                         <Lock />
-                        <Typography>Secret</Typography>
+                        <Typography>Sensitive</Typography>
                       </Stack>
                     )}
                   </TableCell>

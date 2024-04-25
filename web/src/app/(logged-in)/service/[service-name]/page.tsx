@@ -31,7 +31,7 @@ const OpenIcon = styled(OpenInNew)`
   cursor: pointer;
 `;
 
-function ServicePage() {
+function ServicePageInner() {
   const { service, loading } = useService({ poll: 5000 });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -105,8 +105,10 @@ function ServicePage() {
   );
 }
 
-export default LoginRequired(() => (
-  <Loader>
-    <ServicePage />
-  </Loader>
-)) as any;
+export default function ServicePage() {
+  return (
+    <Loader>
+      <ServicePageInner />
+    </Loader>
+  );
+}

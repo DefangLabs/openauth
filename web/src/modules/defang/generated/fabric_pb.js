@@ -46,6 +46,61 @@ export const Mode = proto3.makeEnum(
 );
 
 /**
+ * @generated from message io.defang.v1.TrackRequest
+ */
+export const TrackRequest = proto3.makeMessageType(
+  "io.defang.v1.TrackRequest",
+  () => [
+    { no: 1, name: "anon_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "event", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "properties", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "scalar", T: 9 /* ScalarType.STRING */} },
+    { no: 4, name: "os", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "arch", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.DeployRequest
+ */
+export const DeployRequest = proto3.makeMessageType(
+  "io.defang.v1.DeployRequest",
+  () => [
+    { no: 1, name: "services", kind: "message", T: Service, repeated: true },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.DeployResponse
+ */
+export const DeployResponse = proto3.makeMessageType(
+  "io.defang.v1.DeployResponse",
+  () => [
+    { no: 1, name: "services", kind: "message", T: ServiceInfo, repeated: true },
+    { no: 2, name: "etag", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.DeleteRequest
+ */
+export const DeleteRequest = proto3.makeMessageType(
+  "io.defang.v1.DeleteRequest",
+  () => [
+    { no: 1, name: "names", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.DeleteResponse
+ */
+export const DeleteResponse = proto3.makeMessageType(
+  "io.defang.v1.DeleteResponse",
+  () => [
+    { no: 1, name: "etag", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
+);
+
+/**
  * @generated from message io.defang.v1.GenerateFilesRequest
  */
 export const GenerateFilesRequest = proto3.makeMessageType(
@@ -53,6 +108,7 @@ export const GenerateFilesRequest = proto3.makeMessageType(
   () => [
     { no: 1, name: "prompt", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "language", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "agree_tos", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ],
 );
 
@@ -78,6 +134,36 @@ export const GenerateFilesResponse = proto3.makeMessageType(
 );
 
 /**
+ * @generated from message io.defang.v1.StartGenerateResponse
+ */
+export const StartGenerateResponse = proto3.makeMessageType(
+  "io.defang.v1.StartGenerateResponse",
+  () => [
+    { no: 1, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.GenerateStatusRequest
+ */
+export const GenerateStatusRequest = proto3.makeMessageType(
+  "io.defang.v1.GenerateStatusRequest",
+  () => [
+    { no: 1, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.UploadURLRequest
+ */
+export const UploadURLRequest = proto3.makeMessageType(
+  "io.defang.v1.UploadURLRequest",
+  () => [
+    { no: 1, name: "digest", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
+);
+
+/**
  * @generated from message io.defang.v1.UploadURLResponse
  */
 export const UploadURLResponse = proto3.makeMessageType(
@@ -95,13 +181,17 @@ export const ServiceInfo = proto3.makeMessageType(
   () => [
     { no: 1, name: "service", kind: "message", T: Service },
     { no: 2, name: "endpoints", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 3, name: "tenant", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "project", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 4, name: "etag", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 5, name: "status", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 6, name: "nat_ips", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
     { no: 7, name: "lb_ips", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
     { no: 8, name: "private_fqdn", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 9, name: "public_fqdn", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 10, name: "created_at", kind: "message", T: Timestamp },
+    { no: 11, name: "updated_at", kind: "message", T: Timestamp },
+    { no: 12, name: "zone_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 13, name: "use_acme_cert", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ],
 );
 
@@ -112,6 +202,7 @@ export const Secrets = proto3.makeMessageType(
   "io.defang.v1.Secrets",
   () => [
     { no: 1, name: "names", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 2, name: "project", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -123,6 +214,7 @@ export const SecretValue = proto3.makeMessageType(
   () => [
     { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "project", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -136,6 +228,8 @@ export const TokenRequest = proto3.makeMessageType(
     { no: 2, name: "auth_code", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "scope", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
     { no: 4, name: "assertion", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "expires_in", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 6, name: "anon_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -190,6 +284,7 @@ export const LogEntry = proto3.makeMessageType(
   () => [
     { no: 1, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "timestamp", kind: "message", T: Timestamp },
+    { no: 3, name: "stderr", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ],
 );
 
@@ -207,10 +302,10 @@ export const TailResponse = proto3.makeMessageType(
 );
 
 /**
- * @generated from message io.defang.v1.Services
+ * @generated from message io.defang.v1.ListServicesResponse
  */
-export const Services = proto3.makeMessageType(
-  "io.defang.v1.Services",
+export const ListServicesResponse = proto3.makeMessageType(
+  "io.defang.v1.ListServicesResponse",
   () => [
     { no: 1, name: "services", kind: "message", T: ServiceInfo, repeated: true },
   ],
@@ -302,6 +397,8 @@ export const Build = proto3.makeMessageType(
     { no: 1, name: "context", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "dockerfile", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "args", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "scalar", T: 9 /* ScalarType.STRING */} },
+    { no: 4, name: "shm_size", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
+    { no: 5, name: "target", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -312,6 +409,9 @@ export const HealthCheck = proto3.makeMessageType(
   "io.defang.v1.HealthCheck",
   () => [
     { no: 1, name: "test", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 2, name: "interval", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 3, name: "timeout", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 4, name: "retries", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
   ],
 );
 
@@ -333,6 +433,9 @@ export const Service = proto3.makeMessageType(
     { no: 10, name: "healthcheck", kind: "message", T: HealthCheck },
     { no: 11, name: "command", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
     { no: 12, name: "domainname", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 13, name: "init", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 14, name: "dns_role", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 15, name: "static_files", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -351,6 +454,69 @@ export const Event = proto3.makeMessageType(
     { no: 7, name: "subject", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 8, name: "time", kind: "message", T: Timestamp },
     { no: 9, name: "data", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.PublishRequest
+ */
+export const PublishRequest = proto3.makeMessageType(
+  "io.defang.v1.PublishRequest",
+  () => [
+    { no: 1, name: "event", kind: "message", T: Event },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.SubscribeRequest
+ */
+export const SubscribeRequest = proto3.makeMessageType(
+  "io.defang.v1.SubscribeRequest",
+  () => [
+    { no: 1, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.SubscribeResponse
+ */
+export const SubscribeResponse = proto3.makeMessageType(
+  "io.defang.v1.SubscribeResponse",
+  () => [
+    { no: 1, name: "services", kind: "message", T: ServiceInfo, repeated: true },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.DelegateSubdomainZoneRequest
+ */
+export const DelegateSubdomainZoneRequest = proto3.makeMessageType(
+  "io.defang.v1.DelegateSubdomainZoneRequest",
+  () => [
+    { no: 1, name: "name_server_records", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.DelegateSubdomainZoneResponse
+ */
+export const DelegateSubdomainZoneResponse = proto3.makeMessageType(
+  "io.defang.v1.DelegateSubdomainZoneResponse",
+  () => [
+    { no: 1, name: "zone", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.WhoAmIResponse
+ */
+export const WhoAmIResponse = proto3.makeMessageType(
+  "io.defang.v1.WhoAmIResponse",
+  () => [
+    { no: 1, name: "tenant", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "account", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "region", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "user_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 

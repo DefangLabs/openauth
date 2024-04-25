@@ -9,7 +9,6 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    console.log("@@ AnalyticsProvider: useEffect: pathname: ", pathname);
     analytics.page();
   }, [pathname, searchParams]);
 

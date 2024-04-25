@@ -1,4 +1,4 @@
-import { useLogsFilter } from "@/app/service/[service-name]/hooks/use-logs-filter/use-logs-filter";
+import { useLogsFilter } from "@/app/(logged-in)/service/[service-name]/hooks/use-logs-filter/use-logs-filter";
 import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
 import { parse } from "ansicolor";
 import { useCallback, useEffect, useRef } from "react";
@@ -36,12 +36,15 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
     const logs = container.getElementsByClassName("log");
     Array.from(logs).forEach((log) => {
       const htmlLog = log as HTMLElement;
+      console.log("@@ filter", filter);
+      console.log("@@ log", log.textContent);
       if (filter) {
         if (negativeFilter) {
           htmlLog.style.display = log.textContent?.includes(filter)
             ? "none"
             : "block";
         } else {
+          console.log("@@ setting display to block");
           htmlLog.style.display = log.textContent?.includes(filter)
             ? "block"
             : "none";
@@ -129,10 +132,8 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
         container.clientHeight + 20
       ) {
         scrolledRef.current = false;
-        console.log("@@ scrolled to bottom");
       } else {
         scrolledRef.current = true;
-        console.log("@@ not scrolled to bottom");
       }
     }
     container.addEventListener("scroll", scrollCheck);

@@ -1,14 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-  experimental: {
-    modularizeImports: {
-      "@mui/icons-material": {
-        transform: "@mui/icons-material/{{member}}",
-      },
-    },
-    missingSuspenseWithCSRBailout: false,
-  },
+  // experimental: {
+  //   missingSuspenseWithCSRBailout: false, // shouldn't be necessary but build is not detecting Suspense boundaries
+  // },
   async headers() {
     return process.env.NODE_ENV !== "production"
       ? []

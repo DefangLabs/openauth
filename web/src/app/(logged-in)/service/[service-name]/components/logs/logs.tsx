@@ -17,7 +17,7 @@ import {
   styled,
 } from "@mui/material";
 import { useState } from "react";
-import { useServiceLogs } from "../../../../../modules/defang/hooks/use-service-logs/use-service-logs";
+import { useServiceLogs } from "../../../../../../modules/defang/hooks/use-service-logs/use-service-logs";
 import { useLogsFilter } from "../../hooks/use-logs-filter/use-logs-filter";
 import { useService } from "../../hooks/use-service/use-service";
 

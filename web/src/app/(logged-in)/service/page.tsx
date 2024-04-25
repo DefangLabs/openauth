@@ -2,7 +2,6 @@
 
 import { Loader } from "@/components/loader/loader";
 import { StatusIcon } from "@/components/status-icon/status-icon";
-import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
 import {
   Box,
   CircularProgress,
@@ -16,12 +15,12 @@ import { EmptyServices } from "./components/empty-services/empty-services";
 import { useFilteredServices } from "./hooks/use-filtered-services/use-filtered-services";
 import { useSearch } from "./hooks/use-search/use-search";
 
-function ServicesPage() {
+function ServicesPageInner() {
   const { services, loading } = useFilteredServices();
   const { search, setSearch } = useSearch();
   const router = useRouter();
 
-  if (!services?.length && !loading) {
+  if (!services?.length && !loading && !search) {
     return <EmptyServices />;
   }
 
@@ -90,8 +89,10 @@ function ServicesPage() {
   );
 }
 
-export default LoginRequired(() => (
-  <Loader>
-    <ServicesPage />
-  </Loader>
-)) as any;
+export default function ServicesPage() {
+  return (
+    <Loader>
+      <ServicesPageInner />
+    </Loader>
+  );
+}
