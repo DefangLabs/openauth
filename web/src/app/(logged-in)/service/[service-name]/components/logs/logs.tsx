@@ -138,6 +138,7 @@ export function Logs() {
             >
               <ToggleButton value="0">clear</ToggleButton>
               <ToggleButton value="1">1m</ToggleButton>
+              <ToggleButton value="5">5m</ToggleButton>
               <ToggleButton value="30">30m</ToggleButton>
               <ToggleButton value="60">1h</ToggleButton>
               <ToggleButton value="720">12h</ToggleButton>
