@@ -17,7 +17,7 @@ export function useFilteredServices() {
     )
     .map((service) => {
       return {
-        id: service.etag,
+        id: `${service.project}-${service.service.name}`,
         name: service.service?.name,
         fqdn: service.service?.domainname || service.endpoints?.[0],
         dockerImage: service.service?.image || service.service?.build?.context,
