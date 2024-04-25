@@ -60,7 +60,7 @@ export function Environment() {
 
   const envs = service?.service?.environment || {};
   const secrets = service?.service?.secrets || [];
-  const combined = [...secrets, ...Object.entries(envs)];
+  const combined = [...Object.entries(envs), ...secrets];
 
   return Object.keys(combined || {}).length > 0 ? (
     <Stack spacing={2}>
