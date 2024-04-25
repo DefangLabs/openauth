@@ -4,8 +4,7 @@ COPY . /app
 
 WORKDIR /app
 
-ARG COREPACK_ENABLE_STRICT=0
-RUN npm install -g pnpm && pnpm install && pnpm build
+RUN npm install -g pnpm@7.15.0 && pnpm install && pnpm build
 
 ARG APP=api
 
