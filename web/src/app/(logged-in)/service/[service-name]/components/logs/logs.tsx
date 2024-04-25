@@ -1,13 +1,15 @@
 import { analytics } from "@/modules/analytics/lib/analytics";
 import { EVENTS } from "@/modules/analytics/lib/constants";
-import { COLORS } from "@/modules/mui/constants";
+import { COLORS, thinGreyBorder } from "@/modules/mui/constants";
 import {
+  Box,
   Checkbox,
   FormControl,
   FormControlLabel,
   Grid,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
   Stack,
   TextField,
@@ -23,16 +25,14 @@ import { useService } from "../../hooks/use-service/use-service";
 
 const LogContainer = styled("div")`
   font-family: "Courier New", Courier, monospace;
-  background-color: #111;
-  color: ${COLORS.secondary};
   overflow-x: scroll;
   height: 50vh;
-  border-radius: ${({ theme }) => theme.shape.borderRadius.toString()}px;
-  padding: ${({ theme }) => theme.spacing(2).toString()};
+  padding-left: ${({ theme }) => theme.spacing(2).toString()};
+  padding-right: ${({ theme }) => theme.spacing(2).toString()};
+  flex-grow: 1;
 
   ${({ theme }) => theme.breakpoints.up("md")} {
-    width: 800px;
-    max-width: calc(100vw - 400px);
+    max-width: calc(100vw - 416px);
   }
 `;
 
@@ -62,93 +62,94 @@ export function Logs() {
   });
 
   return (
-    <>
-      <Stack spacing={2}>
-        <Grid container alignItems="center" spacing={2}>
-          <Grid item>
-            <Typography variant="h2">Logs</Typography>
-          </Grid>
-          <Grid item>
-            <Stack direction="row" spacing={2}>
-              <TextField
-                label="Filter"
-                variant="outlined"
-                value={filter}
-                size="small"
-                onChange={(e) => {
-                  if (e.target.value.length > 0) {
-                    trackFilter();
-                  }
-                  return setFilter(e.target.value);
-                }}
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={negativeFilter}
-                    onChange={(e) => {
-                      analytics.track(EVENTS.toggleNegativeFilter, {
-                        value: !!e.target.checked,
-                      });
-                      return setNegativeFilter(!!e.target.checked);
-                    }}
-                  />
+    <Stack spacing={2}>
+      <Typography variant="h2">Logs</Typography>
+      <Paper elevation={0} sx={thinGreyBorder}>
+        <Stack>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ borderBottom: "1px solid #ccc" }}
+            p={1}
+          >
+            <TextField
+              label="Filter"
+              variant="outlined"
+              value={filter}
+              size="small"
+              onChange={(e) => {
+                if (e.target.value.length > 0) {
+                  trackFilter();
                 }
-                label="Negative Filter"
-              />
-              <FormControl>
-                <InputLabel id="log-type-select-label">Logs for</InputLabel>
-                <Select
-                  labelId="log-type-select-label"
-                  id="log-type-select"
-                  value={logType}
-                  label="Logs for"
+                return setFilter(e.target.value);
+              }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={negativeFilter}
                   onChange={(e) => {
-                    analytics.track(EVENTS.toggleLogType, {
-                      type: e.target.value,
+                    analytics.track(EVENTS.toggleNegativeFilter, {
+                      value: !!e.target.checked,
                     });
-                    resetLogs();
-                    setLogType(e.target.value as LogFilter);
+                    return setNegativeFilter(!!e.target.checked);
                   }}
-                  size="small"
-                >
-                  <MenuItem value="all">All Deployments</MenuItem>
-                  <MenuItem value="current">Current Deployment</MenuItem>
-                  <MenuItem
-                    disabled={!service?.service.build?.context}
-                    value="image"
-                  >
-                    Current Image Build
-                  </MenuItem>
-                </Select>
-              </FormControl>
-              <ToggleButtonGroup
-                value={logTime}
-                exclusive
-                size="small"
-                onChange={(e, v) => {
-                  analytics.track(EVENTS.toggleLogTime, {
-                    time: v,
+                />
+              }
+              label="Negative Filter"
+            />
+            <FormControl>
+              <InputLabel id="log-type-select-label">Logs for</InputLabel>
+              <Select
+                labelId="log-type-select-label"
+                id="log-type-select"
+                value={logType}
+                label="Logs for"
+                onChange={(e) => {
+                  analytics.track(EVENTS.toggleLogType, {
+                    type: e.target.value,
                   });
                   resetLogs();
-                  setLogTime(v as LogTime);
+                  setLogType(e.target.value as LogFilter);
                 }}
+                size="small"
               >
-                <ToggleButton value="0">clear</ToggleButton>
-                <ToggleButton value="1">1m</ToggleButton>
-                <ToggleButton value="30">30m</ToggleButton>
-                <ToggleButton value="60">1h</ToggleButton>
-                <ToggleButton value="720">12h</ToggleButton>
-              </ToggleButtonGroup>
-            </Stack>
-          </Grid>
-        </Grid>
-        <LogContainer
-          ref={(ref) => {
-            setLogContainer(ref);
-          }}
-        />
-      </Stack>
-    </>
+                <MenuItem value="all">All Deployments</MenuItem>
+                <MenuItem value="current">Current Deployment</MenuItem>
+                <MenuItem
+                  disabled={!service?.service.build?.context}
+                  value="image"
+                >
+                  Current Image Build
+                </MenuItem>
+              </Select>
+            </FormControl>
+            <ToggleButtonGroup
+              value={logTime}
+              exclusive
+              size="small"
+              onChange={(e, v) => {
+                analytics.track(EVENTS.toggleLogTime, {
+                  time: v,
+                });
+                resetLogs();
+                setLogTime(v as LogTime);
+              }}
+            >
+              <ToggleButton value="0">clear</ToggleButton>
+              <ToggleButton value="1">1m</ToggleButton>
+              <ToggleButton value="30">30m</ToggleButton>
+              <ToggleButton value="60">1h</ToggleButton>
+              <ToggleButton value="720">12h</ToggleButton>
+            </ToggleButtonGroup>
+          </Stack>
+          <LogContainer
+            ref={(ref) => {
+              setLogContainer(ref);
+            }}
+          />
+        </Stack>
+      </Paper>
+    </Stack>
   );
 }

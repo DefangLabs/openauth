@@ -32,19 +32,15 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
 
   useEffect(() => {
     if (!container) return;
-    // hide logs based on filter
     const logs = container.getElementsByClassName("log");
     Array.from(logs).forEach((log) => {
       const htmlLog = log as HTMLElement;
-      console.log("@@ filter", filter);
-      console.log("@@ log", log.textContent);
       if (filter) {
         if (negativeFilter) {
           htmlLog.style.display = log.textContent?.includes(filter)
             ? "none"
             : "block";
         } else {
-          console.log("@@ setting display to block");
           htmlLog.style.display = log.textContent?.includes(filter)
             ? "block"
             : "none";
@@ -69,11 +65,22 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
         div.classList.add("log");
         div.style.whiteSpace = "pre";
 
-        div.appendChild(
-          document.createTextNode(
-            `[${log.timestamp?.toDate().toISOString()}]` + " "
-          )
-        );
+        const timestampSpan = document.createElement("span");
+        timestampSpan.setAttribute("style", "color: #8bc34a;");
+        const date = log.timestamp?.toDate() || new Date();
+        const offset = -date.getTimezoneOffset();
+        const offsetSign = offset >= 0 ? "+" : "-";
+        const offsetHours = Math.floor(Math.abs(offset / 60))
+          .toString()
+          .padStart(2, "0");
+        const offsetMinutes = (Math.abs(offset) % 60)
+          .toString()
+          .padStart(2, "0");
+        const localISOTime = new Date(date.getTime() + offset * 60000)
+          .toISOString()
+          .slice(0, -1);
+        timestampSpan.textContent = `[${localISOTime}${offsetSign}${offsetHours}:${offsetMinutes}] `;
+        div.appendChild(timestampSpan);
 
         const parsedMessage = parse(log.message);
         parsedMessage.spans.forEach((span, i) => {
