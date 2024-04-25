@@ -14,5 +14,13 @@
     "turbo": "^1.9.7"
   },
   "packageManager": "pnpm@7.15.0",
-  "name": "fn"
+  "name": "fn",
+  "pnpm": {
+    "overrides": {
+      "semver@>=7.0.0 <7.5.2": ">=7.5.2",
+      "ip@=2.0.0": ">=2.0.1",
+      "express@<4.19.2": ">=4.19.2",
+      "protobufjs@>=7.0.0 <7.2.5": ">=7.2.5"
+    }
+  }
 }
