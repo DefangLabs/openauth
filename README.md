@@ -1,6 +1,5 @@
 # portal
 
-
 ## Secrets
 - `aiven:apiToken`: created in Aiven dashboard; this expires when unused for 10 hours; **deprecated** use `AIVEN_TOKEN` env
 - `defang-portal:aivenBillingGroup`: from Aiven dashboard
