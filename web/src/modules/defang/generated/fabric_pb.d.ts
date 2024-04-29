@@ -457,7 +457,7 @@ export declare class ServiceInfo extends Message<ServiceInfo> {
   natIps: string[];
 
   /**
-   * comma-separated list of load-balancer IPs
+   * comma-separated list of internal CIDR for the load-balancer
    *
    * @generated from field: repeated string lb_ips = 7;
    */
