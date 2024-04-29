@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { EmptyServices } from "./components/empty-services/empty-services";
 import { useFilteredServices } from "./hooks/use-filtered-services/use-filtered-services";
 import { useSearch } from "./hooks/use-search/use-search";
+import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
 
 function ServicesPageInner() {
   const { services, loading } = useFilteredServices();
@@ -89,10 +90,10 @@ function ServicesPageInner() {
   );
 }
 
-export default function ServicesPage() {
+export default LoginRequired(function ServicesPage() {
   return (
     <Loader>
       <ServicesPageInner />
     </Loader>
   );
-}
+});

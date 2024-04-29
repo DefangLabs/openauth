@@ -1,8 +1,8 @@
-import { useLogsFilter } from "@/app/(logged-in)/service/[service-name]/hooks/use-logs-filter/use-logs-filter";
 import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
 import { parse } from "ansicolor";
 import { useCallback, useEffect, useRef } from "react";
-import { TailResponse } from "../../generated/fabric_pb";
+import { TailResponse } from "../../../../../modules/defang/generated/fabric_pb";
+import { useLogsFilter } from "../use-logs-filter/use-logs-filter";
 
 interface UseServiceLogsOpts {
   etag?: string;
@@ -20,6 +20,33 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
   const scrolledRef = useRef(false);
   const { filter, negativeFilter } = useLogsFilter();
 
+  const filterLogs = useCallback(() => {
+    if (container) {
+      const logs = container.getElementsByClassName("log");
+      Array.from(logs).forEach((log) => {
+        const htmlLog = log as HTMLElement;
+        if (filter) {
+          const lcFilter = filter?.toLowerCase() || "";
+          if (negativeFilter) {
+            htmlLog.style.display = log.textContent
+              ?.toLowerCase()
+              .includes(lcFilter)
+              ? "none"
+              : "block";
+          } else {
+            htmlLog.style.display = log.textContent
+              ?.toLowerCase()
+              .includes(lcFilter)
+              ? "block"
+              : "none";
+          }
+        } else {
+          htmlLog.style.display = "block";
+        }
+      });
+    }
+  }, [container, filter, negativeFilter]);
+
   const resetLogs = useCallback(() => {
     if (container) {
       container.innerHTML = "";
@@ -29,27 +56,6 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
   useEffect(() => {
     resetLogs();
   }, [resetLogs, service, etag, sinceMins]);
-
-  useEffect(() => {
-    if (!container) return;
-    const logs = container.getElementsByClassName("log");
-    Array.from(logs).forEach((log) => {
-      const htmlLog = log as HTMLElement;
-      if (filter) {
-        if (negativeFilter) {
-          htmlLog.style.display = log.textContent?.includes(filter)
-            ? "none"
-            : "block";
-        } else {
-          htmlLog.style.display = log.textContent?.includes(filter)
-            ? "block"
-            : "none";
-        }
-      } else {
-        htmlLog.style.display = "block";
-      }
-    });
-  }, [container, filter, negativeFilter]);
 
   const callback = useCallback(
     (res: TailResponse) => {
@@ -94,12 +100,14 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
 
         container.appendChild(div);
       });
+
+      filterLogs();
       // scroll to bottom
       if (shouldScroll) {
         container.scrollTop = container.scrollHeight;
       }
     },
-    [container]
+    [container, filterLogs]
   );
 
   useEffect(() => {
@@ -151,6 +159,7 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
   }, [container]);
 
   return {
+    filterLogs,
     resetLogs,
   };
 }

@@ -19,7 +19,7 @@ import {
   styled,
 } from "@mui/material";
 import { useState } from "react";
-import { useServiceLogs } from "../../../../../../modules/defang/hooks/use-service-logs/use-service-logs";
+import { useServiceLogs } from "../../hooks/use-service-logs/use-service-logs";
 import { useLogsFilter } from "../../hooks/use-logs-filter/use-logs-filter";
 import { useService } from "../../hooks/use-service/use-service";
 
@@ -54,7 +54,7 @@ export function Logs() {
   const { filter, setFilter, negativeFilter, setNegativeFilter } =
     useLogsFilter();
   const { service, loading } = useService({ skip: true, poll: undefined });
-  const { resetLogs } = useServiceLogs({
+  const { resetLogs, filterLogs } = useServiceLogs({
     service: service?.service?.name?.concat(logType == "image" ? "-image" : ""),
     etag: logType === "all" ? undefined : service?.etag,
     sinceMins: parseInt(logTime),
@@ -81,7 +81,8 @@ export function Logs() {
                 if (e.target.value.length > 0) {
                   trackFilter();
                 }
-                return setFilter(e.target.value);
+                setFilter(e.target.value);
+                filterLogs();
               }}
             />
             <FormControlLabel
