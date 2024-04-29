@@ -5,8 +5,8 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Empty, MethodKind } from "@bufbuild/protobuf";
-import { Event, GenerateFilesRequest, GenerateFilesResponse, Secrets, SecretValue, Service, ServiceID, ServiceInfo, Services, Status, TailRequest, TailResponse, TokenRequest, TokenResponse, UploadURLResponse, Version } from "./fabric_pb.js";
+import { Empty, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
+import { DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, ListServicesResponse, PublishRequest, Secrets, SecretValue, Service, ServiceID, ServiceInfo, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, Version, WhoAmIResponse } from "./fabric_pb.js";
 
 /**
  * @generated from service io.defang.v1.FabricController
@@ -15,8 +15,6 @@ export declare const FabricController: {
   readonly typeName: "io.defang.v1.FabricController",
   readonly methods: {
     /**
-     * public
-     *
      * @generated from rpc io.defang.v1.FabricController.GetStatus
      */
     readonly getStatus: {
@@ -24,10 +22,9 @@ export declare const FabricController: {
       readonly I: typeof Empty,
       readonly O: typeof Status,
       readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
-     * public
-     *
      * @generated from rpc io.defang.v1.FabricController.GetVersion
      */
     readonly getVersion: {
@@ -35,6 +32,7 @@ export declare const FabricController: {
       readonly I: typeof Empty,
       readonly O: typeof Version,
       readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
      * public
@@ -66,12 +64,23 @@ export declare const FabricController: {
       readonly kind: MethodKind.ServerStreaming,
     },
     /**
+     * deprecated; use Deploy
+     *
      * @generated from rpc io.defang.v1.FabricController.Update
      */
     readonly update: {
       readonly name: "Update",
       readonly I: typeof Service,
       readonly O: typeof ServiceInfo,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.Deploy
+     */
+    readonly deploy: {
+      readonly name: "Deploy",
+      readonly I: typeof DeployRequest,
+      readonly O: typeof DeployResponse,
       readonly kind: MethodKind.Unary,
     },
     /**
@@ -82,14 +91,17 @@ export declare const FabricController: {
       readonly I: typeof ServiceID,
       readonly O: typeof ServiceInfo,
       readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
+     * deprecated; use Deploy
+     *
      * @generated from rpc io.defang.v1.FabricController.Delete
      */
     readonly delete: {
       readonly name: "Delete",
-      readonly I: typeof ServiceID,
-      readonly O: typeof Empty,
+      readonly I: typeof DeleteRequest,
+      readonly O: typeof DeleteResponse,
       readonly kind: MethodKind.Unary,
     },
     /**
@@ -97,9 +109,18 @@ export declare const FabricController: {
      */
     readonly publish: {
       readonly name: "Publish",
-      readonly I: typeof Event,
+      readonly I: typeof PublishRequest,
       readonly O: typeof Empty,
       readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.Subscribe
+     */
+    readonly subscribe: {
+      readonly name: "Subscribe",
+      readonly I: typeof SubscribeRequest,
+      readonly O: typeof SubscribeResponse,
+      readonly kind: MethodKind.ServerStreaming,
     },
     /**
      * rpc Promote(google.protobuf.Empty) returns (google.protobuf.Empty);
@@ -109,16 +130,58 @@ export declare const FabricController: {
     readonly getServices: {
       readonly name: "GetServices",
       readonly I: typeof Empty,
-      readonly O: typeof Services,
+      readonly O: typeof ListServicesResponse,
       readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
+     * deprecated; use StartGenerate/GenerateStatus
+     *
      * @generated from rpc io.defang.v1.FabricController.GenerateFiles
      */
     readonly generateFiles: {
       readonly name: "GenerateFiles",
       readonly I: typeof GenerateFilesRequest,
       readonly O: typeof GenerateFilesResponse,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.StartGenerate
+     */
+    readonly startGenerate: {
+      readonly name: "StartGenerate",
+      readonly I: typeof GenerateFilesRequest,
+      readonly O: typeof StartGenerateResponse,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.GenerateStatus
+     */
+    readonly generateStatus: {
+      readonly name: "GenerateStatus",
+      readonly I: typeof GenerateStatusRequest,
+      readonly O: typeof GenerateFilesResponse,
+      readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
+     * AgreeToS
+     *
+     * @generated from rpc io.defang.v1.FabricController.SignEULA
+     */
+    readonly signEULA: {
+      readonly name: "SignEULA",
+      readonly I: typeof Empty,
+      readonly O: typeof Empty,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.CheckToS
+     */
+    readonly checkToS: {
+      readonly name: "CheckToS",
+      readonly I: typeof Empty,
+      readonly O: typeof Empty,
       readonly kind: MethodKind.Unary,
     },
     /**
@@ -131,8 +194,15 @@ export declare const FabricController: {
       readonly kind: MethodKind.Unary,
     },
     /**
-     * no values
-     *
+     * @generated from rpc io.defang.v1.FabricController.DeleteSecrets
+     */
+    readonly deleteSecrets: {
+      readonly name: "DeleteSecrets",
+      readonly I: typeof Secrets,
+      readonly O: typeof Empty,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
      * @generated from rpc io.defang.v1.FabricController.ListSecrets
      */
     readonly listSecrets: {
@@ -140,16 +210,62 @@ export declare const FabricController: {
       readonly I: typeof Empty,
       readonly O: typeof Secrets,
       readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
-     * rpc DeleteSecret(SecretValue) returns (google.protobuf.Empty);
-     *
      * @generated from rpc io.defang.v1.FabricController.CreateUploadURL
      */
     readonly createUploadURL: {
       readonly name: "CreateUploadURL",
-      readonly I: typeof Empty,
+      readonly I: typeof UploadURLRequest,
       readonly O: typeof UploadURLResponse,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.DelegateSubdomainZone
+     */
+    readonly delegateSubdomainZone: {
+      readonly name: "DelegateSubdomainZone",
+      readonly I: typeof DelegateSubdomainZoneRequest,
+      readonly O: typeof DelegateSubdomainZoneResponse,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.DeleteSubdomainZone
+     */
+    readonly deleteSubdomainZone: {
+      readonly name: "DeleteSubdomainZone",
+      readonly I: typeof Empty,
+      readonly O: typeof Empty,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.GetDelegateSubdomainZone
+     */
+    readonly getDelegateSubdomainZone: {
+      readonly name: "GetDelegateSubdomainZone",
+      readonly I: typeof Empty,
+      readonly O: typeof DelegateSubdomainZoneResponse,
+      readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.WhoAmI
+     */
+    readonly whoAmI: {
+      readonly name: "WhoAmI",
+      readonly I: typeof Empty,
+      readonly O: typeof WhoAmIResponse,
+      readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.Track
+     */
+    readonly track: {
+      readonly name: "Track",
+      readonly I: typeof TrackRequest,
+      readonly O: typeof Empty,
       readonly kind: MethodKind.Unary,
     },
   }
