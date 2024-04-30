@@ -1,8 +1,8 @@
 "use client";
 
+import { Loader } from "@/components/loader/loader";
 import { StatusIcon } from "@/components/status-icon/status-icon";
 import { Mode } from "@/modules/defang/generated/fabric_pb";
-import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
 import { COLORS } from "@/modules/mui/constants";
 import { OpenInNew } from "@mui/icons-material";
 import {
@@ -17,10 +17,8 @@ import {
 import { ClickableDetail } from "./components/clickable-detail/clickable-detail";
 import { Endpoints } from "./components/endpoints/endpoints";
 import { Environment } from "./components/environment/environment";
-import { Secrets } from "./components/secrets/secrets";
 import { Logs } from "./components/logs/logs";
 import { useService } from "./hooks/use-service/use-service";
-import { Loader } from "@/components/loader/loader";
 
 const Small = styled("small")`
   color: ${COLORS.darkGrey};
@@ -31,7 +29,7 @@ const OpenIcon = styled(OpenInNew)`
   cursor: pointer;
 `;
 
-function ServicePage() {
+function ServicePageInner() {
   const { service, loading } = useService({ poll: 5000 });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -105,8 +103,10 @@ function ServicePage() {
   );
 }
 
-export default LoginRequired(() => (
-  <Loader>
-    <ServicePage />
-  </Loader>
-)) as any;
+export default function ServicePage() {
+  return (
+    <Loader>
+      <ServicePageInner />
+    </Loader>
+  );
+}

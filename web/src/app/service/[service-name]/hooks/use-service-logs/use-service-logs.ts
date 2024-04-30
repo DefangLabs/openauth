@@ -1,8 +1,8 @@
-import { useLogsFilter } from "@/app/service/[service-name]/hooks/use-logs-filter/use-logs-filter";
 import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
 import { parse } from "ansicolor";
 import { useCallback, useEffect, useRef } from "react";
-import { TailResponse } from "../../generated/fabric_pb";
+import { TailResponse } from "../../../../../modules/defang/generated/fabric_pb";
+import { useLogsFilter } from "../use-logs-filter/use-logs-filter";
 
 interface UseServiceLogsOpts {
   etag?: string;
@@ -20,6 +20,33 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
   const scrolledRef = useRef(false);
   const { filter, negativeFilter } = useLogsFilter();
 
+  const filterLogs = useCallback(() => {
+    if (container) {
+      const logs = container.getElementsByClassName("log");
+      Array.from(logs).forEach((log) => {
+        const htmlLog = log as HTMLElement;
+        if (filter) {
+          const lcFilter = filter?.toLowerCase() || "";
+          if (negativeFilter) {
+            htmlLog.style.display = log.textContent
+              ?.toLowerCase()
+              .includes(lcFilter)
+              ? "none"
+              : "block";
+          } else {
+            htmlLog.style.display = log.textContent
+              ?.toLowerCase()
+              .includes(lcFilter)
+              ? "block"
+              : "none";
+          }
+        } else {
+          htmlLog.style.display = "block";
+        }
+      });
+    }
+  }, [container, filter, negativeFilter]);
+
   const resetLogs = useCallback(() => {
     if (container) {
       container.innerHTML = "";
@@ -29,28 +56,6 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
   useEffect(() => {
     resetLogs();
   }, [resetLogs, service, etag, sinceMins]);
-
-  useEffect(() => {
-    if (!container) return;
-    // hide logs based on filter
-    const logs = container.getElementsByClassName("log");
-    Array.from(logs).forEach((log) => {
-      const htmlLog = log as HTMLElement;
-      if (filter) {
-        if (negativeFilter) {
-          htmlLog.style.display = log.textContent?.includes(filter)
-            ? "none"
-            : "block";
-        } else {
-          htmlLog.style.display = log.textContent?.includes(filter)
-            ? "block"
-            : "none";
-        }
-      } else {
-        htmlLog.style.display = "block";
-      }
-    });
-  }, [container, filter, negativeFilter]);
 
   const callback = useCallback(
     (res: TailResponse) => {
@@ -66,11 +71,22 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
         div.classList.add("log");
         div.style.whiteSpace = "pre";
 
-        div.appendChild(
-          document.createTextNode(
-            `[${log.timestamp?.toDate().toISOString()}]` + " "
-          )
-        );
+        const timestampSpan = document.createElement("span");
+        timestampSpan.setAttribute("style", "color: #8bc34a;");
+        const date = log.timestamp?.toDate() || new Date();
+        const offset = -date.getTimezoneOffset();
+        const offsetSign = offset >= 0 ? "+" : "-";
+        const offsetHours = Math.floor(Math.abs(offset / 60))
+          .toString()
+          .padStart(2, "0");
+        const offsetMinutes = (Math.abs(offset) % 60)
+          .toString()
+          .padStart(2, "0");
+        const localISOTime = new Date(date.getTime() + offset * 60000)
+          .toISOString()
+          .slice(0, -1);
+        timestampSpan.textContent = `[${localISOTime}${offsetSign}${offsetHours}:${offsetMinutes}] `;
+        div.appendChild(timestampSpan);
 
         const parsedMessage = parse(log.message);
         parsedMessage.spans.forEach((span, i) => {
@@ -84,12 +100,14 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
 
         container.appendChild(div);
       });
+
+      filterLogs();
       // scroll to bottom
       if (shouldScroll) {
         container.scrollTop = container.scrollHeight;
       }
     },
-    [container]
+    [container, filterLogs]
   );
 
   useEffect(() => {
@@ -129,10 +147,8 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
         container.clientHeight + 20
       ) {
         scrolledRef.current = false;
-        console.log("@@ scrolled to bottom");
       } else {
         scrolledRef.current = true;
-        console.log("@@ not scrolled to bottom");
       }
     }
     container.addEventListener("scroll", scrollCheck);
@@ -143,6 +159,7 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
   }, [container]);
 
   return {
+    filterLogs,
     resetLogs,
   };
 }

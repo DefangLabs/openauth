@@ -1,11 +1,10 @@
 "use client";
 
+import { Loader } from "@/components/loader/loader";
 import { GRADIENTS } from "@/modules/mui/constants";
 import { Grid } from "@mui/material";
-import { Suspense } from "react";
 import { Main } from "./components/main/main";
 import { SideBar } from "./components/sidebar/sidebar";
-import { Loader } from "@/components/loader/loader";
 
 export default function AuthLayout({
   children,

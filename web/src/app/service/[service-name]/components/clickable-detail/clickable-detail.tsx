@@ -33,7 +33,7 @@ const ClickableTypography = styled(Typography)`
 `;
 
 const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} arrow classes={{ popper: className }} />
+  <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
     fontSize: "1rem",
@@ -68,7 +68,18 @@ export function ClickableDetail({ title, content }: ClickableDetailProps) {
       <Typography variant="h5" fontWeight="700">
         {title}
       </Typography>
-      <CustomTooltip title={`Click to copy: \n${content}`} placement="bottom">
+      <CustomTooltip
+        title={
+          <>
+            {`Click to copy:`}
+            <br />
+            {`${content.toString().slice(0, 30)}${
+              content.toString().length > 30 ? "…" : ""
+            }`}
+          </>
+        }
+        placement="bottom"
+      >
         <ClickableTypography onClick={clickToCopy}>
           {content}
         </ClickableTypography>

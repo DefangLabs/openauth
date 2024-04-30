@@ -6,14 +6,14 @@ settings:
 
 dependencies:
   '@defang-io/pulumi-defang':
-    specifier: ^0.15.4
-    version: 0.15.12(@pulumi/pulumi@3.95.0)
+    specifier: ^0.15.14
+    version: 0.15.14(@pulumi/pulumi@3.95.0)
   '@pulumi/aiven':
     specifier: ^6.7.2
     version: 6.13.0
   '@pulumi/command':
-    specifier: ^0.9.1
-    version: 0.9.2
+    specifier: ^0.10.0
+    version: 0.10.0
   '@pulumi/docker':
     specifier: ~4.4.4
     version: 4.4.5
@@ -35,38 +35,30 @@ packages:
     resolution: {integrity: sha512-wMue2Sy4GAVTk6Ic4tJVcnfdau+gx2EnG7S+uAEe+TWJFqE4YoWN4/H8MSLj4eYJKxGg26lZwboEniNiNwZQ6Q==}
     dev: false
 
-  /@defang-io/pulumi-defang@0.15.12(@pulumi/pulumi@3.95.0):
-    resolution: {integrity: sha512-xGT+TcIeh8UVu4saJRekRfkTfdD5KOF65x0y9jA6MpWiajik05+Tb6Ztg+5tWWJZPgWgrDPBPzCVAukIO40wgw==}
+  /@defang-io/pulumi-defang@0.15.14(@pulumi/pulumi@3.95.0):
+    resolution: {integrity: sha512-rmlGH+Uga+DsHVpjknPm5mq+jXF2rJ3q4Yk0+Rd6gmCtzO96HZbxZnuLW/zPupF9h1UsHlFzNR5ipupICdii1Q==}
     engines: {node: '>=16'}
     peerDependencies:
       '@pulumi/pulumi': ^3.95.0
     dependencies:
       '@balena/dockerignore': 1.0.2
-      '@grpc/grpc-js': 1.10.6
+      '@grpc/grpc-js': 1.9.6
       '@pulumi/pulumi': 3.95.0
       google-protobuf: 3.21.2
       node-fetch: 3.3.1
-      tar: 6.2.1
-    dev: false
-
-  /@grpc/grpc-js@1.10.6:
-    resolution: {integrity: sha512-xP58G7wDQ4TCmN/cMUHh00DS7SRDv/+lC+xFLrTkMIN8h55X5NhZMLYbvy7dSELP15qlI6hPhNCRWVMtZMwqLA==}
-    engines: {node: '>=12.10.0'}
-    dependencies:
-      '@grpc/proto-loader': 0.7.12
-      '@js-sdsl/ordered-map': 4.4.2
+      tar: 6.1.15
     dev: false
 
   /@grpc/grpc-js@1.9.6:
     resolution: {integrity: sha512-yq3qTy23u++8zdvf+h4mz4ohDFi681JAkMZZPTKh8zmUVh0AKLisFlgxcn22FMNowXz15oJ6pqgwT7DJ+PdJvg==}
     engines: {node: ^8.13.0 || >=10.10.0}
     dependencies:
-      '@grpc/proto-loader': 0.7.12
-      '@types/node': 20.12.7
+      '@grpc/proto-loader': 0.7.10
+      '@types/node': 20.4.5
     dev: false
 
-  /@grpc/proto-loader@0.7.12:
-    resolution: {integrity: sha512-DCVwMxqYzpUCiDMl7hQ384FqP4T3DbNpXU8pt681l3UWCip1WUiD5JrkImUwCB9a7f2cq4CUTmi5r/xIMRPY1Q==}
+  /@grpc/proto-loader@0.7.10:
+    resolution: {integrity: sha512-CAqDfoaQ8ykFd9zqBDn4k6iWT9loLAlc2ETmDFS9JCD70gDcnA4L3AFEo2iV7KyAtAAHFW9ftq1Fz+Vsgq80RQ==}
     engines: {node: '>=6'}
     hasBin: true
     dependencies:
@@ -74,10 +66,6 @@ packages:
       long: 5.2.3
       protobufjs: 7.2.6
       yargs: 17.7.2
-    dev: false
-
-  /@js-sdsl/ordered-map@4.4.2:
-    resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
     dev: false
 
   /@logdna/tail-file@2.2.0:
@@ -278,8 +266,8 @@ packages:
       - supports-color
     dev: false
 
-  /@pulumi/command@0.9.2:
-    resolution: {integrity: sha512-9RaGDiy8jFCiaarj4EOrMW/fVCM/AgBigzwM6CKzlR49x8UFiRDmKrXfEVHb8r2P9IpC4IaAZf5VbNNAHwN/rA==}
+  /@pulumi/command@0.10.0:
+    resolution: {integrity: sha512-fye7KpMepeqXX7H7JE5bs5hvtloifOgR3etuBdrvW1acfpeaPZOhUvLIWqSztAW+RkulchdGeIVZ6K6sQuOfJw==}
     requiresBuild: true
     dependencies:
       '@pulumi/pulumi': 3.95.0
@@ -345,6 +333,11 @@ packages:
     resolution: {integrity: sha512-wq0cICSkRLVaf3UGLMGItu/PtdY7oaXaI/RVU+xliKVOtRna3PRY57ZDfztpDL0n11vfymMUnXv8QwYCO7L1wg==}
     dependencies:
       undici-types: 5.26.5
+    dev: true
+
+  /@types/node@20.4.5:
+    resolution: {integrity: sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==}
+    dev: false
 
   /ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
@@ -1137,7 +1130,7 @@ packages:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 20.12.7
+      '@types/node': 20.4.5
       long: 5.2.3
     dev: false
 
@@ -1356,8 +1349,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
-  /tar@6.2.1:
-    resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
+  /tar@6.1.15:
+    resolution: {integrity: sha512-/zKt9UyngnxIT/EAGYuxaMYgOIJiP81ab9ZfkILq4oNLPFX50qyYmu7jRj9qeXoxmJHjGlbH0+cm2uy1WCs10A==}
     engines: {node: '>=10'}
     dependencies:
       chownr: 2.0.0
@@ -1408,6 +1401,7 @@ packages:
 
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    dev: true
 
   /upath@1.2.0:
     resolution: {integrity: sha512-aZwGpamFO61g3OlfT7OQCHqhGnW43ieH9WZeP7QxN/G/jS4jfqUkZxoryvJgVPEcrl5NL/ggHsSmLMHuH64Lhg==}
