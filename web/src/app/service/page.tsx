@@ -90,10 +90,12 @@ function ServicesPageInner() {
   );
 }
 
-export default LoginRequired(function ServicesPage() {
+const ServicePageOuter = LoginRequired(function ServicesPage() {
   return (
     <Loader>
       <ServicesPageInner />
     </Loader>
   );
 });
+
+export default ServicePageOuter;
