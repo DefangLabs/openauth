@@ -5,8 +5,8 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Empty, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
-import { DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, ListServicesResponse, PublishRequest, Secrets, SecretValue, Service, ServiceID, ServiceInfo, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, Version, WhoAmIResponse } from "./fabric_pb.js";
+import { Empty, MethodKind } from "@bufbuild/protobuf";
+import { Event, GenerateFilesRequest, GenerateFilesResponse, Secrets, SecretValue, Service, ServiceID, ServiceInfo, Services, Status, TailRequest, TailResponse, TokenRequest, TokenResponse, UploadURLResponse, Version } from "./fabric_pb.js";
 
 /**
  * @generated from service io.defang.v1.FabricController
@@ -15,6 +15,8 @@ export const FabricController = {
   typeName: "io.defang.v1.FabricController",
   methods: {
     /**
+     * public
+     *
      * @generated from rpc io.defang.v1.FabricController.GetStatus
      */
     getStatus: {
@@ -22,9 +24,10 @@ export const FabricController = {
       I: Empty,
       O: Status,
       kind: MethodKind.Unary,
-      idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
+     * public
+     *
      * @generated from rpc io.defang.v1.FabricController.GetVersion
      */
     getVersion: {
@@ -32,7 +35,6 @@ export const FabricController = {
       I: Empty,
       O: Version,
       kind: MethodKind.Unary,
-      idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
      * public
@@ -64,23 +66,12 @@ export const FabricController = {
       kind: MethodKind.ServerStreaming,
     },
     /**
-     * deprecated; use Deploy
-     *
      * @generated from rpc io.defang.v1.FabricController.Update
      */
     update: {
       name: "Update",
       I: Service,
       O: ServiceInfo,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc io.defang.v1.FabricController.Deploy
-     */
-    deploy: {
-      name: "Deploy",
-      I: DeployRequest,
-      O: DeployResponse,
       kind: MethodKind.Unary,
     },
     /**
@@ -91,17 +82,14 @@ export const FabricController = {
       I: ServiceID,
       O: ServiceInfo,
       kind: MethodKind.Unary,
-      idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
-     * deprecated; use Deploy
-     *
      * @generated from rpc io.defang.v1.FabricController.Delete
      */
     delete: {
       name: "Delete",
-      I: DeleteRequest,
-      O: DeleteResponse,
+      I: ServiceID,
+      O: Empty,
       kind: MethodKind.Unary,
     },
     /**
@@ -109,18 +97,9 @@ export const FabricController = {
      */
     publish: {
       name: "Publish",
-      I: PublishRequest,
+      I: Event,
       O: Empty,
       kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc io.defang.v1.FabricController.Subscribe
-     */
-    subscribe: {
-      name: "Subscribe",
-      I: SubscribeRequest,
-      O: SubscribeResponse,
-      kind: MethodKind.ServerStreaming,
     },
     /**
      * rpc Promote(google.protobuf.Empty) returns (google.protobuf.Empty);
@@ -130,58 +109,16 @@ export const FabricController = {
     getServices: {
       name: "GetServices",
       I: Empty,
-      O: ListServicesResponse,
+      O: Services,
       kind: MethodKind.Unary,
-      idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
-     * deprecated; use StartGenerate/GenerateStatus
-     *
      * @generated from rpc io.defang.v1.FabricController.GenerateFiles
      */
     generateFiles: {
       name: "GenerateFiles",
       I: GenerateFilesRequest,
       O: GenerateFilesResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc io.defang.v1.FabricController.StartGenerate
-     */
-    startGenerate: {
-      name: "StartGenerate",
-      I: GenerateFilesRequest,
-      O: StartGenerateResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc io.defang.v1.FabricController.GenerateStatus
-     */
-    generateStatus: {
-      name: "GenerateStatus",
-      I: GenerateStatusRequest,
-      O: GenerateFilesResponse,
-      kind: MethodKind.Unary,
-      idempotency: MethodIdempotency.NoSideEffects,
-    },
-    /**
-     * AgreeToS
-     *
-     * @generated from rpc io.defang.v1.FabricController.SignEULA
-     */
-    signEULA: {
-      name: "SignEULA",
-      I: Empty,
-      O: Empty,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc io.defang.v1.FabricController.CheckToS
-     */
-    checkToS: {
-      name: "CheckToS",
-      I: Empty,
-      O: Empty,
       kind: MethodKind.Unary,
     },
     /**
@@ -194,15 +131,8 @@ export const FabricController = {
       kind: MethodKind.Unary,
     },
     /**
-     * @generated from rpc io.defang.v1.FabricController.DeleteSecrets
-     */
-    deleteSecrets: {
-      name: "DeleteSecrets",
-      I: Secrets,
-      O: Empty,
-      kind: MethodKind.Unary,
-    },
-    /**
+     * no values
+     *
      * @generated from rpc io.defang.v1.FabricController.ListSecrets
      */
     listSecrets: {
@@ -210,62 +140,16 @@ export const FabricController = {
       I: Empty,
       O: Secrets,
       kind: MethodKind.Unary,
-      idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
+     * rpc DeleteSecret(SecretValue) returns (google.protobuf.Empty);
+     *
      * @generated from rpc io.defang.v1.FabricController.CreateUploadURL
      */
     createUploadURL: {
       name: "CreateUploadURL",
-      I: UploadURLRequest,
+      I: Empty,
       O: UploadURLResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc io.defang.v1.FabricController.DelegateSubdomainZone
-     */
-    delegateSubdomainZone: {
-      name: "DelegateSubdomainZone",
-      I: DelegateSubdomainZoneRequest,
-      O: DelegateSubdomainZoneResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc io.defang.v1.FabricController.DeleteSubdomainZone
-     */
-    deleteSubdomainZone: {
-      name: "DeleteSubdomainZone",
-      I: Empty,
-      O: Empty,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc io.defang.v1.FabricController.GetDelegateSubdomainZone
-     */
-    getDelegateSubdomainZone: {
-      name: "GetDelegateSubdomainZone",
-      I: Empty,
-      O: DelegateSubdomainZoneResponse,
-      kind: MethodKind.Unary,
-      idempotency: MethodIdempotency.NoSideEffects,
-    },
-    /**
-     * @generated from rpc io.defang.v1.FabricController.WhoAmI
-     */
-    whoAmI: {
-      name: "WhoAmI",
-      I: Empty,
-      O: WhoAmIResponse,
-      kind: MethodKind.Unary,
-      idempotency: MethodIdempotency.NoSideEffects,
-    },
-    /**
-     * @generated from rpc io.defang.v1.FabricController.Track
-     */
-    track: {
-      name: "Track",
-      I: TrackRequest,
-      O: Empty,
       kind: MethodKind.Unary,
     },
   }

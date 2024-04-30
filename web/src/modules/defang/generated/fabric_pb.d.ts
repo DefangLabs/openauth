@@ -87,153 +87,6 @@ export declare enum Mode {
 }
 
 /**
- * @generated from message io.defang.v1.TrackRequest
- */
-export declare class TrackRequest extends Message<TrackRequest> {
-  /**
-   * @generated from field: string anon_id = 1;
-   */
-  anonId: string;
-
-  /**
-   * @generated from field: string event = 2;
-   */
-  event: string;
-
-  /**
-   * @generated from field: map<string, string> properties = 3;
-   */
-  properties: { [key: string]: string };
-
-  /**
-   * @generated from field: string os = 4;
-   */
-  os: string;
-
-  /**
-   * @generated from field: string arch = 5;
-   */
-  arch: string;
-
-  constructor(data?: PartialMessage<TrackRequest>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.TrackRequest";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TrackRequest;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TrackRequest;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TrackRequest;
-
-  static equals(a: TrackRequest | PlainMessage<TrackRequest> | undefined, b: TrackRequest | PlainMessage<TrackRequest> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.DeployRequest
- */
-export declare class DeployRequest extends Message<DeployRequest> {
-  /**
-   * @generated from field: repeated io.defang.v1.Service services = 1;
-   */
-  services: Service[];
-
-  constructor(data?: PartialMessage<DeployRequest>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.DeployRequest";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeployRequest;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeployRequest;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeployRequest;
-
-  static equals(a: DeployRequest | PlainMessage<DeployRequest> | undefined, b: DeployRequest | PlainMessage<DeployRequest> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.DeployResponse
- */
-export declare class DeployResponse extends Message<DeployResponse> {
-  /**
-   * @generated from field: repeated io.defang.v1.ServiceInfo services = 1;
-   */
-  services: ServiceInfo[];
-
-  /**
-   * @generated from field: string etag = 2;
-   */
-  etag: string;
-
-  constructor(data?: PartialMessage<DeployResponse>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.DeployResponse";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeployResponse;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeployResponse;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeployResponse;
-
-  static equals(a: DeployResponse | PlainMessage<DeployResponse> | undefined, b: DeployResponse | PlainMessage<DeployResponse> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.DeleteRequest
- */
-export declare class DeleteRequest extends Message<DeleteRequest> {
-  /**
-   * string project = 2; // defaults to tenant ID
-   *
-   * @generated from field: repeated string names = 1;
-   */
-  names: string[];
-
-  constructor(data?: PartialMessage<DeleteRequest>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.DeleteRequest";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeleteRequest;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeleteRequest;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeleteRequest;
-
-  static equals(a: DeleteRequest | PlainMessage<DeleteRequest> | undefined, b: DeleteRequest | PlainMessage<DeleteRequest> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.DeleteResponse
- */
-export declare class DeleteResponse extends Message<DeleteResponse> {
-  /**
-   * @generated from field: string etag = 1;
-   */
-  etag: string;
-
-  constructor(data?: PartialMessage<DeleteResponse>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.DeleteResponse";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeleteResponse;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeleteResponse;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeleteResponse;
-
-  static equals(a: DeleteResponse | PlainMessage<DeleteResponse> | undefined, b: DeleteResponse | PlainMessage<DeleteResponse> | undefined): boolean;
-}
-
-/**
  * @generated from message io.defang.v1.GenerateFilesRequest
  */
 export declare class GenerateFilesRequest extends Message<GenerateFilesRequest> {
@@ -246,11 +99,6 @@ export declare class GenerateFilesRequest extends Message<GenerateFilesRequest> 
    * @generated from field: string language = 2;
    */
   language: string;
-
-  /**
-   * @generated from field: bool agree_tos = 3;
-   */
-  agreeTos: boolean;
 
   constructor(data?: PartialMessage<GenerateFilesRequest>);
 
@@ -321,78 +169,6 @@ export declare class GenerateFilesResponse extends Message<GenerateFilesResponse
 }
 
 /**
- * @generated from message io.defang.v1.StartGenerateResponse
- */
-export declare class StartGenerateResponse extends Message<StartGenerateResponse> {
-  /**
-   * @generated from field: string uuid = 1;
-   */
-  uuid: string;
-
-  constructor(data?: PartialMessage<StartGenerateResponse>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.StartGenerateResponse";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartGenerateResponse;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StartGenerateResponse;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StartGenerateResponse;
-
-  static equals(a: StartGenerateResponse | PlainMessage<StartGenerateResponse> | undefined, b: StartGenerateResponse | PlainMessage<StartGenerateResponse> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.GenerateStatusRequest
- */
-export declare class GenerateStatusRequest extends Message<GenerateStatusRequest> {
-  /**
-   * @generated from field: string uuid = 1;
-   */
-  uuid: string;
-
-  constructor(data?: PartialMessage<GenerateStatusRequest>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.GenerateStatusRequest";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GenerateStatusRequest;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GenerateStatusRequest;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GenerateStatusRequest;
-
-  static equals(a: GenerateStatusRequest | PlainMessage<GenerateStatusRequest> | undefined, b: GenerateStatusRequest | PlainMessage<GenerateStatusRequest> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.UploadURLRequest
- */
-export declare class UploadURLRequest extends Message<UploadURLRequest> {
-  /**
-   * @generated from field: string digest = 1;
-   */
-  digest: string;
-
-  constructor(data?: PartialMessage<UploadURLRequest>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.UploadURLRequest";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UploadURLRequest;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UploadURLRequest;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UploadURLRequest;
-
-  static equals(a: UploadURLRequest | PlainMessage<UploadURLRequest> | undefined, b: UploadURLRequest | PlainMessage<UploadURLRequest> | undefined): boolean;
-}
-
-/**
  * @generated from message io.defang.v1.UploadURLResponse
  */
 export declare class UploadURLResponse extends Message<UploadURLResponse> {
@@ -433,11 +209,11 @@ export declare class ServiceInfo extends Message<ServiceInfo> {
   endpoints: string[];
 
   /**
-   * was: tenant; defaults to tenant ID
+   * tenant ID (or project ID)
    *
-   * @generated from field: string project = 3;
+   * @generated from field: string tenant = 3;
    */
-  project: string;
+  tenant: string;
 
   /**
    * @generated from field: string etag = 4;
@@ -457,7 +233,7 @@ export declare class ServiceInfo extends Message<ServiceInfo> {
   natIps: string[];
 
   /**
-   * comma-separated list of internal CIDR for the load-balancer
+   * comma-separated list of load-balancer IPs
    *
    * @generated from field: repeated string lb_ips = 7;
    */
@@ -476,30 +252,6 @@ export declare class ServiceInfo extends Message<ServiceInfo> {
    * @generated from field: string public_fqdn = 9;
    */
   publicFqdn: string;
-
-  /**
-   * @generated from field: google.protobuf.Timestamp created_at = 10;
-   */
-  createdAt?: Timestamp;
-
-  /**
-   * @generated from field: google.protobuf.Timestamp updated_at = 11;
-   */
-  updatedAt?: Timestamp;
-
-  /**
-   * zone ID for byod domain
-   *
-   * @generated from field: string zone_id = 12;
-   */
-  zoneId: string;
-
-  /**
-   * If we should setup the facilities to use ACME(let's encrypt) certs
-   *
-   * @generated from field: bool use_acme_cert = 13;
-   */
-  useAcmeCert: boolean;
 
   constructor(data?: PartialMessage<ServiceInfo>);
 
@@ -524,13 +276,6 @@ export declare class Secrets extends Message<Secrets> {
    * @generated from field: repeated string names = 1;
    */
   names: string[];
-
-  /**
-   * defaults to tenant ID
-   *
-   * @generated from field: string project = 2;
-   */
-  project: string;
 
   constructor(data?: PartialMessage<Secrets>);
 
@@ -560,13 +305,6 @@ export declare class SecretValue extends Message<SecretValue> {
    * @generated from field: string value = 2;
    */
   value: string;
-
-  /**
-   * defaults to tenant ID
-   *
-   * @generated from field: string project = 3;
-   */
-  project: string;
 
   constructor(data?: PartialMessage<SecretValue>);
 
@@ -612,20 +350,6 @@ export declare class TokenRequest extends Message<TokenRequest> {
    * @generated from field: string assertion = 4;
    */
   assertion: string;
-
-  /**
-   * seconds
-   *
-   * @generated from field: uint32 expires_in = 5;
-   */
-  expiresIn: number;
-
-  /**
-   * string refresh_token = 6;
-   *
-   * @generated from field: string anon_id = 6;
-   */
-  anonId: string;
 
   constructor(data?: PartialMessage<TokenRequest>);
 
@@ -773,11 +497,6 @@ export declare class LogEntry extends Message<LogEntry> {
    */
   timestamp?: Timestamp;
 
-  /**
-   * @generated from field: bool stderr = 3;
-   */
-  stderr: boolean;
-
   constructor(data?: PartialMessage<LogEntry>);
 
   static readonly runtime: typeof proto3;
@@ -833,27 +552,27 @@ export declare class TailResponse extends Message<TailResponse> {
 }
 
 /**
- * @generated from message io.defang.v1.ListServicesResponse
+ * @generated from message io.defang.v1.Services
  */
-export declare class ListServicesResponse extends Message<ListServicesResponse> {
+export declare class Services extends Message<Services> {
   /**
    * @generated from field: repeated io.defang.v1.ServiceInfo services = 1;
    */
   services: ServiceInfo[];
 
-  constructor(data?: PartialMessage<ListServicesResponse>);
+  constructor(data?: PartialMessage<Services>);
 
   static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.ListServicesResponse";
+  static readonly typeName = "io.defang.v1.Services";
   static readonly fields: FieldList;
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ListServicesResponse;
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Services;
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ListServicesResponse;
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Services;
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ListServicesResponse;
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Services;
 
-  static equals(a: ListServicesResponse | PlainMessage<ListServicesResponse> | undefined, b: ListServicesResponse | PlainMessage<ListServicesResponse> | undefined): boolean;
+  static equals(a: Services | PlainMessage<Services> | undefined, b: Services | PlainMessage<Services> | undefined): boolean;
 }
 
 /**
@@ -1106,18 +825,6 @@ export declare class Build extends Message<Build> {
    */
   args: { [key: string]: string };
 
-  /**
-   * in MiB
-   *
-   * @generated from field: float shm_size = 4;
-   */
-  shmSize: number;
-
-  /**
-   * @generated from field: string target = 5;
-   */
-  target: string;
-
   constructor(data?: PartialMessage<Build>);
 
   static readonly runtime: typeof proto3;
@@ -1138,32 +845,15 @@ export declare class Build extends Message<Build> {
  */
 export declare class HealthCheck extends Message<HealthCheck> {
   /**
+   * float interval = 2;
+   * float timeout = 3;
+   * uint32 retries = 4;
+   * float start_period = 5;
+   * bool disable = 6;
+   *
    * @generated from field: repeated string test = 1;
    */
   test: string[];
-
-  /**
-   * in seconds
-   *
-   * @generated from field: uint32 interval = 2;
-   */
-  interval: number;
-
-  /**
-   * in seconds; must be less than interval
-   *
-   * @generated from field: uint32 timeout = 3;
-   */
-  timeout: number;
-
-  /**
-   * uint32 start_period = 5;
-   * uint32 start_interval = 5; not supported by ECS
-   * bool disable = 6;
-   *
-   * @generated from field: uint32 retries = 4;
-   */
-  retries: number;
 
   constructor(data?: PartialMessage<HealthCheck>);
 
@@ -1200,8 +890,6 @@ export declare class Service extends Message<Service> {
   platform: Platform;
 
   /**
-   * true if service is internal; TODO: not part of spec
-   *
    * @generated from field: bool internal = 4;
    */
   internal: boolean;
@@ -1227,8 +915,6 @@ export declare class Service extends Message<Service> {
   build?: Build;
 
   /**
-   * FIXME: these are actually env vars
-   *
    * @generated from field: repeated io.defang.v1.Secret secrets = 9;
    */
   secrets: Secret[];
@@ -1247,25 +933,6 @@ export declare class Service extends Message<Service> {
    * @generated from field: string domainname = 12;
    */
   domainname: string;
-
-  /**
-   * @generated from field: bool init = 13;
-   */
-  init: boolean;
-
-  /**
-   * x-defang-dns-role: role arn used to access route53 to create dns records; TODO: not part of spec
-   *
-   * @generated from field: string dns_role = 14;
-   */
-  dnsRole: string;
-
-  /**
-   * x-defang-static-files: folder with static files to serve; TODO: not part of spec
-   *
-   * @generated from field: string static_files = 15;
-   */
-  staticFiles: string;
 
   constructor(data?: PartialMessage<Service>);
 
@@ -1352,164 +1019,5 @@ export declare class Event extends Message<Event> {
   static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Event;
 
   static equals(a: Event | PlainMessage<Event> | undefined, b: Event | PlainMessage<Event> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.PublishRequest
- */
-export declare class PublishRequest extends Message<PublishRequest> {
-  /**
-   * @generated from field: io.defang.v1.Event event = 1;
-   */
-  event?: Event;
-
-  constructor(data?: PartialMessage<PublishRequest>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.PublishRequest";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PublishRequest;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PublishRequest;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PublishRequest;
-
-  static equals(a: PublishRequest | PlainMessage<PublishRequest> | undefined, b: PublishRequest | PlainMessage<PublishRequest> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.SubscribeRequest
- */
-export declare class SubscribeRequest extends Message<SubscribeRequest> {
-  /**
-   * @generated from field: string service = 1;
-   */
-  service: string;
-
-  constructor(data?: PartialMessage<SubscribeRequest>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.SubscribeRequest";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SubscribeRequest;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SubscribeRequest;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SubscribeRequest;
-
-  static equals(a: SubscribeRequest | PlainMessage<SubscribeRequest> | undefined, b: SubscribeRequest | PlainMessage<SubscribeRequest> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.SubscribeResponse
- */
-export declare class SubscribeResponse extends Message<SubscribeResponse> {
-  /**
-   * @generated from field: repeated io.defang.v1.ServiceInfo services = 1;
-   */
-  services: ServiceInfo[];
-
-  constructor(data?: PartialMessage<SubscribeResponse>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.SubscribeResponse";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SubscribeResponse;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SubscribeResponse;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SubscribeResponse;
-
-  static equals(a: SubscribeResponse | PlainMessage<SubscribeResponse> | undefined, b: SubscribeResponse | PlainMessage<SubscribeResponse> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.DelegateSubdomainZoneRequest
- */
-export declare class DelegateSubdomainZoneRequest extends Message<DelegateSubdomainZoneRequest> {
-  /**
-   * @generated from field: repeated string name_server_records = 1;
-   */
-  nameServerRecords: string[];
-
-  constructor(data?: PartialMessage<DelegateSubdomainZoneRequest>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.DelegateSubdomainZoneRequest";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DelegateSubdomainZoneRequest;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DelegateSubdomainZoneRequest;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DelegateSubdomainZoneRequest;
-
-  static equals(a: DelegateSubdomainZoneRequest | PlainMessage<DelegateSubdomainZoneRequest> | undefined, b: DelegateSubdomainZoneRequest | PlainMessage<DelegateSubdomainZoneRequest> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.DelegateSubdomainZoneResponse
- */
-export declare class DelegateSubdomainZoneResponse extends Message<DelegateSubdomainZoneResponse> {
-  /**
-   * @generated from field: string zone = 1;
-   */
-  zone: string;
-
-  constructor(data?: PartialMessage<DelegateSubdomainZoneResponse>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.DelegateSubdomainZoneResponse";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DelegateSubdomainZoneResponse;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DelegateSubdomainZoneResponse;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DelegateSubdomainZoneResponse;
-
-  static equals(a: DelegateSubdomainZoneResponse | PlainMessage<DelegateSubdomainZoneResponse> | undefined, b: DelegateSubdomainZoneResponse | PlainMessage<DelegateSubdomainZoneResponse> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.WhoAmIResponse
- */
-export declare class WhoAmIResponse extends Message<WhoAmIResponse> {
-  /**
-   * @generated from field: string tenant = 1;
-   */
-  tenant: string;
-
-  /**
-   * @generated from field: string account = 2;
-   */
-  account: string;
-
-  /**
-   * @generated from field: string region = 3;
-   */
-  region: string;
-
-  /**
-   * @generated from field: string user_id = 4;
-   */
-  userId: string;
-
-  constructor(data?: PartialMessage<WhoAmIResponse>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.WhoAmIResponse";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): WhoAmIResponse;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): WhoAmIResponse;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): WhoAmIResponse;
-
-  static equals(a: WhoAmIResponse | PlainMessage<WhoAmIResponse> | undefined, b: WhoAmIResponse | PlainMessage<WhoAmIResponse> | undefined): boolean;
 }
 
