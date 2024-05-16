@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Log into Defang prod
         run: |
-          . <(curl -s https://raw.githubusercontent.com/DefangLabs/defang/main/src/bin/install.sh)
+          . <(curl -s https://raw.githubusercontent.com/DefangLabs/defang/main/src/bin/install)
           defang --debug login
 
       - uses: actions/checkout@v4
