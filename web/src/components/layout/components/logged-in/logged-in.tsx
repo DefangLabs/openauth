@@ -140,7 +140,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               GitHub Issues
             </NavButton>
             <NavButton
-              href="https://www.reddit.com/r/defang/"
+              href="https://www.reddit.com/r/DefangLabs/"
               iconLeft={<Reddit sx={{ mr: 1 }} />}
               iconRight={
                 <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
