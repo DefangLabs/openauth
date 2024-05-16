@@ -183,6 +183,7 @@ export const FabricController = {
       I: Empty,
       O: Empty,
       kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
      * @generated from rpc io.defang.v1.FabricController.PutSecret

@@ -87,6 +87,30 @@ export declare enum Mode {
 }
 
 /**
+ * @generated from enum io.defang.v1.Network
+ */
+export declare enum Network {
+  /**
+   * was: internal=false
+   *
+   * @generated from enum value: UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * was: internal=true
+   *
+   * @generated from enum value: PRIVATE = 1;
+   */
+  PRIVATE = 1,
+
+  /**
+   * @generated from enum value: PUBLIC = 2;
+   */
+  PUBLIC = 2,
+}
+
+/**
  * @generated from message io.defang.v1.TrackRequest
  */
 export declare class TrackRequest extends Message<TrackRequest> {
@@ -188,8 +212,6 @@ export declare class DeployResponse extends Message<DeployResponse> {
  */
 export declare class DeleteRequest extends Message<DeleteRequest> {
   /**
-   * string project = 2; // defaults to tenant ID
-   *
    * @generated from field: repeated string names = 1;
    */
   names: string[];
@@ -628,8 +650,6 @@ export declare class TokenRequest extends Message<TokenRequest> {
   expiresIn: number;
 
   /**
-   * string refresh_token = 6;
-   *
    * @generated from field: string anon_id = 6;
    */
   anonId: string;
@@ -709,9 +729,18 @@ export declare class Version extends Message<Version> {
   fabric: string;
 
   /**
-   * @generated from field: string nats = 2;
+   * minimum CLI version
+   *
+   * @generated from field: string cli_min = 3;
    */
-  nats: string;
+  cliMin: string;
+
+  /**
+   * minimum Pulumi provider version
+   *
+   * @generated from field: string pulumi_min = 4;
+   */
+  pulumiMin: string;
 
   constructor(data?: PartialMessage<Version>);
 
@@ -745,8 +774,6 @@ export declare class TailRequest extends Message<TailRequest> {
   since?: Timestamp;
 
   /**
-   * string host = 4;
-   *
    * @generated from field: string etag = 3;
    */
   etag: string;
@@ -1164,10 +1191,6 @@ export declare class HealthCheck extends Message<HealthCheck> {
   timeout: number;
 
   /**
-   * uint32 start_period = 5;
-   * uint32 start_interval = 5; not supported by ECS
-   * bool disable = 6;
-   *
    * @generated from field: uint32 retries = 4;
    */
   retries: number;
@@ -1207,7 +1230,7 @@ export declare class Service extends Message<Service> {
   platform: Platform;
 
   /**
-   * true if service is internal; TODO: not part of spec
+   * deprecated: use networks
    *
    * @generated from field: bool internal = 4;
    */
@@ -1261,18 +1284,29 @@ export declare class Service extends Message<Service> {
   init: boolean;
 
   /**
-   * x-defang-dns-role: role arn used to access route53 to create dns records; TODO: not part of spec
+   * x-defang-dns-role: role arn used to access route53 to
    *
    * @generated from field: string dns_role = 14;
    */
   dnsRole: string;
 
   /**
-   * x-defang-static-files: folder with static files to serve; TODO: not part of spec
+   * create dns records; TODO: not part of spec
+   *
+   * x-defang-static-files: folder with static files
    *
    * @generated from field: string static_files = 15;
    */
   staticFiles: string;
+
+  /**
+   * to serve; TODO: not part of spec
+   *
+   * currently only 1 network is supported
+   *
+   * @generated from field: io.defang.v1.Network networks = 16;
+   */
+  networks: Network;
 
   constructor(data?: PartialMessage<Service>);
 

@@ -25,7 +25,7 @@ export function EmptyServices() {
       </Typography>
       <div>
         <Button
-          href="https://github.com/defang-io/defang/releases/latest"
+          href="https://github.com/DefangLabs/defang/releases/latest"
           variant="contained"
           fullWidth={false}
         >

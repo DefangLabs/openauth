@@ -46,6 +46,18 @@ export const Mode = proto3.makeEnum(
 );
 
 /**
+ * @generated from enum io.defang.v1.Network
+ */
+export const Network = proto3.makeEnum(
+  "io.defang.v1.Network",
+  [
+    {no: 0, name: "UNSPECIFIED"},
+    {no: 1, name: "PRIVATE"},
+    {no: 2, name: "PUBLIC"},
+  ],
+);
+
+/**
  * @generated from message io.defang.v1.TrackRequest
  */
 export const TrackRequest = proto3.makeMessageType(
@@ -261,7 +273,8 @@ export const Version = proto3.makeMessageType(
   "io.defang.v1.Version",
   () => [
     { no: 1, name: "fabric", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "nats", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "cli_min", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "pulumi_min", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -437,6 +450,7 @@ export const Service = proto3.makeMessageType(
     { no: 13, name: "init", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 14, name: "dns_role", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 15, name: "static_files", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 16, name: "networks", kind: "enum", T: proto3.getEnumType(Network) },
   ],
 );
 

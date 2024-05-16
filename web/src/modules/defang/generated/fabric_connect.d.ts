@@ -183,6 +183,7 @@ export declare const FabricController: {
       readonly I: typeof Empty,
       readonly O: typeof Empty,
       readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
      * @generated from rpc io.defang.v1.FabricController.PutSecret

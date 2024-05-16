@@ -122,7 +122,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               Documentation
             </NavButton>
             <NavButton
-              href="https://github.com/defang-io/defang/releases/latest"
+              href="https://github.com/DefangLabs/defang/releases/latest"
               iconLeft={<Download sx={{ mr: 1 }} />}
               iconRight={
                 <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
@@ -131,7 +131,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               CLI Download
             </NavButton>
             <NavButton
-              href="https://github.com/defang-io/defang/issues"
+              href="https://github.com/DefangLabs/defang/issues"
               iconLeft={<GitHub sx={{ mr: 1 }} />}
               iconRight={
                 <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
