@@ -13,6 +13,7 @@ const servicesAtom = atom<ListServicesResponse["services"] | null>(null);
 export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
   const [services, setServices] = useAtom(servicesAtom);
   const [loading, setLoading] = useState(false);
+  const [project, setProject] = useState("");
   const client = useDefangClient();
 
   useEffect(() => {
@@ -24,10 +25,11 @@ export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
         setLoading(false);
         return;
       }
+      setProject(res.project);
       setServices(res.services);
       setLoading(false);
     });
-  }, [client, setServices, skip]);
+  }, [client, setServices, skip, setProject]);
 
   useEffect(() => {
     if (!poll) return;
@@ -37,21 +39,22 @@ export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
           console.log("@@ error getting services", err);
           return;
         }
+        setProject(res.project);
         setServices(res.services);
       });
     }, poll);
 
     return () => clearInterval(i);
-  }, [client, poll, setServices]);
+  }, [client, poll, setServices, setProject]);
 
   const memoServices = useMemo(() => {
     return services?.map((service) => {
-      const regex = /(\b\w+:\b)[^@]+(@)/i;
+      const regex = /^([^:]+:)[^@]+(@)/i;
       return {
         ...service,
         service: {
           ...service.service,
-          image: service.service?.image?.replace(regex, "$1***$2"),
+          image: service.service?.image?.replace(regex, "$1***$2"), // hide the password
         },
       };
     });
@@ -60,5 +63,6 @@ export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
   return {
     services: memoServices,
     loading,
+    project,
   };
 }

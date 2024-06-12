@@ -163,6 +163,11 @@ export declare class DeployRequest extends Message<DeployRequest> {
    */
   services: Service[];
 
+  /**
+   * @generated from field: string project = 2;
+   */
+  project: string;
+
   constructor(data?: PartialMessage<DeployRequest>);
 
   static readonly runtime: typeof proto3;
@@ -523,13 +528,6 @@ export declare class ServiceInfo extends Message<ServiceInfo> {
    */
   useAcmeCert: boolean;
 
-  /**
-   * public load-balancer DNS name
-   *
-   * @generated from field: string lb_dns = 14;
-   */
-  lbDns: string;
-
   constructor(data?: PartialMessage<ServiceInfo>);
 
   static readonly runtime: typeof proto3;
@@ -812,6 +810,21 @@ export declare class LogEntry extends Message<LogEntry> {
    */
   stderr: boolean;
 
+  /**
+   * @generated from field: string service = 4;
+   */
+  service: string;
+
+  /**
+   * @generated from field: string etag = 5;
+   */
+  etag: string;
+
+  /**
+   * @generated from field: string host = 6;
+   */
+  host: string;
+
   constructor(data?: PartialMessage<LogEntry>);
 
   static readonly runtime: typeof proto3;
@@ -875,6 +888,11 @@ export declare class ListServicesResponse extends Message<ListServicesResponse> 
    */
   services: ServiceInfo[];
 
+  /**
+   * @generated from field: string project = 2;
+   */
+  project: string;
+
   constructor(data?: PartialMessage<ListServicesResponse>);
 
   static readonly runtime: typeof proto3;
@@ -888,6 +906,37 @@ export declare class ListServicesResponse extends Message<ListServicesResponse> 
   static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ListServicesResponse;
 
   static equals(a: ListServicesResponse | PlainMessage<ListServicesResponse> | undefined, b: ListServicesResponse | PlainMessage<ListServicesResponse> | undefined): boolean;
+}
+
+/**
+ * TODO: internal message; move to a separate proto file
+ *
+ * @generated from message io.defang.v1.ProjectUpdate
+ */
+export declare class ProjectUpdate extends Message<ProjectUpdate> {
+  /**
+   * @generated from field: repeated io.defang.v1.ServiceInfo services = 1;
+   */
+  services: ServiceInfo[];
+
+  /**
+   * @generated from field: string alb_arn = 2;
+   */
+  albArn: string;
+
+  constructor(data?: PartialMessage<ProjectUpdate>);
+
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "io.defang.v1.ProjectUpdate";
+  static readonly fields: FieldList;
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ProjectUpdate;
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ProjectUpdate;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ProjectUpdate;
+
+  static equals(a: ProjectUpdate | PlainMessage<ProjectUpdate> | undefined, b: ProjectUpdate | PlainMessage<ProjectUpdate> | undefined): boolean;
 }
 
 /**
@@ -1284,29 +1333,32 @@ export declare class Service extends Message<Service> {
   init: boolean;
 
   /**
-   * x-defang-dns-role: role arn used to access route53 to
+   * x-defang-dns-role: role arn used to access route53 to create dns records
    *
    * @generated from field: string dns_role = 14;
    */
   dnsRole: string;
 
   /**
-   * create dns records; TODO: not part of spec
+   * x-defang-static-files: use a managed CDN
    *
-   * x-defang-static-files: folder with static files
-   *
-   * @generated from field: string static_files = 15;
+   * @generated from field: io.defang.v1.StaticFiles static_files = 15;
    */
-  staticFiles: string;
+  staticFiles?: StaticFiles;
 
   /**
-   * to serve; TODO: not part of spec
-   *
    * currently only 1 network is supported
    *
    * @generated from field: io.defang.v1.Network networks = 16;
    */
   networks: Network;
+
+  /**
+   * x-defang-redis: use a managed redis
+   *
+   * @generated from field: io.defang.v1.Redis redis = 18;
+   */
+  redis?: Redis;
 
   constructor(data?: PartialMessage<Service>);
 
@@ -1321,6 +1373,54 @@ export declare class Service extends Message<Service> {
   static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Service;
 
   static equals(a: Service | PlainMessage<Service> | undefined, b: Service | PlainMessage<Service> | undefined): boolean;
+}
+
+/**
+ * @generated from message io.defang.v1.StaticFiles
+ */
+export declare class StaticFiles extends Message<StaticFiles> {
+  /**
+   * @generated from field: string folder = 1;
+   */
+  folder: string;
+
+  /**
+   * @generated from field: repeated string redirects = 2;
+   */
+  redirects: string[];
+
+  constructor(data?: PartialMessage<StaticFiles>);
+
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "io.defang.v1.StaticFiles";
+  static readonly fields: FieldList;
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StaticFiles;
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StaticFiles;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StaticFiles;
+
+  static equals(a: StaticFiles | PlainMessage<StaticFiles> | undefined, b: StaticFiles | PlainMessage<StaticFiles> | undefined): boolean;
+}
+
+/**
+ * @generated from message io.defang.v1.Redis
+ */
+export declare class Redis extends Message<Redis> {
+  constructor(data?: PartialMessage<Redis>);
+
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "io.defang.v1.Redis";
+  static readonly fields: FieldList;
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Redis;
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Redis;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Redis;
+
+  static equals(a: Redis | PlainMessage<Redis> | undefined, b: Redis | PlainMessage<Redis> | undefined): boolean;
 }
 
 /**
@@ -1424,9 +1524,9 @@ export declare class PublishRequest extends Message<PublishRequest> {
  */
 export declare class SubscribeRequest extends Message<SubscribeRequest> {
   /**
-   * @generated from field: string service = 1;
+   * @generated from field: repeated string services = 1;
    */
-  service: string;
+  services: string[];
 
   constructor(data?: PartialMessage<SubscribeRequest>);
 

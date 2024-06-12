@@ -78,6 +78,7 @@ export const DeployRequest = proto3.makeMessageType(
   "io.defang.v1.DeployRequest",
   () => [
     { no: 1, name: "services", kind: "message", T: Service, repeated: true },
+    { no: 2, name: "project", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -204,7 +205,6 @@ export const ServiceInfo = proto3.makeMessageType(
     { no: 11, name: "updated_at", kind: "message", T: Timestamp },
     { no: 12, name: "zone_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 13, name: "use_acme_cert", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 14, name: "lb_dns", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -299,6 +299,9 @@ export const LogEntry = proto3.makeMessageType(
     { no: 1, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "timestamp", kind: "message", T: Timestamp },
     { no: 3, name: "stderr", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 4, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "etag", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "host", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -322,6 +325,20 @@ export const ListServicesResponse = proto3.makeMessageType(
   "io.defang.v1.ListServicesResponse",
   () => [
     { no: 1, name: "services", kind: "message", T: ServiceInfo, repeated: true },
+    { no: 2, name: "project", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
+);
+
+/**
+ * TODO: internal message; move to a separate proto file
+ *
+ * @generated from message io.defang.v1.ProjectUpdate
+ */
+export const ProjectUpdate = proto3.makeMessageType(
+  "io.defang.v1.ProjectUpdate",
+  () => [
+    { no: 1, name: "services", kind: "message", T: ServiceInfo, repeated: true },
+    { no: 2, name: "alb_arn", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -449,9 +466,29 @@ export const Service = proto3.makeMessageType(
     { no: 12, name: "domainname", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 13, name: "init", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 14, name: "dns_role", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 15, name: "static_files", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 15, name: "static_files", kind: "message", T: StaticFiles },
     { no: 16, name: "networks", kind: "enum", T: proto3.getEnumType(Network) },
+    { no: 18, name: "redis", kind: "message", T: Redis },
   ],
+);
+
+/**
+ * @generated from message io.defang.v1.StaticFiles
+ */
+export const StaticFiles = proto3.makeMessageType(
+  "io.defang.v1.StaticFiles",
+  () => [
+    { no: 1, name: "folder", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "redirects", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.Redis
+ */
+export const Redis = proto3.makeMessageType(
+  "io.defang.v1.Redis",
+  [],
 );
 
 /**
@@ -488,7 +525,7 @@ export const PublishRequest = proto3.makeMessageType(
 export const SubscribeRequest = proto3.makeMessageType(
   "io.defang.v1.SubscribeRequest",
   () => [
-    { no: 1, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: "services", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
   ],
 );
 
