@@ -75,7 +75,9 @@ function useClient() {
     }
   }, [client, setClient]);
 
-  return token ? memoClient : undefined;
+  const returnClient = token ? memoClient : undefined;
+
+  return returnClient;
 }
 
 export function useDefangClient() {
