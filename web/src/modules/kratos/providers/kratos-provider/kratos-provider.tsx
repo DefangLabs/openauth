@@ -7,6 +7,8 @@ interface KratosProviderProps {
   children: React.ReactNode;
 }
 
+const REDIRECT_KEY = "DFNG_REDIRECT";
+
 export function KratosProvider({ children }: KratosProviderProps) {
   const updateSession = useUpdateSession();
   const router = useRouter();
@@ -14,9 +16,17 @@ export function KratosProvider({ children }: KratosProviderProps) {
 
   useEffect(() => {
     updateSession({
+      onSuccess: () => {
+        const redirect = window.localStorage.getItem(REDIRECT_KEY);
+        if (redirect) {
+          window.localStorage.removeItem(REDIRECT_KEY);
+          window.location.href = redirect;
+        }
+      },
       onError: () => {
         if (!pathname.includes("/auth")) {
-          router.push("/auth/register");
+          window.localStorage.setItem(REDIRECT_KEY, window.location.href);
+          router.push("/auth/login");
         }
       },
     });
