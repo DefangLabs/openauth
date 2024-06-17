@@ -113,10 +113,9 @@ function LoginPage() {
       ) : (
         <Button onClick={login} variant="contained" disableElevation>
           <GitHub height={20} width={20} sx={{ mr: 1 }} />
-          Sign in with GitHub
+          Agree and sign in with GitHub
         </Button>
       )}
-      <Divider />
       <Typography fontSize={14} width={300} align="center">
         By proceeding you are agreeing to our{" "}
         <a href="https://defang.io/terms-conditions.html" target="_blank">

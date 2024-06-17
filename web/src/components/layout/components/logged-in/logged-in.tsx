@@ -1,14 +1,15 @@
+import { useSignTos } from "@/modules/defang/hooks/use-sign-tos/use-sign-tos";
 import { useLogout } from "@/modules/kratos/hooks/use-logout/use-logout";
 import { useSession } from "@/modules/kratos/hooks/use-session/use-session";
 import { COLORS, GRADIENTS } from "@/modules/mui/constants";
 import { useName } from "@/modules/profiles/hooks/use-name/use-name";
 import {
-  OpenInNew,
-  Reddit,
-  GitHub,
-  Download,
   Article,
   ChevronRight,
+  Download,
+  GitHub,
+  OpenInNew,
+  Reddit,
 } from "@mui/icons-material";
 import Menu from "@mui/icons-material/Menu";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
@@ -68,6 +69,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { sidebarOpen, setSidebarOpen } = useSidebarOpen();
+  useSignTos();
 
   if (!session) return null;
 
