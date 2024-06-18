@@ -7,6 +7,7 @@ import {
   Article,
   ChevronRight,
   Download,
+  Forum,
   GitHub,
   OpenInNew,
   Reddit,
@@ -149,6 +150,15 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               }
             >
               Community{" "}
+            </NavButton>
+            <NavButton
+              href="https://discord.gg/WCczsXJPRm"
+              iconLeft={<Forum sx={{ mr: 1 }} />}
+              iconRight={
+                <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
+              }
+            >
+              Join Discord{" "}
             </NavButton>
             {/* <NavButton href="https://join.slack.com/share/enQtNTcyNDY0NDMyMzM3Ny00NmU3NzY1ZGI5NTY4ZDcyYjA4NDUzMTdlZjBlYmIzZTNhYTVhOGVjNDk0NWU5YmRmMzQzN2I0MzhjM2I0MjEx">
               Join Slack{" "}
