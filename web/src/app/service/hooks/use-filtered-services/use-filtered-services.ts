@@ -2,7 +2,7 @@ import { useServices } from "@/modules/defang/hooks/use-services/use-services";
 import { useSearch } from "../use-search/use-search";
 
 export function useFilteredServices() {
-  const { services, loading } = useServices({ poll: 5000 });
+  const { services, loading, project } = useServices({ poll: 5000 });
 
   const { search } = useSearch();
   const filteredServices = services
@@ -23,6 +23,7 @@ export function useFilteredServices() {
         dockerImage: service.service?.image || service.service?.build?.context,
         port: service.service?.ports?.map((p) => p.target).join(" "),
         ...service,
+        project: project || service.project,
       };
     });
 

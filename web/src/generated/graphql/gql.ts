@@ -37,13 +37,13 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  mutation InsertProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(\n      object: $object\n      onConflict: { constraint: profiles_pkey, updateColumns: [name] }\n    ) {\n      id\n      name\n    }\n  }\n"
+  source: "\n  mutation InsertProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(\n      object: $object\n      onConflict: { constraint: profiles_pkey, updateColumns: [name] }\n    ) {\n      id\n      name\n    }\n  }\n",
 ): (typeof documents)["\n  mutation InsertProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(\n      object: $object\n      onConflict: { constraint: profiles_pkey, updateColumns: [name] }\n    ) {\n      id\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n"
+  source: "\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n",
 ): (typeof documents)["\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n"];
 
 export function graphql(source: string) {

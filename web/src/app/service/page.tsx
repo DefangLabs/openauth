@@ -62,6 +62,7 @@ function ServicesPageInner() {
               width: 80,
               renderCell: (params) => <StatusIcon status={params.value} />,
             },
+            { field: "project", headerName: "Project", width: 150 },
             { field: "name", headerName: "Name", width: 150 },
             {
               field: "fqdn",
