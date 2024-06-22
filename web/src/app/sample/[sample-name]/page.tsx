@@ -5,105 +5,106 @@ import { LoginRequired } from "@/modules/kratos/components/login-required/login-
 
 import { fetchSamples } from "@/modules/samples/lib/fetch-samples/fetch-samples";
 import { getTagColor } from "@/modules/samples/lib/get-tag-color/get-tag-color";
+import { CopyAll } from "@mui/icons-material";
 import {
   Box,
   Card,
   Chip,
-  Grid,
+  InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import Link from "next/link";
-import { useMemo, useState } from "react";
-import useSWR from "swr";
 import { useParams } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import useSWR from "swr";
 
-// export default function SamplePage() {
-// return (
-//   <div className="modal-box w-full sm:w-8/12 md:w-6/12 max-w-full">
-//     <h3 className="font-bold text-lg">{selectedSample?.title}</h3>
-//     <p>{selectedSample.shortDescription}</p>
-//     <p className="font-bold mt-4">Create a new project from this sample:</p>
-//     <div
-//       onClick={() => {
-//         navigator.clipboard.writeText(getStartedCmd);
-//         // select the text in the pre tag with id "sample-command" so the user can copy it manually if they want
-//         const selection = window.getSelection();
-//         const range = document.createRange();
-//         range.selectNodeContents(document.getElementById("sample-command")!);
-//         selection?.removeAllRanges();
-//         selection?.addRange(range);
+function SamplePageInner() {
+  const sampleName = useParams()["sample-name"] as string;
+  const { data } = useSWR("samples", fetchSamples);
+  const sample = data?.find((sample) => sample.name === sampleName);
 
-//         setCopied?.(true);
-//         setTimeout(() => setCopied?.(false), 1000);
+  if (!sample) {
+    return (
+      <Box p={2}>
+        <Typography variant="h1">Sample not found</Typography>
+      </Box>
+    );
+  }
 
-//         analytics.track(
-//           "Portal: Sample Generate Command Clicked",
-//           selectedSample
-//         );
-//       }}
-//       onMouseDown={() => setClicked(true)}
-//       onMouseUp={() => setClicked(false)}
-//     >
-//       <div className="absolute right-4 flex h-full items-center">
-//         <ContentCopy />
-//       </div>
-//       <pre className="p-4" id="sample-command">
-//         {getStartedCmd}
-//       </pre>
-//       <Box
-//         sx={{
-//           opacity: clicked ? 0.5 : 0,
-//         }}
-//       >
-//         <p className="text-white text-center p-2">copied!</p>
-//       </Box>
-//     </div>
-//     <div className="mt-4">
-//       <p>
-//         You can automatically deploy to Defang by cloning a sample repo using
-//         the 1 click deploy button below, or you can check out the source code
-//         on GitHub.
-//       </p>
-//     </div>
-//     <div className="modal-action">
-//       <a
-//         href={`https://portal.defang.dev/redirect?url=${encodeURIComponent(
-//           `https://github.com/new?template_name=sample-${selectedSample.name}-template&template_owner=DefangSamples`
-//         )}`}
-//         className="btn btn-secondary"
-//         target="_blank"
-//         onClick={() => {
-//           analytics.track("Website: 1-click Deploy Clicked", selectedSample);
-//         }}
-//       >
-//         1-Click Deploy
-//       </a>
-//       <a
-//         href={`https://github.com/DefangLabs/samples/tree/main/samples/${selectedSample.name}`}
-//         className="btn btn-secondary"
-//         target="_blank"
-//         onClick={() => {
-//           analytics.track("Website: Sample Github Clicked", selectedSample);
-//         }}
-//       >
-//         Open on GitHub
-//       </a>
-//     </div>
-//   </div>
-// );
-// }
+  const { readme } = sample;
+  let newReadme = readme;
+  // find the line that has --- followed in the few lines by "Title: " in the readme
+  // then split and take everything before the --- as the new readme
+  const titleMatch = readme.match(/---\n(?:.*\n){0,3}Title: (.*)\n/);
+  if (titleMatch) {
+    newReadme = readme.split(titleMatch[0])[0];
+  }
 
-interface Chip {
-  bgColor: string;
-  textColor: string;
-  text: string;
-}
+  const tags = Array.from(
+    new Set([...sample.tags, ...sample.languages].filter((tag) => !!tag))
+  );
+  const chips = tags.map(getTagColor);
 
-export function SamplePageInner() {
-  const sampleName = useParams()["sample-name"];
-  return <div>Sample: {sampleName}</div>;
+  return (
+    <Box p={2} mb={10}>
+      <Stack direction="row" gap={2}>
+        <Stack spacing={2} direction="column" width="70%">
+          <Stack spacing={2} direction="row" alignItems="center">
+            <Typography variant="h1">{sample.title}</Typography>
+            <Box>
+              {chips.map((chip) => (
+                <Chip
+                  key={chip.text}
+                  label={chip.text}
+                  style={{
+                    backgroundColor: chip.bgColor,
+                    color: chip.textColor,
+                  }}
+                  size="small"
+                  sx={{ mr: 1, mb: 1 }}
+                />
+              ))}
+            </Box>
+          </Stack>
+          <Box>
+            <TextField
+              label="Generate with CLI:"
+              fullWidth
+              variant="outlined"
+              value={`defang new ${sample.directoryName}`}
+              InputProps={{
+                readOnly: true,
+                sx: { cursor: "pointer" },
+                inputProps: {
+                  style: { cursor: "pointer" },
+                },
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CopyAll />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+          <Card variant="outlined">
+            <Box p={2}>
+              <Typography
+                component="div"
+                sx={{
+                  "& h1, & h2, & h3, & h4, & h5, & h6": {
+                    fontFamily: `var(--headers-font), "Helvetica Neue", Arial, sans-serif`,
+                  },
+                }}
+              >
+                <ReactMarkdown>{newReadme}</ReactMarkdown>
+              </Typography>
+            </Box>
+          </Card>
+        </Stack>
+      </Stack>
+    </Box>
+  );
 }
 
 const SamplePageOuter = LoginRequired(function SamplePage() {
