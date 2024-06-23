@@ -73,7 +73,7 @@ export function OneClick() {
             analytics.track("Portal: Clicked Sample One Click Deploy", {
               sample: sampleName,
             });
-          }
+          }}
         >
           Deploy!
         </Button>
