@@ -7,18 +7,22 @@ import { fetchSamples } from "@/modules/samples/lib/fetch-samples/fetch-samples"
 import { getTagColor } from "@/modules/samples/lib/get-tag-color/get-tag-color";
 import {
   Box,
-  Button,
   Card,
   Chip,
-  Container,
   Grid,
+  IconButton,
+  InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
+import { Tag } from "./components/tag/tag";
+import { useDebounce } from "@uidotdev/usehooks";
+import { analytics } from "@/modules/analytics/lib/analytics";
+import { Cancel, ClearAllRounded } from "@mui/icons-material";
 
 interface Chip {
   bgColor: string;
@@ -28,6 +32,15 @@ interface Chip {
 
 export function SamplesPageInner() {
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      analytics.track("Portal: Searched Samples", {
+        searchQuery: debouncedSearchQuery,
+      });
+    }
+  }, [debouncedSearchQuery]);
 
   const { data } = useSWR("samples", fetchSamples);
 
@@ -65,7 +78,7 @@ export function SamplesPageInner() {
   }, [searchQuery, processedSamples]);
 
   return (
-    <Stack p={2} spacing={2} direction="column">
+    <Stack p={2} spacing={2} direction="column" mb={10}>
       <Stack direction="row" flexWrap="wrap" spacing={2}>
         <Typography variant="h1">Samples</Typography>
         <Box
@@ -81,6 +94,15 @@ export function SamplesPageInner() {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search samples..."
             size="small"
+            InputProps={{
+              endAdornment: searchQuery && (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setSearchQuery("")}>
+                    <Cancel />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
         </Box>
       </Stack>
@@ -92,7 +114,7 @@ export function SamplesPageInner() {
       </Box>
       <Grid container spacing={2} sx={{ marginLeft: "-16px !important" }}>
         {filteredSamples?.map((sample) => (
-          <Grid item key={sample.name} xs={12} sm={6} lg={3}>
+          <Grid item key={sample.name} xs={12} sm={6} lg={4}>
             <Link
               href={`/sample/${sample.name}`}
               style={{ textDecoration: "none" }}
@@ -107,15 +129,17 @@ export function SamplesPageInner() {
                   </Typography>
                   <Box sx={{ px: 2, pb: 2 }}>
                     {sample.chips.map((chip) => (
-                      <Chip
+                      <Tag
                         key={chip.text}
-                        label={chip.text}
-                        style={{
-                          backgroundColor: chip.bgColor,
-                          color: chip.textColor,
+                        chip={chip}
+                        ChipProps={{
+                          sx: { mr: 1, mb: 1 },
+                          onClick: (e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setSearchQuery(chip.text);
+                          },
                         }}
-                        size="small"
-                        sx={{ mr: 1, mb: 1 }}
                       />
                     ))}
                   </Box>
