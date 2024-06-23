@@ -21,6 +21,7 @@ export function CopyTypography({ ...TypographyProps }: CopyTypographyProps) {
           ...(TypographyProps.sx || {}),
         }}
         onClick={(e: any) => {
+          TypographyProps.onClick?.(e);
           const text = e.target.innerText;
           navigator.clipboard.writeText(text);
           setCopied(true);

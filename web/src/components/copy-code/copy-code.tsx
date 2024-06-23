@@ -15,7 +15,8 @@ export function CopyCode({ code, TextFieldProps = {} }: CopyCodeProps) {
     <TextField
       value={code}
       {...TextFieldProps}
-      onClick={() => {
+      onClick={(e) => {
+        TextFieldProps.onClick?.(e);
         navigator.clipboard.writeText(code);
         setCopied(true);
         setTimeout(() => setCopied?.(false), 1000);

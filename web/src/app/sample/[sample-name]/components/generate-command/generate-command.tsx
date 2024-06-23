@@ -1,6 +1,7 @@
 "use client";
 
 import { CopyCode } from "@/components/copy-code/copy-code";
+import { analytics } from "@/modules/analytics/lib/analytics";
 import { Sample } from "@/modules/samples/lib/fetch-samples/fetch-samples";
 import { CopyAll } from "@mui/icons-material";
 import { InputAdornment, TextField } from "@mui/material";
@@ -14,9 +15,9 @@ export function GenerateCommand({ sample }: GenerateCommandProps) {
     <CopyCode
       code={`defang new ${sample.directoryName}`}
       TextFieldProps={{
-        label: "Generate with CLI:",
+        label: "Generate with Defang CLI:",
         helperText:
-          "Click to copy. Once you've installed the cli, you can run this command in your terminal to generate a new project from this sample.",
+          "Run this Defang command to generate a new project from this sample.",
         fullWidth: true,
         variant: "outlined",
         value: `defang new ${sample.directoryName}`,
@@ -25,6 +26,12 @@ export function GenerateCommand({ sample }: GenerateCommandProps) {
           inputProps: {
             style: { cursor: "pointer" },
           },
+        },
+        onClick: (e) => {
+          analytics.track("Portal: Clicked Sample Generate Code", {
+            sample: sample.name,
+            ...sample,
+          });
         },
       }}
     />

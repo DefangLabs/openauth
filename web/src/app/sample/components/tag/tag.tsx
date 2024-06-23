@@ -6,10 +6,10 @@ interface TagProps {
     bgColor: string;
     textColor: string;
   };
-  ChipProps: ChipProps;
+  ChipProps?: ChipProps;
 }
 
-export function Tag({ chip, ChipProps }: TagProps) {
+export function Tag({ chip, ChipProps = {} }: TagProps) {
   return (
     <Chip
       label={chip.text}

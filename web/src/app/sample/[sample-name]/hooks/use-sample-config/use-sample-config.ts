@@ -16,28 +16,33 @@ const composeSchema = z.object({
 });
 
 export function useSampleConfig({ sampleName }: SampleConfigParams) {
-  const { data: composeResponse, error: composeError } = useSWR(
-    ["/sample-config/compose", sampleName],
-    () =>
-      fetchSampleFile({
-        sampleName,
-        branch: "main",
-        path: "compose.yaml",
-      }).then((res) => res.text())
+  const res = useSWR(["/sample-config/compose", sampleName], () =>
+    fetchSampleFile({
+      sampleName,
+      branch: "main",
+      path: "compose.yaml",
+    }).then((res) => res.text())
   );
+  const { data } = res;
 
-  const loadedCompose = composeResponse ? yaml.load(composeResponse) : {};
+  const loadedCompose = data ? yaml.load(data) : {};
 
   const parsedCompose = composeSchema.safeParse(loadedCompose);
 
   if (!parsedCompose.success) {
-    return [];
+    return {
+      config: [],
+      ...res,
+    };
   }
 
   // let's grab all the env vars from all services and find all the values that don't contain a = sign
-  const configVals = Object.values(parsedCompose.data.services)
+  const config = Object.values(parsedCompose.data.services)
     .flatMap((service) => service.environment)
     .filter((envVar) => !envVar.includes("="));
 
-  return configVals;
+  return {
+    config,
+    ...res,
+  };
 }

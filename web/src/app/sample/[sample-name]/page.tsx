@@ -3,9 +3,11 @@
 import { Loader } from "@/components/loader/loader";
 import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
 
+import { analytics } from "@/modules/analytics/lib/analytics";
 import { fetchSamples } from "@/modules/samples/lib/fetch-samples/fetch-samples";
 import { getTagColor } from "@/modules/samples/lib/get-tag-color/get-tag-color";
 import { Box, Stack, Theme, Typography, useMediaQuery } from "@mui/material";
+import Link from "next/link";
 import useSWR from "swr";
 import { Tag } from "../components/tag/tag";
 import { GenerateCommand } from "./components/generate-command/generate-command";
@@ -55,20 +57,32 @@ function SamplePageInner() {
             },
           }}
         >
-          <Stack spacing={2} direction="row" alignItems="center">
-            <Typography variant="h1">{sample.title}</Typography>
-            <Box>
+          <Typography variant="h1">{sample.title}</Typography>
+          <Box>
+            <Typography>
               {chips.map((chip) => (
-                <Tag
+                <Link
                   key={chip.text}
-                  chip={chip}
-                  ChipProps={{
-                    sx: { mr: 1, mb: 1 },
-                  }}
-                />
+                  href={`/sample?search=${encodeURIComponent(chip.text)}`}
+                  onClick={() =>
+                    analytics.track("Portal: Clicked Tag", {
+                      tag: chip.text,
+                    })
+                  }
+                >
+                  <Tag
+                    chip={chip}
+                    ChipProps={{
+                      sx: {
+                        mr: 0.5,
+                        mb: 0.5,
+                      },
+                    }}
+                  />
+                </Link>
               ))}
-            </Box>
-          </Stack>
+            </Typography>
+          </Box>
           <Box>
             <GenerateCommand sample={sample} />
           </Box>

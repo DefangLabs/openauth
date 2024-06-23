@@ -23,6 +23,7 @@ import { Tag } from "./components/tag/tag";
 import { useDebounce } from "@uidotdev/usehooks";
 import { analytics } from "@/modules/analytics/lib/analytics";
 import { Cancel, ClearAllRounded } from "@mui/icons-material";
+import { useSearchParams } from "next/navigation";
 
 interface Chip {
   bgColor: string;
@@ -31,8 +32,13 @@ interface Chip {
 }
 
 export function SamplesPageInner() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const search = useSearchParams().get("search") || "";
+  const [searchQuery, setSearchQuery] = useState(search);
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+  useEffect(() => {
+    setSearchQuery(search);
+  }, [search]);
 
   useEffect(() => {
     if (debouncedSearchQuery) {
@@ -129,18 +135,25 @@ export function SamplesPageInner() {
                   </Typography>
                   <Box sx={{ px: 2, pb: 2 }}>
                     {sample.chips.map((chip) => (
-                      <Tag
+                      <Link
                         key={chip.text}
-                        chip={chip}
-                        ChipProps={{
-                          sx: { mr: 1, mb: 1 },
-                          onClick: (e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            setSearchQuery(chip.text);
-                          },
-                        }}
-                      />
+                        href={`/sample?search=${encodeURIComponent(chip.text)}`}
+                        onClick={(e) =>
+                          analytics.track("Portal: Clicked Tag", {
+                            tag: chip.text,
+                          })
+                        }
+                      >
+                        <Tag
+                          chip={chip}
+                          ChipProps={{
+                            sx: {
+                              mr: 0.5,
+                              mb: 0.5,
+                            },
+                          }}
+                        />
+                      </Link>
                     ))}
                   </Box>
                 </Stack>
