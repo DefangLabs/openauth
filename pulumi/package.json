@@ -10,6 +10,6 @@
         "@pulumi/command": "^0.10.0",
         "@pulumi/docker": "~4.4.4",
         "@pulumi/postgresql": "~3.10.0",
-        "@pulumi/pulumi": "~3.95.0"
+        "@pulumi/pulumi": "~3.121.0"
     }
 }
