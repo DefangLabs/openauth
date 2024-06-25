@@ -14,6 +14,7 @@ jobs:
   up:
     name: Pulumi Up
     runs-on: ubuntu-latest
+    environment: production
     if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch' # only runs on push/merge to main branch
     steps:
       - name: Log into Defang prod
