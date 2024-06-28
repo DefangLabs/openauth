@@ -9,6 +9,7 @@ export function CopyTypography({ ...TypographyProps }: CopyTypographyProps) {
     <Tooltip title="Copied!" open={copied} arrow placement="top">
       <Typography
         component={"span"}
+        {...TypographyProps}
         sx={{
           cursor: "pointer",
           backgroundColor: (theme) => theme.palette.grey[100],
@@ -27,7 +28,6 @@ export function CopyTypography({ ...TypographyProps }: CopyTypographyProps) {
           setCopied(true);
           setTimeout(() => setCopied?.(false), 1000);
         }}
-        {...TypographyProps}
       />
     </Tooltip>
   );

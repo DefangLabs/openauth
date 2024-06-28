@@ -1,6 +1,8 @@
 import { CopyCode } from "@/components/copy-code/copy-code";
 import { CopyTypography } from "@/components/copy-typography/copy-typography";
+import { analytics } from "@/modules/analytics/lib/analytics";
 import {
+  Box,
   Button,
   Card,
   CircularProgress,
@@ -9,7 +11,6 @@ import {
 } from "@mui/material";
 import { useSampleConfig } from "../../hooks/use-sample-config/use-sample-config";
 import { useSampleName } from "../../hooks/use-sample-name/use-sample-name";
-import { analytics } from "@/modules/analytics/lib/analytics";
 
 export function OneClick() {
   const sampleName = useSampleName();
@@ -17,7 +18,7 @@ export function OneClick() {
   return (
     <Card variant="outlined">
       <Stack spacing={2} p={2}>
-        <Typography variant="h3">One Click Deployment</Typography>
+        <Typography variant="h3">One Click Container Deployment</Typography>
         <Typography>
           <b>How it works:</b>
           <br />
@@ -33,18 +34,18 @@ export function OneClick() {
               <br />
               The following config values must be set <em>before deploying</em>:
               {config.map((c) => (
-                <Typography key={c} py={0.5}>
+                <Box key={c} py={0.5}>
                   <CopyTypography
-                    onClick={() =>
+                    onClick={() => {
                       analytics.track("Portal: Copied Sample Config Key", {
                         sample: sampleName,
                         config: c,
-                      })
-                    }
+                      });
+                    }}
                   >
                     {c}
                   </CopyTypography>
-                </Typography>
+                </Box>
               ))}
             </Typography>
             <CopyCode
