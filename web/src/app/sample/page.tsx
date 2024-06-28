@@ -31,7 +31,7 @@ interface Chip {
   text: string;
 }
 
-export function SamplesPageInner() {
+function SamplesPageInner() {
   const search = useSearchParams().get("search") || "";
   const [searchQuery, setSearchQuery] = useState(search);
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
