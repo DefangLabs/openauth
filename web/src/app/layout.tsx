@@ -1,8 +1,7 @@
+import { Loader } from "@/components/loader/loader";
 import { Providers } from "@/lib/providers/providers";
 import { Roboto } from "next/font/google";
-import { Suspense } from "react";
 import { Layout } from "../components/layout/layout";
-import { Loader } from "@/components/loader/loader";
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
 

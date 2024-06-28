@@ -11,6 +11,7 @@ import {
   GitHub,
   OpenInNew,
   Reddit,
+  TipsAndUpdates,
 } from "@mui/icons-material";
 import Menu from "@mui/icons-material/Menu";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
@@ -114,6 +115,12 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               iconLeft={<ChevronRight sx={{ mr: 1 }} />}
             >
               Services
+            </NavButton>
+            <NavButton
+              href="/sample"
+              iconLeft={<TipsAndUpdates sx={{ mr: 1 }} />}
+            >
+              Samples
             </NavButton>
             <NavButton
               href="https://docs.defang.io/docs/intro"
