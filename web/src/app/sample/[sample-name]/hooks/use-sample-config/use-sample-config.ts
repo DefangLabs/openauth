@@ -10,7 +10,7 @@ interface SampleConfigParams {
 const composeSchema = z.object({
   services: z.record(
     z.object({
-      environment: z.array(z.string()),
+      environment: z.array(z.string()).or(z.record(z.string())).nullish(),
     })
   ),
 });
@@ -36,10 +36,23 @@ export function useSampleConfig({ sampleName }: SampleConfigParams) {
     };
   }
 
-  // let's grab all the env vars from all services and find all the values that don't contain a = sign
-  const config = Object.values(parsedCompose.data.services)
-    .flatMap((service) => service.environment)
-    .filter((envVar) => !envVar.includes("="));
+  let config: string[] = [];
+
+  Object.values(parsedCompose.data.services).forEach((service) => {
+    const env = service.environment;
+    const isArray = Array.isArray(env);
+    const isEmpty = !env;
+    if (isEmpty) return;
+    if (isArray) {
+      config = [...config, ...env.filter((e) => !e.includes("="))];
+    } else {
+      Object.entries(env).forEach(([key, value]) => {
+        if (!value) {
+          config.push(key);
+        }
+      });
+    }
+  });
 
   return {
     config,
