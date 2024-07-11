@@ -15,6 +15,7 @@ const kratosDomain = kratosService.endpoints[0];
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
+    forceNewDeployment: true,
     build: {
         context: SERVICE_ROOT_PATH,
         args: {
