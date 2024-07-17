@@ -33,6 +33,9 @@ import { SIDEBAR_WIDTH } from "../../constants";
 import { NavButton } from "./components/nav-button/nav-button";
 import { NAV_SURFACE } from "./constants";
 import { useSidebarOpen } from "./hooks/use-sidebar-open/use-sidebar-open";
+import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
+import { useEffect } from "react";
+import { analytics } from "@/modules/analytics/lib/analytics";
 
 const UserChip = styled(Chip)`
   ${NAV_SURFACE}
@@ -64,7 +67,7 @@ const Grow = styled("div")`
 
 export function LoggedIn({ children }: { children: React.ReactNode }) {
   const logout = useLogout();
-  const { session } = useSession();
+  const { session, loading } = useSession();
   const name = useName();
   const email =
     (useSession()?.session?.identity?.traits?.email as string) || "";
@@ -72,6 +75,20 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { sidebarOpen, setSidebarOpen } = useSidebarOpen();
   useSignTos();
+
+  const client = useDefangClient();
+  const track = !!session && !loading;
+
+  useEffect(() => {
+    if (!track) return;
+    client?.whoAmI({}, (err, res) => {
+      if (err) {
+        console.log("@@ error getting whoami", err);
+        return;
+      }
+      analytics.identify(res.userId);
+    });
+  }, [client, track]);
 
   if (!session) return null;
 
