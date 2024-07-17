@@ -8,6 +8,26 @@
 import { proto3, Timestamp } from "@bufbuild/protobuf";
 
 /**
+ * @generated from enum io.defang.v1.ServiceState
+ */
+export const ServiceState = proto3.makeEnum(
+  "io.defang.v1.ServiceState",
+  [
+    {no: 0, name: "NOT_SPECIFIED"},
+    {no: 1, name: "BUILD_QUEUED"},
+    {no: 2, name: "BUILD_PROVISIONING"},
+    {no: 3, name: "BUILD_PENDING"},
+    {no: 4, name: "BUILD_ACTIVATING"},
+    {no: 5, name: "BUILD_RUNNING"},
+    {no: 6, name: "BUILD_DEACTIVATING"},
+    {no: 7, name: "UPDATE_QUEUED"},
+    {no: 8, name: "SERVICE_PENDING"},
+    {no: 9, name: "SERVICE_COMPLETED"},
+    {no: 10, name: "SERVICE_FAILED"},
+  ],
+);
+
+/**
  * @generated from enum io.defang.v1.Platform
  */
 export const Platform = proto3.makeEnum(
@@ -54,6 +74,55 @@ export const Network = proto3.makeEnum(
     {no: 0, name: "UNSPECIFIED"},
     {no: 1, name: "PRIVATE"},
     {no: 2, name: "PUBLIC"},
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.DebugRequest
+ */
+export const DebugRequest = proto3.makeMessageType(
+  "io.defang.v1.DebugRequest",
+  () => [
+    { no: 1, name: "files", kind: "message", T: File, repeated: true },
+    { no: 2, name: "etag", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "project", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "logs", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.DebugResponse
+ */
+export const DebugResponse = proto3.makeMessageType(
+  "io.defang.v1.DebugResponse",
+  () => [
+    { no: 1, name: "general", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "issues", kind: "message", T: Issue, repeated: true },
+    { no: 3, name: "requests", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.Issue
+ */
+export const Issue = proto3.makeMessageType(
+  "io.defang.v1.Issue",
+  () => [
+    { no: 1, name: "type", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "severity", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "details", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "code_changes", kind: "message", T: CodeChange, repeated: true },
+  ],
+);
+
+/**
+ * @generated from message io.defang.v1.CodeChange
+ */
+export const CodeChange = proto3.makeMessageType(
+  "io.defang.v1.CodeChange",
+  () => [
+    { no: 1, name: "file", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "change", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
 
@@ -205,6 +274,7 @@ export const ServiceInfo = proto3.makeMessageType(
     { no: 11, name: "updated_at", kind: "message", T: Timestamp },
     { no: 12, name: "zone_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 13, name: "use_acme_cert", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 15, name: "state", kind: "enum", T: proto3.getEnumType(ServiceState) },
   ],
 );
 
@@ -284,7 +354,7 @@ export const Version = proto3.makeMessageType(
 export const TailRequest = proto3.makeMessageType(
   "io.defang.v1.TailRequest",
   () => [
-    { no: 1, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: "services", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
     { no: 2, name: "since", kind: "message", T: Timestamp },
     { no: 3, name: "etag", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
@@ -535,7 +605,10 @@ export const SubscribeRequest = proto3.makeMessageType(
 export const SubscribeResponse = proto3.makeMessageType(
   "io.defang.v1.SubscribeResponse",
   () => [
-    { no: 1, name: "services", kind: "message", T: ServiceInfo, repeated: true },
+    { no: 1, name: "service", kind: "message", T: ServiceInfo },
+    { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "status", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "state", kind: "enum", T: proto3.getEnumType(ServiceState) },
   ],
 );
 

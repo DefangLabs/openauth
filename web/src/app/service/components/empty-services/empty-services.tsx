@@ -7,7 +7,6 @@ const CodeBlock = ({ children }: { children: React.ReactNode }) => (
       backgroundColor: "#333",
       color: "white",
       padding: 10,
-      borderRadius: 8,
     }}
   >
     <code>{children}</code>

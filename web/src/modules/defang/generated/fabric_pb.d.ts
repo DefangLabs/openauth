@@ -9,6 +9,72 @@ import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialM
 import { Message, proto3 } from "@bufbuild/protobuf";
 
 /**
+ * @generated from enum io.defang.v1.ServiceState
+ */
+export declare enum ServiceState {
+  /**
+   * @generated from enum value: NOT_SPECIFIED = 0;
+   */
+  NOT_SPECIFIED = 0,
+
+  /**
+   * Build states (initial state for build)
+   *
+   * @generated from enum value: BUILD_QUEUED = 1;
+   */
+  BUILD_QUEUED = 1,
+
+  /**
+   * @generated from enum value: BUILD_PROVISIONING = 2;
+   */
+  BUILD_PROVISIONING = 2,
+
+  /**
+   * @generated from enum value: BUILD_PENDING = 3;
+   */
+  BUILD_PENDING = 3,
+
+  /**
+   * @generated from enum value: BUILD_ACTIVATING = 4;
+   */
+  BUILD_ACTIVATING = 4,
+
+  /**
+   * @generated from enum value: BUILD_RUNNING = 5;
+   */
+  BUILD_RUNNING = 5,
+
+  /**
+   * @generated from enum value: BUILD_DEACTIVATING = 6;
+   */
+  BUILD_DEACTIVATING = 6,
+
+  /**
+   * Update states (initial state for existing image)
+   *
+   * @generated from enum value: UPDATE_QUEUED = 7;
+   */
+  UPDATE_QUEUED = 7,
+
+  /**
+   * Deployment states
+   *
+   * @generated from enum value: SERVICE_PENDING = 8;
+   */
+  SERVICE_PENDING = 8,
+
+  /**
+   * @generated from enum value: SERVICE_COMPLETED = 9;
+   */
+  SERVICE_COMPLETED = 9,
+
+  /**
+   * @generated from enum value: SERVICE_FAILED = 10;
+   */
+  SERVICE_FAILED = 10,
+}
+
+/**
  * @generated from enum io.defang.v1.Platform
  */
 export declare enum Platform {
@@ -108,6 +174,147 @@ export declare enum Network {
    * @generated from enum value: PUBLIC = 2;
    */
   PUBLIC = 2,
+}
+
+/**
+ * @generated from message io.defang.v1.DebugRequest
+ */
+export declare class DebugRequest extends Message<DebugRequest> {
+  /**
+   * @generated from field: repeated io.defang.v1.File files = 1;
+   */
+  files: File[];
+
+  /**
+   * @generated from field: string etag = 2;
+   */
+  etag: string;
+
+  /**
+   * @generated from field: string project = 3;
+   */
+  project: string;
+
+  /**
+   * @generated from field: string logs = 4;
+   */
+  logs: string;
+
+  constructor(data?: PartialMessage<DebugRequest>);
+
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "io.defang.v1.DebugRequest";
+  static readonly fields: FieldList;
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DebugRequest;
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DebugRequest;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DebugRequest;
+
+  static equals(a: DebugRequest | PlainMessage<DebugRequest> | undefined, b: DebugRequest | PlainMessage<DebugRequest> | undefined): boolean;
+}
+
+/**
+ * @generated from message io.defang.v1.DebugResponse
+ */
+export declare class DebugResponse extends Message<DebugResponse> {
+  /**
+   * @generated from field: string general = 1;
+   */
+  general: string;
+
+  /**
+   * @generated from field: repeated io.defang.v1.Issue issues = 2;
+   */
+  issues: Issue[];
+
+  /**
+   * @generated from field: repeated string requests = 3;
+   */
+  requests: string[];
+
+  constructor(data?: PartialMessage<DebugResponse>);
+
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "io.defang.v1.DebugResponse";
+  static readonly fields: FieldList;
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DebugResponse;
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DebugResponse;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DebugResponse;
+
+  static equals(a: DebugResponse | PlainMessage<DebugResponse> | undefined, b: DebugResponse | PlainMessage<DebugResponse> | undefined): boolean;
+}
+
+/**
+ * @generated from message io.defang.v1.Issue
+ */
+export declare class Issue extends Message<Issue> {
+  /**
+   * @generated from field: string type = 1;
+   */
+  type: string;
+
+  /**
+   * @generated from field: string severity = 2;
+   */
+  severity: string;
+
+  /**
+   * @generated from field: string details = 3;
+   */
+  details: string;
+
+  /**
+   * @generated from field: repeated io.defang.v1.CodeChange code_changes = 4;
+   */
+  codeChanges: CodeChange[];
+
+  constructor(data?: PartialMessage<Issue>);
+
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "io.defang.v1.Issue";
+  static readonly fields: FieldList;
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Issue;
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Issue;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Issue;
+
+  static equals(a: Issue | PlainMessage<Issue> | undefined, b: Issue | PlainMessage<Issue> | undefined): boolean;
+}
+
+/**
+ * @generated from message io.defang.v1.CodeChange
+ */
+export declare class CodeChange extends Message<CodeChange> {
+  /**
+   * @generated from field: string file = 1;
+   */
+  file: string;
+
+  /**
+   * @generated from field: string change = 2;
+   */
+  change: string;
+
+  constructor(data?: PartialMessage<CodeChange>);
+
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "io.defang.v1.CodeChange";
+  static readonly fields: FieldList;
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CodeChange;
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CodeChange;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CodeChange;
+
+  static equals(a: CodeChange | PlainMessage<CodeChange> | undefined, b: CodeChange | PlainMessage<CodeChange> | undefined): boolean;
 }
 
 /**
@@ -528,6 +735,13 @@ export declare class ServiceInfo extends Message<ServiceInfo> {
    */
   useAcmeCert: boolean;
 
+  /**
+   * enumerated status of the service
+   *
+   * @generated from field: io.defang.v1.ServiceState state = 15;
+   */
+  state: ServiceState;
+
   constructor(data?: PartialMessage<ServiceInfo>);
 
   static readonly runtime: typeof proto3;
@@ -760,11 +974,9 @@ export declare class Version extends Message<Version> {
  */
 export declare class TailRequest extends Message<TailRequest> {
   /**
-   * was "name"
-   *
-   * @generated from field: string service = 1;
+   * @generated from field: repeated string services = 1;
    */
-  service: string;
+  services: string[];
 
   /**
    * @generated from field: google.protobuf.Timestamp since = 2;
@@ -1548,9 +1760,25 @@ export declare class SubscribeRequest extends Message<SubscribeRequest> {
  */
 export declare class SubscribeResponse extends Message<SubscribeResponse> {
   /**
-   * @generated from field: repeated io.defang.v1.ServiceInfo services = 1;
+   * @generated from field: io.defang.v1.ServiceInfo service = 1 [deprecated = true];
+   * @deprecated
    */
-  services: ServiceInfo[];
+  service?: ServiceInfo;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string status = 3;
+   */
+  status: string;
+
+  /**
+   * @generated from field: io.defang.v1.ServiceState state = 4;
+   */
+  state: ServiceState;
 
   constructor(data?: PartialMessage<SubscribeResponse>);
 

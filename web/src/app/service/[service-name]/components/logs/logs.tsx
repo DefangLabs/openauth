@@ -53,13 +53,25 @@ export function Logs() {
   const [logTime, setLogTime] = useState<LogTime>("30");
   const { filter, setFilter, negativeFilter, setNegativeFilter } =
     useLogsFilter();
-  const { service, loading } = useService({ skip: true, poll: undefined });
+  const { service } = useService({ skip: true, poll: undefined });
+  const serviceName = service?.service?.name?.concat(
+    logType == "image" ? "-image" : ""
+  );
   const { resetLogs, filterLogs } = useServiceLogs({
-    service: service?.service?.name?.concat(logType == "image" ? "-image" : ""),
+    service: serviceName,
     etag: logType === "all" ? undefined : service?.etag,
     sinceMins: parseInt(logTime),
     logContainer: logContainer,
   });
+
+  if (service?.service.redis !== undefined) {
+    return (
+      <Stack spacing={2}>
+        <Typography variant="h2">Logs</Typography>
+        <Typography>No logs for managed Redis yet.</Typography>
+      </Stack>
+    );
+  }
 
   return (
     <Stack spacing={2}>

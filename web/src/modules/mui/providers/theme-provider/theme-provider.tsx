@@ -75,7 +75,7 @@ const theme = createTheme({
     MuiPaper: {
       defaultProps: {
         elevation: 0,
-        ...(thinGreyBorder as any),
+        sx: thinGreyBorder,
       },
     },
   },

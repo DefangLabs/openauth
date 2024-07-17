@@ -6,7 +6,7 @@
 // @ts-nocheck
 
 import { Empty, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
-import { DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, ListServicesResponse, PublishRequest, Secrets, SecretValue, Service, ServiceID, ServiceInfo, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, Version, WhoAmIResponse } from "./fabric_pb.js";
+import { DebugRequest, DebugResponse, DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, ListServicesResponse, PublishRequest, Secrets, SecretValue, Service, ServiceID, ServiceInfo, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, Version, WhoAmIResponse } from "./fabric_pb.js";
 
 /**
  * @generated from service io.defang.v1.FabricController
@@ -163,6 +163,17 @@ export const FabricController = {
       O: GenerateFilesResponse,
       kind: MethodKind.Unary,
       idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
+     * TEST
+     *
+     * @generated from rpc io.defang.v1.FabricController.Debug
+     */
+    debug: {
+      name: "Debug",
+      I: DebugRequest,
+      O: DebugResponse,
+      kind: MethodKind.Unary,
     },
     /**
      * AgreeToS

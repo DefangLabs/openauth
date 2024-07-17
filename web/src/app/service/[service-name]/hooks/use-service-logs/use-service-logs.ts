@@ -115,7 +115,7 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
 
     const stopTail = client.tail(
       {
-        service,
+        services: service ? [service] : undefined,
         etag,
         since: sinceMins
           ? { seconds: BigInt(Math.floor(Date.now() / 1000) - 60 * sinceMins) }
