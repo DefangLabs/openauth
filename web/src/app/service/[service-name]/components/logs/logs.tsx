@@ -105,6 +105,7 @@ export function Logs() {
                     analytics.track(EVENTS.toggleNegativeFilter, {
                       value: !!e.target.checked,
                     });
+                    resetLogs();
                     return setNegativeFilter(!!e.target.checked);
                   }}
                 />
