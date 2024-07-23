@@ -176,7 +176,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               Community{" "}
             </NavButton>
             <NavButton
-              href="https://discord.gg/WCczsXJPRm"
+              href="http://s.defang.io/discord"
               iconLeft={<Forum sx={{ mr: 1 }} />}
               iconRight={
                 <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
