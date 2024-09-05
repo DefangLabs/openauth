@@ -28,7 +28,7 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     test: ["CMD", "wget", "--spider", "http://localhost:3000/"],
   },
   platform: "linux/arm64",
-  // waitForSteadyState: true,
+  waitForSteadyState: true,
 });
 
 function gitDescribe(): string {

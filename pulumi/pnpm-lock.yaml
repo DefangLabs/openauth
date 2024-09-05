@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@defang-io/pulumi-defang':
-    specifier: ^0.15.14
-    version: 0.15.14(@pulumi/pulumi@3.121.0)
+    specifier: ^0.16.2
+    version: 0.16.2(@pulumi/pulumi@3.121.0)
   '@pulumi/aiven':
     specifier: ^6.7.2
     version: 6.13.0
@@ -35,14 +35,14 @@ packages:
     resolution: {integrity: sha512-wMue2Sy4GAVTk6Ic4tJVcnfdau+gx2EnG7S+uAEe+TWJFqE4YoWN4/H8MSLj4eYJKxGg26lZwboEniNiNwZQ6Q==}
     dev: false
 
-  /@defang-io/pulumi-defang@0.15.14(@pulumi/pulumi@3.121.0):
-    resolution: {integrity: sha512-rmlGH+Uga+DsHVpjknPm5mq+jXF2rJ3q4Yk0+Rd6gmCtzO96HZbxZnuLW/zPupF9h1UsHlFzNR5ipupICdii1Q==}
+  /@defang-io/pulumi-defang@0.16.2(@pulumi/pulumi@3.121.0):
+    resolution: {integrity: sha512-9ebZrtBjhLWzEFDp87VN+71Ah32Rt3quH6pVu543M6TE5Mk+bYmPb60UvYdfLm/gpRkOgpsFQiqj9BhscJFnFw==}
     engines: {node: '>=16'}
     peerDependencies:
       '@pulumi/pulumi': ^3.95.0
     dependencies:
       '@balena/dockerignore': 1.0.2
-      '@grpc/grpc-js': 1.10.10
+      '@grpc/grpc-js': 1.9.6
       '@pulumi/pulumi': 3.121.0
       google-protobuf: 3.21.2
       node-fetch: 3.3.1
@@ -675,7 +675,7 @@ packages:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 20.12.7
+      '@types/node': 20.4.5
       '@types/responselike': 1.0.3
     dev: false
 
@@ -690,13 +690,14 @@ packages:
   /@types/keyv@3.1.4:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
-      '@types/node': 20.12.7
+      '@types/node': 20.4.5
     dev: false
 
   /@types/node@20.12.7:
     resolution: {integrity: sha512-wq0cICSkRLVaf3UGLMGItu/PtdY7oaXaI/RVU+xliKVOtRna3PRY57ZDfztpDL0n11vfymMUnXv8QwYCO7L1wg==}
     dependencies:
       undici-types: 5.26.5
+    dev: true
 
   /@types/node@20.4.5:
     resolution: {integrity: sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==}
@@ -705,7 +706,7 @@ packages:
   /@types/responselike@1.0.3:
     resolution: {integrity: sha512-H/+L+UkTV33uf49PH5pCAUBVPNj2nDBXTN+qS1dOwyyg24l3CcicicCA7ca+HMvJBZcFgl5r8e+RR6elsb4Lyw==}
     dependencies:
-      '@types/node': 20.12.7
+      '@types/node': 20.4.5
     dev: false
 
   /@types/semver@7.5.8:
@@ -834,7 +835,7 @@ packages:
     engines: {node: ^16.14.0 || >=18.0.0}
     dependencies:
       '@npmcli/fs': 3.1.1
-      fs-minipass: 3.0.3
+      fs-minipass: 3.0.2
       glob: 10.4.2
       lru-cache: 10.2.2
       minipass: 7.1.2
@@ -1172,11 +1173,11 @@ packages:
       minipass: 3.3.6
     dev: false
 
-  /fs-minipass@3.0.3:
-    resolution: {integrity: sha512-XUBA9XClHbnJWSfBzjkm6RvPsyg3sryZt06BEQoXcF7EK/xpGaQYJgQKDJSUH5SGZ76Y7pFx1QBnXz09rU5Fbw==}
+  /fs-minipass@3.0.2:
+    resolution: {integrity: sha512-2GAfyfoaCDRrM6jaOS3UsBts8yJ55VioXdWcOL7dK9zdAuKT71+WBA4ifnNYqVjYv+4SsPxjK0JT4yIIn4cA/g==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minipass: 7.1.2
+      minipass: 5.0.0
     dev: false
 
   /fs.realpath@1.0.0:
@@ -1769,6 +1770,11 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /minipass@7.0.2:
+    resolution: {integrity: sha512-eL79dXrE1q9dBbDCLg7xfn/vl7MS4F1gvJAgjJrQli/jbQWdUttuVawphqpffoIYfRdq78LHx6GP4bU/EQ2ATA==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    dev: false
+
   /minipass@7.1.2:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -1939,7 +1945,7 @@ packages:
       '@npmcli/redact': 2.0.1
       jsonparse: 1.3.1
       make-fetch-happen: 13.0.1
-      minipass: 7.1.2
+      minipass: 7.0.2
       minipass-fetch: 3.0.5
       minizlib: 2.1.2
       npm-package-arg: 11.0.2
@@ -2039,8 +2045,8 @@ packages:
       '@npmcli/promise-spawn': 7.0.2
       '@npmcli/run-script': 8.1.0
       cacache: 18.0.3
-      fs-minipass: 3.0.3
-      minipass: 7.1.2
+      fs-minipass: 3.0.2
+      minipass: 7.0.2
       npm-package-arg: 11.0.2
       npm-packlist: 8.0.2
       npm-pick-manifest: 9.0.1
@@ -2166,7 +2172,7 @@ packages:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 20.12.7
+      '@types/node': 20.4.5
       long: 5.2.3
     dev: false
 
@@ -2574,6 +2580,7 @@ packages:
 
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    dev: true
 
   /unique-filename@3.0.0:
     resolution: {integrity: sha512-afXhuC55wkAmZ0P18QsVE6kp8JaxrEokN2HGIoIVv2ijHQd419H0+6EigAFcIzXeMIkcIkNBpB3L/DXB3cTS/g==}
