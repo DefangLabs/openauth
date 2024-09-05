@@ -19,8 +19,8 @@ export function EmptyServices() {
       <Typography variant="h1">Hi! Welcome to Defang.</Typography>
       <Typography>
         Defang makes it really, <i>really</i> easy to spin up a new service from
-        scratch or using an existing container image. To get started, you&apos;ll
-        want to start by downloading the CLI.
+        scratch or using an existing container image. To get started,
+        you&apos;ll want to start by downloading the CLI.
       </Typography>
       <div>
         <Button
@@ -33,7 +33,7 @@ export function EmptyServices() {
         </Button>
       </div>
       <Typography>
-        Great! First things first, let&apos;s run the generate command. That 
+        Great! First things first, let&apos;s run the generate command. That
         will stand up a project for you with everything you need. You can start
         an existing sample or <em>generate</em> a project from scratch:
       </Typography>
