@@ -30,8 +30,8 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0(graphql@16.8.1)
       '@grpc/grpc-js':
-        specifier: ^1.8.17
-        version: 1.8.17
+        specifier: ^1.8.22
+        version: 1.8.22
       '@mui/icons-material':
         specifier: ^5.11.16
         version: 5.11.16(@mui/material@5.15.15(@emotion/react@11.11.0(@types/react@18.2.6)(react@18.2.0))(@emotion/styled@11.11.0(@emotion/react@11.11.0(@types/react@18.2.6)(react@18.2.0))(@types/react@18.2.6)(react@18.2.0))(@types/react@18.2.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@types/react@18.2.6)(react@18.2.0)
@@ -923,8 +923,8 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  '@grpc/grpc-js@1.8.17':
-    resolution: {integrity: sha512-DGuSbtMFbaRsyffMf+VEkVu8HkSXEUfO3UyGJNtqxW9ABdtTIA+2UXAJpwbJS+xfQxuwqLUeELmL6FuZkOqPxw==}
+  '@grpc/grpc-js@1.8.22':
+    resolution: {integrity: sha512-oAjDdN7fzbUi+4hZjKG96MR6KTEubAeMpQEb+77qy+3r0Ua5xTFuie6JOLr4ZZgl5g+W5/uRTS2M1V8mVAFPuA==}
     engines: {node: ^8.13.0 || >=10.10.0}
 
   '@grpc/proto-loader@0.7.7':
@@ -5433,7 +5433,7 @@ snapshots:
     dependencies:
       graphql: 16.8.1
 
-  '@grpc/grpc-js@1.8.17':
+  '@grpc/grpc-js@1.8.22':
     dependencies:
       '@grpc/proto-loader': 0.7.7
       '@types/node': 20.1.5
