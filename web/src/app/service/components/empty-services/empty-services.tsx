@@ -21,7 +21,7 @@ export function EmptyServices() {
         Defang makes it really, <i>really</i> easy to spin up a new service from
         scratch or using an existing container image. To get started,
         you&apos;ll want to start by downloading the CLI. Note that this portal
-        is read-only, so you'll need to use the CLI to manage your project.
+        is read-only, so you&apos;ll need to use the CLI to manage your project.
       </Typography>
       <div>
         <Button
@@ -57,9 +57,7 @@ export function EmptyServices() {
         To deprovision (ie. remove) a project, you can do:
       </Typography>
       <CodeBlock>{"defang compose down"}</CodeBlock>
-      <Typography>
-        Happy building!
-      </Typography>
+      <Typography>Happy building!</Typography>
     </Stack>
   );
 }
