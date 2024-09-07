@@ -36,7 +36,7 @@ export function EmptyServices() {
       <Typography>
         Great! First things first, let&apos;s run the generate command. That
         will stand up a project for you with everything you need. You can start
-        an existing sample or <em>generate</em> a project from scratch:
+        from an existing sample or <em>generate</em> a project from scratch:
       </Typography>
       <CodeBlock>{"defang generate"}</CodeBlock>
       <Typography>
@@ -46,7 +46,7 @@ export function EmptyServices() {
       <CodeBlock>{"defang compose up"}</CodeBlock>
       <Typography>
         Awesome. Your service will be up and running in no time. You can check
-        the status of your service with:
+        the status of your service in this portal or with:
       </Typography>
       <CodeBlock>{"defang ps -l"}</CodeBlock>
       <Typography>
