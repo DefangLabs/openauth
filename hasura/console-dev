@@ -1,0 +1,11 @@
+#!/bin/bash
+
+until curl -s http://localhost:5000/svc/hasura//v1/metadata; do
+    >&2 echo "Hasura is unavailable - waiting"
+    sleep 3
+done
+
+until hasura console; do
+    >&2 echo "Hasura console is unavailable - waiting"
+    sleep 1
+done
