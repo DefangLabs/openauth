@@ -37,6 +37,7 @@ jobs:
         uses: pulumi/actions@v5
         with:
           command: up
+          refresh: true
           stack-name: defang-io/production
           work-dir: ./pulumi
         env:
