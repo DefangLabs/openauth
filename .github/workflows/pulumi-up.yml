@@ -13,6 +13,8 @@ permissions:
 jobs:
   up:
     name: Pulumi Up
+    concurrency:
+      group: up-group-${{ github.ref }}
     runs-on: ubuntu-latest
     environment: production
     if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch' # only runs on push/merge to main branch
@@ -35,6 +37,7 @@ jobs:
         uses: pulumi/actions@v5
         with:
           command: up
+          refresh: true
           stack-name: defang-io/production
           work-dir: ./pulumi
         env:

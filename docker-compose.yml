@@ -1,4 +1,0 @@
-version: "3.7"
-
-# Individual services have their own docker-compose files which we 
-# chain together. 

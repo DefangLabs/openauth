@@ -19,8 +19,9 @@ export function EmptyServices() {
       <Typography variant="h1">Hi! Welcome to Defang.</Typography>
       <Typography>
         Defang makes it really, <i>really</i> easy to spin up a new service from
-        a container image. To get started, you&apos;ll want to start by
-        downloading the CLI.
+        scratch or using an existing container image. To get started,
+        you&apos;ll want to start by downloading the CLI. Note that this portal
+        is read-only, so you&apos;ll need to use the CLI to manage your project.
       </Typography>
       <div>
         <Button
@@ -33,17 +34,9 @@ export function EmptyServices() {
         </Button>
       </div>
       <Typography>
-        Great! First things first, let&apos;s login with the cli.
-      </Typography>
-      <CodeBlock>{"defang login"}</CodeBlock>
-      <Typography>
-        Before you can deploy code you should read and agree to our the terms of
-        service. You can do this by running:
-      </Typography>
-      <CodeBlock>{"defang terms"}</CodeBlock>
-      <Typography>
-        Perfect. Now let&apos;s run the generate command. That will stand up a
-        project for you with everything you need in the current directory:
+        Great! First things first, let&apos;s run the generate command. That
+        will stand up a project for you with everything you need. You can start
+        from an existing sample or <em>generate</em> a project from scratch:
       </Typography>
       <CodeBlock>{"defang generate"}</CodeBlock>
       <Typography>
@@ -53,13 +46,18 @@ export function EmptyServices() {
       <CodeBlock>{"defang compose up"}</CodeBlock>
       <Typography>
         Awesome. Your service will be up and running in no time. You can check
-        the status of your service with:
+        the status of your service in this portal or with:
       </Typography>
-      <CodeBlock>{"defang ls"}</CodeBlock>
+      <CodeBlock>{"defang ps -l"}</CodeBlock>
       <Typography>
         That will give you all the info you need to know about your service:
         status, endpoints, environment variables, and more.
       </Typography>
+      <Typography>
+        To deprovision (ie. remove) a project, you can do:
+      </Typography>
+      <CodeBlock>{"defang compose down"}</CodeBlock>
+      <Typography>Happy building!</Typography>
     </Stack>
   );
 }
