@@ -45,7 +45,7 @@ rules:
     match:
       url: "http://localhost:8000/svc/fn/<**>"
     forward_to:
-      host: fn:5001
+      host: fn:8001
       rewrite:
         scheme: http
         strip_path_prefix: /svc/fn

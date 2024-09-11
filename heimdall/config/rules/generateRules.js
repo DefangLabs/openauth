@@ -46,7 +46,7 @@ fs.readFile(rulesInputFile, "utf8", (err, data) => {
   );
   // Replace hasura dev domain with actual domain
   replacedContent = replacedContent.replace(
-    new RegExp("fn:5001", "g"),
+    new RegExp("fn:8001", "g"),
     process.env.FN_DOMAIN
   );
   // Replace nextjs dev domain with actual domain

@@ -6,7 +6,7 @@ const app = express();
 expressWsInit(app);
 
 app.use(cors({
-    origin: '*', // Our IAP will prevent unauthorized access from the outside world. 
+    origin: '*', // Our IAP will prevent unauthorized access from the outside world.
     credentials: true,
 }));
 
@@ -20,6 +20,6 @@ import { defangRouter } from './modules/defang/defang.router';
 app.use(jwtRouter);
 app.use('/defang', defangRouter);
 
-app.listen(5001, () => {
-    console.log('Server is listening on port 5001');
+app.listen(8001, () => {
+    console.log('Server is listening on port 8001');
 });
