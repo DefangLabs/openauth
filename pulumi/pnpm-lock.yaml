@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@defang-io/pulumi-defang':
-    specifier: ^0.17.0
-    version: 0.17.0(@pulumi/pulumi@3.121.0)
+    specifier: ^0.17.1
+    version: 0.17.1(@pulumi/pulumi@3.121.0)
   '@pulumi/aiven':
     specifier: ^6.7.2
     version: 6.13.0
@@ -35,8 +35,8 @@ packages:
     resolution: {integrity: sha512-wMue2Sy4GAVTk6Ic4tJVcnfdau+gx2EnG7S+uAEe+TWJFqE4YoWN4/H8MSLj4eYJKxGg26lZwboEniNiNwZQ6Q==}
     dev: false
 
-  /@defang-io/pulumi-defang@0.17.0(@pulumi/pulumi@3.121.0):
-    resolution: {integrity: sha512-UEU7CbaMEYsTPZZqxSNjgPsaiYmUsNT+egwaFai5V0rcVA7fd3dNhE4f1nbMFhwLM2rPhKiJkRWmVDJ9K1EiDA==}
+  /@defang-io/pulumi-defang@0.17.1(@pulumi/pulumi@3.121.0):
+    resolution: {integrity: sha512-VcvjPYct+a6b4IECewl8zEMH3oFrMI2eTqDGQ/8wMgHqkt3KBBkOVDyqQiklbk4UI9NXM3gn7lFH8WKflGr4DQ==}
     engines: {node: '>=16'}
     peerDependencies:
       '@pulumi/pulumi': ^3.95.0
