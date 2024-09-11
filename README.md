@@ -19,11 +19,11 @@ If you need to start the process yourself, can run them all manually by searchin
  - `hasura: console`
  - `web: run dev`
 
-Once the frontend is running, you can access the site at `http://localhost:5000`.
+Once the frontend is running, you can access the site at `http://localhost:8000`.
 
 ### NOTES
 
-All services are designed run behind Heimdall, which is a reverse proxy that handles authorization. This includes the web service, so if you go to localhost:3000, the app won't work properly (even though you will see a login UI). You must go to localhost:5000 to access the app.
+All services are designed run behind Heimdall, which is a reverse proxy that handles authorization. This includes the web service, so if you go to localhost:3000, the app won't work properly (even though you will see a login UI). You must go to localhost:8000 to access the app.
 
 Hot reloading for Next.js doesn't work at the moment, because we're running an old version of Heimdall which doesn't support websockets. We should upgrade Heimdall to the latest version to fix this.
 

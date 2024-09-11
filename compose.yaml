@@ -44,21 +44,21 @@ services:
     ports:
       - "54322:5432"
 
-  
+
   heimdall:
-    build: 
+    build:
       context: ./heimdall
       dockerfile: Dockerfile
       args:
         - ENV=dev
-        - PUBLIC_ROOT_URL=http://localhost:5000
+        - PUBLIC_ROOT_URL=http://localhost:8000
     volumes:
       - ./heimdall/config:/heimdall/conf
       - ./heimdall/config/keys/dev/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
     depends_on:
       - kratos
     ports:
-      - 5000:4455
+      - 8000:4455
       - 4457:4457
     command: -c /heimdall/conf/dev.config.yaml serve proxy
     environment:
@@ -66,7 +66,7 @@ services:
       - KEYSTORE_FILE_PATH=/heimdall/conf/keys/dev/keystore.pem
     extra_hosts:
       - "host.docker.internal:host-gateway"
-  
+
   hasura-postgres:
     restart: unless-stopped
     image: postgres:14
@@ -89,7 +89,7 @@ services:
     volumes:
       - ./hasura:/project
 
-  
+
   fn:
     # env_file:
     #   - ./fn/.env.local

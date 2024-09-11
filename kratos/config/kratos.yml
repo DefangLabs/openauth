@@ -4,11 +4,11 @@ dsn: memory
 
 serve:
   public:
-    base_url: http://localhost:5000/svc/kratos/
+    base_url: http://localhost:8000/svc/kratos/
     cors:
       enabled: true
       allowed_origins:
-        - "http://localhost:5000"
+        - "http://localhost:8000"
       allowed_methods:
         - POST
         - GET
@@ -26,10 +26,10 @@ serve:
     base_url: http://kratos:4434/
 
 selfservice:
-  default_browser_return_url: http://localhost:5000
+  default_browser_return_url: http://localhost:8000
   allowed_return_urls:
-    - http://localhost:5000/auth
-    - http://localhost:5000
+    - http://localhost:8000/auth
+    - http://localhost:8000
 
   methods:
     # totp:
@@ -59,36 +59,36 @@ selfservice:
 
   flows:
     error:
-      ui_url: http://localhost:5000/auth/error
+      ui_url: http://localhost:8000/auth/error
 
     settings:
-      ui_url: http://localhost:5000/auth/settings
+      ui_url: http://localhost:8000/auth/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
 
     recovery:
       enabled: true
-      ui_url: http://localhost:5000/auth/recovery
+      ui_url: http://localhost:8000/auth/recovery
       use: code
 
     verification:
       enabled: true
-      ui_url: http://localhost:5000/auth/verification
+      ui_url: http://localhost:8000/auth/verification
       use: code
       after:
-        default_browser_return_url: http://localhost:5000/auth/login
+        default_browser_return_url: http://localhost:8000/auth/login
 
     logout:
       after:
-        default_browser_return_url: http://localhost:5000/auth/login
+        default_browser_return_url: http://localhost:8000/auth/login
 
     login:
-      ui_url: http://localhost:5000/auth/login
+      ui_url: http://localhost:8000/auth/login
       lifespan: 10m
 
     registration:
       lifespan: 10m
-      ui_url: http://localhost:5000/auth/login
+      ui_url: http://localhost:8000/auth/login
       # after:
       #   password:
       #     hooks:
@@ -124,5 +124,5 @@ courier:
   smtp:
     connection_uri: smtps://test:test@mailslurper:1025/?skip_ssl_verify=true
 
-session:  
+session:
   lifespan: 720h

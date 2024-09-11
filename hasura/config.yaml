@@ -1,5 +1,5 @@
 version: 3
-endpoint: http://localhost:5000/svc/hasura
+endpoint: http://localhost:8000/svc/hasura
 admin_secret: password
 metadata_directory: metadata
 actions:

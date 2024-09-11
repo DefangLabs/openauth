@@ -30,7 +30,7 @@ const OpenIcon = styled(OpenInNew)`
 `;
 
 function ServicePageInner() {
-  const { service, loading } = useService({ poll: 5000 });
+  const { service, loading } = useService({ poll: 8000 });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 

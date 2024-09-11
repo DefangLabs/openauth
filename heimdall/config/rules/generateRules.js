@@ -30,7 +30,7 @@ fs.readFile(rulesInputFile, "utf8", (err, data) => {
 
   // Replace heimdall dev domain with actal domain
   let replacedContent = data.replace(
-    new RegExp("http://localhost:5000", "g"),
+    new RegExp("http://localhost:8000", "g"),
     process.env.PUBLIC_ROOT_URL
   );
 
@@ -56,7 +56,7 @@ fs.readFile(rulesInputFile, "utf8", (err, data) => {
   );
   // Production Scheme
   // replacedContent = replacedContent.replace(/scheme:\s*http/g, "scheme: https");
-  
+
   // Write the modified contents to the output file
   fs.writeFile(rulesOutputFile, replacedContent, "utf8", (err) => {
     if (err) {

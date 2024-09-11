@@ -6,7 +6,7 @@ const config: CodegenConfig = {
   documents: ["src/**/*.tsx", "src/**/*.ts"],
   schema: [
     {
-      "http://localhost:5000/svc/hasura/v1/graphql": {
+      "http://localhost:8000/svc/hasura/v1/graphql": {
         headers: {
           "x-hasura-admin-secret": "password",
           "x-hasura-role": "user",
