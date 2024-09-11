@@ -60,9 +60,7 @@ function AccountPage() {
   return (
     <Stack spacing={1} p={2}>
       <Typography variant="h1">Account</Typography>
-      <Typography>
-        Welcome to the Defang Opinionated Platform, <b>{profile?.name}</b>.
-      </Typography>
+      <Typography variant="h2">Profile</Typography>
       <form onSubmit={onSubmit}>
         <Stack spacing={2} mt={2} maxWidth={400}>
           <TextField
@@ -87,6 +85,16 @@ function AccountPage() {
           </Stack>
         </Stack>
       </form>
+      <Typography variant="h2">Deleting your account</Typography>
+      <Typography>
+        If you would like to delete your account,
+        <br />
+        please{" "}
+        <a href="mailto:info@defang.io?subject=Please%20delete%20my%20account">
+          send an email to info@defang.io
+        </a>
+        .
+      </Typography>
     </Stack>
   );
 }
