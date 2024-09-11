@@ -111,8 +111,8 @@
 			},
 			{
 				"label": "web: run dev",
-				"type": "npm",
-				"script": "dev",
+				"type": "shell",
+				"command": "pnpm dev",
 				"runOptions": {
 					"runOn": "folderOpen"
 				},

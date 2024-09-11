@@ -7,11 +7,11 @@ Ideally, run this in a devcontainer. VSCode should prompt you to do so. Otherwis
 There is a workspace at `./portal.code-workspace`. Once you start the devcontainer, open this workspace. (you should be prompted to do so). The workspace will recommend a few extensions, and will immediately start the project, which consists of the following steps:
 
  - Install backend dependencies
-   Note: this is done this way because we mount the `fn` (api) directory into the container for live reloading. A bit hacky, but works.
- - Start the backend (docker compose up)
- - Start the Hasura console (checks for the backend being up and hasura being healthy before starting)
+   Note: this is done this way because we mount the `fn` (api) directory into the container for live reloading. A bit hacky, but works. (Runs `docker compose run --rm fn install`)
+ - Start the backend (Runs `docker compose up`)
+ - Start the Hasura console, and checks for the backend being up and hasura being healthy before starting. (Essentially runs `hasura console`)
  - Install frontend dependencies
- - Start the frontend in dev mode
+ - Start the frontend in dev mode (Runs `pnpm dev`)
 
 If you need to start the process yourself, can run them all manually by searching for the "run task" command in VSCode and running the following tasks:
 
