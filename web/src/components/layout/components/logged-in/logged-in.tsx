@@ -117,7 +117,16 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
                       (email || "").toLowerCase().trim()
                     )}?d=identicon`}
                   >
-                    {(name || "U").charAt(0)}
+                    <div>{(name || "U").charAt(0)}</div>
+                    <div
+                      style={{
+                        color: "white",
+                        fontSize: "x-small",
+                        opacity: 0.75,
+                      }}
+                    >
+                      My Account
+                    </div>
                   </UserAvatar>
                 }
                 label={<UserLabel>{name}</UserLabel>}
