@@ -90,8 +90,8 @@ function AccountPage() {
         If you would like to delete your account,
         <br />
         please{" "}
-        <a href="mailto:info@defang.io?subject=Please%20delete%20my%20account">
-          send an email to info@defang.io
+        <a href="mailto:support@defang.io?subject=Please%20delete%20my%20account">
+          send an email to support@defang.io
         </a>
         .
       </Typography>
