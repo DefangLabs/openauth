@@ -1,5 +1,6 @@
 "use client";
 
+import { useDevRedirect } from "@/hooks/use-dev-redirect/use-dev-redirect";
 import { AnalyticsProvider } from "@/modules/analytics/providers/analytics-provider/analytics-provider";
 import { ApolloProvider } from "@/modules/apollo/providers/apollo-provider/apollo-provider";
 import { KratosProvider } from "@/modules/kratos/providers/kratos-provider/kratos-provider";
@@ -28,6 +29,8 @@ interface ProvidersProps {
 }
 
 export function Providers({ children }: ProvidersProps) {
+  useDevRedirect();
+
   return (
     <AnalyticsProvider>
       <ThemeProvider>

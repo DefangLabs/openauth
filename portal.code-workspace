@@ -76,55 +76,58 @@
 			}
 		],
 		"tasks": [
+			// install web dependencies
 			{
-				"label": "backend: up",
+				"label": "web: install",
 				"type": "shell",
-				"command": "pnpm nps 'dc up -d'",
+				// this is necessary in the devcontainer because of how pnpm links packages
+				"command": "pnpm config set store-dir ~/.pnpm-store-local && pnpm install",
+				"options": {
+					"cwd": "${workspaceFolder}/web"
+				},
 				"problemMatcher": []
 			},
+			// install rest api dependencies
 			{
-				"label": "backend: stop",
+				"label": "fn: install",
 				"type": "shell",
-				"command": "pnpm nps 'dc stop'",
-				"problemMatcher": []
-			},
-			{
-				"label": "backend: down",
-				"type": "shell",
-				"command": "pnpm nps 'dc down'",
-				"problemMatcher": []
-			},
-			{
-				"label": "backend: docker-compose",
-				"type": "shell",
-				"command": "pnpm nps 'dc ${input:dockerComposeCommand}'",
-				"problemMatcher": []
-			},
-			{
-				"label": "backend: run",
-				"type": "npm",
-				"script": "nps",
-				"runOptions": {
-					"runOn": "folderOpen"
+				"command": "docker compose run --rm fn i",
+				"options": {
+					"cwd": "${workspaceFolder}/kratos"
 				},
 				"problemMatcher": []
 			},
 			{
+				"label": "backend: run dev",
+				"type": "shell",
+				"command": "docker compose up",
+				"runOptions": {
+					"runOn": "folderOpen"
+				},
+				"problemMatcher": [],
+				"dependsOn": [
+					"fn: install"
+				]
+			},
+			{
 				"label": "web: run dev",
-				"type": "npm",
-				"script": "dev",
+				"type": "shell",
+				"command": "pnpm dev",
 				"runOptions": {
 					"runOn": "folderOpen"
 				},
 				"options": {
 					"cwd": "${workspaceFolder}/web"
 				},
-				"problemMatcher": []
+				"problemMatcher": [],
+				"dependsOn": [
+					"web: install"
+				]
 			},
 			{
-				"label": "web: graphql watch",
+				"label": "web: graphql codegen",
 				"type": "shell",
-				"command": "pnpm graphql-codegen --watch",
+				"command": "pnpm graphql-codegen",
 				"runOptions": {
 					"runOn": "folderOpen"
 				},
@@ -136,7 +139,7 @@
 			{
 				"label": "hasura: console",
 				"type": "shell",
-				"command": "hasura console",
+				"command": "./console-dev",
 				"runOptions": {
 					"runOn": "folderOpen"
 				},

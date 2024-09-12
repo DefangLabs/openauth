@@ -100,6 +100,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
             backgroundColor: COLORS.primary,
             backgroundImage: GRADIENTS.primary,
             width: isMobile ? "calc(100vw - 100px)" : SIDEBAR_WIDTH,
+            border: "none",
           },
         }}
         variant={isMobile ? "temporary" : "persistent"}

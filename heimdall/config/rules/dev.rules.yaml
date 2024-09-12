@@ -2,7 +2,7 @@ version: "1alpha2"
 rules:
   - id: "kratos:public-api"
     match:
-      url: "http://localhost:5000/svc/kratos/<**>"
+      url: "http://localhost:8000/svc/kratos/<**>"
     forward_to:
       host: kratos:4433
       rewrite:
@@ -22,7 +22,7 @@ rules:
 
   - id: "hasura:public-api"
     match:
-      url: "http://localhost:5000/svc/hasura/<**>"
+      url: "http://localhost:8000/svc/hasura/<**>"
     forward_to:
       host: hasura:8080
       rewrite:
@@ -43,9 +43,9 @@ rules:
 
   - id: "fn:public-api"
     match:
-      url: "http://localhost:5000/svc/fn/<**>"
+      url: "http://localhost:8000/svc/fn/<**>"
     forward_to:
-      host: fn:5001
+      host: fn:8001
       rewrite:
         scheme: http
         strip_path_prefix: /svc/fn
@@ -64,7 +64,7 @@ rules:
 
   - id: "nextjs:public"
     match:
-      url: "http://localhost:5000<**>"
+      url: "http://localhost:8000<**>"
     forward_to:
       host: host.docker.internal:3000
       rewrite:

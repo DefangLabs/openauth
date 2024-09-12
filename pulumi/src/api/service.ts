@@ -11,12 +11,12 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
             APP: 'api',
         },
     },
-    ports: [{target: 5001, protocol: 'http', mode: 'host'}],
+    ports: [{target: 8001, protocol: 'http', mode: 'host'}],
     environment: {
         DEFANG_FABRIC: config.require('fabric'),
     },
     platform: 'linux/arm64',
     healthcheck: {
-        test: ['CMD', 'wget', '--spider', 'http://localhost:5001/']
+        test: ['CMD', 'wget', '--spider', 'http://localhost:8001/']
     },
 });
