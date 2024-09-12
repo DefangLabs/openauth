@@ -119,6 +119,11 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
                     )}?d=identicon`}
                   >
                     <div>{(name || "U").charAt(0)}</div>
+                  </UserAvatar>
+                }
+                label={
+                  <UserLabel>
+                    <div>{name}</div>
                     <div
                       style={{
                         color: "white",
@@ -128,9 +133,8 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
                     >
                       My Account
                     </div>
-                  </UserAvatar>
+                  </UserLabel>
                 }
-                label={<UserLabel>{name}</UserLabel>}
                 onClick={() => null}
               />
             </Link>
