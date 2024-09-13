@@ -1,6 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
+  async redirects() {
+    return [
+      // Basic redirect
+      {
+        source: "/service",
+        destination: "/projects",
+        permanent: true,
+      },
+    ];
+  },
   // experimental: {
   //   missingSuspenseWithCSRBailout: false, // shouldn't be necessary but build is not detecting Suspense boundaries
   // },

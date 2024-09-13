@@ -20,7 +20,7 @@ function RedirectPageInner() {
   return null;
 }
 
-const ServicePageOuter = LoginRequired(function RedirectPage() {
+const ProjectsPageOuter = LoginRequired(function RedirectPage() {
   return (
     <Loader>
       <RedirectPageInner />
@@ -28,4 +28,4 @@ const ServicePageOuter = LoginRequired(function RedirectPage() {
   );
 });
 
-export default ServicePageOuter;
+export default ProjectsPageOuter;

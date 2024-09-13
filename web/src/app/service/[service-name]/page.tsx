@@ -29,7 +29,7 @@ const OpenIcon = styled(OpenInNew)`
   cursor: pointer;
 `;
 
-function ServicePageInner() {
+function ProjectsPageInner() {
   const { service, loading } = useService({ poll: 8000 });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -103,10 +103,10 @@ function ServicePageInner() {
   );
 }
 
-export default function ServicePage() {
+export default function ProjectsPage() {
   return (
     <Loader>
-      <ServicePageInner />
+      <ProjectsPageInner />
     </Loader>
   );
 }

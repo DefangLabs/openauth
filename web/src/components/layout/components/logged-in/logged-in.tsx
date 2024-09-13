@@ -101,6 +101,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
             backgroundImage: GRADIENTS.primary,
             width: isMobile ? "calc(100vw - 100px)" : SIDEBAR_WIDTH,
             border: "none",
+            borderRadius: 0,
           },
         }}
         variant={isMobile ? "temporary" : "persistent"}
@@ -145,7 +146,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               href="/service"
               iconLeft={<ChevronRight sx={{ mr: 1 }} />}
             >
-              Services
+              Projects
             </NavButton>
             <NavButton
               href="/sample"
@@ -207,6 +208,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
           <Stack
             direction="row"
             alignItems="center"
+            alignContent="center"
             justifyContent="space-between"
           >
             <LogoutChip
@@ -218,7 +220,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               label="Logout"
               onClick={logout}
             />
-            <Typography color="gray">
+            <Typography sx={{color: "white", opacity: 0.5 }}>
               {process.env.NEXT_PUBLIC_VERSION}
             </Typography>
           </Stack>

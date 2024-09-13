@@ -6,7 +6,7 @@ import { useEffect } from "react";
 export default function HomePage() {
   const router = useRouter();
   useEffect(() => {
-    router.push("/service");
+    router.push("/projects");
   }, [router]);
   return <></>;
 }
