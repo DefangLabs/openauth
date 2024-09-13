@@ -220,7 +220,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               label="Logout"
               onClick={logout}
             />
-            <Typography sx={{color: "white", opacity: 0.5 }}>
+            <Typography sx={{ color: "white", opacity: 0.5 }}>
               {process.env.NEXT_PUBLIC_VERSION}
             </Typography>
           </Stack>
