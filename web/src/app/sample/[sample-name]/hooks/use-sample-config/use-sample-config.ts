@@ -10,7 +10,10 @@ interface SampleConfigParams {
 const composeSchema = z.object({
   services: z.record(
     z.object({
-      environment: z.array(z.string()).or(z.record(z.string())).nullish(),
+      environment: z
+        .array(z.string())
+        .or(z.record(z.string().nullable()))
+        .nullish(),
     })
   ),
 });
@@ -36,26 +39,24 @@ export function useSampleConfig({ sampleName }: SampleConfigParams) {
     };
   }
 
-  let config: string[] = [];
-
-  Object.values(parsedCompose.data.services).forEach((service) => {
-    const env = service.environment;
-    const isArray = Array.isArray(env);
-    const isEmpty = !env;
-    if (isEmpty) return;
-    if (isArray) {
-      config = [...config, ...env.filter((e) => !e.includes("="))];
-    } else {
-      Object.entries(env).forEach(([key, value]) => {
-        if (!value) {
-          config.push(key);
-        }
-      });
+  const config = Object.values(parsedCompose.data.services).flatMap(
+    (service) => {
+      const env = service.environment;
+      const isArray = Array.isArray(env);
+      const isEmpty = !env;
+      if (isEmpty) return [];
+      if (isArray) {
+        return env.filter((e) => !e.includes("="));
+      } else {
+        return Object.entries(env).flatMap(([key, value]) => {
+          return value === null ? key : [];
+        });
+      }
     }
-  });
+  );
 
   return {
-    config,
+    config: [...new Set(config)], // dedupe
     ...res,
   };
 }

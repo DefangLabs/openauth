@@ -1,17 +1,6 @@
+import { CopyCode } from "@/components/copy-code/copy-code";
 import { OpenInNew } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
-
-const CodeBlock = ({ children }: { children: React.ReactNode }) => (
-  <pre
-    style={{
-      backgroundColor: "#333",
-      color: "white",
-      padding: 10,
-    }}
-  >
-    <code>{children}</code>
-  </pre>
-);
 
 export function EmptyServices() {
   return (
@@ -38,17 +27,17 @@ export function EmptyServices() {
         will stand up a project for you with everything you need. You can start
         from an existing sample or <em>generate</em> a project from scratch:
       </Typography>
-      <CodeBlock>{"defang generate"}</CodeBlock>
+      <CopyCode code={"defang generate"} />
       <Typography>
         Sweet. You&apos;ve got everything you need to build your amazing new
         service. Now let&apos;s get it launched:
       </Typography>
-      <CodeBlock>{"defang compose up"}</CodeBlock>
+      <CopyCode code={"defang compose up"} />
       <Typography>
         Awesome. Your service will be up and running in no time. You can check
         the status of your service in this portal or with:
       </Typography>
-      <CodeBlock>{"defang ps -l"}</CodeBlock>
+      <CopyCode code={"defang ps -l"} />
       <Typography>
         That will give you all the info you need to know about your service:
         status, endpoints, environment variables, and more.
@@ -56,7 +45,7 @@ export function EmptyServices() {
       <Typography>
         To deprovision (ie. remove) a project, you can do:
       </Typography>
-      <CodeBlock>{"defang compose down"}</CodeBlock>
+      <CopyCode code={"defang compose down"} />
       <Typography>Happy building!</Typography>
     </Stack>
   );

@@ -40,6 +40,8 @@ Hot reloading for Next.js doesn't work at the moment, because we're running an o
 
 ## Deploy
 
+Create an Aiven API token using their dashboard. Then run the following command to deploy the stack:
 ```
 AIVEN_TOKEN=… pulumi -C pulumi up
 ```
+**Do not deploy to prod from your local machine. Let the CI take care of it.**

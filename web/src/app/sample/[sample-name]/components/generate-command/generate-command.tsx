@@ -20,7 +20,6 @@ export function GenerateCommand({ sample }: GenerateCommandProps) {
           "Run this Defang command to generate a new project from this sample.",
         fullWidth: true,
         variant: "outlined",
-        value: `defang new ${sample.directoryName}`,
         InputProps: {
           readOnly: true,
           inputProps: {

@@ -107,7 +107,6 @@ function ProjectsPageInner() {
                   "Run this command from the command line to delete this project.",
                 fullWidth: true,
                 variant: "outlined",
-                value: `defang down --project-name ${projectName}`,
                 InputProps: {
                   readOnly: true,
                   inputProps: {

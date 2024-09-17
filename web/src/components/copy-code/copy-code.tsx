@@ -28,9 +28,10 @@ export function CopyCode({ code, TextFieldProps = {} }: CopyCodeProps) {
           ...(TextFieldProps.InputProps?.inputProps || {}),
           style: {
             cursor: "pointer",
-            whiteSpace: "pre",
+            fontFamily: "monospace",
             overflow: "hidden",
             textOverflow: "ellipsis",
+            whiteSpace: "pre",
             ...(TextFieldProps.InputProps?.inputProps?.style || {}),
           },
           id: `copy-code-${id}`,
