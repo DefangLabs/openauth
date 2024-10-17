@@ -13,6 +13,8 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+  "\n  mutation DeleteAccountMutation {\n    deleteAccount {\n      message\n    }\n  }\n":
+    types.DeleteAccountMutationDocument,
   "\n  mutation InsertProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(\n      object: $object\n      onConflict: { constraint: profiles_pkey, updateColumns: [name] }\n    ) {\n      id\n      name\n    }\n  }\n":
     types.InsertProfileMutationDocument,
   "\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n":
@@ -33,6 +35,12 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation DeleteAccountMutation {\n    deleteAccount {\n      message\n    }\n  }\n"
+): (typeof documents)["\n  mutation DeleteAccountMutation {\n    deleteAccount {\n      message\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

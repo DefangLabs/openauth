@@ -1,5 +1,9 @@
 "use client";
 
+import { Loader } from "@/components/loader/loader";
+import { analytics } from "@/modules/analytics/lib/analytics";
+import { EVENTS } from "@/modules/analytics/lib/constants";
+import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
 import { useSession } from "@/modules/kratos/hooks/use-session/use-session";
 import { InsertProfileMutation } from "@/modules/profiles/graphql/mutations/insert-profile-mutation";
 import { useCurrentUserProfileQuery } from "@/modules/profiles/hooks/use-current-user-profile-query/use-current-user-profile-query";
@@ -12,11 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 import { FormEvent, useCallback, useEffect } from "react";
+import { DangerZone } from "./components/danger-zone/danger-zone";
 import { useAccountForm } from "./hooks/use-account-form/use-account-form";
-import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
-import { analytics } from "@/modules/analytics/lib/analytics";
-import { EVENTS } from "@/modules/analytics/lib/constants";
-import { Loader } from "@/components/loader/loader";
 
 function AccountPage() {
   const {
@@ -58,11 +59,14 @@ function AccountPage() {
   const loading = profileLoading || mutationLoading;
 
   return (
-    <Stack spacing={1} p={2}>
+    <Stack
+      spacing={2}
+      sx={{ maxWidth: (theme) => theme.breakpoints.values.sm, p: 2, mb: 10 }}
+    >
       <Typography variant="h1">Account</Typography>
-      <Typography variant="h2">Profile</Typography>
       <form onSubmit={onSubmit}>
-        <Stack spacing={2} mt={2} maxWidth={400}>
+        <Stack spacing={2} mt={2}>
+          <Typography variant="h2">Profile</Typography>
           <TextField
             label="Name"
             value={form.name}
@@ -85,16 +89,7 @@ function AccountPage() {
           </Stack>
         </Stack>
       </form>
-      <Typography variant="h2">Deleting your account</Typography>
-      <Typography>
-        If you would like to delete your account,
-        <br />
-        please{" "}
-        <a href="mailto:support@defang.io?subject=Please%20delete%20my%20account">
-          send an email to support@defang.io
-        </a>
-        .
-      </Typography>
+      <DangerZone />
     </Stack>
   );
 }

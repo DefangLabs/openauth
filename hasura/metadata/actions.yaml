@@ -1,6 +1,19 @@
-actions: []
+actions:
+  - name: deleteAccount
+    definition:
+      kind: synchronous
+      handler: '{{DEFANG_FN_ENDPOINT}}/accounts'
+      forward_client_headers: true
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        version: 2
+    permissions:
+      - role: user
 custom_types:
   enums: []
   input_objects: []
-  objects: []
+  objects:
+    - name: DeleteAccountOutput
   scalars: []

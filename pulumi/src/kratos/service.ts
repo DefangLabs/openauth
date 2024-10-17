@@ -11,7 +11,10 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     build: {
         context: SERVICE_ROOT_PATH,
     },
-    ports: [{ target: 4433, protocol: 'http', mode: 'host' }],
+    ports: [
+        { target: 4433, protocol: 'http', mode: 'host' },
+        { target: 4434, protocol: 'http', mode: 'host' },
+    ],
     platform: 'linux/arm64',
     environment: {
         LOG_FORMAT: 'json',

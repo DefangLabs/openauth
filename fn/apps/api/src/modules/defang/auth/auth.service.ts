@@ -1,56 +1,31 @@
-import * as grpc from "@grpc/grpc-js";
 import { Request, Response } from "express";
-import * as fabric from "../../../lib/io/defang/v1/fabric_grpc_pb";
-import { TokenRequest } from "../../../lib/io/defang/v1/fabric_pb";
+import { getClient } from '@/lib/defang/get-client';
+import { TokenRequestSchema } from '@/lib/defang/generated/fabric_pb';
+import { getJwtFromRequest } from '@/lib/auth/get-jwt-from-request'
+import { create } from "@bufbuild/protobuf";
 
-const getHeimdallJWT = async (req: Request) => {
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-        const authHeaderParts = authHeader.split(' ');
-        if (authHeaderParts.length === 2) {
-            return authHeaderParts[1];
-        }
-    }
-}
-
-const getUnauthedClient = async () => {
-    let defaultFabric = process.env["DEFANG_FABRIC"] || "fabric-prod1.defang.dev:443";
-    return new fabric.FabricControllerClient(
-        defaultFabric,
-        grpc.credentials.combineChannelCredentials(
-            grpc.credentials.createSsl(),
-            grpc.credentials.createFromMetadataGenerator((_, callback) => {
-                const metadata = new grpc.Metadata();
-                callback(null, metadata);
-            })
-        )
-    );
-}
 
 
 export const getDefangToken = async (req: Request, res: Response) => {
-    let token: string | undefined;
-    const heimdallJWT = await getHeimdallJWT(req);
-    if (heimdallJWT) {
-        const client = await getUnauthedClient();
-        const tokenRequest = new TokenRequest();
-        tokenRequest.setAssertion(heimdallJWT);
-        tokenRequest.setScopeList(["tail", "read"]);
-        try {
-            token = await new Promise((resolve, reject) => {
-                client.token(tokenRequest, (err, response) => {
-                    if (err) {
-                        reject(err);
-                    }
-                    else {
-                        resolve(response?.toString() || undefined);
-                    }
-                });
-            });
-            return res.status(201).json({ token });
-        }
-        catch (e) {
-            return res.status(500).json({ error: e });
-        }
+    const heimdallJWT = await getJwtFromRequest(req);
+
+    if (!heimdallJWT) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const client = getClient();
+
+    const tokenRequest = create(TokenRequestSchema, {
+        assertion: heimdallJWT,
+        scope: ["tail", "read", "delete"],
+    });
+
+    try {
+        const response = await client.token(tokenRequest);
+        return res.status(201).json({ token: response?.accessToken });
+    }
+    catch (e) {
+        console.log('@@ err: ', e);
+        return res.status(500).json({ error: e });
     }
 }

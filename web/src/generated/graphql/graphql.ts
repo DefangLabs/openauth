@@ -38,6 +38,11 @@ export enum CursorOrdering {
   Desc = "DESC",
 }
 
+export type DeleteAccountOutput = {
+  __typename?: "DeleteAccountOutput";
+  message: Scalars["String"]["output"];
+};
+
 /** column ordering options */
 export enum OrderBy {
   /** in ascending order, nulls last */
@@ -197,6 +202,7 @@ export type UuidComparisonExp = {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: "mutation_root";
+  deleteAccount?: Maybe<DeleteAccountOutput>;
   /** delete data from the table: "profiles" */
   deleteProfiles?: Maybe<ProfilesMutationResponse>;
   /** delete single row from the table: "profiles" */
@@ -300,6 +306,18 @@ export type Subscription_RootProfilesStreamArgs = {
   where?: InputMaybe<ProfilesBoolExp>;
 };
 
+export type DeleteAccountMutationMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type DeleteAccountMutationMutation = {
+  __typename?: "mutation_root";
+  deleteAccount?: {
+    __typename?: "DeleteAccountOutput";
+    message: string;
+  } | null;
+};
+
 export type InsertProfileMutationMutationVariables = Exact<{
   object: ProfilesInsertInput;
 }>;
@@ -326,6 +344,34 @@ export type ProfileQueryQuery = {
   } | null;
 };
 
+export const DeleteAccountMutationDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "DeleteAccountMutation" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "deleteAccount" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeleteAccountMutationMutation,
+  DeleteAccountMutationMutationVariables
+>;
 export const InsertProfileMutationDocument = {
   kind: "Document",
   definitions: [

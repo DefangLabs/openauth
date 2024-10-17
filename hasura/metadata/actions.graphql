@@ -1,0 +1,8 @@
+type Mutation {
+  deleteAccount: DeleteAccountOutput
+}
+
+type DeleteAccountOutput {
+  message: String!
+}
+

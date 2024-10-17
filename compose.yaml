@@ -34,7 +34,7 @@ services:
       - "4437:4437"
 
   kratos-postgres:
-    image: postgres:9.6
+    image: postgres:16
     environment:
       - POSTGRES_USER=kratos
       - POSTGRES_PASSWORD=secret
@@ -69,7 +69,7 @@ services:
 
   hasura-postgres:
     restart: unless-stopped
-    image: postgres:14
+    image: postgres:16
     environment:
       POSTGRES_PASSWORD: password
     volumes:
@@ -91,14 +91,16 @@ services:
 
 
   fn:
-    # env_file:
-    #   - ./fn/.env.local
     build:
       context: ./fn
       dockerfile: dev.Dockerfile
       args:
         - APP=/app
     command: dev
+    environment:
+      - JWKS_ENDPOINT=http://heimdall:4457/.well-known/jwks
+      - KRATOS_DOMAIN=kratos:4433
+      - HASURA_DOMAIN=hasura:8080
     ports:
       - 8001:8001
     volumes:

@@ -14,6 +14,8 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     ports: [{target: 8001, protocol: 'http', mode: 'host'}],
     environment: {
         DEFANG_FABRIC: config.require('fabric'),
+        JWKS_ENDPOINT: config.require("heimdallJwksEndpoint"), // i.e. http://heimdall:4456/.well-known/jwks
+        KRATOS_DOMAIN: config.require("kratosDomain"), // i.e. kratos:4433
     },
     platform: 'linux/arm64',
     healthcheck: {

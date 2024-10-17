@@ -4,7 +4,7 @@ config:
   defang-portal:NEXT_PUBLIC_KRATOS_PUBLIC_URL: x
   defang-portal:aivenBillingGroup:
     secure: AAABAFIbNUbpVBs9A5WRiO2YJ/iTV5icTVqlVfpLcFCy2RVplij0iQQkACrRSaYBu+6VR07myQRKrYwCjrnHItr8gz8=
-  defang-portal:fabric: fabric-prod1.defang.dev:443
+  defang-portal:fabric: https://fabric-prod1.defang.dev
   defang-portal:githubClientId: 530ac29eb81d95ec590e
   defang-portal:githubClientSecret:
     secure: AAABAL/yY0DzvG3MBBvDV/hxd/sgEgLVgFINAIP8D/REKEZGLjqQSLbP6eZSDL/MJ9gWla35TkiruQS3c/c+hc6jdc7hAkgN

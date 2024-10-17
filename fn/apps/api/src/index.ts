@@ -16,9 +16,11 @@ app.get('/', (req, res) => {
 
 import { jwtRouter } from './modules/jwt/jwt.router';
 import { defangRouter } from './modules/defang/defang.router';
+import { accountRouter } from './modules/accounts/accounts.router';
 
 app.use(jwtRouter);
 app.use('/defang', defangRouter);
+app.use('/accounts', accountRouter);
 
 app.listen(8001, () => {
     console.log('Server is listening on port 8001');
