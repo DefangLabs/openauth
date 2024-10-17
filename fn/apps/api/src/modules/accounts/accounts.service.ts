@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import z from 'zod';
 import { validateJwt } from '../../lib/auth/validate-jwt';
-import { getClient } from '@/lib/defang/get-client';
 import { create } from '@bufbuild/protobuf';
-import { DeleteRequestSchema, TokenRequestSchema } from '@/lib/defang/generated/fabric_pb';
+import { TokenRequestSchema } from '../../lib/defang/generated/fabric_pb';
+import { getClient } from '../../lib/defang/get-client';
 
 
 /**

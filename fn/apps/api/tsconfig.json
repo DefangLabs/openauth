@@ -8,9 +8,9 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      // "@/*": [
+      //   "src/*"
+      // ]
     }
   },
   "include": [

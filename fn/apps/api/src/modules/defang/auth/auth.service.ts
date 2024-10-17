@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { getClient } from '@/lib/defang/get-client';
-import { TokenRequestSchema } from '@/lib/defang/generated/fabric_pb';
-import { getJwtFromRequest } from '@/lib/auth/get-jwt-from-request'
+import { getClient } from '../../../lib/defang/get-client';
+import { TokenRequestSchema } from '../../../lib/defang/generated/fabric_pb';
+import { getJwtFromRequest } from '../../../lib/auth/get-jwt-from-request'
 import { create } from "@bufbuild/protobuf";
 
 
