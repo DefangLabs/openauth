@@ -45,3 +45,43 @@ Create an Aiven API token using their dashboard. Then run the following command 
 AIVEN_TOKEN=… pulumi -C pulumi up
 ```
 **Do not deploy to prod from your local machine. Let the CI take care of it.**
+
+## Architecture
+
+### Dependency graph:
+
+```mermaid
+flowchart TB
+  browser --> heimdall
+  subgraph portal
+    heimdall --always permits initial page load--> nextjs
+    heimdall --authenticates requests--> kratos
+    heimdall --forwards requests after authentication--> hasura
+    heimdall --when generating defang tokens (should be moved behind hasura)--> fn
+
+    fn --account deletion--> kratos
+    hasura --acts as a graphql interface for--> fn
+    fn --deletes resources managed by--> hasura
+    kratos --> postgres
+    hasura --> postgres
+  end
+```
+
+### Abstract request sequence:
+
+```mermaid
+sequenceDiagram
+  browser->>heimdall: 1. all requests are routed through
+  heimdall->>nextjs: 2. forwards requests for `/` to nextjs
+  nextjs->>heimdall: 3. responds with initial page
+  heimdall->>browser: -
+  browser->>heimdall: 4. http requests are routed through
+  heimdall->>kratos: 5. forwards requests to kratos
+  kratos<<->>postgres: 6. authenticates session ids
+  kratos->>heimdall: 7. responds with user data
+  heimdall->>hasura: 8. forwards requests to hasura with a generated short-lived jwt in the Authorization header
+  hasura<<->>postgres: 9a. queries the database
+  hasura<<->>fn: 9a. queries fn directly (should be moved behind hasura)
+  hasura->>heimdall: 10. responds with data
+  heimdall->>browser: -
+```
