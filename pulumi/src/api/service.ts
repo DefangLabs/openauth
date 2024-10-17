@@ -16,6 +16,7 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
         DEFANG_FABRIC: config.require('fabric'),
         JWKS_ENDPOINT: config.require("heimdallJwksEndpoint"), // i.e. http://heimdall:4456/.well-known/jwks
         KRATOS_DOMAIN: config.require("kratosDomain"), // i.e. kratos:4433
+        HASURA_DOMAIN: config.require("hasuraDomain"), // i.e. hasura:8080
     },
     platform: 'linux/arm64',
     healthcheck: {
