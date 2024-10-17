@@ -21,7 +21,7 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
         HASURA_GRAPHQL_METADATA_DIR: '/project/metadata',
         HASURA_GRAPHQL_MIGRATIONS_DIR: '/project/migrations',
         HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: 'true',
-        DEFANG_FN_ENDPOINT: pulumi.interpolate`https://${apiService.endpoints[0]}`,
+        DEFANG_FN_ENDPOINT: pulumi.interpolate`http://${apiService.endpoints[0]}`,
         HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: 'naming_convention',
         HASURA_GRAPHQL_JWT_SECRET: pulumi.interpolate`{"jwk_url":"${heimdallJwksEndpoint}"}`, // TODO: use pulumi.jsonStringify
     },
