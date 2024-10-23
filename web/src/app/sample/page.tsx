@@ -54,7 +54,7 @@ function SamplesPageInner() {
     return data?.map((sample) => {
       //"actualTags" are languages and tags combined into one array with duplicates removed
       const actualTags = Array.from(
-        new Set([...sample.tags, ...sample.languages].filter((tag) => !!tag))
+        new Set([...sample.tags, ...sample.languages].filter((tag) => !!tag)),
       );
       // "chips" are the tags that are displayed on the sample card, we colorize certain languages and frameworks
       const chips = actualTags.map(getTagColor);
@@ -78,8 +78,8 @@ function SamplesPageInner() {
         sample.shortDescription.toLowerCase().includes(lowerCaseQuery) ||
         sample.tags.some((tag) => tag.toLowerCase().includes(lowerCaseQuery)) ||
         sample.languages.some((lang) =>
-          lang.toLowerCase().includes(lowerCaseQuery)
-        )
+          lang.toLowerCase().includes(lowerCaseQuery),
+        ),
     );
   }, [searchQuery, processedSamples]);
 

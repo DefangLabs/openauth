@@ -13,7 +13,7 @@ export function useFilteredServices() {
           ?.join()
           .toLowerCase()
           .includes(search.toLowerCase()) ||
-        service?.service?.image?.toLowerCase().includes(search.toLowerCase())
+        service?.service?.image?.toLowerCase().includes(search.toLowerCase()),
     )
     .map((service) => {
       return {

@@ -21,7 +21,7 @@ export function useService({
     loading,
     service: useMemo(
       () => services?.find((service) => service.service?.name === name) || null,
-      [name, services]
+      [name, services],
     ),
   };
 }

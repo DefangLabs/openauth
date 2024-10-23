@@ -14,7 +14,7 @@ const composeSchema = z.object({
         .array(z.string())
         .or(z.record(z.string().nullable()))
         .nullish(),
-    })
+    }),
   ),
 });
 
@@ -24,7 +24,7 @@ export function useSampleConfig({ sampleName }: SampleConfigParams) {
       sampleName,
       branch: "main",
       path: "compose.yaml",
-    }).then((res) => res.text())
+    }).then((res) => res.text()),
   );
   const { data } = res;
 
@@ -52,7 +52,7 @@ export function useSampleConfig({ sampleName }: SampleConfigParams) {
           return value === null ? key : [];
         });
       }
-    }
+    },
   );
 
   return {

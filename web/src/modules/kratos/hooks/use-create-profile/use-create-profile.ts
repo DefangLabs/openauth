@@ -8,9 +8,9 @@ import { useName } from "@/modules/profiles/hooks/use-name/use-name";
 export function useCreateProfile() {
   const { session } = useSession();
   const name = useName();
-  const id = session?.identity.id;
+  const id = session?.identity?.id;
   const { refetch: profileQuery } = useQuery(ProfileQuery, {
-    skip: true,
+    skip: !id,
   });
   const [insertProfileMutation] = useMutation(InsertProfileMutation);
 

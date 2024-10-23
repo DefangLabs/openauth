@@ -5,7 +5,7 @@ import { ProfileQuery } from "../../graphql/queries/profile-query";
 export function useCurrentUserProfileQuery() {
   const { session } = useSession();
   return useQuery(ProfileQuery, {
-    variables: { id: session?.identity.id },
-    skip: !session?.identity.id,
+    variables: { id: session?.identity?.id },
+    skip: !session?.identity?.id,
   });
 }

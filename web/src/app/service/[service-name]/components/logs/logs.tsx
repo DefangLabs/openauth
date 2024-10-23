@@ -78,7 +78,7 @@ export function Logs() {
   const { service } = useService({ skip: true, poll: undefined });
   const { logType, logTime } = useLogsFilter();
   const serviceName = service?.service?.name?.concat(
-    logType == "image" ? "-image" : ""
+    logType == "image" ? "-image" : "",
   );
   const { logs } = useServiceLogs({
     service: serviceName,

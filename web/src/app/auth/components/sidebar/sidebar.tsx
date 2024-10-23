@@ -56,7 +56,7 @@ export function SideBar() {
   useEffect(() => {
     const interval = setInterval(() => {
       setTestimonialIndex((prevIndex) =>
-        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
+        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1,
       );
     }, 10000);
     return () => clearInterval(interval);

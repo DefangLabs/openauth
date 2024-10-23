@@ -26,10 +26,10 @@ function AccountPage() {
     loading: profileLoading,
   } = useCurrentUserProfileQuery();
   const profile = profileData?.profilesByPk;
-  const email = useSession().session?.identity.traits.email || "";
+  const email = useSession()?.session?.identity?.traits.email || "";
   const { form, setForm } = useAccountForm();
   const [insertProfileMutation, { loading: mutationLoading }] = useMutation(
-    InsertProfileMutation
+    InsertProfileMutation,
   );
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function AccountPage() {
         window.alert("Error saving profile: " + errors[0].message);
       }
     },
-    [form, insertProfileMutation, refetch]
+    [form, insertProfileMutation, refetch],
   );
 
   const loading = profileLoading || mutationLoading;

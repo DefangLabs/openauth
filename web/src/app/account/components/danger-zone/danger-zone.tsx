@@ -25,7 +25,7 @@ export function DangerZone() {
         return;
       }
       window.confirm(
-        "Last check. Are you sure you want to delete your account?"
+        "Last check. Are you sure you want to delete your account?",
       );
       try {
         const response = await deleteAccount();
@@ -35,7 +35,7 @@ export function DangerZone() {
         console.error("@@ error deleting account", e);
       }
     },
-    [deleteAccount, isValid, logout]
+    [deleteAccount, isValid, logout],
   );
 
   return (

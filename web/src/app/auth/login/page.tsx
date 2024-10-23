@@ -43,7 +43,7 @@ function LoginPage() {
               break;
           }
         }),
-    [router]
+    [router],
   );
 
   const createFlow = useCallback(
@@ -67,7 +67,7 @@ function LoginPage() {
               break;
           }
         }),
-    [router, setUriFlow]
+    [router, setUriFlow],
   );
 
   useEffect(() => {

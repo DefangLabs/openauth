@@ -64,7 +64,7 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
           : undefined,
       },
       callback,
-      () => {}
+      () => {},
     );
 
     return () => {

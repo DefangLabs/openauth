@@ -19,6 +19,6 @@ export function useTokenRequest(opts: TokenRequestOpts = {}) {
   return useSWR<TokenRequestResponse>(
     "defang/auth/token",
     fetcher,
-    combinedOpts
+    combinedOpts,
   );
 }

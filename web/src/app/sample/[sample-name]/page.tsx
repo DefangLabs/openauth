@@ -20,7 +20,7 @@ function SamplePageInner() {
   const { data } = useSWR("samples", fetchSamples);
   const sample = data?.find((sample) => sample.name === sampleName);
   const smallerThanLg = useMediaQuery((theme: Theme) =>
-    theme.breakpoints.down("lg")
+    theme.breakpoints.down("lg"),
   );
 
   if (!sample) {
@@ -40,7 +40,7 @@ function SamplePageInner() {
   }
 
   const tags = Array.from(
-    new Set([...sample.tags, ...sample.languages].filter((tag) => !!tag))
+    new Set([...sample.tags, ...sample.languages].filter((tag) => !!tag)),
   );
   const chips = tags.map(getTagColor);
 

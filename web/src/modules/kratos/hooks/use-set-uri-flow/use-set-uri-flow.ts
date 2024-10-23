@@ -14,6 +14,6 @@ export function useSetUriFlow() {
         router.replace(`${path}?flow=${id}`);
       }
     },
-    [path, router, searchParams]
+    [path, router, searchParams],
   );
 }

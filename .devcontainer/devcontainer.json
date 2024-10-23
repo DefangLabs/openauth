@@ -15,7 +15,8 @@
 				"eamodio.gitlens",
 				"bierner.markdown-mermaid",
 				"bpruitt-goddard.mermaid-markdown-syntax-highlighting",
-				"GitHub.copilot"
+				"GitHub.copilot",
+				"github.vscode-github-actions"
 			]
 		}
 	}

@@ -21,10 +21,9 @@ jobs:
     - name: Install dependencies
       run: |
         cd web
-        npm install -g pnpm
-        pnpm install --frozen-lockfile
+        npm ci
 
     - name: Run build
       run: |
         cd web
-        pnpm run build
+        npm run build

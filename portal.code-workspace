@@ -80,8 +80,7 @@
 			{
 				"label": "web: install",
 				"type": "shell",
-				// this is necessary in the devcontainer because of how pnpm links packages
-				"command": "pnpm config set store-dir ~/.pnpm-store-local && pnpm install",
+				"command": "npm i",
 				"options": {
 					"cwd": "${workspaceFolder}/web"
 				},
@@ -112,7 +111,7 @@
 			{
 				"label": "web: run dev",
 				"type": "shell",
-				"command": "pnpm dev",
+				"command": "npm run dev",
 				"runOptions": {
 					"runOn": "folderOpen"
 				},
@@ -127,7 +126,7 @@
 			{
 				"label": "web: graphql codegen",
 				"type": "shell",
-				"command": "pnpm graphql-codegen",
+				"command": "npm run graphql-codegen",
 				"runOptions": {
 					"runOn": "folderOpen"
 				},

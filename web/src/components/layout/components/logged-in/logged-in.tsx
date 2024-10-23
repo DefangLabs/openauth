@@ -116,7 +116,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
                   <UserAvatar
                     style={{ width: 60, height: 60, backgroundColor: "white" }}
                     src={`//www.gravatar.com/avatar/${md5(
-                      (email || "").toLowerCase().trim()
+                      (email || "").toLowerCase().trim(),
                     )}?d=identicon`}
                   >
                     <div>{(name || "U").charAt(0)}</div>

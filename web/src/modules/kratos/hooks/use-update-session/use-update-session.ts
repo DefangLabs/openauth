@@ -37,6 +37,6 @@ export function useUpdateSession() {
         onError?.(error);
       }
     },
-    [setSession]
+    [setSession],
   );
 }

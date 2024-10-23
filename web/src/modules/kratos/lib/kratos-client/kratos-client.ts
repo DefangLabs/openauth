@@ -6,7 +6,7 @@ export const kratosClient = new FrontendApi(
     baseOptions: {
       withCredentials: true,
     },
-  })
+  }),
 );
 
 if (typeof window !== "undefined") {
