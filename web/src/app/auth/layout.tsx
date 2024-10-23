@@ -34,7 +34,9 @@ export default function AuthLayout({
           sm={6}
           xs={12}
         >
-          <SideBar />
+          <Main>
+            <Loader>{children}</Loader>
+          </Main>
         </Grid>
         <Grid
           item
@@ -46,9 +48,7 @@ export default function AuthLayout({
           sm={6}
           xs={12}
         >
-          <Main>
-            <Loader>{children}</Loader>
-          </Main>
+          <SideBar />
         </Grid>
       </Grid>
     </>

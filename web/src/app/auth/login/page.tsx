@@ -6,11 +6,12 @@ import { EVENTS } from "@/modules/analytics/lib/constants";
 import { useSetUriFlow } from "@/modules/kratos/hooks/use-set-uri-flow/use-set-uri-flow";
 import { kratosClient } from "@/modules/kratos/lib/kratos-client/kratos-client";
 import { GitHub } from "@mui/icons-material";
-import { Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Link, Typography } from "@mui/material";
 import { GenericError, LoginFlow } from "@ory/client";
 import { AxiosError } from "axios";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import NextLink from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 function LoginPage() {
@@ -18,6 +19,9 @@ function LoginPage() {
   const router = useRouter();
   const search = useSearchParams();
   const setUriFlow = useSetUriFlow();
+  const pathname = usePathname();
+  const isRegister = pathname === "/auth/register";
+  const verb = isRegister ? "Register" : "Login";
 
   const flowId = search.get("flow") || "";
   const returnTo = search.get("return_to") || "";
@@ -101,21 +105,34 @@ function LoginPage() {
 
   return (
     <>
+      <Box flexGrow={1} />
       <Image
         src="/DEFANG-1_4x-no-text-256.svg"
         height={100}
         width={100}
         alt="Defang logo"
       />
-      <Typography variant="h2">Login to Defang</Typography>
+      <Typography variant="h2">
+        {isRegister ? "Register for Defang" : "Login to Defang"}
+      </Typography>
       {!flow ? (
         "Loading..."
       ) : (
         <Button onClick={login} variant="contained" disableElevation>
           <GitHub height={20} width={20} sx={{ mr: 1 }} />
-          Agree and sign in with GitHub
+          {verb} with GitHub
         </Button>
       )}
+      {isRegister ? (
+        <Link component={NextLink} href={"/auth/login"}>
+          Have an account? Login.
+        </Link>
+      ) : (
+        <Link component={NextLink} href={"/auth/register"}>
+          Don&apos;t have an account? Register.
+        </Link>
+      )}
+      <Box flexGrow={1} />
       <Typography fontSize={14} width={300} align="center">
         By proceeding you are agreeing to our{" "}
         <a href="https://defang.io/terms-conditions.html" target="_blank">
