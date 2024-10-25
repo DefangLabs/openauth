@@ -90,7 +90,7 @@ export function LogFilterBar() {
         >
           <MenuItem value="all">All Deployments</MenuItem>
           <MenuItem value="current">Current Deployment</MenuItem>
-          <MenuItem disabled={service?.service.image} value="image">
+          <MenuItem disabled={!!service?.service.image} value="image">
             Current Image Build
           </MenuItem>
         </Select>
