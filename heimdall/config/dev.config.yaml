@@ -58,7 +58,8 @@ rules:
                   {{- if .username -}}
                     ,
                     "https://defang.io/jwt/claims": {
-                      "github-username": "{{ .username }}"
+                      "github-username": "{{ .username }}",
+                      "github-id": "{{ .id }}"
                     }
                   {{- end -}}
                 {{- end -}}

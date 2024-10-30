@@ -32,6 +32,10 @@
               "username": {
                 "title": "Username",
                 "type": "string"
+              },
+              "id": {
+                "title": "GitHub ID",
+                "type": "string"
               }
             }
           },

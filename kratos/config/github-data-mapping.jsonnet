@@ -16,6 +16,7 @@ local claims = {
       },
       github: {
         [if 'nickname' in claims then 'username' else null]: claims.nickname,
+        [if 'sub' in claims then 'id' else null]: claims.sub,
       },
     },
   },
