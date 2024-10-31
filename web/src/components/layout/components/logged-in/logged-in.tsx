@@ -146,7 +146,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               href="/service"
               iconLeft={<ChevronRight sx={{ mr: 1 }} />}
             >
-              Projects
+              Playground Projects
             </NavButton>
             <NavButton
               href="/sample"
