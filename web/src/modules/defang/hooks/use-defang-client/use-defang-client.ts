@@ -1,7 +1,6 @@
 import { createCallbackClient } from "@bufbuild/connect";
 import { createGrpcWebTransport } from "@bufbuild/connect-web";
 import { atom, useAtom } from "jotai";
-import jwtDecode, { JwtHeader, JwtPayload } from "jwt-decode";
 import { useEffect, useMemo } from "react";
 import { FabricController } from "../../generated/fabric_connect";
 import { useTokenRequest } from "../use-token-request/use-token-request";
@@ -33,13 +32,12 @@ function useAuthToken() {
 
   if (!token) return;
 
-  const decoded = jwtDecode<JwtHeader & JwtPayload>(token);
-
-  // check if expired
-  if ((decoded?.exp || 0) * 1000 < Date.now()) {
-    setToken(undefined);
-    return;
-  }
+  // const decoded = jwtDecode<JwtHeader & JwtPayload>(token);
+  // // check if expired
+  // if ((decoded?.exp || 0) * 1000 < Date.now()) {
+  //   setToken(undefined);
+  //   return;
+  // }
 
   return token;
 }
