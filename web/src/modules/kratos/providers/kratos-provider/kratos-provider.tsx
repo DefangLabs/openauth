@@ -19,19 +19,28 @@ export function KratosProvider({ children }: KratosProviderProps) {
       onSuccess: () => {
         const redirect = window.localStorage.getItem(REDIRECT_KEY);
         if (redirect) {
-          window.localStorage.removeItem(REDIRECT_KEY);
           window.location.href = redirect;
         }
       },
       onError: () => {
         if (!pathname.includes("/auth")) {
           window.localStorage.setItem(REDIRECT_KEY, window.location.href);
-          router.push("/auth/login");
+          router.push("/auth/register");
         }
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const redirect = window.localStorage.getItem(REDIRECT_KEY);
+    if (redirect) {
+      const url = new URL(redirect);
+      if (url.pathname === pathname) {
+        window.localStorage.removeItem(REDIRECT_KEY);
+      }
+    }
+  }, [pathname]);
 
   useCreateProfile();
 
