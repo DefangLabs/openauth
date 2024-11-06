@@ -9,11 +9,11 @@ import { getTagColor } from "@/modules/samples/lib/get-tag-color/get-tag-color";
 import { Box, Stack, Theme, Typography, useMediaQuery } from "@mui/material";
 import Link from "next/link";
 import useSWR from "swr";
-import { Tag } from "../components/tag/tag";
 import { GenerateCommand } from "./components/generate-command/generate-command";
 import { OneClick } from "./components/one-click/one-click";
 import { Readme } from "./components/readme/readme";
 import { useSampleName } from "./hooks/use-sample-name/use-sample-name";
+import { Tag } from "@/components/tag/tag";
 
 function SamplePageInner() {
   const sampleName = useSampleName();

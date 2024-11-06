@@ -1,52 +1,74 @@
-import { CopyCode } from "@/components/copy-code/copy-code";
-import { OpenInNew } from "@mui/icons-material";
-import { Button, Stack, Typography } from "@mui/material";
+import { SampleCard } from "@/components/sample-card/sample-card";
+import { useSamples } from "@/modules/samples/hooks/use-samples/use-samples";
+import { Box, Button, Card, Grid, Stack, Typography } from "@mui/material";
+import Link from "next/link";
 
 export function EmptyServices() {
+  const { data } = useSamples();
+  const django = data?.find((sample) => sample.directoryName === "django");
+  const flask = data?.find((sample) => sample.directoryName === "flask");
+  const nextjs = data?.find((sample) => sample.directoryName === "nextjs");
+
   return (
-    <Stack spacing={2} maxWidth="450px" p={2}>
+    <Stack p={2} spacing={2} direction="column" mb={10}>
       <Typography variant="h1">Hi! Welcome to Defang.</Typography>
-      <Typography>
-        Defang makes it really, <i>really</i> easy to spin up a new service from
-        scratch or using an existing container image. To get started,
-        you&apos;ll want to start by downloading the CLI. Note that this portal
-        is read-only, so you&apos;ll need to use the CLI to manage your project.
+      <Typography variant="h2">
+        Click to deploy a popular framework to the cloud:
       </Typography>
-      <div>
-        <Button
-          href="https://github.com/DefangLabs/defang/releases/latest"
-          variant="contained"
-          fullWidth={false}
-        >
-          CLI Download{" "}
-          <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
-        </Button>
-      </div>
-      <Typography>
-        Great! First things first, let&apos;s run the generate command. That
-        will stand up a project for you with everything you need. You can start
-        from an existing sample or <em>generate</em> a project from scratch:
-      </Typography>
-      <CopyCode code={"defang generate"} />
-      <Typography>
-        Sweet. You&apos;ve got everything you need to build your amazing new
-        service. Now let&apos;s get it launched:
-      </Typography>
-      <CopyCode code={"defang compose up"} />
-      <Typography>
-        Awesome. Your service will be up and running in no time. You can check
-        the status of your service in this portal or with:
-      </Typography>
-      <CopyCode code={"defang ps -l"} />
-      <Typography>
-        That will give you all the info you need to know about your service:
-        status, endpoints, environment variables, and more.
-      </Typography>
-      <Typography>
-        To deprovision (ie. remove) a project, you can do:
-      </Typography>
-      <CopyCode code={"defang compose down"} />
-      <Typography>Happy building!</Typography>
+      <Grid container spacing={2} sx={{ marginLeft: "-16px !important" }}>
+        {django && (
+          <Grid item xs={12} sm={4}>
+            <SampleCard sample={django} />
+          </Grid>
+        )}
+        {flask && (
+          <Grid item xs={12} sm={4}>
+            <SampleCard sample={flask} />
+          </Grid>
+        )}
+        {nextjs && (
+          <Grid item xs={12} sm={4}>
+            <SampleCard sample={nextjs} />
+          </Grid>
+        )}
+      </Grid>
+      <Box height={8} />
+      <Card sx={{ px: 4, py: 4 }}>
+        <Grid container spacing={2} sx={{ marginLeft: "-16px !important" }}>
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h3" pb={2}>
+              Looking for something else? Try searching through our samples.
+            </Typography>
+            <Link href="/samples" passHref>
+              <Button variant="contained">View All Samples</Button>
+            </Link>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h3" pb={2}>
+              Ready to dive deeper? Check out the docs!
+            </Typography>
+            <Link
+              href="https://docs.defang.io/docs/getting-started"
+              passHref
+              target="_blank"
+            >
+              <Button variant="contained">Read the Docs</Button>
+            </Link>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h3" pb={2}>
+              Want to deploy from your own machine? Check out the CLI.
+            </Typography>
+            <Link
+              href="https://docs.defang.io/docs/getting-started/installing"
+              passHref
+              target="_blank"
+            >
+              <Button variant="contained">Install Defang CLI</Button>
+            </Link>
+          </Grid>
+        </Grid>
+      </Card>
     </Stack>
   );
 }

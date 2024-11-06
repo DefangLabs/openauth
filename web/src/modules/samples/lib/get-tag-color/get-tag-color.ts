@@ -140,6 +140,10 @@ export function getTagColor(tag: string) {
       bgColor: "#61DAFB",
       textColor: "#333",
     },
+    redis: {
+      bgColor: "#DC382D",
+      textColor: "#fff",
+    },
     docker: {
       bgColor: "#2496ED",
       textColor: "#fff",
