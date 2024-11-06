@@ -30,21 +30,12 @@ function useAuthToken() {
     setToken(tokenRequest.data.token);
   }, [setToken, token, tokenRequest.data, tokenRequest.isLoading]);
 
-  if (!token) return;
-
-  // const decoded = jwtDecode<JwtHeader & JwtPayload>(token);
-  // // check if expired
-  // if ((decoded?.exp || 0) * 1000 < Date.now()) {
-  //   setToken(undefined);
-  //   return;
-  // }
-
-  return token;
+  return { token, setToken };
 }
 
 function useClient() {
   const [client, setClient] = useAtom(clientAtom);
-  const token = useAuthToken();
+  const { token, setToken } = useAuthToken();
 
   const memoClient = useMemo(() => {
     if (client) {
@@ -56,7 +47,13 @@ function useClient() {
         interceptors: [
           (next) => async (req) => {
             req.header.append("authorization", "Bearer " + _token);
-            return await next(req);
+            return await next(req).catch((err) => {
+              // 16 === UNAUTHENTICATED
+              if (err.code === 16) {
+                setToken(undefined); // token expired; clear it so we can get a new one
+              }
+              throw err;
+            });
           },
         ],
         useBinaryFormat: false,
