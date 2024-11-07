@@ -17,17 +17,17 @@ export function EmptyServices() {
       </Typography>
       <Grid container spacing={2} sx={{ marginLeft: "-16px !important" }}>
         {django && (
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} md={4}>
             <SampleCard sample={django} />
           </Grid>
         )}
         {flask && (
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} md={4}>
             <SampleCard sample={flask} />
           </Grid>
         )}
         {nextjs && (
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} md={4}>
             <SampleCard sample={nextjs} />
           </Grid>
         )}
@@ -35,7 +35,7 @@ export function EmptyServices() {
       <Box height={8} />
       <Card sx={{ px: 4, py: 4 }}>
         <Grid container spacing={2} sx={{ marginLeft: "-16px !important" }}>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} md={4}>
             <Typography variant="h3" pb={2}>
               Looking for something else? Try searching through our samples.
             </Typography>
@@ -43,7 +43,7 @@ export function EmptyServices() {
               <Button variant="contained">View All Samples</Button>
             </Link>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} md={4}>
             <Typography variant="h3" pb={2}>
               Ready to dive deeper? Check out the docs!
             </Typography>
@@ -55,7 +55,7 @@ export function EmptyServices() {
               <Button variant="contained">Read the Docs</Button>
             </Link>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} md={4}>
             <Typography variant="h3" pb={2}>
               Want to deploy from your own machine? Check out the CLI.
             </Typography>
