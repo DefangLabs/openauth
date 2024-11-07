@@ -164,13 +164,13 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               Documentation
             </NavButton>
             <NavButton
-              href="https://github.com/DefangLabs/defang/releases/latest"
+              href="https://docs.defang.io/docs/getting-started/installing"
               iconLeft={<Download sx={{ mr: 1 }} />}
               iconRight={
                 <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
               }
             >
-              CLI Download
+              Install Defang CLI
             </NavButton>
             <NavButton
               href="https://github.com/DefangLabs/defang/issues"
