@@ -39,7 +39,7 @@ export function EmptyServices() {
             <Typography variant="h3" pb={2}>
               Looking for something else? Try searching through our samples.
             </Typography>
-            <Link href="/samples" passHref>
+            <Link href="/sample" passHref>
               <Button variant="contained">View All Samples</Button>
             </Link>
           </Grid>
