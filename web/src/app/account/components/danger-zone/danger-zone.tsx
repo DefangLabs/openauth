@@ -58,7 +58,8 @@ export function DangerZone() {
           >
             {VERIFY_TEXT}
           </span>{" "}
-          and submit to delete your account. This action is irreversible.
+          and submit to delete your account and any Playground project. This
+          action is irreversible.
         </Typography>
         <TextField
           value={form.verifyText}
