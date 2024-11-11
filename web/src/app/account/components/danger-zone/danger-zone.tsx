@@ -24,9 +24,13 @@ export function DangerZone() {
       if (!isValid) {
         return;
       }
-      window.confirm(
-        "Last check. Are you sure you want to delete your account?",
-      );
+      if (
+        !window.confirm(
+          "Last check. Are you sure you want to delete your account?",
+        )
+      ) {
+        return;
+      }
       try {
         const response = await deleteAccount();
         logout();
