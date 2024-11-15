@@ -6,7 +6,7 @@
 // @ts-nocheck
 
 import { Empty, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
-import { DebugRequest, DebugResponse, DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteConfigsRequest, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, GetConfigsRequest, GetConfigsResponse, ListConfigsRequest, ListConfigsResponse, ListServicesResponse, PublishRequest, PutConfigRequest, Secrets, Service, ServiceID, ServiceInfo, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, Version, WhoAmIResponse } from "./fabric_pb.js";
+import { DebugRequest, DebugResponse, DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteConfigsRequest, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, DestroyRequest, DestroyResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, GetConfigsRequest, GetConfigsResponse, GetSelectedProviderRequest, GetSelectedProviderResponse, GetServicesRequest, ListConfigsRequest, ListConfigsResponse, ListServicesResponse, PublishRequest, PutConfigRequest, Secrets, Service, ServiceID, ServiceInfo, SetSelectedProviderRequest, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, VerifyDNSSetupRequest, Version, WhoAmIResponse } from "./fabric_pb.js";
 
 /**
  * @generated from service io.defang.v1.FabricController
@@ -103,7 +103,18 @@ export declare const FabricController: {
       readonly kind: MethodKind.Unary,
     },
     /**
+     * @generated from rpc io.defang.v1.FabricController.Destroy
+     */
+    readonly destroy: {
+      readonly name: "Destroy",
+      readonly I: typeof DestroyRequest,
+      readonly O: typeof DestroyResponse,
+      readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.Idempotent,
+    },
+    /**
      * @generated from rpc io.defang.v1.FabricController.Publish
+     * @deprecated
      */
     readonly publish: {
       readonly name: "Publish",
@@ -127,7 +138,7 @@ export declare const FabricController: {
      */
     readonly getServices: {
       readonly name: "GetServices",
-      readonly I: typeof Empty,
+      readonly I: typeof GetServicesRequest,
       readonly O: typeof ListServicesResponse,
       readonly kind: MethodKind.Unary,
       readonly idempotency: MethodIdempotency.NoSideEffects,
@@ -220,7 +231,7 @@ export declare const FabricController: {
      */
     readonly listSecrets: {
       readonly name: "ListSecrets",
-      readonly I: typeof Empty,
+      readonly I: typeof ListConfigsRequest,
       readonly O: typeof Secrets,
       readonly kind: MethodKind.Unary,
       readonly idempotency: MethodIdempotency.NoSideEffects,
@@ -253,6 +264,7 @@ export declare const FabricController: {
       readonly I: typeof DeleteConfigsRequest,
       readonly O: typeof Empty,
       readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.Idempotent,
     },
     /**
      * @generated from rpc io.defang.v1.FabricController.ListConfigs
@@ -330,6 +342,37 @@ export declare const FabricController: {
       readonly I: typeof Empty,
       readonly O: typeof Empty,
       readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.Idempotent,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.VerifyDNSSetup
+     */
+    readonly verifyDNSSetup: {
+      readonly name: "VerifyDNSSetup",
+      readonly I: typeof VerifyDNSSetupRequest,
+      readonly O: typeof Empty,
+      readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.GetSelectedProvider
+     */
+    readonly getSelectedProvider: {
+      readonly name: "GetSelectedProvider",
+      readonly I: typeof GetSelectedProviderRequest,
+      readonly O: typeof GetSelectedProviderResponse,
+      readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.SetSelectedProvider
+     */
+    readonly setSelectedProvider: {
+      readonly name: "SetSelectedProvider",
+      readonly I: typeof SetSelectedProviderRequest,
+      readonly O: typeof Empty,
+      readonly kind: MethodKind.Unary,
+      readonly idempotency: MethodIdempotency.Idempotent,
     },
   }
 };

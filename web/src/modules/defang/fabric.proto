@@ -6,7 +6,6 @@ option go_package = "github.com/DefangLabs/defang/src/protos/io/defang/v1";
 package io.defang.v1;
 
 import "google/protobuf/empty.proto";
-import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 
 service FabricController {
@@ -27,14 +26,19 @@ service FabricController {
   rpc Deploy(DeployRequest) returns (DeployResponse);
   rpc Get(ServiceID) returns (ServiceInfo) {
     option idempotency_level = NO_SIDE_EFFECTS;
-  };                                                  // should be GetService
-  rpc Delete(DeleteRequest) returns (DeleteResponse){
+  }; // should be GetService
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {
     option deprecated = true;
-  }; // used by pulumi-defang provider; should use Deploy
-  rpc Publish(PublishRequest) returns (google.protobuf.Empty);
+  }; // used by pulumi-defang provider; should use Deploy or Destroy
+  rpc Destroy(DestroyRequest) returns (DestroyResponse) {
+    option idempotency_level = IDEMPOTENT;
+  }
+  rpc Publish(PublishRequest) returns (google.protobuf.Empty) {
+    option deprecated = true;
+  }
   rpc Subscribe(SubscribeRequest) returns (stream SubscribeResponse);
   // rpc Promote(google.protobuf.Empty) returns (google.protobuf.Empty);
-  rpc GetServices(google.protobuf.Empty) returns (ListServicesResponse) {
+  rpc GetServices(GetServicesRequest) returns (ListServicesResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
   }; // should be ListServices
 
@@ -53,9 +57,13 @@ service FabricController {
   }
 
   // deprecate - change to use *Config functions
-  rpc PutSecret(PutConfigRequest) returns (google.protobuf.Empty) {option deprecated = true;};
-  rpc DeleteSecrets(Secrets) returns (google.protobuf.Empty) {option deprecated = true;};
-  rpc ListSecrets(google.protobuf.Empty) returns (Secrets) {
+  rpc PutSecret(PutConfigRequest) returns (google.protobuf.Empty) {
+    option deprecated = true;
+  };
+  rpc DeleteSecrets(Secrets) returns (google.protobuf.Empty) {
+    option deprecated = true;
+  };
+  rpc ListSecrets(ListConfigsRequest) returns (Secrets) {
     option idempotency_level = NO_SIDE_EFFECTS;
     option deprecated = true;
   } // no values
@@ -66,7 +74,9 @@ service FabricController {
   rpc PutConfig(PutConfigRequest) returns (google.protobuf.Empty) {
     option idempotency_level = IDEMPOTENT;
   };
-  rpc DeleteConfigs(DeleteConfigsRequest) returns (google.protobuf.Empty);
+  rpc DeleteConfigs(DeleteConfigsRequest) returns (google.protobuf.Empty) {
+    option idempotency_level = IDEMPOTENT;
+  }
   rpc ListConfigs(ListConfigsRequest) returns (ListConfigsResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
   }; // no values
@@ -87,8 +97,57 @@ service FabricController {
   rpc Track(TrackRequest) returns (google.protobuf.Empty);
 
   // Endpoint for GDPR compliance
-  rpc DeleteMe(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc DeleteMe(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option idempotency_level = IDEMPOTENT;
+  }
+
+  rpc VerifyDNSSetup(VerifyDNSSetupRequest) returns (google.protobuf.Empty) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+
+  rpc GetSelectedProvider(GetSelectedProviderRequest)
+      returns (GetSelectedProviderResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+
+  rpc SetSelectedProvider(SetSelectedProviderRequest)
+      returns (google.protobuf.Empty) {
+    option idempotency_level = IDEMPOTENT;
+  }
+
 }
+
+enum Provider {
+  PROVIDER_UNSPECIFIED = 0;
+  DEFANG = 1;
+  AWS = 2;
+  DIGITALOCEAN = 3;
+  GCP = 4;
+}
+
+message GetSelectedProviderRequest {
+  string project = 1;
+}
+
+message GetSelectedProviderResponse {
+  Provider provider = 1;
+}
+
+message SetSelectedProviderRequest {
+  string project = 1;
+  Provider provider = 2;
+}
+
+message VerifyDNSSetupRequest {
+  string domain = 1;
+  repeated string targets = 2;
+}
+
+message DestroyRequest {
+  string project = 1; // defaults to tenant ID
+}
+
+message DestroyResponse { string etag = 1; }
 
 message DebugRequest {
   repeated File files = 1;
@@ -125,17 +184,20 @@ message TrackRequest {
 }
 
 enum DeploymentMode {
-  UNSPECIFIED_MODE= 0;
+  UNSPECIFIED_MODE = 0;
   DEVELOPMENT = 1;
   STAGING = 2;
   PRODUCTION = 3;
 }
 
 message DeployRequest {
-  repeated Service services = 1 [deprecated = true]; // deprecated; use compose
-  string project = 2 [deprecated = true]; // deprecated; use compose.name
+  repeated Service services = 1
+      [ deprecated = true ];                // deprecated; use compose
+  string project = 2 [ deprecated = true ]; // deprecated; use compose.name
   DeploymentMode mode = 3;
-  google.protobuf.Struct compose = 4;
+  bytes compose = 4; // yaml (or json)
+  string delegate_domain = 5;
+  string delegation_set_id = 6;
 }
 
 message DeployResponse {
@@ -146,6 +208,7 @@ message DeployResponse {
 message DeleteRequest {
   repeated string names = 1;
   string project = 2; // defaults to tenant ID
+  string delegate_domain = 3;
 }
 
 message DeleteResponse { string etag = 1; }
@@ -167,10 +230,12 @@ message StartGenerateResponse { string uuid = 1; }
 
 message GenerateStatusRequest { string uuid = 1; }
 
-message UploadURLRequest { string digest = 1; }
+message UploadURLRequest {
+  string digest = 1;
+  string project = 2;
+}
 
 message UploadURLResponse { string url = 1; }
-
 
 enum ServiceState {
   NOT_SPECIFIED = 0;
@@ -200,16 +265,18 @@ message ServiceInfo {
   string etag = 4;
   string status = 5;
   repeated string nat_ips = 6; // comma-separated list of NAT IPs
-  repeated string lb_ips = 7; // comma-separated list of internal CIDRs for the load-balancer
+  repeated string lb_ips =
+      7; // comma-separated list of internal CIDRs for the load-balancer
   string private_fqdn = 8; // fully qualified domain name (host)
   string public_fqdn = 9;  // fully qualified domain name (ingress)
   google.protobuf.Timestamp created_at = 10;
   google.protobuf.Timestamp updated_at = 11;
   string zone_id = 12; // zone ID for byod domain
-  bool use_acme_cert = 13; // If we should setup the facilities to use ACME(let's encrypt) certs
-  reserved 14; // was: string lb_dns
+  bool use_acme_cert =
+      13; // If we should setup the facilities to use ACME(let's encrypt) certs
+  reserved 14;             // was: string lb_dns
   ServiceState state = 15; // enumerated status of the service
-  string domainname = 16; // domain name for the service
+  string domainname = 16;  // domain name for the service
 
   // bool is_function = 5; // true if service is a function
 }
@@ -251,26 +318,17 @@ message PutConfigRequest {
   ConfigType type = 4;
 }
 
-message GetConfigsRequest {
-  repeated ConfigKey configs = 1;
-}
+message GetConfigsRequest { repeated ConfigKey configs = 1; }
 
-message GetConfigsResponse {
-  repeated Config configs = 1;
-}
+message GetConfigsResponse { repeated Config configs = 1; }
 
-
-message DeleteConfigsRequest {
-  repeated ConfigKey configs = 1;
-}
+message DeleteConfigsRequest { repeated ConfigKey configs = 1; }
 
 message ListConfigsRequest {
   string project = 1; // defaults to tenant ID
 }
 
-message ListConfigsResponse {
-  repeated ConfigKey configs = 1;
-}
+message ListConfigsResponse { repeated ConfigKey configs = 1; }
 
 message TokenRequest {
   string tenant = 1;
@@ -279,14 +337,12 @@ message TokenRequest {
   string assertion = 4;      // jwt-bearer
   uint32 expires_in = 5;     // seconds
   string anon_id = 6;
-
-  // string refresh_token = 6;
+  string refresh_token = 7;
 }
 
 message TokenResponse {
-  string access_token = 1; // our JWT
-
-  // string refresh_token = 2;
+  string access_token = 1; // short-lived token
+  string refresh_token = 2;
   // string token_type = 3; // "Bearer"
   // uint32 expires_in = 4; // 3600
   // string id_token = 5; // "eyJhbGciOiJSUzI…"
@@ -305,6 +361,9 @@ message TailRequest {
   repeated string services = 1;
   google.protobuf.Timestamp since = 2;
   string etag = 3;
+  string project = 4;
+  uint32 log_type = 5;
+  string pattern = 6;
 }
 
 message LogEntry {
@@ -314,7 +373,6 @@ message LogEntry {
   string service = 4;
   string etag = 5;
   string host = 6;
-  string job = 7;
 }
 
 message TailResponse {
@@ -330,12 +388,12 @@ message ListServicesResponse {
   string project = 2;
 }
 
-// TODO: internal message; move to a separate proto file
 message ProjectUpdate {
   repeated ServiceInfo services = 1;
   string alb_arn = 2;
-  string project = 3; // should we use compose.name?
-  google.protobuf.Struct compose = 4;
+  string project = 3 [deprecated = true]; // deprecated; use compose.name
+  bytes compose = 4;
+  string cd_version = 5;
 }
 
 enum Platform {
@@ -345,7 +403,10 @@ enum Platform {
   LINUX_ANY = 2;
 }
 
-message ServiceID { string name = 1; }
+message ServiceID {
+  string name = 1;
+  string project = 2;
+}
 
 message Device {
   option deprecated = true;
@@ -444,7 +505,7 @@ message Service {
   string name = 1;
   string image = 2;
   Platform platform = 3;
-  bool internal = 4 [deprecated = true]; // deprecated: use networks
+  bool internal = 4 [ deprecated = true ]; // deprecated: use networks
   Deploy deploy = 5;
   repeated Port ports = 6;
   map<string, string> environment = 7;
@@ -454,12 +515,13 @@ message Service {
   repeated string command = 11;
   string domainname = 12;
   bool init = 13;
-  string dns_role = 14; // x-defang-dns-role: role arn used to access route53 to create dns records
+  string dns_role = 14; // x-defang-dns-role: role arn used to access route53 to
+                        // create dns records
   StaticFiles static_files = 15; // x-defang-static-files: use a managed CDN
   Network networks = 16;         // currently only 1 network is supported
-  Redis redis = 18; // x-defang-redis: use a managed redis
-  Postgres postgres = 19; // x-defang-postgres: use a managed
-  string project = 20; // defaults to tenant ID
+  Redis redis = 18;              // x-defang-redis: use a managed redis
+  Postgres postgres = 19;        // x-defang-postgres: use a managed
+  string project = 20;           // defaults to tenant ID
 }
 
 message StaticFiles {
@@ -468,14 +530,24 @@ message StaticFiles {
   repeated string redirects = 2;
 }
 
-message Redis {
-  option deprecated = true;
-}
-message Postgres {
-  option deprecated = true;
+message Redis { option deprecated = true; }
+message Postgres { option deprecated = true; }
+
+// TODO: internal message; move to a separate proto file; was Event
+message DeployEvent {
+  DeploymentMode mode = 1;
+  string type = 2; // required
+  string source = 3;
+  string id = 4; // etag
+  string datacontenttype = 5;
+  string dataschema = 6;
+  string subject = 7; // tenant|stack; also used as SQS group ID
+  google.protobuf.Timestamp time = 8;
+  bytes data = 9;
 }
 
 message Event {
+  option deprecated = true;
   string specversion = 1; // required (but we don't care)
   string type = 2;        // required
   string source = 3;      // required
@@ -492,13 +564,18 @@ message PublishRequest { Event event = 1; }
 message SubscribeRequest {
   repeated string services = 1;
   string etag = 2;
+  string project = 3;
 }
 
 message SubscribeResponse {
-  ServiceInfo service = 1 [deprecated = true];
+  ServiceInfo service = 1 [ deprecated = true ];
   string name = 2;
   string status = 3;
   ServiceState state = 4;
+}
+
+message GetServicesRequest {
+  string project = 1;
 }
 
 message DelegateSubdomainZoneRequest {
@@ -507,9 +584,18 @@ message DelegateSubdomainZoneRequest {
 
 message DelegateSubdomainZoneResponse { string zone = 1; }
 
+enum SubscriptionTier {
+  SUBSCRIPTION_TIER_UNSPECIFIED = 0;
+  PERSONAL = 1;
+  BASIC = 2;
+  PRO = 3;
+  TEAM = 4;
+}
+
 message WhoAmIResponse {
   string tenant = 1;
   string account = 2;
   string region = 3;
   string user_id = 4;
+  SubscriptionTier tier = 5;
 }

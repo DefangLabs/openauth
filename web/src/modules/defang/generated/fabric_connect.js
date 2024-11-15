@@ -6,7 +6,7 @@
 // @ts-nocheck
 
 import { Empty, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
-import { DebugRequest, DebugResponse, DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteConfigsRequest, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, GetConfigsRequest, GetConfigsResponse, ListConfigsRequest, ListConfigsResponse, ListServicesResponse, PublishRequest, PutConfigRequest, Secrets, Service, ServiceID, ServiceInfo, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, Version, WhoAmIResponse } from "./fabric_pb.js";
+import { DebugRequest, DebugResponse, DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteConfigsRequest, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, DestroyRequest, DestroyResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, GetConfigsRequest, GetConfigsResponse, GetSelectedProviderRequest, GetSelectedProviderResponse, GetServicesRequest, ListConfigsRequest, ListConfigsResponse, ListServicesResponse, PublishRequest, PutConfigRequest, Secrets, Service, ServiceID, ServiceInfo, SetSelectedProviderRequest, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, VerifyDNSSetupRequest, Version, WhoAmIResponse } from "./fabric_pb.js";
 
 /**
  * @generated from service io.defang.v1.FabricController
@@ -103,7 +103,18 @@ export const FabricController = {
       kind: MethodKind.Unary,
     },
     /**
+     * @generated from rpc io.defang.v1.FabricController.Destroy
+     */
+    destroy: {
+      name: "Destroy",
+      I: DestroyRequest,
+      O: DestroyResponse,
+      kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.Idempotent,
+    },
+    /**
      * @generated from rpc io.defang.v1.FabricController.Publish
+     * @deprecated
      */
     publish: {
       name: "Publish",
@@ -127,7 +138,7 @@ export const FabricController = {
      */
     getServices: {
       name: "GetServices",
-      I: Empty,
+      I: GetServicesRequest,
       O: ListServicesResponse,
       kind: MethodKind.Unary,
       idempotency: MethodIdempotency.NoSideEffects,
@@ -220,7 +231,7 @@ export const FabricController = {
      */
     listSecrets: {
       name: "ListSecrets",
-      I: Empty,
+      I: ListConfigsRequest,
       O: Secrets,
       kind: MethodKind.Unary,
       idempotency: MethodIdempotency.NoSideEffects,
@@ -253,6 +264,7 @@ export const FabricController = {
       I: DeleteConfigsRequest,
       O: Empty,
       kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.Idempotent,
     },
     /**
      * @generated from rpc io.defang.v1.FabricController.ListConfigs
@@ -330,6 +342,37 @@ export const FabricController = {
       I: Empty,
       O: Empty,
       kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.Idempotent,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.VerifyDNSSetup
+     */
+    verifyDNSSetup: {
+      name: "VerifyDNSSetup",
+      I: VerifyDNSSetupRequest,
+      O: Empty,
+      kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.GetSelectedProvider
+     */
+    getSelectedProvider: {
+      name: "GetSelectedProvider",
+      I: GetSelectedProviderRequest,
+      O: GetSelectedProviderResponse,
+      kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.SetSelectedProvider
+     */
+    setSelectedProvider: {
+      name: "SetSelectedProvider",
+      I: SetSelectedProviderRequest,
+      O: Empty,
+      kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.Idempotent,
     },
   }
 };

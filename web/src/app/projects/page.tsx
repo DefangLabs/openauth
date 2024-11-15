@@ -1,8 +1,8 @@
 "use client";
 
+import { useCallback } from "react";
 import { Loader } from "@/components/loader/loader";
 import { StatusIcon } from "@/components/status-icon/status-icon";
-import { analytics } from "@/modules/analytics/lib/analytics";
 import {
   Box,
   Card,
@@ -17,12 +17,27 @@ import { EmptyServices } from "./components/empty-services/empty-services";
 import { useFilteredServices } from "./hooks/use-filtered-services/use-filtered-services";
 import { useSearch } from "./hooks/use-search/use-search";
 import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
-import { CopyCode } from "@/components/copy-code/copy-code";
+import DeleteWithConfirmationButton from "../../components/delete-with-confirmation-button";
+import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
 
 function ProjectsPageInner() {
   const { services, loading } = useFilteredServices();
   const { search, setSearch } = useSearch();
   const router = useRouter();
+  const client = useDefangClient();
+  const project = services?.[0]?.project ?? "Unnamed Project";
+
+  const handleDelete = useCallback(() => {
+    if (!client) {
+      throw new Error("Defang client unavailable");
+    }
+
+    client?.destroy({ project }, (err, res) => {
+      if (err) {
+        console.log("@@ error destroying client", err);
+      }
+    });
+  }, [client, project]);
 
   if (!services?.length && !loading && !search) {
     return <EmptyServices />;
@@ -42,8 +57,6 @@ function ProjectsPageInner() {
     );
   }
 
-  const projectName = services?.[0]?.project ?? "Unnamed Project";
-
   return (
     <Stack p={2} spacing={2} flexGrow={1}>
       <Stack direction="row" alignItems="center">
@@ -59,9 +72,22 @@ function ProjectsPageInner() {
       </Stack>
       <Box style={{ minHeight: "calc(100vh - 200px)", width: "100%" }}>
         <Card sx={{ p: 4 }}>
-          <Typography variant="h2" sx={{ mb: 2 }}>
-            {projectName}
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <Typography variant="h2" sx={{ mb: 2 }}>
+              {project}
+            </Typography>
+            <DeleteWithConfirmationButton
+              dialogTitle={"Are you sure?"}
+              dialogContent={`You want to delete this project?\n\n"${project}"`}
+              onDelete={handleDelete}
+            />
+          </Box>
           <DataGrid
             style={{ width: "100%" }}
             pageSizeOptions={[5]}
@@ -96,29 +122,6 @@ function ProjectsPageInner() {
             }}
             rows={services || []}
           />
-          <Box sx={{ borderLeft: "4px solid orange", pl: 2 }}>
-            <Typography variant="h3" sx={{ color: "orange", mb: 2 }}>
-              Deleting this Project
-            </Typography>
-            <CopyCode
-              code={`defang down --project-name ${projectName}`}
-              TextFieldProps={{
-                helperText:
-                  "Run this command from the command line to delete this project.",
-                fullWidth: true,
-                variant: "outlined",
-                InputProps: {
-                  readOnly: true,
-                  inputProps: {
-                    style: { cursor: "pointer" },
-                  },
-                },
-                onClick: () => {
-                  analytics.track("Portal: Copied down command", {});
-                },
-              }}
-            />
-          </Box>
         </Card>
       </Box>
     </Stack>
