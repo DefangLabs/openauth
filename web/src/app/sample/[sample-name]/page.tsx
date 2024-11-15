@@ -3,17 +3,31 @@
 import { Loader } from "@/components/loader/loader";
 import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
 
+import { Tag } from "@/components/tag/tag";
 import { analytics } from "@/modules/analytics/lib/analytics";
 import { fetchSamples } from "@/modules/samples/lib/fetch-samples/fetch-samples";
 import { getTagColor } from "@/modules/samples/lib/get-tag-color/get-tag-color";
-import { Box, Stack, Theme, Typography, useMediaQuery } from "@mui/material";
+import { GitHub } from "@mui/icons-material";
+import {
+  Box,
+  Stack,
+  styled,
+  Theme,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import Link from "next/link";
 import useSWR from "swr";
 import { GenerateCommand } from "./components/generate-command/generate-command";
 import { OneClick } from "./components/one-click/one-click";
 import { Readme } from "./components/readme/readme";
 import { useSampleName } from "./hooks/use-sample-name/use-sample-name";
-import { Tag } from "@/components/tag/tag";
+
+const OpenIcon = styled(GitHub)`
+  margin-left: 5px;
+  cursor: pointer;
+  color: black;
+`;
 
 function SamplePageInner() {
   const sampleName = useSampleName();
@@ -57,7 +71,15 @@ function SamplePageInner() {
             },
           }}
         >
-          <Typography variant="h1">{sample.title}</Typography>
+          <Typography variant="h1">
+            {sample.title}{" "}
+            <a
+              href={`https://github.com/DefangLabs/samples/tree/main/samples/${sample.directoryName}`}
+              target="_blank"
+            >
+              <OpenIcon titleAccess="Open on GitHub" />
+            </a>
+          </Typography>
           <Box>
             <Typography>
               {chips.map((chip) => (

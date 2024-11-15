@@ -1,24 +1,30 @@
 "use client";
 
-import { useCallback } from "react";
 import { Loader } from "@/components/loader/loader";
 import { StatusIcon } from "@/components/status-icon/status-icon";
+import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
+import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
+import { COLORS } from "@/modules/mui/constants";
 import {
   Box,
   Card,
   CircularProgress,
   Stack,
+  styled,
   TextField,
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import DeleteWithConfirmationButton from "../../components/delete-with-confirmation-button";
 import { EmptyServices } from "./components/empty-services/empty-services";
 import { useFilteredServices } from "./hooks/use-filtered-services/use-filtered-services";
 import { useSearch } from "./hooks/use-search/use-search";
-import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
-import DeleteWithConfirmationButton from "../../components/delete-with-confirmation-button";
-import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
+
+const Small = styled("small")`
+  color: ${COLORS.darkGrey};
+`;
 
 function ProjectsPageInner() {
   const { services, loading } = useFilteredServices();
@@ -35,6 +41,9 @@ function ProjectsPageInner() {
     client?.destroy({ project }, (err, res) => {
       if (err) {
         console.log("@@ error destroying client", err);
+      } else {
+        // Hack to force a reload of the page to update the list of projects
+        window.location.reload();
       }
     });
   }, [client, project]);
@@ -81,6 +90,7 @@ function ProjectsPageInner() {
           >
             <Typography variant="h2" sx={{ mb: 2 }}>
               {project}
+              <Small>{` free `}</Small>
             </Typography>
             <DeleteWithConfirmationButton
               dialogTitle={"Are you sure?"}
@@ -98,7 +108,7 @@ function ProjectsPageInner() {
                 width: 80,
                 renderCell: (params) => <StatusIcon status={params.value} />,
               },
-              { field: "name", headerName: "Name", width: 150 },
+              { field: "name", headerName: "Service", width: 150 },
               {
                 field: "fqdn",
                 headerName: "Domain Name",

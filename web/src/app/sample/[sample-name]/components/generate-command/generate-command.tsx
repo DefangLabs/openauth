@@ -15,7 +15,7 @@ export function GenerateCommand({ sample }: GenerateCommandProps) {
     <CopyCode
       code={`defang new ${sample.directoryName}`}
       TextFieldProps={{
-        label: "Generate with Defang CLI:",
+        label: "Clone with Defang CLI:",
         helperText:
           "Run this Defang command to generate a new project from this sample.",
         fullWidth: true,

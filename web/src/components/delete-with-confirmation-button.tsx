@@ -51,7 +51,7 @@ function DeleteWithConfirmationButton(props: Props) {
           <Button onClick={handleOk}>Yes</Button>
         </DialogActions>
       </Dialog>
-      <Button onClick={openDialog}>
+      <Button onClick={openDialog} title="Delete project">
         <Delete />
       </Button>
     </Box>

@@ -65,7 +65,7 @@ export function OneClick() {
           </Stack>
         )}
         <Button
-          href={`https://github.com/new?template_name=sample-${sampleName}-template&template_owner=DefangSamples`}
+          href={`https://github.com/new?template_owner=DefangSamples&template_name=sample-${sampleName}-template&name=${sampleName}`}
           target="_blank"
           rel="noopener noreferrer"
           variant="contained"
@@ -76,7 +76,21 @@ export function OneClick() {
             });
           }}
         >
-          Deploy!
+          Deploy to Playground
+        </Button>
+        <Button
+          href={`https://github.com/DefangLabs/samples/tree/main/samples/${sampleName}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="outlined"
+          size="large"
+          onClick={() => {
+            analytics.track("Portal: Clicked Sample GitHub Link", {
+              sample: sampleName,
+            });
+          }}
+        >
+          Open on GitHub
         </Button>
       </Stack>
     </Card>

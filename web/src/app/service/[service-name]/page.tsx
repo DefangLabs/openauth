@@ -27,6 +27,7 @@ const Small = styled("small")`
 const OpenIcon = styled(OpenInNew)`
   margin-left: 5px;
   cursor: pointer;
+  color: ${COLORS.darkGrey};
 `;
 
 function ProjectsPageInner() {
@@ -63,11 +64,9 @@ function ProjectsPageInner() {
           <Small>
             {` service `}
             {firstEndpoint && isPublic && (
-              <OpenIcon
-                onClick={() =>
-                  window.open(`https://${service?.endpoints?.[0]}`)
-                }
-              />
+              <a href={`https://${firstEndpoint}`} target="_blank">
+                <OpenIcon />
+              </a>
             )}
           </Small>
         </Typography>
