@@ -2,7 +2,7 @@ import { useServices } from "@/modules/defang/hooks/use-services/use-services";
 import { useSearch } from "../use-search/use-search";
 
 export function useFilteredServices() {
-  const { services, loading, project } = useServices({ poll: 8000 });
+  const { services, loading, project, expiresAt } = useServices({ poll: 8000 });
 
   const { search } = useSearch();
   const filteredServices = services
@@ -30,5 +30,7 @@ export function useFilteredServices() {
   return {
     services: filteredServices,
     loading,
+    project,
+    expiresAt,
   };
 }

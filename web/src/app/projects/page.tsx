@@ -12,6 +12,7 @@ import {
   Stack,
   styled,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
@@ -27,11 +28,10 @@ const Small = styled("small")`
 `;
 
 function ProjectsPageInner() {
-  const { services, loading } = useFilteredServices();
+  const { services, loading, expiresAt, project } = useFilteredServices();
   const { search, setSearch } = useSearch();
   const router = useRouter();
   const client = useDefangClient();
-  const project = services?.[0]?.project ?? "Unnamed Project";
 
   const handleDelete = useCallback(() => {
     if (!client) {
@@ -89,9 +89,25 @@ function ProjectsPageInner() {
             }}
           >
             <Typography variant="h2" sx={{ mb: 2 }}>
-              {project}
+              {project ?? "Unnamed Project"}
               <Small>{` free `}</Small>
             </Typography>
+            {expiresAt < Date.now() ? (
+              <Typography>
+                Redeploy to avoid downtime or{" "}
+                <a href="https://docs.defang.io/docs/concepts/defang-byoc">
+                  use BYOC
+                </a>
+              </Typography>
+            ) : expiresAt ? (
+              <Tooltip title="Redeploy before this date to avoid downtime or use BYOC">
+                <Typography>
+                  {`This deployment will be deactivated on ${new Date(expiresAt).toDateString()}`}
+                </Typography>
+              </Tooltip>
+            ) : (
+              <></>
+            )}
             <DeleteWithConfirmationButton
               dialogTitle={"Are you sure?"}
               dialogContent={`You want to delete this project?\n\n"${project}"`}
@@ -106,7 +122,9 @@ function ProjectsPageInner() {
                 field: "status",
                 headerName: "Status",
                 width: 80,
-                renderCell: (params) => <StatusIcon status={params.value} />,
+                renderCell: (params) => (
+                  <StatusIcon status={params.value} state={params.row.state} />
+                ),
               },
               { field: "name", headerName: "Service", width: 150 },
               {

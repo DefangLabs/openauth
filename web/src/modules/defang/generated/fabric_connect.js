@@ -6,7 +6,7 @@
 // @ts-nocheck
 
 import { Empty, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
-import { DebugRequest, DebugResponse, DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteConfigsRequest, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, DestroyRequest, DestroyResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, GetConfigsRequest, GetConfigsResponse, GetSelectedProviderRequest, GetSelectedProviderResponse, GetServicesRequest, ListConfigsRequest, ListConfigsResponse, ListServicesResponse, PublishRequest, PutConfigRequest, Secrets, Service, ServiceID, ServiceInfo, SetSelectedProviderRequest, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, VerifyDNSSetupRequest, Version, WhoAmIResponse } from "./fabric_pb.js";
+import { DebugRequest, DebugResponse, DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteConfigsRequest, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, DestroyRequest, DestroyResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, GetConfigsRequest, GetConfigsResponse, GetRequest, GetSelectedProviderRequest, GetSelectedProviderResponse, GetServicesRequest, GetServicesResponse, ListConfigsRequest, ListConfigsResponse, PublishRequest, PutConfigRequest, Secrets, Service, ServiceInfo, SetSelectedProviderRequest, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, VerifyDNSSetupRequest, Version, WhoAmIResponse } from "./fabric_pb.js";
 
 /**
  * @generated from service io.defang.v1.FabricController
@@ -87,7 +87,7 @@ export const FabricController = {
      */
     get: {
       name: "Get",
-      I: ServiceID,
+      I: GetRequest,
       O: ServiceInfo,
       kind: MethodKind.Unary,
       idempotency: MethodIdempotency.NoSideEffects,
@@ -139,7 +139,7 @@ export const FabricController = {
     getServices: {
       name: "GetServices",
       I: GetServicesRequest,
-      O: ListServicesResponse,
+      O: GetServicesResponse,
       kind: MethodKind.Unary,
       idempotency: MethodIdempotency.NoSideEffects,
     },

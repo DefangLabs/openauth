@@ -59,7 +59,7 @@ function ProjectsPageInner() {
     <Stack p={2} spacing={4} mb={10}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">
-          <StatusIcon status={service?.status} />
+          <StatusIcon status={service?.status} state={service?.state} />
           {service?.service?.name}
           <Small>
             {` service `}

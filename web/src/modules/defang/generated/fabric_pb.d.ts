@@ -134,6 +134,11 @@ export declare enum ServiceState {
    * @generated from enum value: BUILD_FAILED = 11;
    */
   BUILD_FAILED = 11,
+
+  /**
+   * @generated from enum value: DEPLOYMENT_SCALED_IN = 12;
+   */
+  DEPLOYMENT_SCALED_IN = 12,
 }
 
 /**
@@ -1678,9 +1683,9 @@ export declare class TailResponse extends Message<TailResponse> {
 }
 
 /**
- * @generated from message io.defang.v1.ListServicesResponse
+ * @generated from message io.defang.v1.GetServicesResponse
  */
-export declare class ListServicesResponse extends Message<ListServicesResponse> {
+export declare class GetServicesResponse extends Message<GetServicesResponse> {
   /**
    * @generated from field: repeated io.defang.v1.ServiceInfo services = 1;
    */
@@ -1691,19 +1696,24 @@ export declare class ListServicesResponse extends Message<ListServicesResponse> 
    */
   project: string;
 
-  constructor(data?: PartialMessage<ListServicesResponse>);
+  /**
+   * @generated from field: google.protobuf.Timestamp expires_at = 3;
+   */
+  expiresAt?: Timestamp;
+
+  constructor(data?: PartialMessage<GetServicesResponse>);
 
   static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.ListServicesResponse";
+  static readonly typeName = "io.defang.v1.GetServicesResponse";
   static readonly fields: FieldList;
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ListServicesResponse;
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetServicesResponse;
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ListServicesResponse;
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetServicesResponse;
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ListServicesResponse;
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetServicesResponse;
 
-  static equals(a: ListServicesResponse | PlainMessage<ListServicesResponse> | undefined, b: ListServicesResponse | PlainMessage<ListServicesResponse> | undefined): boolean;
+  static equals(a: GetServicesResponse | PlainMessage<GetServicesResponse> | undefined, b: GetServicesResponse | PlainMessage<GetServicesResponse> | undefined): boolean;
 }
 
 /**
@@ -1754,9 +1764,11 @@ export declare class ProjectUpdate extends Message<ProjectUpdate> {
 }
 
 /**
- * @generated from message io.defang.v1.ServiceID
+ * was GetRequest
+ *
+ * @generated from message io.defang.v1.GetRequest
  */
-export declare class ServiceID extends Message<ServiceID> {
+export declare class GetRequest extends Message<GetRequest> {
   /**
    * @generated from field: string name = 1;
    */
@@ -1767,19 +1779,19 @@ export declare class ServiceID extends Message<ServiceID> {
    */
   project: string;
 
-  constructor(data?: PartialMessage<ServiceID>);
+  constructor(data?: PartialMessage<GetRequest>);
 
   static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.ServiceID";
+  static readonly typeName = "io.defang.v1.GetRequest";
   static readonly fields: FieldList;
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ServiceID;
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetRequest;
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ServiceID;
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetRequest;
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ServiceID;
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetRequest;
 
-  static equals(a: ServiceID | PlainMessage<ServiceID> | undefined, b: ServiceID | PlainMessage<ServiceID> | undefined): boolean;
+  static equals(a: GetRequest | PlainMessage<GetRequest> | undefined, b: GetRequest | PlainMessage<GetRequest> | undefined): boolean;
 }
 
 /**
@@ -2185,18 +2197,16 @@ export declare class Service extends Message<Service> {
   networks: Network;
 
   /**
+   * @generated from field: repeated string aliases = 17;
+   */
+  aliases: string[];
+
+  /**
    * x-defang-redis: use a managed redis
    *
    * @generated from field: io.defang.v1.Redis redis = 18;
    */
   redis?: Redis;
-
-  /**
-   * x-defang-postgres: use a managed
-   *
-   * @generated from field: io.defang.v1.Postgres postgres = 19;
-   */
-  postgres?: Postgres;
 
   /**
    * defaults to tenant ID
@@ -2268,26 +2278,6 @@ export declare class Redis extends Message<Redis> {
   static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Redis;
 
   static equals(a: Redis | PlainMessage<Redis> | undefined, b: Redis | PlainMessage<Redis> | undefined): boolean;
-}
-
-/**
- * @generated from message io.defang.v1.Postgres
- * @deprecated
- */
-export declare class Postgres extends Message<Postgres> {
-  constructor(data?: PartialMessage<Postgres>);
-
-  static readonly runtime: typeof proto3;
-  static readonly typeName = "io.defang.v1.Postgres";
-  static readonly fields: FieldList;
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Postgres;
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Postgres;
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Postgres;
-
-  static equals(a: Postgres | PlainMessage<Postgres> | undefined, b: Postgres | PlainMessage<Postgres> | undefined): boolean;
 }
 
 /**

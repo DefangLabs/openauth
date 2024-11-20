@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ListServicesResponse } from "../../generated/fabric_pb";
+import { GetServicesResponse } from "../../generated/fabric_pb";
 import { useDefangClient } from "../use-defang-client/use-defang-client";
 import { atom, useAtom } from "jotai";
 
@@ -8,12 +8,13 @@ interface UseServicesOpts {
   poll?: number;
 }
 
-const servicesAtom = atom<ListServicesResponse["services"] | null>(null);
+const servicesAtom = atom<GetServicesResponse["services"] | null>(null);
 
 export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
   const [services, setServices] = useAtom(servicesAtom);
   const [loading, setLoading] = useState(false);
   const [project, setProject] = useState("");
+  const [expiresAt, setExpiresAt] = useState(0);
   const client = useDefangClient();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
       }
       setProject(res.project);
       setServices(res.services);
+      setExpiresAt(res.expiresAt?.toDate().getTime() ?? 0);
       setLoading(false);
     });
   }, [client, setServices, skip, setProject]);
@@ -64,5 +66,6 @@ export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
     services: memoServices,
     loading,
     project,
+    expiresAt,
   };
 }

@@ -7,14 +7,128 @@
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
 import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
 import type { EmptySchema, Timestamp } from "@bufbuild/protobuf/wkt";
-import { file_google_protobuf_empty, file_google_protobuf_struct, file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
-import type { JsonObject, Message } from "@bufbuild/protobuf";
+import { file_google_protobuf_empty, file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
+import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file fabric.proto.
  */
 export const file_fabric: GenFile = /*@__PURE__*/
-  fileDesc("CgxmYWJyaWMucHJvdG8SDGlvLmRlZmFuZy52MSJwCgxEZWJ1Z1JlcXVlc3QSIQoFZmlsZXMYASADKAsyEi5pby5kZWZhbmcudjEuRmlsZRIMCgRldGFnGAIgASgJEg8KB3Byb2plY3QYAyABKAkSDAoEbG9ncxgEIAEoCRIQCghzZXJ2aWNlcxgFIAMoCSJXCg1EZWJ1Z1Jlc3BvbnNlEg8KB2dlbmVyYWwYASABKAkSIwoGaXNzdWVzGAIgAygLMhMuaW8uZGVmYW5nLnYxLklzc3VlEhAKCHJlcXVlc3RzGAMgAygJImgKBUlzc3VlEgwKBHR5cGUYASABKAkSEAoIc2V2ZXJpdHkYAiABKAkSDwoHZGV0YWlscxgDIAEoCRIuCgxjb2RlX2NoYW5nZXMYBCADKAsyGC5pby5kZWZhbmcudjEuQ29kZUNoYW5nZSIqCgpDb2RlQ2hhbmdlEgwKBGZpbGUYASABKAkSDgoGY2hhbmdlGAIgASgJIrsBCgxUcmFja1JlcXVlc3QSDwoHYW5vbl9pZBgBIAEoCRINCgVldmVudBgCIAEoCRI+Cgpwcm9wZXJ0aWVzGAMgAygLMiouaW8uZGVmYW5nLnYxLlRyYWNrUmVxdWVzdC5Qcm9wZXJ0aWVzRW50cnkSCgoCb3MYBCABKAkSDAoEYXJjaBgFIAEoCRoxCg9Qcm9wZXJ0aWVzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASKnAQoNRGVwbG95UmVxdWVzdBIrCghzZXJ2aWNlcxgBIAMoCzIVLmlvLmRlZmFuZy52MS5TZXJ2aWNlQgIYARITCgdwcm9qZWN0GAIgASgJQgIYARIqCgRtb2RlGAMgASgOMhwuaW8uZGVmYW5nLnYxLkRlcGxveW1lbnRNb2RlEigKB2NvbXBvc2UYBCABKAsyFy5nb29nbGUucHJvdG9idWYuU3RydWN0IksKDkRlcGxveVJlc3BvbnNlEisKCHNlcnZpY2VzGAEgAygLMhkuaW8uZGVmYW5nLnYxLlNlcnZpY2VJbmZvEgwKBGV0YWcYAiABKAkiLwoNRGVsZXRlUmVxdWVzdBINCgVuYW1lcxgBIAMoCRIPCgdwcm9qZWN0GAIgASgJIh4KDkRlbGV0ZVJlc3BvbnNlEgwKBGV0YWcYASABKAkiSwoUR2VuZXJhdGVGaWxlc1JlcXVlc3QSDgoGcHJvbXB0GAEgASgJEhAKCGxhbmd1YWdlGAIgASgJEhEKCWFncmVlX3RvcxgDIAEoCCIlCgRGaWxlEgwKBG5hbWUYASABKAkSDwoHY29udGVudBgCIAEoCSI6ChVHZW5lcmF0ZUZpbGVzUmVzcG9uc2USIQoFZmlsZXMYASADKAsyEi5pby5kZWZhbmcudjEuRmlsZSIlChVTdGFydEdlbmVyYXRlUmVzcG9uc2USDAoEdXVpZBgBIAEoCSIlChVHZW5lcmF0ZVN0YXR1c1JlcXVlc3QSDAoEdXVpZBgBIAEoCSIiChBVcGxvYWRVUkxSZXF1ZXN0Eg4KBmRpZ2VzdBgBIAEoCSIgChFVcGxvYWRVUkxSZXNwb25zZRILCgN1cmwYASABKAkikAMKC1NlcnZpY2VJbmZvEiYKB3NlcnZpY2UYASABKAsyFS5pby5kZWZhbmcudjEuU2VydmljZRIRCgllbmRwb2ludHMYAiADKAkSDwoHcHJvamVjdBgDIAEoCRIMCgRldGFnGAQgASgJEg4KBnN0YXR1cxgFIAEoCRIPCgduYXRfaXBzGAYgAygJEg4KBmxiX2lwcxgHIAMoCRIUCgxwcml2YXRlX2ZxZG4YCCABKAkSEwoLcHVibGljX2ZxZG4YCSABKAkSLgoKY3JlYXRlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgLIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASDwoHem9uZV9pZBgMIAEoCRIVCg11c2VfYWNtZV9jZXJ0GA0gASgIEikKBXN0YXRlGA8gASgOMhouaW8uZGVmYW5nLnYxLlNlcnZpY2VTdGF0ZRISCgpkb21haW5uYW1lGBAgASgJSgQIDhAPIi0KB1NlY3JldHMSDQoFbmFtZXMYASADKAkSDwoHcHJvamVjdBgCIAEoCToCGAEiPwoLU2VjcmV0VmFsdWUSDAoEbmFtZRgBIAEoCRINCgV2YWx1ZRgCIAEoCRIPCgdwcm9qZWN0GAMgASgJOgIYASJeCgZDb25maWcSDAoEbmFtZRgBIAEoCRINCgV2YWx1ZRgCIAEoCRIPCgdwcm9qZWN0GAMgASgJEiYKBHR5cGUYBCABKA4yGC5pby5kZWZhbmcudjEuQ29uZmlnVHlwZSIqCglDb25maWdLZXkSDAoEbmFtZRgBIAEoCRIPCgdwcm9qZWN0GAIgASgJImgKEFB1dENvbmZpZ1JlcXVlc3QSDAoEbmFtZRgBIAEoCRINCgV2YWx1ZRgCIAEoCRIPCgdwcm9qZWN0GAMgASgJEiYKBHR5cGUYBCABKA4yGC5pby5kZWZhbmcudjEuQ29uZmlnVHlwZSI9ChFHZXRDb25maWdzUmVxdWVzdBIoCgdjb25maWdzGAEgAygLMhcuaW8uZGVmYW5nLnYxLkNvbmZpZ0tleSI7ChJHZXRDb25maWdzUmVzcG9uc2USJQoHY29uZmlncxgBIAMoCzIULmlvLmRlZmFuZy52MS5Db25maWciQAoURGVsZXRlQ29uZmlnc1JlcXVlc3QSKAoHY29uZmlncxgBIAMoCzIXLmlvLmRlZmFuZy52MS5Db25maWdLZXkiJQoSTGlzdENvbmZpZ3NSZXF1ZXN0Eg8KB3Byb2plY3QYASABKAkiPwoTTGlzdENvbmZpZ3NSZXNwb25zZRIoCgdjb25maWdzGAEgAygLMhcuaW8uZGVmYW5nLnYxLkNvbmZpZ0tleSJ4CgxUb2tlblJlcXVlc3QSDgoGdGVuYW50GAEgASgJEhEKCWF1dGhfY29kZRgCIAEoCRINCgVzY29wZRgDIAMoCRIRCglhc3NlcnRpb24YBCABKAkSEgoKZXhwaXJlc19pbhgFIAEoDRIPCgdhbm9uX2lkGAYgASgJIiUKDVRva2VuUmVzcG9uc2USFAoMYWNjZXNzX3Rva2VuGAEgASgJIhkKBlN0YXR1cxIPCgd2ZXJzaW9uGAEgASgJIkQKB1ZlcnNpb24SDgoGZmFicmljGAEgASgJEg8KB2NsaV9taW4YAyABKAkSEgoKcHVsdW1pX21pbhgEIAEoCUoECAIQAyJYCgtUYWlsUmVxdWVzdBIQCghzZXJ2aWNlcxgBIAMoCRIpCgVzaW5jZRgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASDAoEZXRhZxgDIAEoCSKUAQoITG9nRW50cnkSDwoHbWVzc2FnZRgBIAEoCRItCgl0aW1lc3RhbXAYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEg4KBnN0ZGVychgDIAEoCBIPCgdzZXJ2aWNlGAQgASgJEgwKBGV0YWcYBSABKAkSDAoEaG9zdBgGIAEoCRILCgNqb2IYByABKAkiagoMVGFpbFJlc3BvbnNlEicKB2VudHJpZXMYAiADKAsyFi5pby5kZWZhbmcudjEuTG9nRW50cnkSDwoHc2VydmljZRgDIAEoCRIMCgRldGFnGAQgASgJEgwKBGhvc3QYBSABKAlKBAgBEAIiVAoUTGlzdFNlcnZpY2VzUmVzcG9uc2USKwoIc2VydmljZXMYASADKAsyGS5pby5kZWZhbmcudjEuU2VydmljZUluZm8SDwoHcHJvamVjdBgCIAEoCSKIAQoNUHJvamVjdFVwZGF0ZRIrCghzZXJ2aWNlcxgBIAMoCzIZLmlvLmRlZmFuZy52MS5TZXJ2aWNlSW5mbxIPCgdhbGJfYXJuGAIgASgJEg8KB3Byb2plY3QYAyABKAkSKAoHY29tcG9zZRgEIAEoCzIXLmdvb2dsZS5wcm90b2J1Zi5TdHJ1Y3QiGQoJU2VydmljZUlEEgwKBG5hbWUYASABKAkiQQoGRGV2aWNlEhQKDGNhcGFiaWxpdGllcxgBIAMoCRIOCgZkcml2ZXIYAiABKAkSDQoFY291bnQYAyABKA06AhgBIlMKCFJlc291cmNlEg4KBm1lbW9yeRgBIAEoAhIMCgRjcHVzGAIgASgCEiUKB2RldmljZXMYAyADKAsyFC5pby5kZWZhbmcudjEuRGV2aWNlOgIYASI9CglSZXNvdXJjZXMSLAoMcmVzZXJ2YXRpb25zGAEgASgLMhYuaW8uZGVmYW5nLnYxLlJlc291cmNlOgIYASJKCgZEZXBsb3kSEAoIcmVwbGljYXMYASABKA0SKgoJcmVzb3VyY2VzGAIgASgLMhcuaW8uZGVmYW5nLnYxLlJlc291cmNlczoCGAEiZgoEUG9ydBIOCgZ0YXJnZXQYASABKA0SKAoIcHJvdG9jb2wYAiABKA4yFi5pby5kZWZhbmcudjEuUHJvdG9jb2wSIAoEbW9kZRgDIAEoDjISLmlvLmRlZmFuZy52MS5Nb2RlOgIYASIcCgZTZWNyZXQSDgoGc291cmNlGAEgASgJOgIYASKsAQoFQnVpbGQSDwoHY29udGV4dBgBIAEoCRISCgpkb2NrZXJmaWxlGAIgASgJEisKBGFyZ3MYAyADKAsyHS5pby5kZWZhbmcudjEuQnVpbGQuQXJnc0VudHJ5EhAKCHNobV9zaXplGAQgASgCEg4KBnRhcmdldBgFIAEoCRorCglBcmdzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4AToCGAEiUwoLSGVhbHRoQ2hlY2sSDAoEdGVzdBgBIAMoCRIQCghpbnRlcnZhbBgCIAEoDRIPCgd0aW1lb3V0GAMgASgNEg8KB3JldHJpZXMYBCABKA06AhgBIp0FCgdTZXJ2aWNlEgwKBG5hbWUYASABKAkSDQoFaW1hZ2UYAiABKAkSKAoIcGxhdGZvcm0YAyABKA4yFi5pby5kZWZhbmcudjEuUGxhdGZvcm0SFAoIaW50ZXJuYWwYBCABKAhCAhgBEiQKBmRlcGxveRgFIAEoCzIULmlvLmRlZmFuZy52MS5EZXBsb3kSIQoFcG9ydHMYBiADKAsyEi5pby5kZWZhbmcudjEuUG9ydBI7CgtlbnZpcm9ubWVudBgHIAMoCzImLmlvLmRlZmFuZy52MS5TZXJ2aWNlLkVudmlyb25tZW50RW50cnkSIgoFYnVpbGQYCCABKAsyEy5pby5kZWZhbmcudjEuQnVpbGQSJQoHc2VjcmV0cxgJIAMoCzIULmlvLmRlZmFuZy52MS5TZWNyZXQSLgoLaGVhbHRoY2hlY2sYCiABKAsyGS5pby5kZWZhbmcudjEuSGVhbHRoQ2hlY2sSDwoHY29tbWFuZBgLIAMoCRISCgpkb21haW5uYW1lGAwgASgJEgwKBGluaXQYDSABKAgSEAoIZG5zX3JvbGUYDiABKAkSLwoMc3RhdGljX2ZpbGVzGA8gASgLMhkuaW8uZGVmYW5nLnYxLlN0YXRpY0ZpbGVzEicKCG5ldHdvcmtzGBAgASgOMhUuaW8uZGVmYW5nLnYxLk5ldHdvcmsSIgoFcmVkaXMYEiABKAsyEy5pby5kZWZhbmcudjEuUmVkaXMSKAoIcG9zdGdyZXMYEyABKAsyFi5pby5kZWZhbmcudjEuUG9zdGdyZXMSDwoHcHJvamVjdBgUIAEoCRoyChBFbnZpcm9ubWVudEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAE6AhgBIjQKC1N0YXRpY0ZpbGVzEg4KBmZvbGRlchgBIAEoCRIRCglyZWRpcmVjdHMYAiADKAk6AhgBIgsKBVJlZGlzOgIYASIOCghQb3N0Z3JlczoCGAEivAEKBUV2ZW50EhMKC3NwZWN2ZXJzaW9uGAEgASgJEgwKBHR5cGUYAiABKAkSDgoGc291cmNlGAMgASgJEgoKAmlkGAQgASgJEhcKD2RhdGFjb250ZW50dHlwZRgFIAEoCRISCgpkYXRhc2NoZW1hGAYgASgJEg8KB3N1YmplY3QYByABKAkSKAoEdGltZRgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASDAoEZGF0YRgJIAEoDCI0Cg5QdWJsaXNoUmVxdWVzdBIiCgVldmVudBgBIAEoCzITLmlvLmRlZmFuZy52MS5FdmVudCIyChBTdWJzY3JpYmVSZXF1ZXN0EhAKCHNlcnZpY2VzGAEgAygJEgwKBGV0YWcYAiABKAkijAEKEVN1YnNjcmliZVJlc3BvbnNlEi4KB3NlcnZpY2UYASABKAsyGS5pby5kZWZhbmcudjEuU2VydmljZUluZm9CAhgBEgwKBG5hbWUYAiABKAkSDgoGc3RhdHVzGAMgASgJEikKBXN0YXRlGAQgASgOMhouaW8uZGVmYW5nLnYxLlNlcnZpY2VTdGF0ZSI7ChxEZWxlZ2F0ZVN1YmRvbWFpblpvbmVSZXF1ZXN0EhsKE25hbWVfc2VydmVyX3JlY29yZHMYASADKAkiLQodRGVsZWdhdGVTdWJkb21haW5ab25lUmVzcG9uc2USDAoEem9uZRgBIAEoCSJSCg5XaG9BbUlSZXNwb25zZRIOCgZ0ZW5hbnQYASABKAkSDwoHYWNjb3VudBgCIAEoCRIOCgZyZWdpb24YAyABKAkSDwoHdXNlcl9pZBgEIAEoCSpUCg5EZXBsb3ltZW50TW9kZRIUChBVTlNQRUNJRklFRF9NT0RFEAASDwoLREVWRUxPUE1FTlQQARILCgdTVEFHSU5HEAISDgoKUFJPRFVDVElPThADKokCCgxTZXJ2aWNlU3RhdGUSEQoNTk9UX1NQRUNJRklFRBAAEhAKDEJVSUxEX1FVRVVFRBABEhYKEkJVSUxEX1BST1ZJU0lPTklORxACEhEKDUJVSUxEX1BFTkRJTkcQAxIUChBCVUlMRF9BQ1RJVkFUSU5HEAQSEQoNQlVJTERfUlVOTklORxAFEhIKDkJVSUxEX1NUT1BQSU5HEAYSEQoNVVBEQVRFX1FVRVVFRBAHEhYKEkRFUExPWU1FTlRfUEVORElORxAIEhgKFERFUExPWU1FTlRfQ09NUExFVEVEEAkSFQoRREVQTE9ZTUVOVF9GQUlMRUQQChIQCgxCVUlMRF9GQUlMRUQQCypCCgpDb25maWdUeXBlEhoKFkNPTkZJR1RZUEVfVU5TUEVDSUZJRUQQABIYChRDT05GSUdUWVBFX1NFTlNJVElWRRABKj8KCFBsYXRmb3JtEg8KC0xJTlVYX0FNRDY0EAASDwoLTElOVVhfQVJNNjQQARINCglMSU5VWF9BTlkQAhoCGAEqSAoIUHJvdG9jb2wSBwoDQU5ZEAASBwoDVURQEAESBwoDVENQEAISCAoESFRUUBADEgkKBUhUVFAyEAQSCAoER1JQQxAFGgIYASohCgRNb2RlEggKBEhPU1QQABILCgdJTkdSRVNTEAEaAhgBKjcKB05ldHdvcmsSDwoLVU5TUEVDSUZJRUQQABILCgdQUklWQVRFEAESCgoGUFVCTElDEAIaAhgBMucSChBGYWJyaWNDb250cm9sbGVyEj4KCUdldFN0YXR1cxIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoULmlvLmRlZmFuZy52MS5TdGF0dXMiA5ACARJACgpHZXRWZXJzaW9uEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhUuaW8uZGVmYW5nLnYxLlZlcnNpb24iA5ACARJACgVUb2tlbhIaLmlvLmRlZmFuZy52MS5Ub2tlblJlcXVlc3QaGy5pby5kZWZhbmcudjEuVG9rZW5SZXNwb25zZRI9CgtSZXZva2VUb2tlbhIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRI/CgRUYWlsEhkuaW8uZGVmYW5nLnYxLlRhaWxSZXF1ZXN0GhouaW8uZGVmYW5nLnYxLlRhaWxSZXNwb25zZTABEj8KBlVwZGF0ZRIVLmlvLmRlZmFuZy52MS5TZXJ2aWNlGhkuaW8uZGVmYW5nLnYxLlNlcnZpY2VJbmZvIgOIAgESQwoGRGVwbG95EhsuaW8uZGVmYW5nLnYxLkRlcGxveVJlcXVlc3QaHC5pby5kZWZhbmcudjEuRGVwbG95UmVzcG9uc2USPgoDR2V0EhcuaW8uZGVmYW5nLnYxLlNlcnZpY2VJRBoZLmlvLmRlZmFuZy52MS5TZXJ2aWNlSW5mbyIDkAIBEkgKBkRlbGV0ZRIbLmlvLmRlZmFuZy52MS5EZWxldGVSZXF1ZXN0GhwuaW8uZGVmYW5nLnYxLkRlbGV0ZVJlc3BvbnNlIgOIAgESPwoHUHVibGlzaBIcLmlvLmRlZmFuZy52MS5QdWJsaXNoUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJOCglTdWJzY3JpYmUSHi5pby5kZWZhbmcudjEuU3Vic2NyaWJlUmVxdWVzdBofLmlvLmRlZmFuZy52MS5TdWJzY3JpYmVSZXNwb25zZTABEk4KC0dldFNlcnZpY2VzEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GiIuaW8uZGVmYW5nLnYxLkxpc3RTZXJ2aWNlc1Jlc3BvbnNlIgOQAgESWAoNR2VuZXJhdGVGaWxlcxIiLmlvLmRlZmFuZy52MS5HZW5lcmF0ZUZpbGVzUmVxdWVzdBojLmlvLmRlZmFuZy52MS5HZW5lcmF0ZUZpbGVzUmVzcG9uc2USWAoNU3RhcnRHZW5lcmF0ZRIiLmlvLmRlZmFuZy52MS5HZW5lcmF0ZUZpbGVzUmVxdWVzdBojLmlvLmRlZmFuZy52MS5TdGFydEdlbmVyYXRlUmVzcG9uc2USXwoOR2VuZXJhdGVTdGF0dXMSIy5pby5kZWZhbmcudjEuR2VuZXJhdGVTdGF0dXNSZXF1ZXN0GiMuaW8uZGVmYW5nLnYxLkdlbmVyYXRlRmlsZXNSZXNwb25zZSIDkAIBEkAKBURlYnVnEhouaW8uZGVmYW5nLnYxLkRlYnVnUmVxdWVzdBobLmlvLmRlZmFuZy52MS5EZWJ1Z1Jlc3BvbnNlEjoKCFNpZ25FVUxBEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Ej8KCENoZWNrVG9TEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5IgOQAgESSAoJUHV0U2VjcmV0Eh4uaW8uZGVmYW5nLnYxLlB1dENvbmZpZ1JlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkiA4gCARJDCg1EZWxldGVTZWNyZXRzEhUuaW8uZGVmYW5nLnYxLlNlY3JldHMaFi5nb29nbGUucHJvdG9idWYuRW1wdHkiA4gCARJECgtMaXN0U2VjcmV0cxIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoVLmlvLmRlZmFuZy52MS5TZWNyZXRzIgaIAgGQAgESVAoKR2V0Q29uZmlncxIfLmlvLmRlZmFuZy52MS5HZXRDb25maWdzUmVxdWVzdBogLmlvLmRlZmFuZy52MS5HZXRDb25maWdzUmVzcG9uc2UiA5ACARJICglQdXRDb25maWcSHi5pby5kZWZhbmcudjEuUHV0Q29uZmlnUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIDkAICEksKDURlbGV0ZUNvbmZpZ3MSIi5pby5kZWZhbmcudjEuRGVsZXRlQ29uZmlnc1JlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSVwoLTGlzdENvbmZpZ3MSIC5pby5kZWZhbmcudjEuTGlzdENvbmZpZ3NSZXF1ZXN0GiEuaW8uZGVmYW5nLnYxLkxpc3RDb25maWdzUmVzcG9uc2UiA5ACARJSCg9DcmVhdGVVcGxvYWRVUkwSHi5pby5kZWZhbmcudjEuVXBsb2FkVVJMUmVxdWVzdBofLmlvLmRlZmFuZy52MS5VcGxvYWRVUkxSZXNwb25zZRJwChVEZWxlZ2F0ZVN1YmRvbWFpblpvbmUSKi5pby5kZWZhbmcudjEuRGVsZWdhdGVTdWJkb21haW5ab25lUmVxdWVzdBorLmlvLmRlZmFuZy52MS5EZWxlZ2F0ZVN1YmRvbWFpblpvbmVSZXNwb25zZRJFChNEZWxldGVTdWJkb21haW5ab25lEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5EmQKGEdldERlbGVnYXRlU3ViZG9tYWluWm9uZRIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRorLmlvLmRlZmFuZy52MS5EZWxlZ2F0ZVN1YmRvbWFpblpvbmVSZXNwb25zZSIDkAIBEkMKBldob0FtSRIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRocLmlvLmRlZmFuZy52MS5XaG9BbUlSZXNwb25zZSIDkAIBEjsKBVRyYWNrEhouaW8uZGVmYW5nLnYxLlRyYWNrUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRI6CghEZWxldGVNZRIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eUI2WjRnaXRodWIuY29tL0RlZmFuZ0xhYnMvZGVmYW5nL3NyYy9wcm90b3MvaW8vZGVmYW5nL3YxYgZwcm90bzM", [file_google_protobuf_empty, file_google_protobuf_struct, file_google_protobuf_timestamp]);
+  fileDesc("CgxmYWJyaWMucHJvdG8SDGlvLmRlZmFuZy52MSItChpHZXRTZWxlY3RlZFByb3ZpZGVyUmVxdWVzdBIPCgdwcm9qZWN0GAEgASgJIkcKG0dldFNlbGVjdGVkUHJvdmlkZXJSZXNwb25zZRIoCghwcm92aWRlchgBIAEoDjIWLmlvLmRlZmFuZy52MS5Qcm92aWRlciJXChpTZXRTZWxlY3RlZFByb3ZpZGVyUmVxdWVzdBIPCgdwcm9qZWN0GAEgASgJEigKCHByb3ZpZGVyGAIgASgOMhYuaW8uZGVmYW5nLnYxLlByb3ZpZGVyIjgKFVZlcmlmeUROU1NldHVwUmVxdWVzdBIOCgZkb21haW4YASABKAkSDwoHdGFyZ2V0cxgCIAMoCSIhCg5EZXN0cm95UmVxdWVzdBIPCgdwcm9qZWN0GAEgASgJIh8KD0Rlc3Ryb3lSZXNwb25zZRIMCgRldGFnGAEgASgJInAKDERlYnVnUmVxdWVzdBIhCgVmaWxlcxgBIAMoCzISLmlvLmRlZmFuZy52MS5GaWxlEgwKBGV0YWcYAiABKAkSDwoHcHJvamVjdBgDIAEoCRIMCgRsb2dzGAQgASgJEhAKCHNlcnZpY2VzGAUgAygJIlcKDURlYnVnUmVzcG9uc2USDwoHZ2VuZXJhbBgBIAEoCRIjCgZpc3N1ZXMYAiADKAsyEy5pby5kZWZhbmcudjEuSXNzdWUSEAoIcmVxdWVzdHMYAyADKAkiaAoFSXNzdWUSDAoEdHlwZRgBIAEoCRIQCghzZXZlcml0eRgCIAEoCRIPCgdkZXRhaWxzGAMgASgJEi4KDGNvZGVfY2hhbmdlcxgEIAMoCzIYLmlvLmRlZmFuZy52MS5Db2RlQ2hhbmdlIioKCkNvZGVDaGFuZ2USDAoEZmlsZRgBIAEoCRIOCgZjaGFuZ2UYAiABKAkiuwEKDFRyYWNrUmVxdWVzdBIPCgdhbm9uX2lkGAEgASgJEg0KBWV2ZW50GAIgASgJEj4KCnByb3BlcnRpZXMYAyADKAsyKi5pby5kZWZhbmcudjEuVHJhY2tSZXF1ZXN0LlByb3BlcnRpZXNFbnRyeRIKCgJvcxgEIAEoCRIMCgRhcmNoGAUgASgJGjEKD1Byb3BlcnRpZXNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBIsIBCg1EZXBsb3lSZXF1ZXN0EisKCHNlcnZpY2VzGAEgAygLMhUuaW8uZGVmYW5nLnYxLlNlcnZpY2VCAhgBEhMKB3Byb2plY3QYAiABKAlCAhgBEioKBG1vZGUYAyABKA4yHC5pby5kZWZhbmcudjEuRGVwbG95bWVudE1vZGUSDwoHY29tcG9zZRgEIAEoDBIXCg9kZWxlZ2F0ZV9kb21haW4YBSABKAkSGQoRZGVsZWdhdGlvbl9zZXRfaWQYBiABKAkiSwoORGVwbG95UmVzcG9uc2USKwoIc2VydmljZXMYASADKAsyGS5pby5kZWZhbmcudjEuU2VydmljZUluZm8SDAoEZXRhZxgCIAEoCSJICg1EZWxldGVSZXF1ZXN0Eg0KBW5hbWVzGAEgAygJEg8KB3Byb2plY3QYAiABKAkSFwoPZGVsZWdhdGVfZG9tYWluGAMgASgJIh4KDkRlbGV0ZVJlc3BvbnNlEgwKBGV0YWcYASABKAkiSwoUR2VuZXJhdGVGaWxlc1JlcXVlc3QSDgoGcHJvbXB0GAEgASgJEhAKCGxhbmd1YWdlGAIgASgJEhEKCWFncmVlX3RvcxgDIAEoCCIlCgRGaWxlEgwKBG5hbWUYASABKAkSDwoHY29udGVudBgCIAEoCSI6ChVHZW5lcmF0ZUZpbGVzUmVzcG9uc2USIQoFZmlsZXMYASADKAsyEi5pby5kZWZhbmcudjEuRmlsZSIlChVTdGFydEdlbmVyYXRlUmVzcG9uc2USDAoEdXVpZBgBIAEoCSIlChVHZW5lcmF0ZVN0YXR1c1JlcXVlc3QSDAoEdXVpZBgBIAEoCSIzChBVcGxvYWRVUkxSZXF1ZXN0Eg4KBmRpZ2VzdBgBIAEoCRIPCgdwcm9qZWN0GAIgASgJIiAKEVVwbG9hZFVSTFJlc3BvbnNlEgsKA3VybBgBIAEoCSKQAwoLU2VydmljZUluZm8SJgoHc2VydmljZRgBIAEoCzIVLmlvLmRlZmFuZy52MS5TZXJ2aWNlEhEKCWVuZHBvaW50cxgCIAMoCRIPCgdwcm9qZWN0GAMgASgJEgwKBGV0YWcYBCABKAkSDgoGc3RhdHVzGAUgASgJEg8KB25hdF9pcHMYBiADKAkSDgoGbGJfaXBzGAcgAygJEhQKDHByaXZhdGVfZnFkbhgIIAEoCRITCgtwdWJsaWNfZnFkbhgJIAEoCRIuCgpjcmVhdGVkX2F0GAogASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp1cGRhdGVkX2F0GAsgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIPCgd6b25lX2lkGAwgASgJEhUKDXVzZV9hY21lX2NlcnQYDSABKAgSKQoFc3RhdGUYDyABKA4yGi5pby5kZWZhbmcudjEuU2VydmljZVN0YXRlEhIKCmRvbWFpbm5hbWUYECABKAlKBAgOEA8iLQoHU2VjcmV0cxINCgVuYW1lcxgBIAMoCRIPCgdwcm9qZWN0GAIgASgJOgIYASI/CgtTZWNyZXRWYWx1ZRIMCgRuYW1lGAEgASgJEg0KBXZhbHVlGAIgASgJEg8KB3Byb2plY3QYAyABKAk6AhgBIl4KBkNvbmZpZxIMCgRuYW1lGAEgASgJEg0KBXZhbHVlGAIgASgJEg8KB3Byb2plY3QYAyABKAkSJgoEdHlwZRgEIAEoDjIYLmlvLmRlZmFuZy52MS5Db25maWdUeXBlIioKCUNvbmZpZ0tleRIMCgRuYW1lGAEgASgJEg8KB3Byb2plY3QYAiABKAkiaAoQUHV0Q29uZmlnUmVxdWVzdBIMCgRuYW1lGAEgASgJEg0KBXZhbHVlGAIgASgJEg8KB3Byb2plY3QYAyABKAkSJgoEdHlwZRgEIAEoDjIYLmlvLmRlZmFuZy52MS5Db25maWdUeXBlIj0KEUdldENvbmZpZ3NSZXF1ZXN0EigKB2NvbmZpZ3MYASADKAsyFy5pby5kZWZhbmcudjEuQ29uZmlnS2V5IjsKEkdldENvbmZpZ3NSZXNwb25zZRIlCgdjb25maWdzGAEgAygLMhQuaW8uZGVmYW5nLnYxLkNvbmZpZyJAChREZWxldGVDb25maWdzUmVxdWVzdBIoCgdjb25maWdzGAEgAygLMhcuaW8uZGVmYW5nLnYxLkNvbmZpZ0tleSIlChJMaXN0Q29uZmlnc1JlcXVlc3QSDwoHcHJvamVjdBgBIAEoCSI/ChNMaXN0Q29uZmlnc1Jlc3BvbnNlEigKB2NvbmZpZ3MYASADKAsyFy5pby5kZWZhbmcudjEuQ29uZmlnS2V5Io8BCgxUb2tlblJlcXVlc3QSDgoGdGVuYW50GAEgASgJEhEKCWF1dGhfY29kZRgCIAEoCRINCgVzY29wZRgDIAMoCRIRCglhc3NlcnRpb24YBCABKAkSEgoKZXhwaXJlc19pbhgFIAEoDRIPCgdhbm9uX2lkGAYgASgJEhUKDXJlZnJlc2hfdG9rZW4YByABKAkiPAoNVG9rZW5SZXNwb25zZRIUCgxhY2Nlc3NfdG9rZW4YASABKAkSFQoNcmVmcmVzaF90b2tlbhgCIAEoCSIZCgZTdGF0dXMSDwoHdmVyc2lvbhgBIAEoCSJECgdWZXJzaW9uEg4KBmZhYnJpYxgBIAEoCRIPCgdjbGlfbWluGAMgASgJEhIKCnB1bHVtaV9taW4YBCABKAlKBAgCEAMijAEKC1RhaWxSZXF1ZXN0EhAKCHNlcnZpY2VzGAEgAygJEikKBXNpbmNlGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIMCgRldGFnGAMgASgJEg8KB3Byb2plY3QYBCABKAkSEAoIbG9nX3R5cGUYBSABKA0SDwoHcGF0dGVybhgGIAEoCSKHAQoITG9nRW50cnkSDwoHbWVzc2FnZRgBIAEoCRItCgl0aW1lc3RhbXAYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEg4KBnN0ZGVychgDIAEoCBIPCgdzZXJ2aWNlGAQgASgJEgwKBGV0YWcYBSABKAkSDAoEaG9zdBgGIAEoCSJqCgxUYWlsUmVzcG9uc2USJwoHZW50cmllcxgCIAMoCzIWLmlvLmRlZmFuZy52MS5Mb2dFbnRyeRIPCgdzZXJ2aWNlGAMgASgJEgwKBGV0YWcYBCABKAkSDAoEaG9zdBgFIAEoCUoECAEQAiKDAQoTR2V0U2VydmljZXNSZXNwb25zZRIrCghzZXJ2aWNlcxgBIAMoCzIZLmlvLmRlZmFuZy52MS5TZXJ2aWNlSW5mbxIPCgdwcm9qZWN0GAIgASgJEi4KCmV4cGlyZXNfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIocBCg1Qcm9qZWN0VXBkYXRlEisKCHNlcnZpY2VzGAEgAygLMhkuaW8uZGVmYW5nLnYxLlNlcnZpY2VJbmZvEg8KB2FsYl9hcm4YAiABKAkSEwoHcHJvamVjdBgDIAEoCUICGAESDwoHY29tcG9zZRgEIAEoDBISCgpjZF92ZXJzaW9uGAUgASgJIisKCkdldFJlcXVlc3QSDAoEbmFtZRgBIAEoCRIPCgdwcm9qZWN0GAIgASgJIkEKBkRldmljZRIUCgxjYXBhYmlsaXRpZXMYASADKAkSDgoGZHJpdmVyGAIgASgJEg0KBWNvdW50GAMgASgNOgIYASJTCghSZXNvdXJjZRIOCgZtZW1vcnkYASABKAISDAoEY3B1cxgCIAEoAhIlCgdkZXZpY2VzGAMgAygLMhQuaW8uZGVmYW5nLnYxLkRldmljZToCGAEiPQoJUmVzb3VyY2VzEiwKDHJlc2VydmF0aW9ucxgBIAEoCzIWLmlvLmRlZmFuZy52MS5SZXNvdXJjZToCGAEiSgoGRGVwbG95EhAKCHJlcGxpY2FzGAEgASgNEioKCXJlc291cmNlcxgCIAEoCzIXLmlvLmRlZmFuZy52MS5SZXNvdXJjZXM6AhgBImYKBFBvcnQSDgoGdGFyZ2V0GAEgASgNEigKCHByb3RvY29sGAIgASgOMhYuaW8uZGVmYW5nLnYxLlByb3RvY29sEiAKBG1vZGUYAyABKA4yEi5pby5kZWZhbmcudjEuTW9kZToCGAEiHAoGU2VjcmV0Eg4KBnNvdXJjZRgBIAEoCToCGAEirAEKBUJ1aWxkEg8KB2NvbnRleHQYASABKAkSEgoKZG9ja2VyZmlsZRgCIAEoCRIrCgRhcmdzGAMgAygLMh0uaW8uZGVmYW5nLnYxLkJ1aWxkLkFyZ3NFbnRyeRIQCghzaG1fc2l6ZRgEIAEoAhIOCgZ0YXJnZXQYBSABKAkaKwoJQXJnc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAE6AhgBIlMKC0hlYWx0aENoZWNrEgwKBHRlc3QYASADKAkSEAoIaW50ZXJ2YWwYAiABKA0SDwoHdGltZW91dBgDIAEoDRIPCgdyZXRyaWVzGAQgASgNOgIYASKEBQoHU2VydmljZRIMCgRuYW1lGAEgASgJEg0KBWltYWdlGAIgASgJEigKCHBsYXRmb3JtGAMgASgOMhYuaW8uZGVmYW5nLnYxLlBsYXRmb3JtEhQKCGludGVybmFsGAQgASgIQgIYARIkCgZkZXBsb3kYBSABKAsyFC5pby5kZWZhbmcudjEuRGVwbG95EiEKBXBvcnRzGAYgAygLMhIuaW8uZGVmYW5nLnYxLlBvcnQSOwoLZW52aXJvbm1lbnQYByADKAsyJi5pby5kZWZhbmcudjEuU2VydmljZS5FbnZpcm9ubWVudEVudHJ5EiIKBWJ1aWxkGAggASgLMhMuaW8uZGVmYW5nLnYxLkJ1aWxkEiUKB3NlY3JldHMYCSADKAsyFC5pby5kZWZhbmcudjEuU2VjcmV0Ei4KC2hlYWx0aGNoZWNrGAogASgLMhkuaW8uZGVmYW5nLnYxLkhlYWx0aENoZWNrEg8KB2NvbW1hbmQYCyADKAkSEgoKZG9tYWlubmFtZRgMIAEoCRIMCgRpbml0GA0gASgIEhAKCGRuc19yb2xlGA4gASgJEi8KDHN0YXRpY19maWxlcxgPIAEoCzIZLmlvLmRlZmFuZy52MS5TdGF0aWNGaWxlcxInCghuZXR3b3JrcxgQIAEoDjIVLmlvLmRlZmFuZy52MS5OZXR3b3JrEg8KB2FsaWFzZXMYESADKAkSIgoFcmVkaXMYEiABKAsyEy5pby5kZWZhbmcudjEuUmVkaXMSDwoHcHJvamVjdBgUIAEoCRoyChBFbnZpcm9ubWVudEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAE6AhgBIjQKC1N0YXRpY0ZpbGVzEg4KBmZvbGRlchgBIAEoCRIRCglyZWRpcmVjdHMYAiADKAk6AhgBIgsKBVJlZGlzOgIYASLZAQoLRGVwbG95RXZlbnQSKgoEbW9kZRgBIAEoDjIcLmlvLmRlZmFuZy52MS5EZXBsb3ltZW50TW9kZRIMCgR0eXBlGAIgASgJEg4KBnNvdXJjZRgDIAEoCRIKCgJpZBgEIAEoCRIXCg9kYXRhY29udGVudHR5cGUYBSABKAkSEgoKZGF0YXNjaGVtYRgGIAEoCRIPCgdzdWJqZWN0GAcgASgJEigKBHRpbWUYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEgwKBGRhdGEYCSABKAwiwAEKBUV2ZW50EhMKC3NwZWN2ZXJzaW9uGAEgASgJEgwKBHR5cGUYAiABKAkSDgoGc291cmNlGAMgASgJEgoKAmlkGAQgASgJEhcKD2RhdGFjb250ZW50dHlwZRgFIAEoCRISCgpkYXRhc2NoZW1hGAYgASgJEg8KB3N1YmplY3QYByABKAkSKAoEdGltZRgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASDAoEZGF0YRgJIAEoDDoCGAEiNAoOUHVibGlzaFJlcXVlc3QSIgoFZXZlbnQYASABKAsyEy5pby5kZWZhbmcudjEuRXZlbnQiQwoQU3Vic2NyaWJlUmVxdWVzdBIQCghzZXJ2aWNlcxgBIAMoCRIMCgRldGFnGAIgASgJEg8KB3Byb2plY3QYAyABKAkijAEKEVN1YnNjcmliZVJlc3BvbnNlEi4KB3NlcnZpY2UYASABKAsyGS5pby5kZWZhbmcudjEuU2VydmljZUluZm9CAhgBEgwKBG5hbWUYAiABKAkSDgoGc3RhdHVzGAMgASgJEikKBXN0YXRlGAQgASgOMhouaW8uZGVmYW5nLnYxLlNlcnZpY2VTdGF0ZSIlChJHZXRTZXJ2aWNlc1JlcXVlc3QSDwoHcHJvamVjdBgBIAEoCSI7ChxEZWxlZ2F0ZVN1YmRvbWFpblpvbmVSZXF1ZXN0EhsKE25hbWVfc2VydmVyX3JlY29yZHMYASADKAkiLQodRGVsZWdhdGVTdWJkb21haW5ab25lUmVzcG9uc2USDAoEem9uZRgBIAEoCSKAAQoOV2hvQW1JUmVzcG9uc2USDgoGdGVuYW50GAEgASgJEg8KB2FjY291bnQYAiABKAkSDgoGcmVnaW9uGAMgASgJEg8KB3VzZXJfaWQYBCABKAkSLAoEdGllchgFIAEoDjIeLmlvLmRlZmFuZy52MS5TdWJzY3JpcHRpb25UaWVyKlQKCFByb3ZpZGVyEhgKFFBST1ZJREVSX1VOU1BFQ0lGSUVEEAASCgoGREVGQU5HEAESBwoDQVdTEAISEAoMRElHSVRBTE9DRUFOEAMSBwoDR0NQEAQqVAoORGVwbG95bWVudE1vZGUSFAoQVU5TUEVDSUZJRURfTU9ERRAAEg8KC0RFVkVMT1BNRU5UEAESCwoHU1RBR0lORxACEg4KClBST0RVQ1RJT04QAyqjAgoMU2VydmljZVN0YXRlEhEKDU5PVF9TUEVDSUZJRUQQABIQCgxCVUlMRF9RVUVVRUQQARIWChJCVUlMRF9QUk9WSVNJT05JTkcQAhIRCg1CVUlMRF9QRU5ESU5HEAMSFAoQQlVJTERfQUNUSVZBVElORxAEEhEKDUJVSUxEX1JVTk5JTkcQBRISCg5CVUlMRF9TVE9QUElORxAGEhEKDVVQREFURV9RVUVVRUQQBxIWChJERVBMT1lNRU5UX1BFTkRJTkcQCBIYChRERVBMT1lNRU5UX0NPTVBMRVRFRBAJEhUKEURFUExPWU1FTlRfRkFJTEVEEAoSEAoMQlVJTERfRkFJTEVEEAsSGAoUREVQTE9ZTUVOVF9TQ0FMRURfSU4QDCpCCgpDb25maWdUeXBlEhoKFkNPTkZJR1RZUEVfVU5TUEVDSUZJRUQQABIYChRDT05GSUdUWVBFX1NFTlNJVElWRRABKj8KCFBsYXRmb3JtEg8KC0xJTlVYX0FNRDY0EAASDwoLTElOVVhfQVJNNjQQARINCglMSU5VWF9BTlkQAhoCGAEqSAoIUHJvdG9jb2wSBwoDQU5ZEAASBwoDVURQEAESBwoDVENQEAISCAoESFRUUBADEgkKBUhUVFAyEAQSCAoER1JQQxAFGgIYASohCgRNb2RlEggKBEhPU1QQABILCgdJTkdSRVNTEAEaAhgBKjcKB05ldHdvcmsSDwoLVU5TUEVDSUZJRUQQABILCgdQUklWQVRFEAESCgoGUFVCTElDEAIaAhgBKmEKEFN1YnNjcmlwdGlvblRpZXISIQodU1VCU0NSSVBUSU9OX1RJRVJfVU5TUEVDSUZJRUQQABIMCghQRVJTT05BTBABEgkKBUJBU0lDEAISBwoDUFJPEAMSCAoEVEVBTRAEMvoVChBGYWJyaWNDb250cm9sbGVyEj4KCUdldFN0YXR1cxIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoULmlvLmRlZmFuZy52MS5TdGF0dXMiA5ACARJACgpHZXRWZXJzaW9uEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhUuaW8uZGVmYW5nLnYxLlZlcnNpb24iA5ACARJACgVUb2tlbhIaLmlvLmRlZmFuZy52MS5Ub2tlblJlcXVlc3QaGy5pby5kZWZhbmcudjEuVG9rZW5SZXNwb25zZRI9CgtSZXZva2VUb2tlbhIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRI/CgRUYWlsEhkuaW8uZGVmYW5nLnYxLlRhaWxSZXF1ZXN0GhouaW8uZGVmYW5nLnYxLlRhaWxSZXNwb25zZTABEj8KBlVwZGF0ZRIVLmlvLmRlZmFuZy52MS5TZXJ2aWNlGhkuaW8uZGVmYW5nLnYxLlNlcnZpY2VJbmZvIgOIAgESQwoGRGVwbG95EhsuaW8uZGVmYW5nLnYxLkRlcGxveVJlcXVlc3QaHC5pby5kZWZhbmcudjEuRGVwbG95UmVzcG9uc2USPwoDR2V0EhguaW8uZGVmYW5nLnYxLkdldFJlcXVlc3QaGS5pby5kZWZhbmcudjEuU2VydmljZUluZm8iA5ACARJICgZEZWxldGUSGy5pby5kZWZhbmcudjEuRGVsZXRlUmVxdWVzdBocLmlvLmRlZmFuZy52MS5EZWxldGVSZXNwb25zZSIDiAIBEksKB0Rlc3Ryb3kSHC5pby5kZWZhbmcudjEuRGVzdHJveVJlcXVlc3QaHS5pby5kZWZhbmcudjEuRGVzdHJveVJlc3BvbnNlIgOQAgISRAoHUHVibGlzaBIcLmlvLmRlZmFuZy52MS5QdWJsaXNoUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIDiAIBEk4KCVN1YnNjcmliZRIeLmlvLmRlZmFuZy52MS5TdWJzY3JpYmVSZXF1ZXN0Gh8uaW8uZGVmYW5nLnYxLlN1YnNjcmliZVJlc3BvbnNlMAESVwoLR2V0U2VydmljZXMSIC5pby5kZWZhbmcudjEuR2V0U2VydmljZXNSZXF1ZXN0GiEuaW8uZGVmYW5nLnYxLkdldFNlcnZpY2VzUmVzcG9uc2UiA5ACARJYCg1HZW5lcmF0ZUZpbGVzEiIuaW8uZGVmYW5nLnYxLkdlbmVyYXRlRmlsZXNSZXF1ZXN0GiMuaW8uZGVmYW5nLnYxLkdlbmVyYXRlRmlsZXNSZXNwb25zZRJYCg1TdGFydEdlbmVyYXRlEiIuaW8uZGVmYW5nLnYxLkdlbmVyYXRlRmlsZXNSZXF1ZXN0GiMuaW8uZGVmYW5nLnYxLlN0YXJ0R2VuZXJhdGVSZXNwb25zZRJfCg5HZW5lcmF0ZVN0YXR1cxIjLmlvLmRlZmFuZy52MS5HZW5lcmF0ZVN0YXR1c1JlcXVlc3QaIy5pby5kZWZhbmcudjEuR2VuZXJhdGVGaWxlc1Jlc3BvbnNlIgOQAgESQAoFRGVidWcSGi5pby5kZWZhbmcudjEuRGVidWdSZXF1ZXN0GhsuaW8uZGVmYW5nLnYxLkRlYnVnUmVzcG9uc2USOgoIU2lnbkVVTEESFi5nb29nbGUucHJvdG9idWYuRW1wdHkaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSPwoIQ2hlY2tUb1MSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaFi5nb29nbGUucHJvdG9idWYuRW1wdHkiA5ACARJICglQdXRTZWNyZXQSHi5pby5kZWZhbmcudjEuUHV0Q29uZmlnUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIDiAIBEkMKDURlbGV0ZVNlY3JldHMSFS5pby5kZWZhbmcudjEuU2VjcmV0cxoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIDiAIBEk4KC0xpc3RTZWNyZXRzEiAuaW8uZGVmYW5nLnYxLkxpc3RDb25maWdzUmVxdWVzdBoVLmlvLmRlZmFuZy52MS5TZWNyZXRzIgaIAgGQAgESVAoKR2V0Q29uZmlncxIfLmlvLmRlZmFuZy52MS5HZXRDb25maWdzUmVxdWVzdBogLmlvLmRlZmFuZy52MS5HZXRDb25maWdzUmVzcG9uc2UiA5ACARJICglQdXRDb25maWcSHi5pby5kZWZhbmcudjEuUHV0Q29uZmlnUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIDkAICElAKDURlbGV0ZUNvbmZpZ3MSIi5pby5kZWZhbmcudjEuRGVsZXRlQ29uZmlnc1JlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkiA5ACAhJXCgtMaXN0Q29uZmlncxIgLmlvLmRlZmFuZy52MS5MaXN0Q29uZmlnc1JlcXVlc3QaIS5pby5kZWZhbmcudjEuTGlzdENvbmZpZ3NSZXNwb25zZSIDkAIBElIKD0NyZWF0ZVVwbG9hZFVSTBIeLmlvLmRlZmFuZy52MS5VcGxvYWRVUkxSZXF1ZXN0Gh8uaW8uZGVmYW5nLnYxLlVwbG9hZFVSTFJlc3BvbnNlEnAKFURlbGVnYXRlU3ViZG9tYWluWm9uZRIqLmlvLmRlZmFuZy52MS5EZWxlZ2F0ZVN1YmRvbWFpblpvbmVSZXF1ZXN0GisuaW8uZGVmYW5nLnYxLkRlbGVnYXRlU3ViZG9tYWluWm9uZVJlc3BvbnNlEkUKE0RlbGV0ZVN1YmRvbWFpblpvbmUSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSZAoYR2V0RGVsZWdhdGVTdWJkb21haW5ab25lEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GisuaW8uZGVmYW5nLnYxLkRlbGVnYXRlU3ViZG9tYWluWm9uZVJlc3BvbnNlIgOQAgESQwoGV2hvQW1JEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhwuaW8uZGVmYW5nLnYxLldob0FtSVJlc3BvbnNlIgOQAgESOwoFVHJhY2sSGi5pby5kZWZhbmcudjEuVHJhY2tSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Ej8KCERlbGV0ZU1lEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5IgOQAgISUgoOVmVyaWZ5RE5TU2V0dXASIy5pby5kZWZhbmcudjEuVmVyaWZ5RE5TU2V0dXBSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5IgOQAgESbwoTR2V0U2VsZWN0ZWRQcm92aWRlchIoLmlvLmRlZmFuZy52MS5HZXRTZWxlY3RlZFByb3ZpZGVyUmVxdWVzdBopLmlvLmRlZmFuZy52MS5HZXRTZWxlY3RlZFByb3ZpZGVyUmVzcG9uc2UiA5ACARJcChNTZXRTZWxlY3RlZFByb3ZpZGVyEiguaW8uZGVmYW5nLnYxLlNldFNlbGVjdGVkUHJvdmlkZXJSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5IgOQAgJCNlo0Z2l0aHViLmNvbS9EZWZhbmdMYWJzL2RlZmFuZy9zcmMvcHJvdG9zL2lvL2RlZmFuZy92MWIGcHJvdG8z", [file_google_protobuf_empty, file_google_protobuf_timestamp]);
+
+/**
+ * @generated from message io.defang.v1.GetSelectedProviderRequest
+ */
+export type GetSelectedProviderRequest = Message<"io.defang.v1.GetSelectedProviderRequest"> & {
+  /**
+   * @generated from field: string project = 1;
+   */
+  project: string;
+};
+
+/**
+ * Describes the message io.defang.v1.GetSelectedProviderRequest.
+ * Use `create(GetSelectedProviderRequestSchema)` to create a new message.
+ */
+export const GetSelectedProviderRequestSchema: GenMessage<GetSelectedProviderRequest> = /*@__PURE__*/
+  messageDesc(file_fabric, 0);
+
+/**
+ * @generated from message io.defang.v1.GetSelectedProviderResponse
+ */
+export type GetSelectedProviderResponse = Message<"io.defang.v1.GetSelectedProviderResponse"> & {
+  /**
+   * @generated from field: io.defang.v1.Provider provider = 1;
+   */
+  provider: Provider;
+};
+
+/**
+ * Describes the message io.defang.v1.GetSelectedProviderResponse.
+ * Use `create(GetSelectedProviderResponseSchema)` to create a new message.
+ */
+export const GetSelectedProviderResponseSchema: GenMessage<GetSelectedProviderResponse> = /*@__PURE__*/
+  messageDesc(file_fabric, 1);
+
+/**
+ * @generated from message io.defang.v1.SetSelectedProviderRequest
+ */
+export type SetSelectedProviderRequest = Message<"io.defang.v1.SetSelectedProviderRequest"> & {
+  /**
+   * @generated from field: string project = 1;
+   */
+  project: string;
+
+  /**
+   * @generated from field: io.defang.v1.Provider provider = 2;
+   */
+  provider: Provider;
+};
+
+/**
+ * Describes the message io.defang.v1.SetSelectedProviderRequest.
+ * Use `create(SetSelectedProviderRequestSchema)` to create a new message.
+ */
+export const SetSelectedProviderRequestSchema: GenMessage<SetSelectedProviderRequest> = /*@__PURE__*/
+  messageDesc(file_fabric, 2);
+
+/**
+ * @generated from message io.defang.v1.VerifyDNSSetupRequest
+ */
+export type VerifyDNSSetupRequest = Message<"io.defang.v1.VerifyDNSSetupRequest"> & {
+  /**
+   * @generated from field: string domain = 1;
+   */
+  domain: string;
+
+  /**
+   * @generated from field: repeated string targets = 2;
+   */
+  targets: string[];
+};
+
+/**
+ * Describes the message io.defang.v1.VerifyDNSSetupRequest.
+ * Use `create(VerifyDNSSetupRequestSchema)` to create a new message.
+ */
+export const VerifyDNSSetupRequestSchema: GenMessage<VerifyDNSSetupRequest> = /*@__PURE__*/
+  messageDesc(file_fabric, 3);
+
+/**
+ * @generated from message io.defang.v1.DestroyRequest
+ */
+export type DestroyRequest = Message<"io.defang.v1.DestroyRequest"> & {
+  /**
+   * defaults to tenant ID
+   *
+   * @generated from field: string project = 1;
+   */
+  project: string;
+};
+
+/**
+ * Describes the message io.defang.v1.DestroyRequest.
+ * Use `create(DestroyRequestSchema)` to create a new message.
+ */
+export const DestroyRequestSchema: GenMessage<DestroyRequest> = /*@__PURE__*/
+  messageDesc(file_fabric, 4);
+
+/**
+ * @generated from message io.defang.v1.DestroyResponse
+ */
+export type DestroyResponse = Message<"io.defang.v1.DestroyResponse"> & {
+  /**
+   * @generated from field: string etag = 1;
+   */
+  etag: string;
+};
+
+/**
+ * Describes the message io.defang.v1.DestroyResponse.
+ * Use `create(DestroyResponseSchema)` to create a new message.
+ */
+export const DestroyResponseSchema: GenMessage<DestroyResponse> = /*@__PURE__*/
+  messageDesc(file_fabric, 5);
 
 /**
  * @generated from message io.defang.v1.DebugRequest
@@ -51,7 +165,7 @@ export type DebugRequest = Message<"io.defang.v1.DebugRequest"> & {
  * Use `create(DebugRequestSchema)` to create a new message.
  */
 export const DebugRequestSchema: GenMessage<DebugRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 0);
+  messageDesc(file_fabric, 6);
 
 /**
  * @generated from message io.defang.v1.DebugResponse
@@ -78,7 +192,7 @@ export type DebugResponse = Message<"io.defang.v1.DebugResponse"> & {
  * Use `create(DebugResponseSchema)` to create a new message.
  */
 export const DebugResponseSchema: GenMessage<DebugResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 1);
+  messageDesc(file_fabric, 7);
 
 /**
  * @generated from message io.defang.v1.Issue
@@ -110,7 +224,7 @@ export type Issue = Message<"io.defang.v1.Issue"> & {
  * Use `create(IssueSchema)` to create a new message.
  */
 export const IssueSchema: GenMessage<Issue> = /*@__PURE__*/
-  messageDesc(file_fabric, 2);
+  messageDesc(file_fabric, 8);
 
 /**
  * @generated from message io.defang.v1.CodeChange
@@ -132,7 +246,7 @@ export type CodeChange = Message<"io.defang.v1.CodeChange"> & {
  * Use `create(CodeChangeSchema)` to create a new message.
  */
 export const CodeChangeSchema: GenMessage<CodeChange> = /*@__PURE__*/
-  messageDesc(file_fabric, 3);
+  messageDesc(file_fabric, 9);
 
 /**
  * @generated from message io.defang.v1.TrackRequest
@@ -169,7 +283,7 @@ export type TrackRequest = Message<"io.defang.v1.TrackRequest"> & {
  * Use `create(TrackRequestSchema)` to create a new message.
  */
 export const TrackRequestSchema: GenMessage<TrackRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 4);
+  messageDesc(file_fabric, 10);
 
 /**
  * @generated from message io.defang.v1.DeployRequest
@@ -197,9 +311,21 @@ export type DeployRequest = Message<"io.defang.v1.DeployRequest"> & {
   mode: DeploymentMode;
 
   /**
-   * @generated from field: google.protobuf.Struct compose = 4;
+   * yaml (or json)
+   *
+   * @generated from field: bytes compose = 4;
    */
-  compose?: JsonObject;
+  compose: Uint8Array;
+
+  /**
+   * @generated from field: string delegate_domain = 5;
+   */
+  delegateDomain: string;
+
+  /**
+   * @generated from field: string delegation_set_id = 6;
+   */
+  delegationSetId: string;
 };
 
 /**
@@ -207,7 +333,7 @@ export type DeployRequest = Message<"io.defang.v1.DeployRequest"> & {
  * Use `create(DeployRequestSchema)` to create a new message.
  */
 export const DeployRequestSchema: GenMessage<DeployRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 5);
+  messageDesc(file_fabric, 11);
 
 /**
  * @generated from message io.defang.v1.DeployResponse
@@ -229,7 +355,7 @@ export type DeployResponse = Message<"io.defang.v1.DeployResponse"> & {
  * Use `create(DeployResponseSchema)` to create a new message.
  */
 export const DeployResponseSchema: GenMessage<DeployResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 6);
+  messageDesc(file_fabric, 12);
 
 /**
  * @generated from message io.defang.v1.DeleteRequest
@@ -246,6 +372,11 @@ export type DeleteRequest = Message<"io.defang.v1.DeleteRequest"> & {
    * @generated from field: string project = 2;
    */
   project: string;
+
+  /**
+   * @generated from field: string delegate_domain = 3;
+   */
+  delegateDomain: string;
 };
 
 /**
@@ -253,7 +384,7 @@ export type DeleteRequest = Message<"io.defang.v1.DeleteRequest"> & {
  * Use `create(DeleteRequestSchema)` to create a new message.
  */
 export const DeleteRequestSchema: GenMessage<DeleteRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 7);
+  messageDesc(file_fabric, 13);
 
 /**
  * @generated from message io.defang.v1.DeleteResponse
@@ -270,7 +401,7 @@ export type DeleteResponse = Message<"io.defang.v1.DeleteResponse"> & {
  * Use `create(DeleteResponseSchema)` to create a new message.
  */
 export const DeleteResponseSchema: GenMessage<DeleteResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 8);
+  messageDesc(file_fabric, 14);
 
 /**
  * @generated from message io.defang.v1.GenerateFilesRequest
@@ -297,7 +428,7 @@ export type GenerateFilesRequest = Message<"io.defang.v1.GenerateFilesRequest"> 
  * Use `create(GenerateFilesRequestSchema)` to create a new message.
  */
 export const GenerateFilesRequestSchema: GenMessage<GenerateFilesRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 9);
+  messageDesc(file_fabric, 15);
 
 /**
  * @generated from message io.defang.v1.File
@@ -319,7 +450,7 @@ export type File = Message<"io.defang.v1.File"> & {
  * Use `create(FileSchema)` to create a new message.
  */
 export const FileSchema: GenMessage<File> = /*@__PURE__*/
-  messageDesc(file_fabric, 10);
+  messageDesc(file_fabric, 16);
 
 /**
  * @generated from message io.defang.v1.GenerateFilesResponse
@@ -336,7 +467,7 @@ export type GenerateFilesResponse = Message<"io.defang.v1.GenerateFilesResponse"
  * Use `create(GenerateFilesResponseSchema)` to create a new message.
  */
 export const GenerateFilesResponseSchema: GenMessage<GenerateFilesResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 11);
+  messageDesc(file_fabric, 17);
 
 /**
  * @generated from message io.defang.v1.StartGenerateResponse
@@ -353,7 +484,7 @@ export type StartGenerateResponse = Message<"io.defang.v1.StartGenerateResponse"
  * Use `create(StartGenerateResponseSchema)` to create a new message.
  */
 export const StartGenerateResponseSchema: GenMessage<StartGenerateResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 12);
+  messageDesc(file_fabric, 18);
 
 /**
  * @generated from message io.defang.v1.GenerateStatusRequest
@@ -370,7 +501,7 @@ export type GenerateStatusRequest = Message<"io.defang.v1.GenerateStatusRequest"
  * Use `create(GenerateStatusRequestSchema)` to create a new message.
  */
 export const GenerateStatusRequestSchema: GenMessage<GenerateStatusRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 13);
+  messageDesc(file_fabric, 19);
 
 /**
  * @generated from message io.defang.v1.UploadURLRequest
@@ -380,6 +511,11 @@ export type UploadURLRequest = Message<"io.defang.v1.UploadURLRequest"> & {
    * @generated from field: string digest = 1;
    */
   digest: string;
+
+  /**
+   * @generated from field: string project = 2;
+   */
+  project: string;
 };
 
 /**
@@ -387,7 +523,7 @@ export type UploadURLRequest = Message<"io.defang.v1.UploadURLRequest"> & {
  * Use `create(UploadURLRequestSchema)` to create a new message.
  */
 export const UploadURLRequestSchema: GenMessage<UploadURLRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 14);
+  messageDesc(file_fabric, 20);
 
 /**
  * @generated from message io.defang.v1.UploadURLResponse
@@ -404,7 +540,7 @@ export type UploadURLResponse = Message<"io.defang.v1.UploadURLResponse"> & {
  * Use `create(UploadURLResponseSchema)` to create a new message.
  */
 export const UploadURLResponseSchema: GenMessage<UploadURLResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 15);
+  messageDesc(file_fabric, 21);
 
 /**
  * @generated from message io.defang.v1.ServiceInfo
@@ -511,7 +647,7 @@ export type ServiceInfo = Message<"io.defang.v1.ServiceInfo"> & {
  * Use `create(ServiceInfoSchema)` to create a new message.
  */
 export const ServiceInfoSchema: GenMessage<ServiceInfo> = /*@__PURE__*/
-  messageDesc(file_fabric, 16);
+  messageDesc(file_fabric, 22);
 
 /**
  * @generated from message io.defang.v1.Secrets
@@ -537,7 +673,7 @@ export type Secrets = Message<"io.defang.v1.Secrets"> & {
  * @deprecated
  */
 export const SecretsSchema: GenMessage<Secrets> = /*@__PURE__*/
-  messageDesc(file_fabric, 17);
+  messageDesc(file_fabric, 23);
 
 /**
  * @generated from message io.defang.v1.SecretValue
@@ -568,7 +704,7 @@ export type SecretValue = Message<"io.defang.v1.SecretValue"> & {
  * @deprecated
  */
 export const SecretValueSchema: GenMessage<SecretValue> = /*@__PURE__*/
-  messageDesc(file_fabric, 18);
+  messageDesc(file_fabric, 24);
 
 /**
  * @generated from message io.defang.v1.Config
@@ -600,7 +736,7 @@ export type Config = Message<"io.defang.v1.Config"> & {
  * Use `create(ConfigSchema)` to create a new message.
  */
 export const ConfigSchema: GenMessage<Config> = /*@__PURE__*/
-  messageDesc(file_fabric, 19);
+  messageDesc(file_fabric, 25);
 
 /**
  * @generated from message io.defang.v1.ConfigKey
@@ -624,7 +760,7 @@ export type ConfigKey = Message<"io.defang.v1.ConfigKey"> & {
  * Use `create(ConfigKeySchema)` to create a new message.
  */
 export const ConfigKeySchema: GenMessage<ConfigKey> = /*@__PURE__*/
-  messageDesc(file_fabric, 20);
+  messageDesc(file_fabric, 26);
 
 /**
  * @generated from message io.defang.v1.PutConfigRequest
@@ -656,7 +792,7 @@ export type PutConfigRequest = Message<"io.defang.v1.PutConfigRequest"> & {
  * Use `create(PutConfigRequestSchema)` to create a new message.
  */
 export const PutConfigRequestSchema: GenMessage<PutConfigRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 21);
+  messageDesc(file_fabric, 27);
 
 /**
  * @generated from message io.defang.v1.GetConfigsRequest
@@ -673,7 +809,7 @@ export type GetConfigsRequest = Message<"io.defang.v1.GetConfigsRequest"> & {
  * Use `create(GetConfigsRequestSchema)` to create a new message.
  */
 export const GetConfigsRequestSchema: GenMessage<GetConfigsRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 22);
+  messageDesc(file_fabric, 28);
 
 /**
  * @generated from message io.defang.v1.GetConfigsResponse
@@ -690,7 +826,7 @@ export type GetConfigsResponse = Message<"io.defang.v1.GetConfigsResponse"> & {
  * Use `create(GetConfigsResponseSchema)` to create a new message.
  */
 export const GetConfigsResponseSchema: GenMessage<GetConfigsResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 23);
+  messageDesc(file_fabric, 29);
 
 /**
  * @generated from message io.defang.v1.DeleteConfigsRequest
@@ -707,7 +843,7 @@ export type DeleteConfigsRequest = Message<"io.defang.v1.DeleteConfigsRequest"> 
  * Use `create(DeleteConfigsRequestSchema)` to create a new message.
  */
 export const DeleteConfigsRequestSchema: GenMessage<DeleteConfigsRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 24);
+  messageDesc(file_fabric, 30);
 
 /**
  * @generated from message io.defang.v1.ListConfigsRequest
@@ -726,7 +862,7 @@ export type ListConfigsRequest = Message<"io.defang.v1.ListConfigsRequest"> & {
  * Use `create(ListConfigsRequestSchema)` to create a new message.
  */
 export const ListConfigsRequestSchema: GenMessage<ListConfigsRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 25);
+  messageDesc(file_fabric, 31);
 
 /**
  * @generated from message io.defang.v1.ListConfigsResponse
@@ -743,7 +879,7 @@ export type ListConfigsResponse = Message<"io.defang.v1.ListConfigsResponse"> & 
  * Use `create(ListConfigsResponseSchema)` to create a new message.
  */
 export const ListConfigsResponseSchema: GenMessage<ListConfigsResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 26);
+  messageDesc(file_fabric, 32);
 
 /**
  * @generated from message io.defang.v1.TokenRequest
@@ -786,6 +922,11 @@ export type TokenRequest = Message<"io.defang.v1.TokenRequest"> & {
    * @generated from field: string anon_id = 6;
    */
   anonId: string;
+
+  /**
+   * @generated from field: string refresh_token = 7;
+   */
+  refreshToken: string;
 };
 
 /**
@@ -793,18 +934,27 @@ export type TokenRequest = Message<"io.defang.v1.TokenRequest"> & {
  * Use `create(TokenRequestSchema)` to create a new message.
  */
 export const TokenRequestSchema: GenMessage<TokenRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 27);
+  messageDesc(file_fabric, 33);
 
 /**
  * @generated from message io.defang.v1.TokenResponse
  */
 export type TokenResponse = Message<"io.defang.v1.TokenResponse"> & {
   /**
-   * our JWT
+   * short-lived token
    *
    * @generated from field: string access_token = 1;
    */
   accessToken: string;
+
+  /**
+   * string token_type = 3; // "Bearer"
+   * uint32 expires_in = 4; // 3600
+   * string id_token = 5; // "eyJhbGciOiJSUzI…"
+   *
+   * @generated from field: string refresh_token = 2;
+   */
+  refreshToken: string;
 };
 
 /**
@@ -812,7 +962,7 @@ export type TokenResponse = Message<"io.defang.v1.TokenResponse"> & {
  * Use `create(TokenResponseSchema)` to create a new message.
  */
 export const TokenResponseSchema: GenMessage<TokenResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 28);
+  messageDesc(file_fabric, 34);
 
 /**
  * @generated from message io.defang.v1.Status
@@ -829,7 +979,7 @@ export type Status = Message<"io.defang.v1.Status"> & {
  * Use `create(StatusSchema)` to create a new message.
  */
 export const StatusSchema: GenMessage<Status> = /*@__PURE__*/
-  messageDesc(file_fabric, 29);
+  messageDesc(file_fabric, 35);
 
 /**
  * @generated from message io.defang.v1.Version
@@ -860,7 +1010,7 @@ export type Version = Message<"io.defang.v1.Version"> & {
  * Use `create(VersionSchema)` to create a new message.
  */
 export const VersionSchema: GenMessage<Version> = /*@__PURE__*/
-  messageDesc(file_fabric, 30);
+  messageDesc(file_fabric, 36);
 
 /**
  * @generated from message io.defang.v1.TailRequest
@@ -880,6 +1030,21 @@ export type TailRequest = Message<"io.defang.v1.TailRequest"> & {
    * @generated from field: string etag = 3;
    */
   etag: string;
+
+  /**
+   * @generated from field: string project = 4;
+   */
+  project: string;
+
+  /**
+   * @generated from field: uint32 log_type = 5;
+   */
+  logType: number;
+
+  /**
+   * @generated from field: string pattern = 6;
+   */
+  pattern: string;
 };
 
 /**
@@ -887,7 +1052,7 @@ export type TailRequest = Message<"io.defang.v1.TailRequest"> & {
  * Use `create(TailRequestSchema)` to create a new message.
  */
 export const TailRequestSchema: GenMessage<TailRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 31);
+  messageDesc(file_fabric, 37);
 
 /**
  * @generated from message io.defang.v1.LogEntry
@@ -922,11 +1087,6 @@ export type LogEntry = Message<"io.defang.v1.LogEntry"> & {
    * @generated from field: string host = 6;
    */
   host: string;
-
-  /**
-   * @generated from field: string job = 7;
-   */
-  job: string;
 };
 
 /**
@@ -934,7 +1094,7 @@ export type LogEntry = Message<"io.defang.v1.LogEntry"> & {
  * Use `create(LogEntrySchema)` to create a new message.
  */
 export const LogEntrySchema: GenMessage<LogEntry> = /*@__PURE__*/
-  messageDesc(file_fabric, 32);
+  messageDesc(file_fabric, 38);
 
 /**
  * @generated from message io.defang.v1.TailResponse
@@ -966,12 +1126,12 @@ export type TailResponse = Message<"io.defang.v1.TailResponse"> & {
  * Use `create(TailResponseSchema)` to create a new message.
  */
 export const TailResponseSchema: GenMessage<TailResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 33);
+  messageDesc(file_fabric, 39);
 
 /**
- * @generated from message io.defang.v1.ListServicesResponse
+ * @generated from message io.defang.v1.GetServicesResponse
  */
-export type ListServicesResponse = Message<"io.defang.v1.ListServicesResponse"> & {
+export type GetServicesResponse = Message<"io.defang.v1.GetServicesResponse"> & {
   /**
    * @generated from field: repeated io.defang.v1.ServiceInfo services = 1;
    */
@@ -981,18 +1141,21 @@ export type ListServicesResponse = Message<"io.defang.v1.ListServicesResponse"> 
    * @generated from field: string project = 2;
    */
   project: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp expires_at = 3;
+   */
+  expiresAt?: Timestamp;
 };
 
 /**
- * Describes the message io.defang.v1.ListServicesResponse.
- * Use `create(ListServicesResponseSchema)` to create a new message.
+ * Describes the message io.defang.v1.GetServicesResponse.
+ * Use `create(GetServicesResponseSchema)` to create a new message.
  */
-export const ListServicesResponseSchema: GenMessage<ListServicesResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 34);
+export const GetServicesResponseSchema: GenMessage<GetServicesResponse> = /*@__PURE__*/
+  messageDesc(file_fabric, 40);
 
 /**
- * TODO: internal message; move to a separate proto file
- *
  * @generated from message io.defang.v1.ProjectUpdate
  */
 export type ProjectUpdate = Message<"io.defang.v1.ProjectUpdate"> & {
@@ -1007,16 +1170,22 @@ export type ProjectUpdate = Message<"io.defang.v1.ProjectUpdate"> & {
   albArn: string;
 
   /**
-   * should we use compose.name?
+   * deprecated; use compose.name
    *
-   * @generated from field: string project = 3;
+   * @generated from field: string project = 3 [deprecated = true];
+   * @deprecated
    */
   project: string;
 
   /**
-   * @generated from field: google.protobuf.Struct compose = 4;
+   * @generated from field: bytes compose = 4;
    */
-  compose?: JsonObject;
+  compose: Uint8Array;
+
+  /**
+   * @generated from field: string cd_version = 5;
+   */
+  cdVersion: string;
 };
 
 /**
@@ -1024,24 +1193,31 @@ export type ProjectUpdate = Message<"io.defang.v1.ProjectUpdate"> & {
  * Use `create(ProjectUpdateSchema)` to create a new message.
  */
 export const ProjectUpdateSchema: GenMessage<ProjectUpdate> = /*@__PURE__*/
-  messageDesc(file_fabric, 35);
+  messageDesc(file_fabric, 41);
 
 /**
- * @generated from message io.defang.v1.ServiceID
+ * was GetRequest
+ *
+ * @generated from message io.defang.v1.GetRequest
  */
-export type ServiceID = Message<"io.defang.v1.ServiceID"> & {
+export type GetRequest = Message<"io.defang.v1.GetRequest"> & {
   /**
    * @generated from field: string name = 1;
    */
   name: string;
+
+  /**
+   * @generated from field: string project = 2;
+   */
+  project: string;
 };
 
 /**
- * Describes the message io.defang.v1.ServiceID.
- * Use `create(ServiceIDSchema)` to create a new message.
+ * Describes the message io.defang.v1.GetRequest.
+ * Use `create(GetRequestSchema)` to create a new message.
  */
-export const ServiceIDSchema: GenMessage<ServiceID> = /*@__PURE__*/
-  messageDesc(file_fabric, 36);
+export const GetRequestSchema: GenMessage<GetRequest> = /*@__PURE__*/
+  messageDesc(file_fabric, 42);
 
 /**
  * @generated from message io.defang.v1.Device
@@ -1076,7 +1252,7 @@ export type Device = Message<"io.defang.v1.Device"> & {
  * @deprecated
  */
 export const DeviceSchema: GenMessage<Device> = /*@__PURE__*/
-  messageDesc(file_fabric, 37);
+  messageDesc(file_fabric, 43);
 
 /**
  * @generated from message io.defang.v1.Resource
@@ -1111,7 +1287,7 @@ export type Resource = Message<"io.defang.v1.Resource"> & {
  * @deprecated
  */
 export const ResourceSchema: GenMessage<Resource> = /*@__PURE__*/
-  messageDesc(file_fabric, 38);
+  messageDesc(file_fabric, 44);
 
 /**
  * @generated from message io.defang.v1.Resources
@@ -1132,7 +1308,7 @@ export type Resources = Message<"io.defang.v1.Resources"> & {
  * @deprecated
  */
 export const ResourcesSchema: GenMessage<Resources> = /*@__PURE__*/
-  messageDesc(file_fabric, 39);
+  messageDesc(file_fabric, 45);
 
 /**
  * @generated from message io.defang.v1.Deploy
@@ -1160,7 +1336,7 @@ export type Deploy = Message<"io.defang.v1.Deploy"> & {
  * @deprecated
  */
 export const DeploySchema: GenMessage<Deploy> = /*@__PURE__*/
-  messageDesc(file_fabric, 40);
+  messageDesc(file_fabric, 46);
 
 /**
  * @generated from message io.defang.v1.Port
@@ -1191,7 +1367,7 @@ export type Port = Message<"io.defang.v1.Port"> & {
  * @deprecated
  */
 export const PortSchema: GenMessage<Port> = /*@__PURE__*/
-  messageDesc(file_fabric, 41);
+  messageDesc(file_fabric, 47);
 
 /**
  * @generated from message io.defang.v1.Secret
@@ -1212,7 +1388,7 @@ export type Secret = Message<"io.defang.v1.Secret"> & {
  * @deprecated
  */
 export const SecretSchema: GenMessage<Secret> = /*@__PURE__*/
-  messageDesc(file_fabric, 42);
+  messageDesc(file_fabric, 48);
 
 /**
  * @generated from message io.defang.v1.Build
@@ -1259,7 +1435,7 @@ export type Build = Message<"io.defang.v1.Build"> & {
  * @deprecated
  */
 export const BuildSchema: GenMessage<Build> = /*@__PURE__*/
-  messageDesc(file_fabric, 43);
+  messageDesc(file_fabric, 49);
 
 /**
  * @generated from message io.defang.v1.HealthCheck
@@ -1297,7 +1473,7 @@ export type HealthCheck = Message<"io.defang.v1.HealthCheck"> & {
  * @deprecated
  */
 export const HealthCheckSchema: GenMessage<HealthCheck> = /*@__PURE__*/
-  messageDesc(file_fabric, 44);
+  messageDesc(file_fabric, 50);
 
 /**
  * @generated from message io.defang.v1.Service
@@ -1375,13 +1551,15 @@ export type Service = Message<"io.defang.v1.Service"> & {
   init: boolean;
 
   /**
-   * x-defang-dns-role: role arn used to access route53 to create dns records
+   * x-defang-dns-role: role arn used to access route53 to
    *
    * @generated from field: string dns_role = 14;
    */
   dnsRole: string;
 
   /**
+   * create dns records
+   *
    * x-defang-static-files: use a managed CDN
    *
    * @generated from field: io.defang.v1.StaticFiles static_files = 15;
@@ -1396,18 +1574,16 @@ export type Service = Message<"io.defang.v1.Service"> & {
   networks: Network;
 
   /**
+   * @generated from field: repeated string aliases = 17;
+   */
+  aliases: string[];
+
+  /**
    * x-defang-redis: use a managed redis
    *
    * @generated from field: io.defang.v1.Redis redis = 18;
    */
   redis?: Redis;
-
-  /**
-   * x-defang-postgres: use a managed
-   *
-   * @generated from field: io.defang.v1.Postgres postgres = 19;
-   */
-  postgres?: Postgres;
 
   /**
    * defaults to tenant ID
@@ -1423,7 +1599,7 @@ export type Service = Message<"io.defang.v1.Service"> & {
  * @deprecated
  */
 export const ServiceSchema: GenMessage<Service> = /*@__PURE__*/
-  messageDesc(file_fabric, 45);
+  messageDesc(file_fabric, 51);
 
 /**
  * @generated from message io.defang.v1.StaticFiles
@@ -1447,7 +1623,7 @@ export type StaticFiles = Message<"io.defang.v1.StaticFiles"> & {
  * @deprecated
  */
 export const StaticFilesSchema: GenMessage<StaticFiles> = /*@__PURE__*/
-  messageDesc(file_fabric, 46);
+  messageDesc(file_fabric, 52);
 
 /**
  * @generated from message io.defang.v1.Redis
@@ -1462,25 +1638,76 @@ export type Redis = Message<"io.defang.v1.Redis"> & {
  * @deprecated
  */
 export const RedisSchema: GenMessage<Redis> = /*@__PURE__*/
-  messageDesc(file_fabric, 47);
+  messageDesc(file_fabric, 53);
 
 /**
- * @generated from message io.defang.v1.Postgres
- * @deprecated
+ * TODO: internal message; move to a separate proto file; was Event
+ *
+ * @generated from message io.defang.v1.DeployEvent
  */
-export type Postgres = Message<"io.defang.v1.Postgres"> & {
+export type DeployEvent = Message<"io.defang.v1.DeployEvent"> & {
+  /**
+   * @generated from field: io.defang.v1.DeploymentMode mode = 1;
+   */
+  mode: DeploymentMode;
+
+  /**
+   * required
+   *
+   * @generated from field: string type = 2;
+   */
+  type: string;
+
+  /**
+   * @generated from field: string source = 3;
+   */
+  source: string;
+
+  /**
+   * etag
+   *
+   * @generated from field: string id = 4;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string datacontenttype = 5;
+   */
+  datacontenttype: string;
+
+  /**
+   * @generated from field: string dataschema = 6;
+   */
+  dataschema: string;
+
+  /**
+   * tenant|stack; also used as SQS group ID
+   *
+   * @generated from field: string subject = 7;
+   */
+  subject: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp time = 8;
+   */
+  time?: Timestamp;
+
+  /**
+   * @generated from field: bytes data = 9;
+   */
+  data: Uint8Array;
 };
 
 /**
- * Describes the message io.defang.v1.Postgres.
- * Use `create(PostgresSchema)` to create a new message.
- * @deprecated
+ * Describes the message io.defang.v1.DeployEvent.
+ * Use `create(DeployEventSchema)` to create a new message.
  */
-export const PostgresSchema: GenMessage<Postgres> = /*@__PURE__*/
-  messageDesc(file_fabric, 48);
+export const DeployEventSchema: GenMessage<DeployEvent> = /*@__PURE__*/
+  messageDesc(file_fabric, 54);
 
 /**
  * @generated from message io.defang.v1.Event
+ * @deprecated
  */
 export type Event = Message<"io.defang.v1.Event"> & {
   /**
@@ -1540,9 +1767,10 @@ export type Event = Message<"io.defang.v1.Event"> & {
 /**
  * Describes the message io.defang.v1.Event.
  * Use `create(EventSchema)` to create a new message.
+ * @deprecated
  */
 export const EventSchema: GenMessage<Event> = /*@__PURE__*/
-  messageDesc(file_fabric, 49);
+  messageDesc(file_fabric, 55);
 
 /**
  * @generated from message io.defang.v1.PublishRequest
@@ -1559,7 +1787,7 @@ export type PublishRequest = Message<"io.defang.v1.PublishRequest"> & {
  * Use `create(PublishRequestSchema)` to create a new message.
  */
 export const PublishRequestSchema: GenMessage<PublishRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 50);
+  messageDesc(file_fabric, 56);
 
 /**
  * @generated from message io.defang.v1.SubscribeRequest
@@ -1574,6 +1802,11 @@ export type SubscribeRequest = Message<"io.defang.v1.SubscribeRequest"> & {
    * @generated from field: string etag = 2;
    */
   etag: string;
+
+  /**
+   * @generated from field: string project = 3;
+   */
+  project: string;
 };
 
 /**
@@ -1581,7 +1814,7 @@ export type SubscribeRequest = Message<"io.defang.v1.SubscribeRequest"> & {
  * Use `create(SubscribeRequestSchema)` to create a new message.
  */
 export const SubscribeRequestSchema: GenMessage<SubscribeRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 51);
+  messageDesc(file_fabric, 57);
 
 /**
  * @generated from message io.defang.v1.SubscribeResponse
@@ -1614,7 +1847,24 @@ export type SubscribeResponse = Message<"io.defang.v1.SubscribeResponse"> & {
  * Use `create(SubscribeResponseSchema)` to create a new message.
  */
 export const SubscribeResponseSchema: GenMessage<SubscribeResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 52);
+  messageDesc(file_fabric, 58);
+
+/**
+ * @generated from message io.defang.v1.GetServicesRequest
+ */
+export type GetServicesRequest = Message<"io.defang.v1.GetServicesRequest"> & {
+  /**
+   * @generated from field: string project = 1;
+   */
+  project: string;
+};
+
+/**
+ * Describes the message io.defang.v1.GetServicesRequest.
+ * Use `create(GetServicesRequestSchema)` to create a new message.
+ */
+export const GetServicesRequestSchema: GenMessage<GetServicesRequest> = /*@__PURE__*/
+  messageDesc(file_fabric, 59);
 
 /**
  * @generated from message io.defang.v1.DelegateSubdomainZoneRequest
@@ -1631,7 +1881,7 @@ export type DelegateSubdomainZoneRequest = Message<"io.defang.v1.DelegateSubdoma
  * Use `create(DelegateSubdomainZoneRequestSchema)` to create a new message.
  */
 export const DelegateSubdomainZoneRequestSchema: GenMessage<DelegateSubdomainZoneRequest> = /*@__PURE__*/
-  messageDesc(file_fabric, 53);
+  messageDesc(file_fabric, 60);
 
 /**
  * @generated from message io.defang.v1.DelegateSubdomainZoneResponse
@@ -1648,7 +1898,7 @@ export type DelegateSubdomainZoneResponse = Message<"io.defang.v1.DelegateSubdom
  * Use `create(DelegateSubdomainZoneResponseSchema)` to create a new message.
  */
 export const DelegateSubdomainZoneResponseSchema: GenMessage<DelegateSubdomainZoneResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 54);
+  messageDesc(file_fabric, 61);
 
 /**
  * @generated from message io.defang.v1.WhoAmIResponse
@@ -1673,6 +1923,11 @@ export type WhoAmIResponse = Message<"io.defang.v1.WhoAmIResponse"> & {
    * @generated from field: string user_id = 4;
    */
   userId: string;
+
+  /**
+   * @generated from field: io.defang.v1.SubscriptionTier tier = 5;
+   */
+  tier: SubscriptionTier;
 };
 
 /**
@@ -1680,7 +1935,43 @@ export type WhoAmIResponse = Message<"io.defang.v1.WhoAmIResponse"> & {
  * Use `create(WhoAmIResponseSchema)` to create a new message.
  */
 export const WhoAmIResponseSchema: GenMessage<WhoAmIResponse> = /*@__PURE__*/
-  messageDesc(file_fabric, 55);
+  messageDesc(file_fabric, 62);
+
+/**
+ * @generated from enum io.defang.v1.Provider
+ */
+export enum Provider {
+  /**
+   * @generated from enum value: PROVIDER_UNSPECIFIED = 0;
+   */
+  PROVIDER_UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: DEFANG = 1;
+   */
+  DEFANG = 1,
+
+  /**
+   * @generated from enum value: AWS = 2;
+   */
+  AWS = 2,
+
+  /**
+   * @generated from enum value: DIGITALOCEAN = 3;
+   */
+  DIGITALOCEAN = 3,
+
+  /**
+   * @generated from enum value: GCP = 4;
+   */
+  GCP = 4,
+}
+
+/**
+ * Describes the enum io.defang.v1.Provider.
+ */
+export const ProviderSchema: GenEnum<Provider> = /*@__PURE__*/
+  enumDesc(file_fabric, 0);
 
 /**
  * @generated from enum io.defang.v1.DeploymentMode
@@ -1711,7 +2002,7 @@ export enum DeploymentMode {
  * Describes the enum io.defang.v1.DeploymentMode.
  */
 export const DeploymentModeSchema: GenEnum<DeploymentMode> = /*@__PURE__*/
-  enumDesc(file_fabric, 0);
+  enumDesc(file_fabric, 1);
 
 /**
  * @generated from enum io.defang.v1.ServiceState
@@ -1784,13 +2075,18 @@ export enum ServiceState {
    * @generated from enum value: BUILD_FAILED = 11;
    */
   BUILD_FAILED = 11,
+
+  /**
+   * @generated from enum value: DEPLOYMENT_SCALED_IN = 12;
+   */
+  DEPLOYMENT_SCALED_IN = 12,
 }
 
 /**
  * Describes the enum io.defang.v1.ServiceState.
  */
 export const ServiceStateSchema: GenEnum<ServiceState> = /*@__PURE__*/
-  enumDesc(file_fabric, 1);
+  enumDesc(file_fabric, 2);
 
 /**
  * @generated from enum io.defang.v1.ConfigType
@@ -1811,7 +2107,7 @@ export enum ConfigType {
  * Describes the enum io.defang.v1.ConfigType.
  */
 export const ConfigTypeSchema: GenEnum<ConfigType> = /*@__PURE__*/
-  enumDesc(file_fabric, 2);
+  enumDesc(file_fabric, 3);
 
 /**
  * @generated from enum io.defang.v1.Platform
@@ -1839,7 +2135,7 @@ export enum Platform {
  * @deprecated
  */
 export const PlatformSchema: GenEnum<Platform> = /*@__PURE__*/
-  enumDesc(file_fabric, 3);
+  enumDesc(file_fabric, 4);
 
 /**
  * @generated from enum io.defang.v1.Protocol
@@ -1886,7 +2182,7 @@ export enum Protocol {
  * @deprecated
  */
 export const ProtocolSchema: GenEnum<Protocol> = /*@__PURE__*/
-  enumDesc(file_fabric, 4);
+  enumDesc(file_fabric, 5);
 
 /**
  * @generated from enum io.defang.v1.Mode
@@ -1913,7 +2209,7 @@ export enum Mode {
  * @deprecated
  */
 export const ModeSchema: GenEnum<Mode> = /*@__PURE__*/
-  enumDesc(file_fabric, 5);
+  enumDesc(file_fabric, 6);
 
 /**
  * @generated from enum io.defang.v1.Network
@@ -1945,7 +2241,43 @@ export enum Network {
  * @deprecated
  */
 export const NetworkSchema: GenEnum<Network> = /*@__PURE__*/
-  enumDesc(file_fabric, 6);
+  enumDesc(file_fabric, 7);
+
+/**
+ * @generated from enum io.defang.v1.SubscriptionTier
+ */
+export enum SubscriptionTier {
+  /**
+   * @generated from enum value: SUBSCRIPTION_TIER_UNSPECIFIED = 0;
+   */
+  SUBSCRIPTION_TIER_UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: PERSONAL = 1;
+   */
+  PERSONAL = 1,
+
+  /**
+   * @generated from enum value: BASIC = 2;
+   */
+  BASIC = 2,
+
+  /**
+   * @generated from enum value: PRO = 3;
+   */
+  PRO = 3,
+
+  /**
+   * @generated from enum value: TEAM = 4;
+   */
+  TEAM = 4,
+}
+
+/**
+ * Describes the enum io.defang.v1.SubscriptionTier.
+ */
+export const SubscriptionTierSchema: GenEnum<SubscriptionTier> = /*@__PURE__*/
+  enumDesc(file_fabric, 8);
 
 /**
  * @generated from service io.defang.v1.FabricController
@@ -2015,7 +2347,7 @@ export const FabricController: GenService<{
    */
   get: {
     methodKind: "unary";
-    input: typeof ServiceIDSchema;
+    input: typeof GetRequestSchema;
     output: typeof ServiceInfoSchema;
   },
   /**
@@ -2028,7 +2360,16 @@ export const FabricController: GenService<{
     output: typeof DeleteResponseSchema;
   },
   /**
+   * @generated from rpc io.defang.v1.FabricController.Destroy
+   */
+  destroy: {
+    methodKind: "unary";
+    input: typeof DestroyRequestSchema;
+    output: typeof DestroyResponseSchema;
+  },
+  /**
    * @generated from rpc io.defang.v1.FabricController.Publish
+   * @deprecated
    */
   publish: {
     methodKind: "unary";
@@ -2050,8 +2391,8 @@ export const FabricController: GenService<{
    */
   getServices: {
     methodKind: "unary";
-    input: typeof EmptySchema;
-    output: typeof ListServicesResponseSchema;
+    input: typeof GetServicesRequestSchema;
+    output: typeof GetServicesResponseSchema;
   },
   /**
    * deprecated; use StartGenerate/GenerateStatus
@@ -2131,7 +2472,7 @@ export const FabricController: GenService<{
    */
   listSecrets: {
     methodKind: "unary";
-    input: typeof EmptySchema;
+    input: typeof ListConfigsRequestSchema;
     output: typeof SecretsSchema;
   },
   /**
@@ -2222,6 +2563,30 @@ export const FabricController: GenService<{
   deleteMe: {
     methodKind: "unary";
     input: typeof EmptySchema;
+    output: typeof EmptySchema;
+  },
+  /**
+   * @generated from rpc io.defang.v1.FabricController.VerifyDNSSetup
+   */
+  verifyDNSSetup: {
+    methodKind: "unary";
+    input: typeof VerifyDNSSetupRequestSchema;
+    output: typeof EmptySchema;
+  },
+  /**
+   * @generated from rpc io.defang.v1.FabricController.GetSelectedProvider
+   */
+  getSelectedProvider: {
+    methodKind: "unary";
+    input: typeof GetSelectedProviderRequestSchema;
+    output: typeof GetSelectedProviderResponseSchema;
+  },
+  /**
+   * @generated from rpc io.defang.v1.FabricController.SetSelectedProvider
+   */
+  setSelectedProvider: {
+    methodKind: "unary";
+    input: typeof SetSelectedProviderRequestSchema;
     output: typeof EmptySchema;
   },
 }> = /*@__PURE__*/

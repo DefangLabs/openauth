@@ -1,5 +1,6 @@
 import { Circle } from "@mui/icons-material";
 import { Tooltip, Icon } from "@mui/material";
+import { ServiceState } from "@/modules/defang/generated/fabric_pb";
 
 const statusColorMap: Record<string, string> = {
   BUILD_QUEUED: "red",
@@ -25,20 +26,25 @@ const statusColorMap: Record<string, string> = {
 } as const;
 
 function color(status: string) {
-  return statusColorMap[status.split(" ", 1)[0]]; // strip of the status reason
+  return statusColorMap[status.split(" ", 1)[0]]; // strip off the status reason
 }
 
 export function StatusIcon({
   status,
+  state,
 }: {
   status?: string | keyof typeof statusColorMap;
+  state?: ServiceState;
 }) {
   if (!status) return null;
   return (
     <Tooltip title={status}>
       <Icon
         sx={{
-          color: color(status),
+          color:
+            state === ServiceState.DEPLOYMENT_SCALED_IN
+              ? "grey"
+              : color(status),
           mr: 1,
           position: "relative",
         }}

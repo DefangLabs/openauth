@@ -52,6 +52,7 @@ export const ServiceState = /*@__PURE__*/ proto3.makeEnum(
     {no: 9, name: "DEPLOYMENT_COMPLETED"},
     {no: 10, name: "DEPLOYMENT_FAILED"},
     {no: 11, name: "BUILD_FAILED"},
+    {no: 12, name: "DEPLOYMENT_SCALED_IN"},
   ],
 );
 
@@ -611,13 +612,14 @@ export const TailResponse = /*@__PURE__*/ proto3.makeMessageType(
 );
 
 /**
- * @generated from message io.defang.v1.ListServicesResponse
+ * @generated from message io.defang.v1.GetServicesResponse
  */
-export const ListServicesResponse = /*@__PURE__*/ proto3.makeMessageType(
-  "io.defang.v1.ListServicesResponse",
+export const GetServicesResponse = /*@__PURE__*/ proto3.makeMessageType(
+  "io.defang.v1.GetServicesResponse",
   () => [
     { no: 1, name: "services", kind: "message", T: ServiceInfo, repeated: true },
     { no: 2, name: "project", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "expires_at", kind: "message", T: Timestamp },
   ],
 );
 
@@ -636,10 +638,12 @@ export const ProjectUpdate = /*@__PURE__*/ proto3.makeMessageType(
 );
 
 /**
- * @generated from message io.defang.v1.ServiceID
+ * was GetRequest
+ *
+ * @generated from message io.defang.v1.GetRequest
  */
-export const ServiceID = /*@__PURE__*/ proto3.makeMessageType(
-  "io.defang.v1.ServiceID",
+export const GetRequest = /*@__PURE__*/ proto3.makeMessageType(
+  "io.defang.v1.GetRequest",
   () => [
     { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "project", kind: "scalar", T: 9 /* ScalarType.STRING */ },
@@ -771,8 +775,8 @@ export const Service = /*@__PURE__*/ proto3.makeMessageType(
     { no: 14, name: "dns_role", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 15, name: "static_files", kind: "message", T: StaticFiles },
     { no: 16, name: "networks", kind: "enum", T: proto3.getEnumType(Network) },
+    { no: 17, name: "aliases", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
     { no: 18, name: "redis", kind: "message", T: Redis },
-    { no: 19, name: "postgres", kind: "message", T: Postgres },
     { no: 20, name: "project", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
@@ -795,15 +799,6 @@ export const StaticFiles = /*@__PURE__*/ proto3.makeMessageType(
  */
 export const Redis = /*@__PURE__*/ proto3.makeMessageType(
   "io.defang.v1.Redis",
-  [],
-);
-
-/**
- * @generated from message io.defang.v1.Postgres
- * @deprecated
- */
-export const Postgres = /*@__PURE__*/ proto3.makeMessageType(
-  "io.defang.v1.Postgres",
   [],
 );
 
