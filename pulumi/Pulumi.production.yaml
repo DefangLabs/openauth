@@ -2,8 +2,8 @@ config:
   defang-portal:aivenBillingGroup:
     secure: AAABACYssb6InyMG8+yblNMObJSRBsBqocBay3MqWf7k7haci5++YkQiCU7D2OkkDxE8/kkqXrwc72SMNs3dZwYrjnQ=
   defang-portal:domainname: portal.defang.dev
-  # defang-portal:aliases:
-  #   - portal.defang.io
+  defang-portal:aliases:
+    - portal.defang.io
   defang-portal:fabric: https://fabric-prod1.defang.dev
   defang-portal:githubClientId: f4a7f6905b83028583d5
   defang-portal:githubClientSecret:
