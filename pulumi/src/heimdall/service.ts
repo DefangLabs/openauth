@@ -28,6 +28,11 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
         },
     },
     domainname: config.get("domainname"),
+    networks: {
+        "private": {
+            aliases: config.getObject<string[]>("aliases"),
+        },
+    },
     // deploy: {
     //     resources: {
     //         reservations: {memory: 1024}
