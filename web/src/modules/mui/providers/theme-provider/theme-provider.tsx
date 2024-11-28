@@ -43,10 +43,12 @@ const theme = createTheme({
     h5: {
       fontFamily: 'var(--headers-font), "Helvetica Neue", Arial, sans-serif',
       fontSize: "1rem",
+      fontWeight: 700,
     },
     h6: {
       fontFamily: 'var(--headers-font), "Helvetica Neue", Arial, sans-serif',
-      fontSize: "0.75rem",
+      fontSize: "1rem",
+      fontWeight: 700,
     },
   },
   shape: {

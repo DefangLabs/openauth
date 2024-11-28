@@ -5,10 +5,13 @@ import { StatusIcon } from "@/components/status-icon/status-icon";
 import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
 import { LoginRequired } from "@/modules/kratos/components/login-required/login-required";
 import { COLORS } from "@/modules/mui/constants";
+import { HelpOutline, HelpOutlineTwoTone } from "@mui/icons-material";
 import {
+  Alert,
   Box,
   Card,
   CircularProgress,
+  Link,
   Stack,
   styled,
   TextField,
@@ -66,6 +69,10 @@ function ProjectsPageInner() {
     );
   }
 
+  const hasExpiry = !!expiresAt;
+  const hasExpired = hasExpiry && expiresAt < Date.now();
+  const willExpire = hasExpiry && expiresAt > Date.now();
+
   return (
     <Stack p={2} spacing={2} flexGrow={1}>
       <Stack direction="row" alignItems="center">
@@ -85,28 +92,63 @@ function ProjectsPageInner() {
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              gap: 2,
+              alignItems: "center",
               width: "100%",
+              mb: 2,
             }}
           >
-            <Typography variant="h2" sx={{ mb: 2 }}>
+            <Typography variant="h2">
               {project ?? "Unnamed Project"}
               <Small>{` free `}</Small>
             </Typography>
-            {expiresAt < Date.now() ? (
-              <Typography>
-                Redeploy to avoid downtime or{" "}
-                <a href="https://docs.defang.io/docs/concepts/defang-byoc">
-                  use BYOC
-                </a>
-              </Typography>
-            ) : expiresAt ? (
-              <Tooltip title="Redeploy before this date to avoid downtime or use BYOC">
-                <Typography>
-                  {`This deployment will be deactivated on ${new Date(expiresAt).toDateString()}`}
-                </Typography>
+            {hasExpired && (
+              <Tooltip
+                title={
+                  <Typography>
+                    Redeploy to avoid downtime or{" "}
+                    <Link
+                      color="#FFF"
+                      href="https://docs.defang.io/docs/concepts/defang-byoc"
+                    >
+                      use BYOC
+                    </Link>
+                  </Typography>
+                }
+              >
+                <Alert
+                  severity="error"
+                  icon={<HelpOutlineTwoTone />}
+                  sx={{ cursor: "pointer" }}
+                >
+                  This deployment expired on{" "}
+                  {new Date(expiresAt).toDateString()}
+                </Alert>
               </Tooltip>
-            ) : (
-              <></>
+            )}
+            {willExpire && (
+              <Tooltip
+                title={
+                  <Typography>
+                    Redeploy before this date to avoid downtime or{" "}
+                    <Link
+                      color="#FFF"
+                      href="https://docs.defang.io/docs/concepts/defang-byoc"
+                    >
+                      use BYOC
+                    </Link>
+                  </Typography>
+                }
+              >
+                <Alert
+                  severity="info"
+                  icon={<HelpOutlineTwoTone />}
+                  sx={{ cursor: "pointer" }}
+                >
+                  This deployment will be deactivated on{" "}
+                  {new Date(expiresAt).toDateString()}
+                </Alert>
+              </Tooltip>
             )}
             <DeleteWithConfirmationButton
               dialogTitle={"Are you sure?"}
