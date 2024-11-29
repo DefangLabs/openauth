@@ -1,0 +1,1 @@
+CREATE TABLE "public"."stripeCustomers" ("id" text NOT NULL, "defangId" text NOT NULL, "data" jsonb NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("defangId") REFERENCES "public"."profiles"("defangId") ON UPDATE cascade ON DELETE cascade, UNIQUE ("id"), UNIQUE ("defangId"));

@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "graphql-codegen": "npx graphql-codegen",
     "generate-defang-fabric": "npx buf generate src/modules/defang/fabric.proto"
   },
   "dependencies": {

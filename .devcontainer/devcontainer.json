@@ -16,7 +16,8 @@
 				"bierner.markdown-mermaid",
 				"bpruitt-goddard.mermaid-markdown-syntax-highlighting",
 				"GitHub.copilot",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"styled-components.vscode-styled-components"
 			]
 		}
 	}

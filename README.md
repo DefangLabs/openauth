@@ -37,6 +37,7 @@ Hot reloading for Next.js doesn't work at the moment, because we're running an o
 - `defang-portal:kratosDatabasePassword`:
 - `defang-portal:kratosSecretsCipher0`: random 32 char string (24 bytes, base64 encoded)
 - `defang-portal:kratosSecretsCookie0`: random 32 bytes, base64 encoded to 44 chars
+- `defang-portal:stripeSecretKey`: from Stripe dashboard
 
 ## Deploy
 

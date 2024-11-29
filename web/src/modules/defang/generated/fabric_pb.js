@@ -128,8 +128,8 @@ export const SubscriptionTier = /*@__PURE__*/ proto3.makeEnum(
   "io.defang.v1.SubscriptionTier",
   [
     {no: 0, name: "SUBSCRIPTION_TIER_UNSPECIFIED"},
-    {no: 1, name: "PERSONAL"},
-    {no: 2, name: "BASIC"},
+    {no: 1, name: "HOBBY"},
+    {no: 2, name: "PERSONAL"},
     {no: 3, name: "PRO"},
     {no: 4, name: "TEAM"},
   ],

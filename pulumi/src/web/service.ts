@@ -17,6 +17,13 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
       NEXT_PUBLIC_KRATOS_PUBLIC_URL: `${ROOT_URL}/svc/kratos`,
       NEXT_PUBLIC_SEGMENT_WRITE_KEY: config.require("segmentWriteKey"),
       NEXT_PUBLIC_VERSION: gitDescribe() || "unknown",
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: config.require(
+        "stripe-publishable-key"
+      ),
+      NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID: config.require(
+        "stripe-pricing-table-id"
+      ),
+      NEXT_PUBLIC_STRIPE_PORTAL_URL: config.require("stripe-portal-url"),
     },
   },
   environment: {
@@ -32,11 +39,9 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
 });
 
 function gitDescribe(): string {
-  return (
-    execFileSync(
-      "/usr/bin/env",
-      ["git", "describe", "--tags", "--always", "--dirty"],
-      { encoding: "utf8", stdio: ["pipe", "pipe", "inherit"] }
-    ).trim()
-  );
+  return execFileSync(
+    "/usr/bin/env",
+    ["git", "describe", "--tags", "--always", "--dirty"],
+    { encoding: "utf8", stdio: ["pipe", "pipe", "inherit"] }
+  ).trim();
 }

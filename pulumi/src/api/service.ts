@@ -2,6 +2,7 @@ import { DefangService } from '@defang-io/pulumi-defang/lib';
 import * as pulumi from '@pulumi/pulumi';
 import { SERVICE_NAME, SERVICE_ROOT_PATH } from './constants';
 import { config } from '../common/config';
+import { ROOT_URL } from '../common/constants';
 
 export const service: DefangService = new DefangService(SERVICE_NAME, {
     name: `${SERVICE_NAME}-${pulumi.getStack()}`,
@@ -17,6 +18,8 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
         JWKS_ENDPOINT: config.require("heimdallJwksEndpoint"), // i.e. http://heimdall:4456/.well-known/jwks
         KRATOS_DOMAIN: config.require("kratosDomain"), // i.e. kratos:4433
         HASURA_DOMAIN: config.require("hasuraDomain"), // i.e. hasura:8080
+        STRIPE_SECRET_KEY: config.require("stripeSecretKey"),
+        PUBLIC_ROOT_URL: ROOT_URL,
     },
     platform: 'linux/arm64',
     healthcheck: {

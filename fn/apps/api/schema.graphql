@@ -1,0 +1,340 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+  """measured in seconds"""
+  ttl: Int! = 60
+) on QUERY
+
+type CreateStripePortalSessionOutput {
+  url: String!
+}
+
+type CreateStripeSecretOutput {
+  secret: String!
+}
+
+"""ordering argument of a cursor"""
+enum CursorOrdering {
+  """ascending ordering of the cursor"""
+  ASC
+  """descending ordering of the cursor"""
+  DESC
+}
+
+type DeleteAccountOutput {
+  message: String!
+}
+
+"""column ordering options"""
+enum OrderBy {
+  """in ascending order, nulls last"""
+  ASC
+  """in ascending order, nulls first"""
+  ASC_NULLS_FIRST
+  """in ascending order, nulls last"""
+  ASC_NULLS_LAST
+  """in descending order, nulls first"""
+  DESC
+  """in descending order, nulls first"""
+  DESC_NULLS_FIRST
+  """in descending order, nulls last"""
+  DESC_NULLS_LAST
+}
+
+"""
+columns and relationships of "profiles"
+"""
+type Profiles {
+  id: uuid!
+  name: String
+}
+
+"""
+Boolean expression to filter rows from the table "profiles". All fields are combined with a logical 'AND'.
+"""
+input ProfilesBoolExp {
+  _and: [ProfilesBoolExp!]
+  _not: ProfilesBoolExp
+  _or: [ProfilesBoolExp!]
+  id: UuidComparisonExp
+  name: StringComparisonExp
+}
+
+"""
+unique or primary key constraints on table "profiles"
+"""
+enum ProfilesConstraint {
+  """
+  unique or primary key constraint on columns "defangId"
+  """
+  profiles_defangId_key
+  """
+  unique or primary key constraint on columns "id"
+  """
+  profiles_pkey
+}
+
+"""
+input type for inserting data into table "profiles"
+"""
+input ProfilesInsertInput {
+  name: String
+}
+
+"""
+response of any mutation on the table "profiles"
+"""
+type ProfilesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+  """data from the rows affected by the mutation"""
+  returning: [Profiles!]!
+}
+
+"""
+on_conflict condition type for table "profiles"
+"""
+input ProfilesOnConflict {
+  constraint: ProfilesConstraint!
+  updateColumns: [ProfilesUpdateColumn!]! = []
+  where: ProfilesBoolExp
+}
+
+"""Ordering options when selecting data from "profiles"."""
+input ProfilesOrderBy {
+  id: OrderBy
+  name: OrderBy
+}
+
+"""primary key columns input for table: profiles"""
+input ProfilesPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "profiles"
+"""
+enum ProfilesSelectColumn {
+  """column name"""
+  id
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "profiles"
+"""
+input ProfilesSetInput {
+  name: String
+}
+
+"""
+Streaming cursor of the table "profiles"
+"""
+input ProfilesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: ProfilesStreamCursorValueInput!
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input ProfilesStreamCursorValueInput {
+  id: uuid
+  name: String
+}
+
+"""
+update columns of table "profiles"
+"""
+enum ProfilesUpdateColumn {
+  """column name"""
+  name
+}
+
+input ProfilesUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: ProfilesSetInput
+  """filter the rows which have to be updated"""
+  where: ProfilesBoolExp!
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input StringComparisonExp {
+  _eq: String
+  _gt: String
+  _gte: String
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _isNull: Boolean
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+  """does the column NOT match the given pattern"""
+  _nlike: String
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+"""
+Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'.
+"""
+input UuidComparisonExp {
+  _eq: uuid
+  _gt: uuid
+  _gte: uuid
+  _in: [uuid!]
+  _isNull: Boolean
+  _lt: uuid
+  _lte: uuid
+  _neq: uuid
+  _nin: [uuid!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """Create a Stripe portal session"""
+  createStripePortalSession: CreateStripePortalSessionOutput
+  """Create a Stripe client secret"""
+  createStripeSecret: CreateStripeSecretOutput
+  deleteAccount: DeleteAccountOutput
+  """
+  delete data from the table: "profiles"
+  """
+  deleteProfiles(
+    """filter the rows which have to be deleted"""
+    where: ProfilesBoolExp!
+  ): ProfilesMutationResponse
+  """
+  delete single row from the table: "profiles"
+  """
+  deleteProfilesByPk(id: uuid!): Profiles
+  """
+  insert data into the table: "profiles"
+  """
+  insertProfiles(
+    """the rows to be inserted"""
+    objects: [ProfilesInsertInput!]!
+    """upsert condition"""
+    onConflict: ProfilesOnConflict
+  ): ProfilesMutationResponse
+  """
+  insert a single row into the table: "profiles"
+  """
+  insertProfilesOne(
+    """the row to be inserted"""
+    object: ProfilesInsertInput!
+    """upsert condition"""
+    onConflict: ProfilesOnConflict
+  ): Profiles
+  """
+  update data of the table: "profiles"
+  """
+  updateProfiles(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ProfilesSetInput
+    """filter the rows which have to be updated"""
+    where: ProfilesBoolExp!
+  ): ProfilesMutationResponse
+  """
+  update single row of the table: "profiles"
+  """
+  updateProfilesByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ProfilesSetInput
+    pkColumns: ProfilesPkColumnsInput!
+  ): Profiles
+  """
+  update multiples rows of table: "profiles"
+  """
+  updateProfilesMany(
+    """updates to execute, in order"""
+    updates: [ProfilesUpdates!]!
+  ): [ProfilesMutationResponse]
+}
+
+type query_root {
+  """
+  fetch data from the table: "profiles"
+  """
+  profiles(
+    """distinct select on columns"""
+    distinctOn: [ProfilesSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [ProfilesOrderBy!]
+    """filter the rows returned"""
+    where: ProfilesBoolExp
+  ): [Profiles!]!
+  """fetch data from the table: "profiles" using primary key columns"""
+  profilesByPk(id: uuid!): Profiles
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "profiles"
+  """
+  profiles(
+    """distinct select on columns"""
+    distinctOn: [ProfilesSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [ProfilesOrderBy!]
+    """filter the rows returned"""
+    where: ProfilesBoolExp
+  ): [Profiles!]!
+  """fetch data from the table: "profiles" using primary key columns"""
+  profilesByPk(id: uuid!): Profiles
+  """
+  fetch data from the table in a streaming manner: "profiles"
+  """
+  profilesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+    """cursor to stream the results returned by the query"""
+    cursor: [ProfilesStreamCursorInput]!
+    """filter the rows returned"""
+    where: ProfilesBoolExp
+  ): [Profiles!]!
+}
+
+scalar uuid

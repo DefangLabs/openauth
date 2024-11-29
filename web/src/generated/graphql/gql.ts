@@ -11,6 +11,7 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * 3. It does not support dead code elimination, so it will add unused operations.
  *
  * Therefore it is highly recommended to use the babel or swc plugin for production.
+ * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
   "\n  mutation DeleteAccountMutation {\n    deleteAccount {\n      message\n    }\n  }\n":
@@ -19,6 +20,10 @@ const documents = {
     types.InsertProfileMutationDocument,
   "\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n":
     types.ProfileQueryDocument,
+  "\n  mutation CreateStripePortalSession {\n    createStripePortalSession {\n      url\n    }\n  }\n":
+    types.CreateStripePortalSessionDocument,
+  "\n  mutation CreateStripeSecret {\n    createStripeSecret {\n      secret\n    }\n  }\n":
+    types.CreateStripeSecretDocument,
 };
 
 /**
@@ -39,20 +44,32 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  mutation DeleteAccountMutation {\n    deleteAccount {\n      message\n    }\n  }\n"
+  source: "\n  mutation DeleteAccountMutation {\n    deleteAccount {\n      message\n    }\n  }\n",
 ): (typeof documents)["\n  mutation DeleteAccountMutation {\n    deleteAccount {\n      message\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  mutation InsertProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(\n      object: $object\n      onConflict: { constraint: profiles_pkey, updateColumns: [name] }\n    ) {\n      id\n      name\n    }\n  }\n"
+  source: "\n  mutation InsertProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(\n      object: $object\n      onConflict: { constraint: profiles_pkey, updateColumns: [name] }\n    ) {\n      id\n      name\n    }\n  }\n",
 ): (typeof documents)["\n  mutation InsertProfileMutation($object: ProfilesInsertInput!) {\n    insertProfilesOne(\n      object: $object\n      onConflict: { constraint: profiles_pkey, updateColumns: [name] }\n    ) {\n      id\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n"
+  source: "\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n",
 ): (typeof documents)["\n  query ProfileQuery($id: uuid!) {\n    profilesByPk(id: $id) {\n      id\n      name\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation CreateStripePortalSession {\n    createStripePortalSession {\n      url\n    }\n  }\n",
+): (typeof documents)["\n  mutation CreateStripePortalSession {\n    createStripePortalSession {\n      url\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation CreateStripeSecret {\n    createStripeSecret {\n      secret\n    }\n  }\n",
+): (typeof documents)["\n  mutation CreateStripeSecret {\n    createStripeSecret {\n      secret\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

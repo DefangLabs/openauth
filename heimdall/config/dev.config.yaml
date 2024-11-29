@@ -27,7 +27,7 @@ rules:
             - ory_kratos_session
           subject:
             id: "identity.id"
-          cache_ttl: 5m
+          cache_ttl: 1s
           session_lifespan:
             active: active
             issued_at: issued_at
@@ -54,12 +54,14 @@ rules:
                 "x-hasura-user-id": "{{ .id }}"
               }
               {{- with .traits -}}
+                {{ $traits := . }}
                 {{- with .github -}}
                   {{- if .username -}}
                     ,
                     "https://defang.io/jwt/claims": {
                       "github-username": "{{ .username }}",
-                      "github-id": "{{ .id }}"
+                      "github-id": "{{ .id }}",
+                      "email": "{{ $traits.email }}"
                     }
                   {{- end -}}
                 {{- end -}}
@@ -88,3 +90,9 @@ rules:
     file_system:
       src: ${RULES_FILE_PATH:="/heimdall/conf/dev.rules.yaml"}
       watch: true
+
+tracing:
+  enabled: false
+
+metrics:
+  enabled: false

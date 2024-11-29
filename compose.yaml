@@ -103,6 +103,8 @@ services:
       - JWKS_ENDPOINT=http://heimdall:4457/.well-known/jwks
       - KRATOS_DOMAIN=kratos:4433
       - HASURA_DOMAIN=hasura:8080
+      - STRIPE_SECRET_KEY=rk_test_51QJ1i6GzPK2DOcG5XJxzf6GmkKbCESzOfThaVkGxMzVMS7p6UQOycxMuNQG7lPbEJkAvxGwEEvfcsLObiGpNyIX200fxhtNlJG
+      - PUBLIC_ROOT_URL=http://localhost:8000
     ports:
       - 8001:8001
     volumes:

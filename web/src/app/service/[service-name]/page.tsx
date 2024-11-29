@@ -19,6 +19,7 @@ import { Endpoints } from "./components/endpoints/endpoints";
 import { Environment } from "./components/environment/environment";
 import { Logs } from "./components/logs/logs";
 import { useService } from "./hooks/use-service/use-service";
+import { PageLoading } from "@/components/page-loading/page-loading";
 
 const Small = styled("small")`
   color: ${COLORS.darkGrey};
@@ -36,20 +37,7 @@ function ProjectsPageInner() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   if (loading) {
-    return (
-      <Box
-        width="100%"
-        height="100vh"
-        alignItems="center"
-        justifyContent="center"
-        display="flex"
-      >
-        <Stack direction="column" spacing={2} alignItems="center">
-          <CircularProgress />
-          <Typography variant="h2">Loading...</Typography>
-        </Stack>
-      </Box>
-    );
+    return <PageLoading />;
   }
 
   const firstEndpoint = service?.endpoints?.[0];

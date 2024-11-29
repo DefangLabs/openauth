@@ -21,6 +21,12 @@ async function getKey(header: any): Promise<string> {
     });
 }
 
+/**
+ * Takes a token and validates it using the JWKS endpoint. Throws an error if invalid.
+ * 
+ * @param token 
+ * @returns 
+ */
 export async function validateJwt(token: string) {
     try {
         const decoded = await new Promise((resolve, reject) => {

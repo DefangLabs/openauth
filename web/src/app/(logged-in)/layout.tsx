@@ -6,6 +6,7 @@ import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-de
 import { Placeholder } from "@/modules/kratos/components/login-required/components/placeholder/placeholder";
 import { useSession } from "@/modules/kratos/hooks/use-session/use-session";
 import { useEffect } from "react";
+import { getTierString } from "@/lib/tiers";
 
 function RootLayoutInner({ children }: { children: React.ReactNode }) {
   const { session, loading } = useSession();
@@ -19,9 +20,15 @@ function RootLayoutInner({ children }: { children: React.ReactNode }) {
         console.log("@@ error getting whoami", err);
         return;
       }
-      analytics.identify(res.userId);
+      analytics.identify(res.userId, {
+        email: session.identity?.traits.email,
+        firstName: session.identity?.traits.name?.first,
+        lastName: session.identity?.traits.name?.last,
+        plan: getTierString(res.tier),
+        username: res.tenant,
+      });
     });
-  }, [client, display]);
+  }, [client, display, session]);
 
   return display ? <>{children}</> : <Placeholder />;
 }

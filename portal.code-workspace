@@ -85,6 +85,15 @@
 					"cwd": "${workspaceFolder}/web"
 				},
 				"problemMatcher": []
+			},// install web dependencies
+			{
+				"label": "web: generate gql",
+				"type": "shell",
+				"command": "npx graphql-codegen",
+				"options": {
+					"cwd": "${workspaceFolder}/web"
+				},
+				"problemMatcher": []
 			},
 			// install rest api dependencies
 			{
@@ -126,7 +135,7 @@
 			{
 				"label": "web: graphql codegen",
 				"type": "shell",
-				"command": "npm run graphql-codegen",
+				"command": "./scripts/watch-graphql",
 				"runOptions": {
 					"runOn": "folderOpen"
 				},

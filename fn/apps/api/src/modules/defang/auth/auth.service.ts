@@ -7,7 +7,7 @@ import { create } from "@bufbuild/protobuf";
 
 
 export const getDefangToken = async (req: Request, res: Response) => {
-    const heimdallJWT = await getJwtFromRequest(req);
+    const heimdallJWT = getJwtFromRequest(req);
 
     if (!heimdallJWT) {
         return res.status(401).json({ error: 'Unauthorized' });

@@ -13,7 +13,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 };
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T
+  K extends keyof T,
 > = { [_ in K]?: never };
 export type Incremental<T> =
   | T
@@ -22,7 +22,7 @@ export type Incremental<T> =
     };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string };
+  ID: { input: string; output: string };
   String: { input: string; output: string };
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
@@ -37,11 +37,6 @@ export enum CursorOrdering {
   /** descending ordering of the cursor */
   Desc = "DESC",
 }
-
-export type DeleteAccountOutput = {
-  __typename?: "DeleteAccountOutput";
-  message: Scalars["String"]["output"];
-};
 
 /** column ordering options */
 export enum OrderBy {
@@ -59,13 +54,6 @@ export enum OrderBy {
   DescNullsLast = "DESC_NULLS_LAST",
 }
 
-/** columns and relationships of "profiles" */
-export type Profiles = {
-  __typename?: "Profiles";
-  id: Scalars["uuid"]["output"];
-  name?: Maybe<Scalars["String"]["output"]>;
-};
-
 /** Boolean expression to filter rows from the table "profiles". All fields are combined with a logical 'AND'. */
 export type ProfilesBoolExp = {
   _and?: InputMaybe<Array<ProfilesBoolExp>>;
@@ -77,6 +65,8 @@ export type ProfilesBoolExp = {
 
 /** unique or primary key constraints on table "profiles" */
 export enum ProfilesConstraint {
+  /** unique or primary key constraint on columns "defangId" */
+  ProfilesDefangIdKey = "profiles_defangId_key",
   /** unique or primary key constraint on columns "id" */
   ProfilesPkey = "profiles_pkey",
 }
@@ -84,15 +74,6 @@ export enum ProfilesConstraint {
 /** input type for inserting data into table "profiles" */
 export type ProfilesInsertInput = {
   name?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** response of any mutation on the table "profiles" */
-export type ProfilesMutationResponse = {
-  __typename?: "ProfilesMutationResponse";
-  /** number of rows affected by the mutation */
-  affectedRows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Profiles>;
 };
 
 /** on_conflict condition type for table "profiles" */
@@ -199,113 +180,6 @@ export type UuidComparisonExp = {
   _nin?: InputMaybe<Array<Scalars["uuid"]["input"]>>;
 };
 
-/** mutation root */
-export type Mutation_Root = {
-  __typename?: "mutation_root";
-  deleteAccount?: Maybe<DeleteAccountOutput>;
-  /** delete data from the table: "profiles" */
-  deleteProfiles?: Maybe<ProfilesMutationResponse>;
-  /** delete single row from the table: "profiles" */
-  deleteProfilesByPk?: Maybe<Profiles>;
-  /** insert data into the table: "profiles" */
-  insertProfiles?: Maybe<ProfilesMutationResponse>;
-  /** insert a single row into the table: "profiles" */
-  insertProfilesOne?: Maybe<Profiles>;
-  /** update data of the table: "profiles" */
-  updateProfiles?: Maybe<ProfilesMutationResponse>;
-  /** update single row of the table: "profiles" */
-  updateProfilesByPk?: Maybe<Profiles>;
-  /** update multiples rows of table: "profiles" */
-  updateProfilesMany?: Maybe<Array<Maybe<ProfilesMutationResponse>>>;
-};
-
-/** mutation root */
-export type Mutation_RootDeleteProfilesArgs = {
-  where: ProfilesBoolExp;
-};
-
-/** mutation root */
-export type Mutation_RootDeleteProfilesByPkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** mutation root */
-export type Mutation_RootInsertProfilesArgs = {
-  objects: Array<ProfilesInsertInput>;
-  onConflict?: InputMaybe<ProfilesOnConflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsertProfilesOneArgs = {
-  object: ProfilesInsertInput;
-  onConflict?: InputMaybe<ProfilesOnConflict>;
-};
-
-/** mutation root */
-export type Mutation_RootUpdateProfilesArgs = {
-  _set?: InputMaybe<ProfilesSetInput>;
-  where: ProfilesBoolExp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdateProfilesByPkArgs = {
-  _set?: InputMaybe<ProfilesSetInput>;
-  pkColumns: ProfilesPkColumnsInput;
-};
-
-/** mutation root */
-export type Mutation_RootUpdateProfilesManyArgs = {
-  updates: Array<ProfilesUpdates>;
-};
-
-export type Query_Root = {
-  __typename?: "query_root";
-  /** fetch data from the table: "profiles" */
-  profiles: Array<Profiles>;
-  /** fetch data from the table: "profiles" using primary key columns */
-  profilesByPk?: Maybe<Profiles>;
-};
-
-export type Query_RootProfilesArgs = {
-  distinctOn?: InputMaybe<Array<ProfilesSelectColumn>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
-  where?: InputMaybe<ProfilesBoolExp>;
-};
-
-export type Query_RootProfilesByPkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Subscription_Root = {
-  __typename?: "subscription_root";
-  /** fetch data from the table: "profiles" */
-  profiles: Array<Profiles>;
-  /** fetch data from the table: "profiles" using primary key columns */
-  profilesByPk?: Maybe<Profiles>;
-  /** fetch data from the table in a streaming manner: "profiles" */
-  profilesStream: Array<Profiles>;
-};
-
-export type Subscription_RootProfilesArgs = {
-  distinctOn?: InputMaybe<Array<ProfilesSelectColumn>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
-  where?: InputMaybe<ProfilesBoolExp>;
-};
-
-export type Subscription_RootProfilesByPkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Subscription_RootProfilesStreamArgs = {
-  batchSize: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<ProfilesStreamCursorInput>>;
-  where?: InputMaybe<ProfilesBoolExp>;
-};
-
 export type DeleteAccountMutationMutationVariables = Exact<{
   [key: string]: never;
 }>;
@@ -341,6 +215,30 @@ export type ProfileQueryQuery = {
     __typename?: "Profiles";
     id: any;
     name?: string | null;
+  } | null;
+};
+
+export type CreateStripePortalSessionMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type CreateStripePortalSessionMutation = {
+  __typename?: "mutation_root";
+  createStripePortalSession?: {
+    __typename?: "CreateStripePortalSessionOutput";
+    url: string;
+  } | null;
+};
+
+export type CreateStripeSecretMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type CreateStripeSecretMutation = {
+  __typename?: "mutation_root";
+  createStripeSecret?: {
+    __typename?: "CreateStripeSecretOutput";
+    secret: string;
   } | null;
 };
 
@@ -495,3 +393,59 @@ export const ProfileQueryDocument = {
     },
   ],
 } as unknown as DocumentNode<ProfileQueryQuery, ProfileQueryQueryVariables>;
+export const CreateStripePortalSessionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateStripePortalSession" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createStripePortalSession" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "url" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateStripePortalSessionMutation,
+  CreateStripePortalSessionMutationVariables
+>;
+export const CreateStripeSecretDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateStripeSecret" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createStripeSecret" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "secret" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateStripeSecretMutation,
+  CreateStripeSecretMutationVariables
+>;

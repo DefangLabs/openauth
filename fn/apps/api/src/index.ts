@@ -17,10 +17,12 @@ app.get('/', (req, res) => {
 import { jwtRouter } from './modules/jwt/jwt.router';
 import { defangRouter } from './modules/defang/defang.router';
 import { accountRouter } from './modules/accounts/accounts.router';
+import { stripeRouter } from './modules/stripe/stripe.router';
 
 app.use(jwtRouter);
 app.use('/defang', defangRouter);
 app.use('/accounts', accountRouter);
+app.use('/stripe', stripeRouter);
 
 app.listen(8001, () => {
     console.log('Server is listening on port 8001');

@@ -15,6 +15,11 @@ const InnerNavButton = styled(Button)`
   &:hover {
     background-color: rgba(0, 0, 0, 0.2);
   }
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 0.8rem;
+  text-transform: none;
+  font-weight: 500;
 `;
 InnerNavButton.defaultProps = {
   fullWidth: true,

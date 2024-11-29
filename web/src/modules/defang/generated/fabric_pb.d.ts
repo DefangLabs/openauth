@@ -272,14 +272,14 @@ export declare enum SubscriptionTier {
   SUBSCRIPTION_TIER_UNSPECIFIED = 0,
 
   /**
-   * @generated from enum value: PERSONAL = 1;
+   * @generated from enum value: HOBBY = 1;
    */
-  PERSONAL = 1,
+  HOBBY = 1,
 
   /**
-   * @generated from enum value: BASIC = 2;
+   * @generated from enum value: PERSONAL = 2;
    */
-  BASIC = 2,
+  PERSONAL = 2,
 
   /**
    * @generated from enum value: PRO = 3;

@@ -25,6 +25,7 @@ import DeleteWithConfirmationButton from "../../components/delete-with-confirmat
 import { EmptyServices } from "./components/empty-services/empty-services";
 import { useFilteredServices } from "./hooks/use-filtered-services/use-filtered-services";
 import { useSearch } from "./hooks/use-search/use-search";
+import { PageLoading } from "@/components/page-loading/page-loading";
 
 const Small = styled("small")`
   color: ${COLORS.darkGrey};
@@ -56,17 +57,7 @@ function ProjectsPageInner() {
   }
 
   if (loading) {
-    return (
-      <Stack
-        height="100vh"
-        justifyContent="center"
-        alignItems="center"
-        spacing={2}
-      >
-        <CircularProgress />
-        <Typography variant="h2">Loading...</Typography>
-      </Stack>
-    );
+    return <PageLoading />;
   }
 
   const hasExpiry = !!expiresAt;

@@ -26,7 +26,7 @@ function AccountPage() {
     loading: profileLoading,
   } = useCurrentUserProfileQuery();
   const profile = profileData?.profilesByPk;
-  const email = useSession()?.session?.identity?.traits.email || "";
+  const email: string = useSession()?.session?.identity?.traits.email || "";
   const { form, setForm } = useAccountForm();
   const [insertProfileMutation, { loading: mutationLoading }] = useMutation(
     InsertProfileMutation,
@@ -89,6 +89,7 @@ function AccountPage() {
           </Stack>
         </Stack>
       </form>
+
       <DangerZone />
     </Stack>
   );

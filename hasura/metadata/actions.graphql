@@ -1,8 +1,24 @@
 type Mutation {
+  createStripePortalSession: CreateStripePortalSessionOutput
+}
+
+type Mutation {
+  createStripeSecret: CreateStripeSecretOutput
+}
+
+type Mutation {
   deleteAccount: DeleteAccountOutput
 }
 
 type DeleteAccountOutput {
   message: String!
+}
+
+type CreateStripeSecretOutput {
+  secret: String!
+}
+
+type CreateStripePortalSessionOutput {
+  url: String!
 }
 

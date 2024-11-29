@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-export async function getJwtFromRequest(req: Request) {
+export function getJwtFromRequest(req: Request) {
     const authHeader = req.headers.authorization;
     if (authHeader) {
         const authHeaderParts = authHeader.split(' ');
