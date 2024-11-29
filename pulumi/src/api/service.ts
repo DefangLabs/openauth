@@ -9,6 +9,7 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     build: {
         context: SERVICE_ROOT_PATH,
         args: {
+            // When you add a new arg here, make sure to add it to the Dockerfile as well
             APP: 'api',
         },
     },

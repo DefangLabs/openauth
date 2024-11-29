@@ -10,6 +10,7 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
   build: {
     context: SERVICE_ROOT_PATH,
     args: {
+      // When you add a new arg here, make sure to add it to the Dockerfile as well
       NEXT_PUBLIC_FABRIC: `${config.require("fabric")}`,
       NEXT_PUBLIC_FN_URL: `${ROOT_URL}/svc/fn`,
       NEXT_PUBLIC_GOOGLE_ANALYTICS: config.require("googleAnalytics"),

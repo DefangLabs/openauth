@@ -19,6 +19,7 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
     build: {
         context: SERVICE_ROOT_PATH,
         args: {
+            // When you add a new arg here, make sure to add it to the Dockerfile as well
             ENV: pulumi.getStack(),
             PUBLIC_ROOT_URL: ROOT_URL,
             HASURA_DOMAIN: hasuraDomain,
