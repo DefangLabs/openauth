@@ -23,7 +23,6 @@ export const service: DefangService = new DefangService(SERVICE_NAME, {
       NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID: config.require(
         "stripe-pricing-table-id"
       ),
-      NEXT_PUBLIC_STRIPE_PORTAL_URL: config.require("stripe-portal-url"),
     },
   },
   environment: {
