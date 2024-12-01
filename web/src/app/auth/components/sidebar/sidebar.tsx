@@ -2,6 +2,10 @@ import { GradientSurface } from "@/components/gradient-surface/gradient-surface"
 import { Box, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import TextTransition, { presets } from "react-text-transition";
+import GCPLogo from "./assets/gcp-partner.png";
+import AWSLogo from "./assets/aws-partner-logo.png";
+import CISLogo from "./assets/cis-logo.jpg";
+import Image from "next/image";
 
 const testimonials = [
   {
@@ -78,6 +82,57 @@ export function SideBar() {
           Sign in with GitHub to join hundreds of developers using Defang to
           deploy their cloud apps faster than ever before.
         </Typography>
+      </Stack>
+
+      <Stack
+        direction="row"
+        spacing={2}
+        justifyContent="flex-start"
+        alignItems="center"
+      >
+        <a href="https://cloud.google.com/partners?hl=en" target="_blank">
+          <Image
+            src={GCPLogo}
+            alt="GCP Partner"
+            width={300}
+            height={120}
+            style={{ objectFit: "contain", height: 60, width: "auto" }}
+          />
+        </a>
+
+        <a
+          href="https://aws.amazon.com/partners/work-with-partners/"
+          target="_blank"
+        >
+          <Image
+            src={AWSLogo}
+            alt="AWS Partner"
+            width={300}
+            height={120}
+            style={{ objectFit: "contain", height: 80, width: "auto" }}
+          />
+        </a>
+
+        <a
+          href="https://docs.aws.amazon.com/securityhub/latest/userguide/cis-aws-foundations-benchmark.html"
+          target="_blank"
+        >
+          <Image
+            src={CISLogo}
+            alt="CIS AWS Foundations Benchmark"
+            width={300}
+            height={120}
+            style={{
+              objectFit: "contain",
+              height: 60,
+              width: "auto",
+              borderRadius: 10,
+              backgroundColor: "white",
+              padding: 10,
+              boxSizing: "border-box",
+            }}
+          />
+        </a>
       </Stack>
       <Stack direction="column" spacing={1}>
         <TextTransition springConfig={presets.gentle} direction="down">
