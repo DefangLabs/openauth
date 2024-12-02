@@ -11,27 +11,21 @@ import { Card, Stack } from "@mui/material";
 function PricingPageInner() {
   const { data, isLoading } = useWhoami();
   const tier = data?.tier;
-  const subscribed =
-    tier !== undefined &&
-    tier !== SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED;
-  const showPricing = !subscribed || tier === SubscriptionTier.HOBBY;
+  const showPricing = tier === undefined || tier === SubscriptionTier.HOBBY;
 
   if (isLoading) {
     return null;
   }
 
-  return (
-    <Stack>
-      {subscribed && (
-        <Stack maxWidth={400} width="100%" p={2}>
-          <Card>
-            <Stack p={2}>
-              <SubscriptionManagement />
-            </Stack>
-          </Card>
+  return showPricing ? (
+    <StripePricingTable />
+  ) : (
+    <Stack maxWidth={400} width="100%" p={2}>
+      <Card>
+        <Stack p={2}>
+          <SubscriptionManagement />
         </Stack>
-      )}{" "}
-      {showPricing && <StripePricingTable />}
+      </Card>
     </Stack>
   );
 }
