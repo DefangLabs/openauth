@@ -169,7 +169,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               href="/pricing"
               iconLeft={<Layers sx={{ mr: 1 }} fontSize="small" />}
             >
-              Plans
+              Subscription
             </NavButton>
             <NavButton
               href="https://docs.defang.io/docs/intro"

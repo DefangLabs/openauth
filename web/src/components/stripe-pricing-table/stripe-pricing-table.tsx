@@ -40,7 +40,7 @@ export function StripePricingTable() {
     <Stack p={0} spacing={2} direction="column" mb={10}>
       <Stack p={2}>
         <Typography variant="h1" fontSize={16} fontWeight={400}>
-          Pricing
+          Subscription
         </Typography>
         <Typography variant="h2">Introductory Limited Time Offer</Typography>
       </Stack>
