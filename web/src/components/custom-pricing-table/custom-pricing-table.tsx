@@ -405,11 +405,7 @@ export function CustomPricingTable() {
                 const button = (
                   <Button
                     variant="contained"
-                    href={
-                      tier.id === "hobby"
-                        ? undefined
-                        : tier.cta?.href || portalUrl
-                    }
+                    href={tier.cta?.href || portalUrl}
                     fullWidth
                     disabled={
                       tier.apiId === currentTier || stripeSessionLoading
