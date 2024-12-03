@@ -52,7 +52,7 @@ export async function createStripePortalSession(req: Request, res: Response) {
 
     const session = await stripeClient.billingPortal.sessions.create({
         customer: customer.id,
-        return_url: process.env.PUBLIC_ROOT_URL + "/account",
+        return_url: process.env.PUBLIC_ROOT_URL + "/pricing",
     });
 
     return res.status(201).json({ url: session.url });
