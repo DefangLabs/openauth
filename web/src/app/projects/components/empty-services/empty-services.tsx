@@ -60,7 +60,7 @@ export function EmptyServices() {
               Want to deploy from your own machine? Check out the CLI.
             </Typography>
             <Link
-              href="https://docs.defang.io/docs/getting-started/installing"
+              href="https://docs.defang.io/docs/getting-started#install-the-defang-cli"
               passHref
               target="_blank"
             >
