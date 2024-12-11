@@ -4,6 +4,8 @@ import { heimdallJwtSchema } from '../../lib/auth/heimdall-jwt-schema';
 import { validateJwt } from '../../lib/auth/validate-jwt';
 import { TokenRequestSchema } from '../../lib/defang/generated/fabric_pb';
 import { getClient } from '../../lib/defang/get-client';
+import { getStripeClient } from 'src/lib/stripe/get-stripe-client';
+import { getStripeCustomer } from 'src/lib/stripe/get-stripe-customer';
 
 
 /**
@@ -26,9 +28,10 @@ async function deleteFabric({ heimdallToken }: { heimdallToken: string }) {
         scope: ['tail', 'read', 'delete'],
     });
     const defangResponse = await defangClient.token(defangTokenRequest);
-    const defangToken = defangResponse.accessToken;
-    defangClient = getClient(defangToken);
+    defangClient = getClient(defangResponse.accessToken);
+    const whoami = await defangClient.whoAmI({}); // last chance to get the Defang user ID
     await defangClient.deleteMe({});
+    return whoami.userId;
 }
 
 /**
@@ -53,6 +56,17 @@ async function deleteProfile({ id, authorization }: { id: string, authorization:
             Authorization: authorization,
         },
     }).then(result => result.json());
+}
+
+/** Delete from Stripe */
+async function deleteStripe({ defangUserId }: { defangUserId: string }) {
+    const customer = await getStripeCustomer(defangUserId)
+    if (!customer) {
+        return;
+    }
+
+    const stripe = getStripeClient();
+    await stripe.customers.del(customer.id);
 }
 
 /**
@@ -84,14 +98,14 @@ export async function deleteAccount(req: Request, res: Response) {
         return;
     }
 
-    
-
-    console.log('@@ deleting from fabric');
-    await deleteFabric({ heimdallToken: token });
+    console.log('@@ deleting from fabric'); // also deletes from Segment, Intercom, Mixpanel, etc.
+    const defangUserId = await deleteFabric({ heimdallToken: token });
     console.log('@@ deleting from hasura');
     await deleteProfile({ id: decodedJwt.data.sub, authorization: authHeader });
     console.log('@@ deleting from kratos');
     await deleteAuth({ id: decodedJwt.data.sub });
+    console.log('@@ deleting from stripe');
+    await deleteStripe({ defangUserId });
 
     res.status(200).send({ message: 'Account deleted.' });
 }
