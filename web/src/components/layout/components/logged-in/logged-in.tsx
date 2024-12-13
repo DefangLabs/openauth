@@ -181,7 +181,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               Documentation
             </NavButton>
             <NavButton
-              href="https://docs.defang.io/docs/getting-started/installing"
+              href="https://docs.defang.io/docs/getting-started#install-the-defang-cli"
               iconLeft={<Download sx={{ mr: 1 }} fontSize="small" />}
               iconRight={
                 <OpenInNew fontSize="small" style={{ marginLeft: "5px" }} />
