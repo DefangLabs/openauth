@@ -4,8 +4,8 @@ import { heimdallJwtSchema } from '../../lib/auth/heimdall-jwt-schema';
 import { validateJwt } from '../../lib/auth/validate-jwt';
 import { TokenRequestSchema } from '../../lib/defang/generated/fabric_pb';
 import { getClient } from '../../lib/defang/get-client';
-import { getStripeClient } from 'src/lib/stripe/get-stripe-client';
-import { getStripeCustomer } from 'src/lib/stripe/get-stripe-customer';
+import { getStripeClient } from '../../lib/stripe/get-stripe-client';
+import { getStripeCustomer } from '../../lib/stripe/get-stripe-customer';
 
 
 /**
