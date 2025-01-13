@@ -25,7 +25,7 @@
 <picture>
   <source srcset="https://raw.githubusercontent.com/openauthjs/identity/main/assets/themes-dark.png" media="(prefers-color-scheme: dark)">
   <source srcset="https://raw.githubusercontent.com/openauthjs/identity/main/assets/themes-light.png" media="(prefers-color-scheme: dark)">
-  <img src="https://raw.githubusercontent.com/openauthjs/identity/main/assets/themes-light.png" alt="OpenAuth logo">
+  <img src="https://raw.githubusercontent.com/openauthjs/identity/main/assets/themes-light.png" alt="OpenAuth themes">
 </picture>
 
 ## Quick Start
@@ -38,7 +38,7 @@ While there are many open source solutions for auth, almost all of them are libr
 
 OpenAuth instead is a centralized auth server that runs on your own infrastructure and has been designed for ease of self hosting. It can be used to authenticate all of your applications - web apps, mobile apps, internal admin tools, etc.
 
-It adheres mostly to OAuth 2.0 specifications - which means anything that can speak OAuth can use it to receive access and refresh tokens. When a client initiates an authorization flow, OpenAuth will hand off to one of the configured adapters - this can be third party identity providers like Google, GitHub, etc or built in flows like email/password or pin code.
+It adheres mostly to OAuth 2.0 specifications - which means anything that can speak OAuth can use it to receive access and refresh tokens. When a client initiates an authorization flow, OpenAuth will hand off to one of the configured providers - this can be third party identity providers like Google, GitHub, etc or built in flows like email/password or pin code.
 
 Because it follows these specifications it can even be used to issue credentials for third party applications - allowing you to implement "login with myapp" flows.
 
@@ -56,18 +56,18 @@ We'll show how to deploy the auth server and then a sample app that uses it.
 
 ### Auth server
 
-Start by importing the `authorizer` function from the `@openauthjs/openauth` package.
+Start by importing the `issuer` function from the `@openauthjs/openauth` package.
 
 ```ts
-import { authorizer } from "@openauthjs/openauth"
+import { issuer } from "@openauthjs/openauth"
 ```
 
-OpenAuth is built on top of [Hono](https://github.com/honojs/hono) which is a minimal web framework that can run anywhere. The `authorizer` function creates a Hono app with all of the auth server implemented that you can then deploy to AWS Lambda, Cloudflare Workers, or in a container running under Node.js or Bun.
+OpenAuth is built on top of [Hono](https://github.com/honojs/hono) which is a minimal web framework that can run anywhere. The `issuer` function creates a Hono app with all of the auth server implemented that you can then deploy to AWS Lambda, Cloudflare Workers, or in a container running under Node.js or Bun.
 
-The `authorizer` function requires a few things:
+The `issuer` function requires a few things:
 
 ```ts
-const app = authorizer({
+const app = issuer({
   providers: { ... },
   storage,
   subjects,
@@ -78,9 +78,9 @@ const app = authorizer({
 First we need to define some providers that are enabled - these are either third party identity providers like Google, GitHub, etc or built in flows like email/password or pin code. You can also implement your own. Let's try the GitHub provider.
 
 ```ts
-import { GithubAdapter } from "@openauthjs/openauth/adapter/github";
+import { GithubProvider } from "@openauthjs/openauth/provider/github"
 
-const app = authorizer({
+const app = issuer({
   providers: {
     github: GithubAdapter({
       clientID: process.env.GITHUB_CLIENT_ID!,
@@ -92,12 +92,12 @@ const app = authorizer({
 })
 ```
 
-Adapters take some configuration - since this is a third party identity provider there is no UI to worry about and all it needs is a client ID, secret and some scopes. Let's add the password provider which is a bit more complicated.
+Providers take some configuration - since this is a third party identity provider there is no UI to worry about and all it needs is a client ID, secret and some scopes. Let's add the password provider which is a bit more complicated.
 
 ```ts
-import { PasswordAdapter } from "@openauthjs/openauth/adapter/password";
+import { PasswordProvider } from "@openauthjs/openauth/provider/password"
 
-const app = authorizer({
+const app = issuer({
   providers: {
     github: ...,
     password: PasswordAdapter(...),
@@ -109,16 +109,16 @@ const app = authorizer({
 The password adapter is quite complicated as username/password involve a lot of flows so there are a lot of callbacks to implement. However you can opt into the default UI which has all of this already implemented for you. The only thing you have to specify is how to send a code for forgot password/email verification. In this case we'll log the code but you would send this over email.
 
 ```ts
-import { PasswordAdapter } from "@openauthjs/openauth/adapter/password";
-import { PasswordUI } from "@openauthjs/openauth/ui/password";
+import { PasswordProvider } from "@openauthjs/openauth/provider/password"
+import { PasswordUI } from "@openauthjs/openauth/ui/password"
 
-const app = authorizer({
+const app = issuer({
   providers: {
     github: ...,
     password: PasswordAdapter(
       PasswordUI({
         sendCode: async (email, code) => {
-          console.log(email, code);
+          console.log(email, code)
         },
       }),
     ),
@@ -143,12 +143,12 @@ const subjects = createSubjects({
 
 Note we are using [valibot](https://github.com/fabian-hiller/valibot) to define the shape of the subject so it can be validated properly. You can use any validation library that is following the [standard-schema specification](https://github.com/standard-schema/standard-schema) - the next version of Zod will support this.
 
-You typically will want to place subjects in its own file as it can be imported by all of your apps. You can pass it to the authorizer in the `subjects` field.
+You typically will want to place subjects in its own file as it can be imported by all of your apps. You can pass it to the issuer in the `subjects` field.
 
 ```ts
-import { subjects } from "./subjects.js";
+import { subjects } from "./subjects.js"
 
-const app = authorizer({
+const app = issuer({
   providers: { ... },
   subjects,
   ...
@@ -158,23 +158,23 @@ const app = authorizer({
 Next we'll implement the `success` callback which receives the payload when a user successfully completes a provider flow.
 
 ```ts
-const app = authorizer({
+const app = issuer({
   providers: { ... },
   subjects,
   async success(ctx, value) {
-    let userID;
+    let userID
     if (value.provider === "password") {
-      console.log(value.email);
+      console.log(value.email)
       userID = ... // lookup user or create them
     }
     if (value.provider === "github") {
-      console.log(value.tokenset.access);
+      console.log(value.tokenset.access)
       userID = ... // lookup user or create them
     }
     return ctx.subject("user", {
       userID,
       'a workspace id'
-    });
+    })
   }
 })
 ```
@@ -184,9 +184,9 @@ Note all of this is typesafe - based on the configured providers you will receiv
 Next we have the `storage` field which defines where things like refresh tokens and password hashes are stored. If on AWS we recommend DynamoDB, if on Cloudflare we recommend Cloudflare KV. We also have a MemoryStore used for testing.
 
 ```ts
-import { MemoryStorage } from "@openauthjs/openauth/storage/memory";
+import { MemoryStorage } from "@openauthjs/openauth/storage/memory"
 
-const app = authorizer({
+const app = issuer({
   providers: { ... },
   subjects,
   async success(ctx, value) { ... },
@@ -223,7 +223,7 @@ import { createClient } from "@openauthjs/openauth/client"
 
 const client = createClient({
   clientID: "my-client",
-  issuer: "https://auth.myserver.com", // this is the url for your auth server
+  issuer: "https://auth.myserver.com", // url to the OpenAuth server
 })
 ```
 
@@ -232,17 +232,17 @@ const client = createClient({
 If your frontend has a server component you can use the code flow. Redirect the user here
 
 ```ts
-const redirect = await client.authorize(
-  <client-id>,
+const { url } = await client.authorize(
   <redirect-uri>,
-  "code",
-);
+  "code"
+)
 ```
 
 You can make up a `client_id` that represents your app. This will initiate the auth flow and user will be redirected to the `redirect_uri` you provided with a query parameter `code` which you can exchange for an access token.
 
 ```ts
-const tokens = await client.exchange(query.get("code"), redirect_uri) // the redirect_uri is the original redirect_uri you passed in and is used for verification
+// the redirect_uri is the original redirect_uri you passed in and is used for verification
+const tokens = await client.exchange(query.get("code"), redirect_uri)
 console.log(tokens.access, tokens.refresh)
 ```
 
@@ -267,18 +267,23 @@ Passing in the refresh token is optional but if you do, this function will autom
 In cases where you do not have a server, you can use the `token` flow with `pkce` on the frontend.
 
 ```ts
-const [verifier, redirect] = await client.pkce(<client_id>, <redirect_uri>);
-localStorage.setItem("verifier", verifier);
-location.href = redirect;
+const { challenge, url } = await client.authorize(<redirect_uri>, "code", { pkce: true })
+localStorage.setItem("challenge", JSON.stringify(challenge))
+location.href = url
 ```
 
 When the auth flow is complete the user's browser will be redirected to the `redirect_uri` with a `code` query parameter. You can then exchange the code for access/refresh tokens.
 
 ```ts
-const verifier = localStorage.getItem("verifier")
-const tokens = await client.exchange(query.get("code"), redirect_uri, verifier)
-localStorage.setItem("access_token", tokens.access)
-localStorage.setItem("refresh_token", tokens.refresh)
+const challenge = JSON.parse(localStorage.getItem("challenge"))
+const exchanged = await client.exchange(
+  query.get("code"),
+  redirect_uri,
+  challenge.verifier,
+)
+if (exchanged.err) throw new Error("Invalid code")
+localStorage.setItem("access_token", exchanged.tokens.access)
+localStorage.setItem("refresh_token", exchanged.tokens.refresh)
 ```
 
 Then when you make requests to your API you can include the access token in the `Authorization` header.

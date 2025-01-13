@@ -1,5 +1,163 @@
 # @openauthjs/openauth
 
+## 0.3.5
+
+### Patch Changes
+
+- b22fb30: fix: enable CORS on well-known routes
+
+## 0.3.4
+
+### Patch Changes
+
+- 34ca2b0: remove catch all route so hono instance can be extended
+
+## 0.3.3
+
+### Patch Changes
+
+- 9712422: fix: add charset meta tag to ui/base.tsx
+- 92e7170: Adds support for refresh token reuse interval and reuse detection
+
+  Also fixes an issue with token invalidation, where removing keys while scanning
+  may cause some refresh tokens to be skipped (depending on storage provider.)
+
+## 0.3.2
+
+### Patch Changes
+
+- 03da3e0: fix issue with oidc adapter
+
+## 0.3.1
+
+### Patch Changes
+
+- 8764ed4: support specify custom subject
+
+## 0.3.0
+
+### Minor Changes
+
+- b2af22a: renamed authorizer -> issuer and adapter -> provider
+
+  this should be a superficial change, but it's a breaking change
+
+  previously you imported adapters like this:
+
+  ```js
+  import { PasswordAdapter } from "@openauth/openauth/adapter/password"
+  ```
+
+  update it to this:
+
+  ```js
+  import { PasswordProvider } from "@openauth/openauth/provider/password"
+  ```
+
+  for the authorizer, you import it like this:
+
+  ```js
+  import { authorizer } from "@openauth/openauth"
+  ```
+
+  update it to this:
+
+  ```js
+  import { issuer } from "@openauth/openauth"
+  ```
+
+  also subjects should be imported deeply like this:
+
+  ```js
+  import { createSubjects } from "@openauth/openauth"
+  ```
+
+  update it to this:
+
+  ```js
+  import { createSubjects } from "@openauth/openauth/subject"
+  ```
+
+## 0.2.7
+
+### Patch Changes
+
+- 3004802: refactor: export `AuthorizationState` for better reusability
+- 2975608: switching signing key algorithm to es256. generate seperate keys for symmetrical encryption. old keys will automatically be marked expired and not used
+- c92604b: Adds support for a custom DynamoDB endpoint which enables use of a amazon/dynamodb-local container.
+
+  Usabe example:
+
+  ```ts
+    storage: DynamoStorage({
+      table: 'openauth-users',
+      endpoint: 'http://localhost:8000',
+    }),
+  ```
+
+## 0.2.6
+
+### Patch Changes
+
+- ca0df5d: ui: support phone mode for code ui
+- d8d1580: Add slack adapter to the list of available adapters.
+- ce44ed6: fix for password adapter not redirecting to the right place after change password flow
+- 4940bef: fix: add `node:` prefix for built-in modules
+
+## 0.2.5
+
+### Patch Changes
+
+- 8d6a243: fix: eliminate OTP bias and timing attack vulnerability
+- 873d1af: support specifying granular ttl for access/refresh token
+
+## 0.2.4
+
+### Patch Changes
+
+- 8b5f490: feat: Add copy customization to Code UI component
+
+## 0.2.3
+
+### Patch Changes
+
+- 80238de: return aud field when verifying token
+
+## 0.2.2
+
+### Patch Changes
+
+- 6da8647: fix copy for code resend
+
+## 0.2.1
+
+### Patch Changes
+
+- 83125f1: Remove predefined scopes from Spotify adapter to allow user-defined scopes
+
+## 0.2.0
+
+### Minor Changes
+
+- 8c3f050: BREAKING CHANGE: `client.exchange` and `client.authorize` signatures have changed.
+
+  `client.exchange` will now return an `{ err, tokens }` object. check `if (result.err)` for errors.
+  `client.authorize` now accepts `pkce: true` as an option. it is now async and returns a promise with `{ challenge, url}`. the `challenge` contains the `state` and `verifier` if using `pkce`
+
+  all exchanges have been updated to reflect this if you would like to reference
+
+### Patch Changes
+
+- 0f93def: refactor: update storage adapters to use Date for expiry
+
+## 0.1.2
+
+### Patch Changes
+
+- 584728f: Add common ColorScheme
+- 41acdc2: ui: missing copy in password.tsx
+- 2aa531b: Add GitHub Actions workflow for running tests
+
 ## 0.1.1
 
 ### Patch Changes

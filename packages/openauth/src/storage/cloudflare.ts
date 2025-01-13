@@ -1,9 +1,36 @@
+/**
+ * Configure OpenAuth to use [Cloudflare KV](https://developers.cloudflare.com/kv/) as a
+ * storage adapter.
+ *
+ * ```ts
+ * import { CloudflareStorage } from "@openauthjs/openauth/storage/cloudflare"
+ *
+ * const storage = CloudflareStorage({
+ *   namespace: "my-namespace"
+ * })
+ *
+ *
+ * export default issuer({
+ *   storage,
+ *   // ...
+ * })
+ * ```
+ *
+ * @packageDocumentation
+ */
 import type { KVNamespace } from "@cloudflare/workers-types"
 import { joinKey, splitKey, StorageAdapter } from "./storage.js"
 
-interface CloudflareStorageOptions {
+/**
+ * Configure the Cloudflare KV store that's created.
+ */
+export interface CloudflareStorageOptions {
   namespace: KVNamespace
 }
+/**
+ * Creates a Cloudflare KV store.
+ * @param options - The config for the adapter.
+ */
 export function CloudflareStorage(
   options: CloudflareStorageOptions,
 ): StorageAdapter {
@@ -14,9 +41,11 @@ export function CloudflareStorage(
       return value as Record<string, any>
     },
 
-    async set(key: string[], value: any, ttl?: number) {
+    async set(key: string[], value: any, expiry?: Date) {
       await options.namespace.put(joinKey(key), JSON.stringify(value), {
-        expirationTtl: ttl,
+        expirationTtl: expiry
+          ? Math.floor((expiry.getTime() - Date.now()) / 1000)
+          : undefined,
       })
     },
 

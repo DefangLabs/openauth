@@ -1,13 +1,64 @@
+/**
+ * Configure OpenAuth to use [DynamoDB](https://aws.amazon.com/dynamodb/) as a storage adapter.
+ *
+ * ```ts
+ * import { DynamoStorage } from "@openauthjs/openauth/storage/dynamo"
+ *
+ * const storage = DynamoStorage({
+ *   table: "my-table",
+ *   pk: "pk",
+ *   sk: "sk"
+ * })
+ *
+ * export default issuer({
+ *   storage,
+ *   // ...
+ * })
+ * ```
+ *
+ * @packageDocumentation
+ */
+
 import { client } from "./aws.js"
 import { joinKey, StorageAdapter } from "./storage.js"
 
+/**
+ * Configure the DynamoDB table that's created.
+ *
+ * @example
+ * ```ts
+ * {
+ *   table: "my-table",
+ *   pk: "pk",
+ *   sk: "sk"
+ * }
+ * ```
+ */
 export interface DynamoStorageOptions {
+  /**
+   * The name of the DynamoDB table.
+   */
   table: string
+  /**
+   * The primary key column name.
+   */
   pk?: string
+  /**
+   * The sort key column name.
+   */
   sk?: string
+  /**
+   * Endpoint URL for the DynamoDB service. Useful for local testing.
+   * @default "https://dynamodb.{region}.amazonaws.com"
+   */
+  endpoint?: string
 }
 
-export function DynamoStorage(options: DynamoStorageOptions) {
+/**
+ * Creates a DynamoDB store.
+ * @param options - The config for the adapter.
+ */
+export function DynamoStorage(options: DynamoStorageOptions): StorageAdapter {
   const c = client()
   const pk = options.pk || "pk"
   const sk = options.sk || "sk"
@@ -28,17 +79,16 @@ export function DynamoStorage(options: DynamoStorageOptions) {
 
   async function dynamo(action: string, payload: any) {
     const client = await c
-    const response = await client.fetch(
-      `https://dynamodb.${client.region}.amazonaws.com`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-amz-json-1.0",
-          "X-Amz-Target": `DynamoDB_20120810.${action}`,
-        },
-        body: JSON.stringify(payload),
+    const endpoint =
+      options.endpoint || `https://dynamodb.${client.region}.amazonaws.com`
+    const response = await client.fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-amz-json-1.0",
+        "X-Amz-Target": `DynamoDB_20120810.${action}`,
       },
-    )
+      body: JSON.stringify(payload),
+    })
 
     if (!response.ok) {
       throw new Error(`DynamoDB request failed: ${response.statusText}`)
@@ -65,16 +115,16 @@ export function DynamoStorage(options: DynamoStorageOptions) {
       return JSON.parse(result.Item.value.S)
     },
 
-    async set(key: string[], value: any, ttl) {
+    async set(key: string[], value: any, expiry?: Date) {
       const parsed = parseKey(key)
       const params = {
         TableName: tableName,
         Item: {
           [pk]: { S: parsed.pk },
           [sk]: { S: parsed.sk },
-          ...(ttl
+          ...(expiry
             ? {
-                expiry: { N: (Math.floor(Date.now() / 1000) + ttl).toString() },
+                expiry: { N: Math.floor(expiry.getTime() / 1000).toString() },
               }
             : {}),
           value: { S: JSON.stringify(value) },
@@ -132,5 +182,5 @@ export function DynamoStorage(options: DynamoStorageOptions) {
         lastEvaluatedKey = result.LastEvaluatedKey
       }
     },
-  } satisfies StorageAdapter
+  }
 }

@@ -4,13 +4,14 @@
   "type": "module",
   "workspaces": [
     "packages/openauth",
-    "examples/authorizer/*",
+    "examples/issuer/*",
     "examples/client/*"
   ],
   "scripts": {
     "release": "bun run --filter=\"@openauthjs/openauth\" build && changeset publish"
   },
   "devDependencies": {
+    "@tsconfig/node22": "22.0.0",
     "@types/bun": "latest"
   },
   "dependencies": {
