@@ -27,13 +27,14 @@ export function RedisStorage<
       if (!value) return
       return JSON.parse(value) as Record<string, any>
     },
-    async set(key: string[], value: any, ttl?: number) {
-      if (ttl !== undefined && ttl > 0) {
+    async set(key: string[], value: any, ttl?: Date) {
+      const seconds = ttl ? Math.trunc((ttl.getTime() - Date.now()) / 1000) : 0
+      if (ttl !== undefined && seconds > 0) {
         await client.set(
           joinKey(key),
           JSON.stringify(value),
           "EX",
-          Math.trunc(ttl),
+          Math.trunc(seconds),
         )
       } else {
         await client.set(joinKey(key), JSON.stringify(value))
