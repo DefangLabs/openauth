@@ -716,8 +716,10 @@ export function issuer<
 
   function issuer(ctx: Context) {
     const url = new URL(ctx.req.url)
-    const host = ctx.req.header("x-forwarded-host") ?? url.host
-    return url.protocol + "//" + host
+    url.host = ctx.req.header("x-forwarded-host") || url.host
+    url.protocol = ctx.req.header("x-forwarded-proto") || url.protocol;
+    url.port = ctx.req.header("x-forwarded-port") || url.port;
+    return url.origin;
   }
 
   const app = new Hono<{
