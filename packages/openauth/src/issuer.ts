@@ -336,7 +336,8 @@ export interface IssuerInput<
      */
     refresh?: number
     /**
-     * Interval in seconds where refresh token reuse is allowed. Helps mitigrate concurrency issues.
+     * Interval in seconds where refresh token reuse is allowed. This helps mitigrate
+     * concurrency issues.
      * @default 60s
      */
     reuse?: number
