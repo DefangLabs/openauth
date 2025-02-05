@@ -28,6 +28,11 @@ All services are designed run behind Heimdall, which is a reverse proxy that han
 Hot reloading for Next.js doesn't work at the moment, because we're running an old version of Heimdall which doesn't support websockets. We should upgrade Heimdall to the latest version to fix this.
 
 
+## Auth
+
+We're using a [Defang fork of OpenAUTH](https://github.com/DefangLabs/openauth). We merge our own features into a branch called `defang` in that repo, which is pulled into a git subtree at `/auth/openauth` in this repo. To update the auth code, you can run `git subtree pull --prefix auth/openauth --squash https://github.com/DefangLabs/openauth defang`
+
+
 ## Secrets
 - `aiven:apiToken`: created in Aiven dashboard; this expires when unused for 10 hours; **deprecated** use `AIVEN_TOKEN` env
 - `defang-portal:aivenBillingGroup`: from Aiven dashboard
