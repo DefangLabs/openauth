@@ -26,7 +26,7 @@
  *
  * const app = issuer({
  *   providers: {
- *     github: GithubAdapter({
+ *     github: GithubProvider({
  *       // ...
  *     }),
  *     password: PasswordProvider({
@@ -715,7 +715,7 @@ export function issuer<
   }
 
   function issuer(ctx: Context) {
-    return (new URL(getRelativeUrl(ctx, '/'))).origin
+    return new URL(getRelativeUrl(ctx, "/")).origin
   }
 
   const app = new Hono<{
