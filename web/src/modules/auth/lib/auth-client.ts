@@ -7,13 +7,8 @@ export const authClient = createClient({
   clientID: "defang-portal",
   issuer: process.env.NEXT_PUBLIC_AUTH_URL!,
   fetch: (...args: [RequestInfo, RequestInit?]) => {
-    console.log("@@ fetching", ...args);
-    // log responses for debugging without interfering with the actual fetch
-
     return fetch(...args).then(async (response) => {
-      const clone = response.clone();
-      const text = await clone.text();
-      console.log("@@ response:", text);
+      // previously used for debugging
       return response;
     });
   },
