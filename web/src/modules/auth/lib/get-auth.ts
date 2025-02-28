@@ -12,7 +12,6 @@ export async function getAuth({ refresh = false }: getAuthOptions = {}) {
   const refreshToken = cookies().get("refresh_token");
 
   if (!accessToken) {
-    console.error("@@ No access token found");
     return false;
   }
 
