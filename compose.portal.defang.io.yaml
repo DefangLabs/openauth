@@ -41,7 +41,7 @@ services:
       service: web
     domainname: portal.defang.io
     networks:
-      - public:
-          aliases:
-            - portal.defang.dev
+      public:
+        aliases:
+          - portal.defang.dev
     x-defang-dns-role: arn:aws:iam::258338292852:role/dnsadmin-cd22af2
