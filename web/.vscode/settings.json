@@ -1,10 +1,6 @@
 {
     "files.exclude": {
         "web": false,
-        "kratos": false,
-        "oathkeeper": false,
         "hasura": false,
-        "fn": false,
-        "pulumi": false,
     }
 }

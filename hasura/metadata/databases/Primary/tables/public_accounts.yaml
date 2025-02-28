@@ -1,0 +1,11 @@
+table:
+  name: accounts
+  schema: public
+array_relationships:
+  - name: accountsUserAccounts
+    using:
+      foreign_key_constraint_on:
+        column: accountId
+        table:
+          name: userAccounts
+          schema: public

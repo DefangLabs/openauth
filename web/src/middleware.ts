@@ -1,27 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const host = request.headers.get("host");
+  const url = request.nextUrl.clone();
 
-  const isNewDomain = host?.includes("portal.defang.io");
-
-  if (isNewDomain || !host) {
-    console.log("@@ No redirect: ", host);
-    return NextResponse.next();
+  if (url.hostname === "portal.defang.dev") {
+    url.hostname = "portal.defang.io";
+    return NextResponse.redirect(url.toString(), { status: 301 });
   }
 
-  // return NextResponse.redirect(
-  //   `${request.nextUrl.protocol}//portal.defang.io${request.nextUrl.pathname}`,
-  //   301,
-  // );
-
-  console.log(
-    "@@ redirect",
-    `${request.nextUrl.protocol}//portal.defang.io${request.nextUrl.pathname}`,
-  );
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: "/:path*",
 };

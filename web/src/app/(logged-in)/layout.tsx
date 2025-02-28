@@ -1,46 +1,27 @@
 "use client";
 
-import { Loader } from "@/components/loader/loader";
-import { analytics } from "@/modules/analytics/lib/analytics";
-import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
-import { Placeholder } from "@/modules/kratos/components/login-required/components/placeholder/placeholder";
-import { useSession } from "@/modules/kratos/hooks/use-session/use-session";
-import { useEffect } from "react";
-import { getTierString } from "@/lib/tiers";
+import { LoggedIn } from "@/app/(logged-in)/components/logged-in/logged-in";
+import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
+import { useRouter } from "next/navigation";
+import { LOGIN_ROUTE } from "../auth/constants";
 
-function RootLayoutInner({ children }: { children: React.ReactNode }) {
-  const { session, loading } = useSession();
-  const client = useDefangClient();
-  const display = !!session && !loading;
-
-  useEffect(() => {
-    if (!display) return;
-    client?.whoAmI({}, (err, res) => {
-      if (err) {
-        console.log("@@ error getting whoami", err);
-        return;
-      }
-      analytics.identify(res.userId, {
-        email: session.identity?.traits.email,
-        firstName: session.identity?.traits.name?.first,
-        lastName: session.identity?.traits.name?.last,
-        plan: getTierString(res.tier),
-        username: res.tenant,
-      });
-    });
-  }, [client, display, session]);
-
-  return display ? <>{children}</> : <Placeholder />;
-}
+const tokenOptions = {
+  refresh: false,
+};
 
 export default function LoggedInLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <Loader>
-      <RootLayoutInner>{children}</RootLayoutInner>
-    </Loader>
-  );
+  const router = useRouter();
+  const { token, isLoading } = useAccessToken(tokenOptions);
+  if (!token && isLoading) {
+    return null;
+  }
+  if (!token && !isLoading) {
+    router.push(LOGIN_ROUTE);
+    return null;
+  }
+  return <LoggedIn>{children}</LoggedIn>;
 }

@@ -13,10 +13,9 @@ export function useWhoami() {
       }
       client.whoAmI({}, (err, res) => {
         if (err) {
-          console.log("@@ err whoami: ", err);
+          console.error("@@ err whoami: ", err);
           reject(err);
         } else {
-          console.log("@@ res whoami: ", res);
           resolve(res!);
         }
       });

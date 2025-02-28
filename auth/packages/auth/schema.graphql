@@ -1,0 +1,1367 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+  """measured in seconds"""
+  ttl: Int! = 60
+) on QUERY
+
+"""
+columns and relationships of "accounts"
+"""
+type Accounts {
+  """An array relationship"""
+  accountsUserAccounts(
+    """distinct select on columns"""
+    distinctOn: [UserAccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UserAccountsOrderBy!]
+    """filter the rows returned"""
+    where: UserAccountsBoolExp
+  ): [UserAccounts!]!
+  """An aggregate relationship"""
+  accountsUserAccountsAggregate(
+    """distinct select on columns"""
+    distinctOn: [UserAccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UserAccountsOrderBy!]
+    """filter the rows returned"""
+    where: UserAccountsBoolExp
+  ): UserAccountsAggregate!
+  createdAt: timestamptz
+  email: String!
+  extra(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+  id: uuid!
+  name: String!
+  provider: String!
+  providerId: String!
+  updatedAt: timestamptz
+}
+
+"""
+aggregated selection of "accounts"
+"""
+type AccountsAggregate {
+  aggregate: AccountsAggregateFields
+  nodes: [Accounts!]!
+}
+
+"""
+aggregate fields of "accounts"
+"""
+type AccountsAggregateFields {
+  count(columns: [AccountsSelectColumn!], distinct: Boolean): Int!
+  max: AccountsMaxFields
+  min: AccountsMinFields
+}
+
+"""append existing jsonb value of filtered columns with new jsonb value"""
+input AccountsAppendInput {
+  extra: jsonb
+}
+
+"""
+Boolean expression to filter rows from the table "accounts". All fields are combined with a logical 'AND'.
+"""
+input AccountsBoolExp {
+  _and: [AccountsBoolExp!]
+  _not: AccountsBoolExp
+  _or: [AccountsBoolExp!]
+  accountsUserAccounts: UserAccountsBoolExp
+  accountsUserAccountsAggregate: UserAccountsAggregateBoolExp
+  createdAt: TimestamptzComparisonExp
+  email: StringComparisonExp
+  extra: JsonbComparisonExp
+  id: UuidComparisonExp
+  name: StringComparisonExp
+  provider: StringComparisonExp
+  providerId: StringComparisonExp
+  updatedAt: TimestamptzComparisonExp
+}
+
+"""
+unique or primary key constraints on table "accounts"
+"""
+enum AccountsConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  accounts_pkey
+  """
+  unique or primary key constraint on columns "provider", "providerId"
+  """
+  accounts_provider_providerId_key
+}
+
+"""
+delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+"""
+input AccountsDeleteAtPathInput {
+  extra: [String!]
+}
+
+"""
+delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+"""
+input AccountsDeleteElemInput {
+  extra: Int
+}
+
+"""
+delete key/value pair or string element. key/value pairs are matched based on their key value
+"""
+input AccountsDeleteKeyInput {
+  extra: String
+}
+
+"""
+input type for inserting data into table "accounts"
+"""
+input AccountsInsertInput {
+  accountsUserAccounts: UserAccountsArrRelInsertInput
+  createdAt: timestamptz
+  email: String
+  extra: jsonb
+  id: uuid
+  name: String
+  provider: String
+  providerId: String
+  updatedAt: timestamptz
+}
+
+"""aggregate max on columns"""
+type AccountsMaxFields {
+  createdAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  provider: String
+  providerId: String
+  updatedAt: timestamptz
+}
+
+"""aggregate min on columns"""
+type AccountsMinFields {
+  createdAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  provider: String
+  providerId: String
+  updatedAt: timestamptz
+}
+
+"""
+response of any mutation on the table "accounts"
+"""
+type AccountsMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+  """data from the rows affected by the mutation"""
+  returning: [Accounts!]!
+}
+
+"""
+input type for inserting object relation for remote table "accounts"
+"""
+input AccountsObjRelInsertInput {
+  data: AccountsInsertInput!
+  """upsert condition"""
+  onConflict: AccountsOnConflict
+}
+
+"""
+on_conflict condition type for table "accounts"
+"""
+input AccountsOnConflict {
+  constraint: AccountsConstraint!
+  updateColumns: [AccountsUpdateColumn!]! = []
+  where: AccountsBoolExp
+}
+
+"""Ordering options when selecting data from "accounts"."""
+input AccountsOrderBy {
+  accountsUserAccountsAggregate: UserAccountsAggregateOrderBy
+  createdAt: OrderBy
+  email: OrderBy
+  extra: OrderBy
+  id: OrderBy
+  name: OrderBy
+  provider: OrderBy
+  providerId: OrderBy
+  updatedAt: OrderBy
+}
+
+"""primary key columns input for table: accounts"""
+input AccountsPkColumnsInput {
+  id: uuid!
+}
+
+"""prepend existing jsonb value of filtered columns with new jsonb value"""
+input AccountsPrependInput {
+  extra: jsonb
+}
+
+"""
+select columns of table "accounts"
+"""
+enum AccountsSelectColumn {
+  """column name"""
+  createdAt
+  """column name"""
+  email
+  """column name"""
+  extra
+  """column name"""
+  id
+  """column name"""
+  name
+  """column name"""
+  provider
+  """column name"""
+  providerId
+  """column name"""
+  updatedAt
+}
+
+"""
+input type for updating data in table "accounts"
+"""
+input AccountsSetInput {
+  createdAt: timestamptz
+  email: String
+  extra: jsonb
+  id: uuid
+  name: String
+  provider: String
+  providerId: String
+  updatedAt: timestamptz
+}
+
+"""
+Streaming cursor of the table "accounts"
+"""
+input AccountsStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: AccountsStreamCursorValueInput!
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input AccountsStreamCursorValueInput {
+  createdAt: timestamptz
+  email: String
+  extra: jsonb
+  id: uuid
+  name: String
+  provider: String
+  providerId: String
+  updatedAt: timestamptz
+}
+
+"""
+update columns of table "accounts"
+"""
+enum AccountsUpdateColumn {
+  """column name"""
+  createdAt
+  """column name"""
+  email
+  """column name"""
+  extra
+  """column name"""
+  id
+  """column name"""
+  name
+  """column name"""
+  provider
+  """column name"""
+  providerId
+  """column name"""
+  updatedAt
+}
+
+input AccountsUpdates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: AccountsAppendInput
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _deleteAtPath: AccountsDeleteAtPathInput
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _deleteElem: AccountsDeleteElemInput
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _deleteKey: AccountsDeleteKeyInput
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: AccountsPrependInput
+  """sets the columns of the filtered rows to the given values"""
+  _set: AccountsSetInput
+  """filter the rows which have to be updated"""
+  where: AccountsBoolExp!
+}
+
+type CreateStripePortalSessionOutput {
+  url: String!
+}
+
+type CreateStripeSecretOutput {
+  secret: String!
+}
+
+"""ordering argument of a cursor"""
+enum CursorOrdering {
+  """ascending ordering of the cursor"""
+  ASC
+  """descending ordering of the cursor"""
+  DESC
+}
+
+type DeleteAccountOutput {
+  message: String!
+}
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input IntComparisonExp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _isNull: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+input JsonbCastExp {
+  String: StringComparisonExp
+}
+
+"""
+Boolean expression to compare columns of type "jsonb". All fields are combined with logical 'AND'.
+"""
+input JsonbComparisonExp {
+  _cast: JsonbCastExp
+  """is the column contained in the given json value"""
+  _containedIn: jsonb
+  """does the column contain the given json value at the top level"""
+  _contains: jsonb
+  _eq: jsonb
+  _gt: jsonb
+  _gte: jsonb
+  """does the string exist as a top-level key in the column"""
+  _hasKey: String
+  """do all of these strings exist as top-level keys in the column"""
+  _hasKeysAll: [String!]
+  """do any of these strings exist as top-level keys in the column"""
+  _hasKeysAny: [String!]
+  _in: [jsonb!]
+  _isNull: Boolean
+  _lt: jsonb
+  _lte: jsonb
+  _neq: jsonb
+  _nin: [jsonb!]
+}
+
+"""column ordering options"""
+enum OrderBy {
+  """in ascending order, nulls last"""
+  ASC
+  """in ascending order, nulls first"""
+  ASC_NULLS_FIRST
+  """in ascending order, nulls last"""
+  ASC_NULLS_LAST
+  """in descending order, nulls first"""
+  DESC
+  """in descending order, nulls first"""
+  DESC_NULLS_FIRST
+  """in descending order, nulls last"""
+  DESC_NULLS_LAST
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input StringComparisonExp {
+  _eq: String
+  _gt: String
+  _gte: String
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _isNull: Boolean
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+  """does the column NOT match the given pattern"""
+  _nlike: String
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+"""
+Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
+"""
+input TimestamptzComparisonExp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _isNull: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "userAccounts"
+"""
+type UserAccounts {
+  accountId: uuid!
+  createdAt: timestamptz!
+  updatedAt: timestamptz!
+  """An object relationship"""
+  userAccountsAccount: Accounts!
+  """An object relationship"""
+  userAccountsUser: Users!
+  userId: uuid!
+}
+
+"""
+aggregated selection of "userAccounts"
+"""
+type UserAccountsAggregate {
+  aggregate: UserAccountsAggregateFields
+  nodes: [UserAccounts!]!
+}
+
+input UserAccountsAggregateBoolExp {
+  count: userAccountsAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "userAccounts"
+"""
+type UserAccountsAggregateFields {
+  count(columns: [UserAccountsSelectColumn!], distinct: Boolean): Int!
+  max: UserAccountsMaxFields
+  min: UserAccountsMinFields
+}
+
+"""
+order by aggregate values of table "userAccounts"
+"""
+input UserAccountsAggregateOrderBy {
+  count: OrderBy
+  max: UserAccountsMaxOrderBy
+  min: UserAccountsMinOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "userAccounts"
+"""
+input UserAccountsArrRelInsertInput {
+  data: [UserAccountsInsertInput!]!
+  """upsert condition"""
+  onConflict: UserAccountsOnConflict
+}
+
+"""
+Boolean expression to filter rows from the table "userAccounts". All fields are combined with a logical 'AND'.
+"""
+input UserAccountsBoolExp {
+  _and: [UserAccountsBoolExp!]
+  _not: UserAccountsBoolExp
+  _or: [UserAccountsBoolExp!]
+  accountId: UuidComparisonExp
+  createdAt: TimestamptzComparisonExp
+  updatedAt: TimestamptzComparisonExp
+  userAccountsAccount: AccountsBoolExp
+  userAccountsUser: UsersBoolExp
+  userId: UuidComparisonExp
+}
+
+"""
+unique or primary key constraints on table "userAccounts"
+"""
+enum UserAccountsConstraint {
+  """
+  unique or primary key constraint on columns "accountId", "userId"
+  """
+  userAccounts_pkey
+}
+
+"""
+input type for inserting data into table "userAccounts"
+"""
+input UserAccountsInsertInput {
+  accountId: uuid
+  createdAt: timestamptz
+  updatedAt: timestamptz
+  userAccountsAccount: AccountsObjRelInsertInput
+  userAccountsUser: UsersObjRelInsertInput
+  userId: uuid
+}
+
+"""aggregate max on columns"""
+type UserAccountsMaxFields {
+  accountId: uuid
+  createdAt: timestamptz
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+order by max() on columns of table "userAccounts"
+"""
+input UserAccountsMaxOrderBy {
+  accountId: OrderBy
+  createdAt: OrderBy
+  updatedAt: OrderBy
+  userId: OrderBy
+}
+
+"""aggregate min on columns"""
+type UserAccountsMinFields {
+  accountId: uuid
+  createdAt: timestamptz
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+order by min() on columns of table "userAccounts"
+"""
+input UserAccountsMinOrderBy {
+  accountId: OrderBy
+  createdAt: OrderBy
+  updatedAt: OrderBy
+  userId: OrderBy
+}
+
+"""
+response of any mutation on the table "userAccounts"
+"""
+type UserAccountsMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+  """data from the rows affected by the mutation"""
+  returning: [UserAccounts!]!
+}
+
+"""
+on_conflict condition type for table "userAccounts"
+"""
+input UserAccountsOnConflict {
+  constraint: UserAccountsConstraint!
+  updateColumns: [UserAccountsUpdateColumn!]! = []
+  where: UserAccountsBoolExp
+}
+
+"""Ordering options when selecting data from "userAccounts"."""
+input UserAccountsOrderBy {
+  accountId: OrderBy
+  createdAt: OrderBy
+  updatedAt: OrderBy
+  userAccountsAccount: AccountsOrderBy
+  userAccountsUser: UsersOrderBy
+  userId: OrderBy
+}
+
+"""primary key columns input for table: userAccounts"""
+input UserAccountsPkColumnsInput {
+  accountId: uuid!
+  userId: uuid!
+}
+
+"""
+select columns of table "userAccounts"
+"""
+enum UserAccountsSelectColumn {
+  """column name"""
+  accountId
+  """column name"""
+  createdAt
+  """column name"""
+  updatedAt
+  """column name"""
+  userId
+}
+
+"""
+input type for updating data in table "userAccounts"
+"""
+input UserAccountsSetInput {
+  accountId: uuid
+  createdAt: timestamptz
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+Streaming cursor of the table "userAccounts"
+"""
+input UserAccountsStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: UserAccountsStreamCursorValueInput!
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input UserAccountsStreamCursorValueInput {
+  accountId: uuid
+  createdAt: timestamptz
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+update columns of table "userAccounts"
+"""
+enum UserAccountsUpdateColumn {
+  """column name"""
+  accountId
+  """column name"""
+  createdAt
+  """column name"""
+  updatedAt
+  """column name"""
+  userId
+}
+
+input UserAccountsUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: UserAccountsSetInput
+  """filter the rows which have to be updated"""
+  where: UserAccountsBoolExp!
+}
+
+"""
+columns and relationships of "users"
+"""
+type Users {
+  createdAt: timestamptz
+  email: String
+  id: uuid!
+  name: String
+  updatedAt: timestamptz
+  """An array relationship"""
+  usersUserAccounts(
+    """distinct select on columns"""
+    distinctOn: [UserAccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UserAccountsOrderBy!]
+    """filter the rows returned"""
+    where: UserAccountsBoolExp
+  ): [UserAccounts!]!
+  """An aggregate relationship"""
+  usersUserAccountsAggregate(
+    """distinct select on columns"""
+    distinctOn: [UserAccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UserAccountsOrderBy!]
+    """filter the rows returned"""
+    where: UserAccountsBoolExp
+  ): UserAccountsAggregate!
+}
+
+"""
+aggregated selection of "users"
+"""
+type UsersAggregate {
+  aggregate: UsersAggregateFields
+  nodes: [Users!]!
+}
+
+"""
+aggregate fields of "users"
+"""
+type UsersAggregateFields {
+  count(columns: [UsersSelectColumn!], distinct: Boolean): Int!
+  max: UsersMaxFields
+  min: UsersMinFields
+}
+
+"""
+Boolean expression to filter rows from the table "users". All fields are combined with a logical 'AND'.
+"""
+input UsersBoolExp {
+  _and: [UsersBoolExp!]
+  _not: UsersBoolExp
+  _or: [UsersBoolExp!]
+  createdAt: TimestamptzComparisonExp
+  email: StringComparisonExp
+  id: UuidComparisonExp
+  name: StringComparisonExp
+  updatedAt: TimestamptzComparisonExp
+  usersUserAccounts: UserAccountsBoolExp
+  usersUserAccountsAggregate: UserAccountsAggregateBoolExp
+}
+
+"""
+unique or primary key constraints on table "users"
+"""
+enum UsersConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  profiles_pkey
+}
+
+"""
+input type for inserting data into table "users"
+"""
+input UsersInsertInput {
+  createdAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  updatedAt: timestamptz
+  usersUserAccounts: UserAccountsArrRelInsertInput
+}
+
+"""aggregate max on columns"""
+type UsersMaxFields {
+  createdAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  updatedAt: timestamptz
+}
+
+"""aggregate min on columns"""
+type UsersMinFields {
+  createdAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  updatedAt: timestamptz
+}
+
+"""
+response of any mutation on the table "users"
+"""
+type UsersMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+  """data from the rows affected by the mutation"""
+  returning: [Users!]!
+}
+
+"""
+input type for inserting object relation for remote table "users"
+"""
+input UsersObjRelInsertInput {
+  data: UsersInsertInput!
+  """upsert condition"""
+  onConflict: UsersOnConflict
+}
+
+"""
+on_conflict condition type for table "users"
+"""
+input UsersOnConflict {
+  constraint: UsersConstraint!
+  updateColumns: [UsersUpdateColumn!]! = []
+  where: UsersBoolExp
+}
+
+"""Ordering options when selecting data from "users"."""
+input UsersOrderBy {
+  createdAt: OrderBy
+  email: OrderBy
+  id: OrderBy
+  name: OrderBy
+  updatedAt: OrderBy
+  usersUserAccountsAggregate: UserAccountsAggregateOrderBy
+}
+
+"""primary key columns input for table: users"""
+input UsersPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "users"
+"""
+enum UsersSelectColumn {
+  """column name"""
+  createdAt
+  """column name"""
+  email
+  """column name"""
+  id
+  """column name"""
+  name
+  """column name"""
+  updatedAt
+}
+
+"""
+input type for updating data in table "users"
+"""
+input UsersSetInput {
+  createdAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  updatedAt: timestamptz
+}
+
+"""
+Streaming cursor of the table "users"
+"""
+input UsersStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: UsersStreamCursorValueInput!
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input UsersStreamCursorValueInput {
+  createdAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  updatedAt: timestamptz
+}
+
+"""
+update columns of table "users"
+"""
+enum UsersUpdateColumn {
+  """column name"""
+  createdAt
+  """column name"""
+  email
+  """column name"""
+  id
+  """column name"""
+  name
+  """column name"""
+  updatedAt
+}
+
+input UsersUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: UsersSetInput
+  """filter the rows which have to be updated"""
+  where: UsersBoolExp!
+}
+
+"""
+Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'.
+"""
+input UuidComparisonExp {
+  _eq: uuid
+  _gt: uuid
+  _gte: uuid
+  _in: [uuid!]
+  _isNull: Boolean
+  _lt: uuid
+  _lte: uuid
+  _neq: uuid
+  _nin: [uuid!]
+}
+
+scalar jsonb
+
+"""mutation root"""
+type mutation_root {
+  """Create a Stripe portal session"""
+  createStripePortalSession: CreateStripePortalSessionOutput
+  """Create a Stripe client secret"""
+  createStripeSecret: CreateStripeSecretOutput
+  deleteAccount: DeleteAccountOutput
+  """
+  delete data from the table: "accounts"
+  """
+  deleteAccounts(
+    """filter the rows which have to be deleted"""
+    where: AccountsBoolExp!
+  ): AccountsMutationResponse
+  """
+  delete single row from the table: "accounts"
+  """
+  deleteAccountsByPk(id: uuid!): Accounts
+  """
+  delete data from the table: "userAccounts"
+  """
+  deleteUserAccounts(
+    """filter the rows which have to be deleted"""
+    where: UserAccountsBoolExp!
+  ): UserAccountsMutationResponse
+  """
+  delete single row from the table: "userAccounts"
+  """
+  deleteUserAccountsByPk(accountId: uuid!, userId: uuid!): UserAccounts
+  """
+  delete data from the table: "users"
+  """
+  deleteUsers(
+    """filter the rows which have to be deleted"""
+    where: UsersBoolExp!
+  ): UsersMutationResponse
+  """
+  delete single row from the table: "users"
+  """
+  deleteUsersByPk(id: uuid!): Users
+  """
+  insert data into the table: "accounts"
+  """
+  insertAccounts(
+    """the rows to be inserted"""
+    objects: [AccountsInsertInput!]!
+    """upsert condition"""
+    onConflict: AccountsOnConflict
+  ): AccountsMutationResponse
+  """
+  insert a single row into the table: "accounts"
+  """
+  insertAccountsOne(
+    """the row to be inserted"""
+    object: AccountsInsertInput!
+    """upsert condition"""
+    onConflict: AccountsOnConflict
+  ): Accounts
+  """
+  insert data into the table: "userAccounts"
+  """
+  insertUserAccounts(
+    """the rows to be inserted"""
+    objects: [UserAccountsInsertInput!]!
+    """upsert condition"""
+    onConflict: UserAccountsOnConflict
+  ): UserAccountsMutationResponse
+  """
+  insert a single row into the table: "userAccounts"
+  """
+  insertUserAccountsOne(
+    """the row to be inserted"""
+    object: UserAccountsInsertInput!
+    """upsert condition"""
+    onConflict: UserAccountsOnConflict
+  ): UserAccounts
+  """
+  insert data into the table: "users"
+  """
+  insertUsers(
+    """the rows to be inserted"""
+    objects: [UsersInsertInput!]!
+    """upsert condition"""
+    onConflict: UsersOnConflict
+  ): UsersMutationResponse
+  """
+  insert a single row into the table: "users"
+  """
+  insertUsersOne(
+    """the row to be inserted"""
+    object: UsersInsertInput!
+    """upsert condition"""
+    onConflict: UsersOnConflict
+  ): Users
+  """
+  update data of the table: "accounts"
+  """
+  updateAccounts(
+    """append existing jsonb value of filtered columns with new jsonb value"""
+    _append: AccountsAppendInput
+    """
+    delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+    """
+    _deleteAtPath: AccountsDeleteAtPathInput
+    """
+    delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+    """
+    _deleteElem: AccountsDeleteElemInput
+    """
+    delete key/value pair or string element. key/value pairs are matched based on their key value
+    """
+    _deleteKey: AccountsDeleteKeyInput
+    """prepend existing jsonb value of filtered columns with new jsonb value"""
+    _prepend: AccountsPrependInput
+    """sets the columns of the filtered rows to the given values"""
+    _set: AccountsSetInput
+    """filter the rows which have to be updated"""
+    where: AccountsBoolExp!
+  ): AccountsMutationResponse
+  """
+  update single row of the table: "accounts"
+  """
+  updateAccountsByPk(
+    """append existing jsonb value of filtered columns with new jsonb value"""
+    _append: AccountsAppendInput
+    """
+    delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+    """
+    _deleteAtPath: AccountsDeleteAtPathInput
+    """
+    delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+    """
+    _deleteElem: AccountsDeleteElemInput
+    """
+    delete key/value pair or string element. key/value pairs are matched based on their key value
+    """
+    _deleteKey: AccountsDeleteKeyInput
+    """prepend existing jsonb value of filtered columns with new jsonb value"""
+    _prepend: AccountsPrependInput
+    """sets the columns of the filtered rows to the given values"""
+    _set: AccountsSetInput
+    pkColumns: AccountsPkColumnsInput!
+  ): Accounts
+  """
+  update multiples rows of table: "accounts"
+  """
+  updateAccountsMany(
+    """updates to execute, in order"""
+    updates: [AccountsUpdates!]!
+  ): [AccountsMutationResponse]
+  """
+  update data of the table: "userAccounts"
+  """
+  updateUserAccounts(
+    """sets the columns of the filtered rows to the given values"""
+    _set: UserAccountsSetInput
+    """filter the rows which have to be updated"""
+    where: UserAccountsBoolExp!
+  ): UserAccountsMutationResponse
+  """
+  update single row of the table: "userAccounts"
+  """
+  updateUserAccountsByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: UserAccountsSetInput
+    pkColumns: UserAccountsPkColumnsInput!
+  ): UserAccounts
+  """
+  update multiples rows of table: "userAccounts"
+  """
+  updateUserAccountsMany(
+    """updates to execute, in order"""
+    updates: [UserAccountsUpdates!]!
+  ): [UserAccountsMutationResponse]
+  """
+  update data of the table: "users"
+  """
+  updateUsers(
+    """sets the columns of the filtered rows to the given values"""
+    _set: UsersSetInput
+    """filter the rows which have to be updated"""
+    where: UsersBoolExp!
+  ): UsersMutationResponse
+  """
+  update single row of the table: "users"
+  """
+  updateUsersByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: UsersSetInput
+    pkColumns: UsersPkColumnsInput!
+  ): Users
+  """
+  update multiples rows of table: "users"
+  """
+  updateUsersMany(
+    """updates to execute, in order"""
+    updates: [UsersUpdates!]!
+  ): [UsersMutationResponse]
+}
+
+type query_root {
+  """
+  fetch data from the table: "accounts"
+  """
+  accounts(
+    """distinct select on columns"""
+    distinctOn: [AccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [AccountsOrderBy!]
+    """filter the rows returned"""
+    where: AccountsBoolExp
+  ): [Accounts!]!
+  """
+  fetch aggregated fields from the table: "accounts"
+  """
+  accountsAggregate(
+    """distinct select on columns"""
+    distinctOn: [AccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [AccountsOrderBy!]
+    """filter the rows returned"""
+    where: AccountsBoolExp
+  ): AccountsAggregate!
+  """fetch data from the table: "accounts" using primary key columns"""
+  accountsByPk(id: uuid!): Accounts
+  """
+  fetch data from the table: "userAccounts"
+  """
+  userAccounts(
+    """distinct select on columns"""
+    distinctOn: [UserAccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UserAccountsOrderBy!]
+    """filter the rows returned"""
+    where: UserAccountsBoolExp
+  ): [UserAccounts!]!
+  """
+  fetch aggregated fields from the table: "userAccounts"
+  """
+  userAccountsAggregate(
+    """distinct select on columns"""
+    distinctOn: [UserAccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UserAccountsOrderBy!]
+    """filter the rows returned"""
+    where: UserAccountsBoolExp
+  ): UserAccountsAggregate!
+  """fetch data from the table: "userAccounts" using primary key columns"""
+  userAccountsByPk(accountId: uuid!, userId: uuid!): UserAccounts
+  """
+  fetch data from the table: "users"
+  """
+  users(
+    """distinct select on columns"""
+    distinctOn: [UsersSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UsersOrderBy!]
+    """filter the rows returned"""
+    where: UsersBoolExp
+  ): [Users!]!
+  """
+  fetch aggregated fields from the table: "users"
+  """
+  usersAggregate(
+    """distinct select on columns"""
+    distinctOn: [UsersSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UsersOrderBy!]
+    """filter the rows returned"""
+    where: UsersBoolExp
+  ): UsersAggregate!
+  """fetch data from the table: "users" using primary key columns"""
+  usersByPk(id: uuid!): Users
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "accounts"
+  """
+  accounts(
+    """distinct select on columns"""
+    distinctOn: [AccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [AccountsOrderBy!]
+    """filter the rows returned"""
+    where: AccountsBoolExp
+  ): [Accounts!]!
+  """
+  fetch aggregated fields from the table: "accounts"
+  """
+  accountsAggregate(
+    """distinct select on columns"""
+    distinctOn: [AccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [AccountsOrderBy!]
+    """filter the rows returned"""
+    where: AccountsBoolExp
+  ): AccountsAggregate!
+  """fetch data from the table: "accounts" using primary key columns"""
+  accountsByPk(id: uuid!): Accounts
+  """
+  fetch data from the table in a streaming manner: "accounts"
+  """
+  accountsStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+    """cursor to stream the results returned by the query"""
+    cursor: [AccountsStreamCursorInput]!
+    """filter the rows returned"""
+    where: AccountsBoolExp
+  ): [Accounts!]!
+  """
+  fetch data from the table: "userAccounts"
+  """
+  userAccounts(
+    """distinct select on columns"""
+    distinctOn: [UserAccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UserAccountsOrderBy!]
+    """filter the rows returned"""
+    where: UserAccountsBoolExp
+  ): [UserAccounts!]!
+  """
+  fetch aggregated fields from the table: "userAccounts"
+  """
+  userAccountsAggregate(
+    """distinct select on columns"""
+    distinctOn: [UserAccountsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UserAccountsOrderBy!]
+    """filter the rows returned"""
+    where: UserAccountsBoolExp
+  ): UserAccountsAggregate!
+  """fetch data from the table: "userAccounts" using primary key columns"""
+  userAccountsByPk(accountId: uuid!, userId: uuid!): UserAccounts
+  """
+  fetch data from the table in a streaming manner: "userAccounts"
+  """
+  userAccountsStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+    """cursor to stream the results returned by the query"""
+    cursor: [UserAccountsStreamCursorInput]!
+    """filter the rows returned"""
+    where: UserAccountsBoolExp
+  ): [UserAccounts!]!
+  """
+  fetch data from the table: "users"
+  """
+  users(
+    """distinct select on columns"""
+    distinctOn: [UsersSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UsersOrderBy!]
+    """filter the rows returned"""
+    where: UsersBoolExp
+  ): [Users!]!
+  """
+  fetch aggregated fields from the table: "users"
+  """
+  usersAggregate(
+    """distinct select on columns"""
+    distinctOn: [UsersSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [UsersOrderBy!]
+    """filter the rows returned"""
+    where: UsersBoolExp
+  ): UsersAggregate!
+  """fetch data from the table: "users" using primary key columns"""
+  usersByPk(id: uuid!): Users
+  """
+  fetch data from the table in a streaming manner: "users"
+  """
+  usersStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+    """cursor to stream the results returned by the query"""
+    cursor: [UsersStreamCursorInput]!
+    """filter the rows returned"""
+    where: UsersBoolExp
+  ): [Users!]!
+}
+
+scalar timestamptz
+
+input userAccountsAggregateBoolExpCount {
+  arguments: [UserAccountsSelectColumn!]
+  distinct: Boolean
+  filter: UserAccountsBoolExp
+  predicate: IntComparisonExp!
+}
+
+scalar uuid

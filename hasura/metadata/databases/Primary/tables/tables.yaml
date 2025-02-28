@@ -1,2 +1,3 @@
-- "!include public_profiles.yaml"
-- "!include public_stripeCustomers.yaml"
+- "!include public_accounts.yaml"
+- "!include public_userAccounts.yaml"
+- "!include public_users.yaml"

@@ -1,0 +1,113 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+      - staging
+    tags:
+      - v*
+  pull_request:
+    branches: [main, intermediate-auth]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy-dev:
+    if: github.event_name == 'pull_request'
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      # create a short sha and make it available to the next steps
+      - name: Set short sha
+        id: vars
+        run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+
+      - uses: ./.github/actions/deploy
+        with:
+          mode: development
+          compose_file: compose.portal.dev.gnafed.click.yaml
+          aws_account_id: 532501343364
+          aws_region: us-west-2
+          domain_name: ${{ vars.DOMAIN_NAME }}
+          github_client_id: ${{ secrets.AUTH_GITHUB_CLIENT_ID }}
+          github_client_secret: ${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}
+          hasura_graphql_admin_secret: ${{ secrets.HASURA_GRAPHQL_ADMIN_SECRET }}
+          next_public_segment_write_key: ${{ secrets.NEXT_PUBLIC_SEGMENT_WRITE_KEY }}
+          next_public_stripe_pricing_table_id: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID }}
+          next_public_stripe_publishable_key: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+          next_public_version: ${{ env.SHORT_SHA }}
+          postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
+          segment_write_key: ${{ secrets.SEGMENT_WRITE_KEY }}
+          stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
+          next_public_fabric: ${{ vars.NEXT_PUBLIC_FABRIC }}
+  
+  deploy-staging:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')
+    environment: staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      # create a short sha and make it available to the next steps
+      - name: Set short sha
+        id: vars
+        run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+
+      - uses: ./.github/actions/deploy
+        with:
+          mode: staging
+          compose_file: compose.portal.staging.defang.dev.yaml
+          aws_account_id: 426819183542
+          aws_region: us-west-2
+          domain_name: ${{ vars.DOMAIN_NAME }}
+          github_client_id: ${{ secrets.AUTH_GITHUB_CLIENT_ID }}
+          github_client_secret: ${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}
+          hasura_graphql_admin_secret: ${{ secrets.HASURA_GRAPHQL_ADMIN_SECRET }}
+          next_public_segment_write_key: ${{ secrets.NEXT_PUBLIC_SEGMENT_WRITE_KEY }}
+          next_public_stripe_pricing_table_id: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID }}
+          next_public_stripe_publishable_key: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+          next_public_version: ${{ env.SHORT_SHA }}
+          postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
+          segment_write_key: ${{ secrets.SEGMENT_WRITE_KEY }}
+          stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
+          next_public_fabric: ${{ vars.NEXT_PUBLIC_FABRIC }}
+
+  
+  deploy-production:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      # create a short sha and make it available to the next steps
+      - name: Set short sha
+        id: vars
+        run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+
+      - uses: ./.github/actions/deploy
+        with:
+          mode: production
+          compose_file: compose.portal.defang.io.yaml
+          # TODO: Update the AWS account ID to the corp account when ready
+          aws_account_id: 407839483216 
+          aws_region: us-west-2
+          domain_name: ${{ vars.DOMAIN_NAME }}
+          github_client_id: ${{ secrets.AUTH_GITHUB_CLIENT_ID }}
+          github_client_secret: ${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}
+          hasura_graphql_admin_secret: ${{ secrets.HASURA_GRAPHQL_ADMIN_SECRET }}
+          next_public_segment_write_key: ${{ secrets.NEXT_PUBLIC_SEGMENT_WRITE_KEY }}
+          next_public_stripe_pricing_table_id: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID }}
+          next_public_stripe_publishable_key: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+          next_public_version: ${{ env.SHORT_SHA }}
+          postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
+          segment_write_key: ${{ secrets.SEGMENT_WRITE_KEY }}
+          stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
+          next_public_fabric: ${{ vars.NEXT_PUBLIC_FABRIC }}

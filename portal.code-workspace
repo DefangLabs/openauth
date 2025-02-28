@@ -7,20 +7,14 @@
 			"path": "web"
 		},
 		{
-			"path": "kratos"
-		},
-		{
 			"path": "hasura"
 		},
 		{
-			"path": "fn"
+			"path": "api"
 		},
 		{
-			"path": "pulumi"
+			"path": "auth"
 		},
-		{
-			"path": "heimdall"
-		}
 	],
 	"settings": {
 		"files.exclude": {
@@ -32,12 +26,9 @@
 			"**/Thumbs.db": true,
 			".pnpm-store": true,
 			"web": true,
-			"kratos": true,
-			"oathkeeper": true,
-			"heimdall": true,
 			"hasura": true,
-			"fn": true,
-			"pulumi": true,
+			"api": true,
+			"auth": true,
 		},
 		"eslint.probe": [
 			"javascript",
@@ -53,18 +44,14 @@
 			{
 				"previewLimit": 50,
 				"server": "localhost",
-				"port": 54322,
+				"port": 5432,
 				"driver": "PostgreSQL",
-				"name": "Kratos",
-				"database": "kratos",
-				"username": "kratos",
-				"password": "secret"
+				"name": "Local Dev",
+				"database": "postgres",
+				"username": "postgres",
+				"password": "password"
 			}
 		],
-		"yaml.schemas": {
-			"file:///workspace/chewy-global/lib/schemas/chewy-component-schema.json": "chewy-component.yml",
-			"https://json.schemastore.org/prometheus.rules.json": "file:///Users/raphaeltitsworth-morin/dev/defang/portal/heimdall/config/rules/dev.rules.yaml"
-		}
 	},
 	"tasks": {
 		"version": "2.0.0",
@@ -95,26 +82,31 @@
 				},
 				"problemMatcher": []
 			},
+			// install rest auth dependencies
+			{
+				"label": "api: install",
+				"type": "shell",
+				"command": "docker compose -f ./compose.dev.yaml --env-file .env.dev run --rm auth i",
+				"problemMatcher": []
+			},
 			// install rest api dependencies
 			{
-				"label": "fn: install",
+				"label": "api: install",
 				"type": "shell",
-				"command": "docker compose run --rm fn i",
-				"options": {
-					"cwd": "${workspaceFolder}/kratos"
-				},
+				"command": "docker compose -f ./compose.dev.yaml --env-file .env.dev run --rm api i",
 				"problemMatcher": []
 			},
 			{
 				"label": "backend: run dev",
 				"type": "shell",
-				"command": "docker compose up",
+				"command": "docker compose -f ./compose.dev.yaml --env-file .env.dev up",
 				"runOptions": {
 					"runOn": "folderOpen"
 				},
 				"problemMatcher": [],
+				"dependsOrder": "parallel",
 				"dependsOn": [
-					"fn: install"
+					"api: install"
 				]
 			},
 			{
@@ -133,7 +125,7 @@
 				]
 			},
 			{
-				"label": "web: graphql codegen",
+				"label": "web: watch graphql",
 				"type": "shell",
 				"command": "./scripts/watch-graphql",
 				"runOptions": {
@@ -164,5 +156,17 @@
 			"dbaeumer.vscode-eslint",
 			"esbenp.prettier-vscode"
 		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"type": "bun",
+				"request": "attach",
+				"name": "Attach to API",
+				"url": "ws://localhost:6499"
+			}
+		],
+		"compounds": []
 	}
 }

@@ -15,7 +15,7 @@ export function StripePricingTable() {
 
   useEffect(() => {
     createStripeSecret();
-  }, []);
+  }, [createStripeSecret]);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -28,7 +28,9 @@ export function StripePricingTable() {
     };
   }, []);
 
-  if (!secret) return <PageLoading />;
+  if (!secret) {
+    return <PageLoading />;
+  }
 
   const pricingTable = React.createElement("stripe-pricing-table", {
     "pricing-table-id": process.env.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID,

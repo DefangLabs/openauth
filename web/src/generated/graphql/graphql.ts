@@ -54,86 +54,6 @@ export enum OrderBy {
   DescNullsLast = "DESC_NULLS_LAST",
 }
 
-/** Boolean expression to filter rows from the table "profiles". All fields are combined with a logical 'AND'. */
-export type ProfilesBoolExp = {
-  _and?: InputMaybe<Array<ProfilesBoolExp>>;
-  _not?: InputMaybe<ProfilesBoolExp>;
-  _or?: InputMaybe<Array<ProfilesBoolExp>>;
-  id?: InputMaybe<UuidComparisonExp>;
-  name?: InputMaybe<StringComparisonExp>;
-};
-
-/** unique or primary key constraints on table "profiles" */
-export enum ProfilesConstraint {
-  /** unique or primary key constraint on columns "defangId" */
-  ProfilesDefangIdKey = "profiles_defangId_key",
-  /** unique or primary key constraint on columns "id" */
-  ProfilesPkey = "profiles_pkey",
-}
-
-/** input type for inserting data into table "profiles" */
-export type ProfilesInsertInput = {
-  name?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** on_conflict condition type for table "profiles" */
-export type ProfilesOnConflict = {
-  constraint: ProfilesConstraint;
-  updateColumns?: Array<ProfilesUpdateColumn>;
-  where?: InputMaybe<ProfilesBoolExp>;
-};
-
-/** Ordering options when selecting data from "profiles". */
-export type ProfilesOrderBy = {
-  id?: InputMaybe<OrderBy>;
-  name?: InputMaybe<OrderBy>;
-};
-
-/** primary key columns input for table: profiles */
-export type ProfilesPkColumnsInput = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** select columns of table "profiles" */
-export enum ProfilesSelectColumn {
-  /** column name */
-  Id = "id",
-  /** column name */
-  Name = "name",
-}
-
-/** input type for updating data in table "profiles" */
-export type ProfilesSetInput = {
-  name?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** Streaming cursor of the table "profiles" */
-export type ProfilesStreamCursorInput = {
-  /** Stream column input with initial value */
-  initialValue: ProfilesStreamCursorValueInput;
-  /** cursor ordering */
-  ordering?: InputMaybe<CursorOrdering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type ProfilesStreamCursorValueInput = {
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** update columns of table "profiles" */
-export enum ProfilesUpdateColumn {
-  /** column name */
-  Name = "name",
-}
-
-export type ProfilesUpdates = {
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<ProfilesSetInput>;
-  /** filter the rows which have to be updated */
-  where: ProfilesBoolExp;
-};
-
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type StringComparisonExp = {
   _eq?: InputMaybe<Scalars["String"]["input"]>;
@@ -167,6 +87,89 @@ export type StringComparisonExp = {
   _similar?: InputMaybe<Scalars["String"]["input"]>;
 };
 
+/** Boolean expression to filter rows from the table "users". All fields are combined with a logical 'AND'. */
+export type UsersBoolExp = {
+  _and?: InputMaybe<Array<UsersBoolExp>>;
+  _not?: InputMaybe<UsersBoolExp>;
+  _or?: InputMaybe<Array<UsersBoolExp>>;
+  email?: InputMaybe<StringComparisonExp>;
+  id?: InputMaybe<UuidComparisonExp>;
+  name?: InputMaybe<StringComparisonExp>;
+};
+
+/** unique or primary key constraints on table "users" */
+export enum UsersConstraint {
+  /** unique or primary key constraint on columns "id" */
+  ProfilesPkey = "profiles_pkey",
+}
+
+/** input type for inserting data into table "users" */
+export type UsersInsertInput = {
+  name?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** on_conflict condition type for table "users" */
+export type UsersOnConflict = {
+  constraint: UsersConstraint;
+  updateColumns?: Array<UsersUpdateColumn>;
+  where?: InputMaybe<UsersBoolExp>;
+};
+
+/** Ordering options when selecting data from "users". */
+export type UsersOrderBy = {
+  email?: InputMaybe<OrderBy>;
+  id?: InputMaybe<OrderBy>;
+  name?: InputMaybe<OrderBy>;
+};
+
+/** primary key columns input for table: users */
+export type UsersPkColumnsInput = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** select columns of table "users" */
+export enum UsersSelectColumn {
+  /** column name */
+  Email = "email",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Name = "name",
+}
+
+/** input type for updating data in table "users" */
+export type UsersSetInput = {
+  name?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** Streaming cursor of the table "users" */
+export type UsersStreamCursorInput = {
+  /** Stream column input with initial value */
+  initialValue: UsersStreamCursorValueInput;
+  /** cursor ordering */
+  ordering?: InputMaybe<CursorOrdering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type UsersStreamCursorValueInput = {
+  email?: InputMaybe<Scalars["String"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** update columns of table "users" */
+export enum UsersUpdateColumn {
+  /** column name */
+  Name = "name",
+}
+
+export type UsersUpdates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<UsersSetInput>;
+  /** filter the rows which have to be updated */
+  where: UsersBoolExp;
+};
+
 /** Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'. */
 export type UuidComparisonExp = {
   _eq?: InputMaybe<Scalars["uuid"]["input"]>;
@@ -192,29 +195,26 @@ export type DeleteAccountMutationMutation = {
   } | null;
 };
 
-export type InsertProfileMutationMutationVariables = Exact<{
-  object: ProfilesInsertInput;
+export type InsertUserMutationMutationVariables = Exact<{
+  object: UsersInsertInput;
 }>;
 
-export type InsertProfileMutationMutation = {
+export type InsertUserMutationMutation = {
   __typename?: "mutation_root";
-  insertProfilesOne?: {
-    __typename?: "Profiles";
-    id: any;
-    name?: string | null;
-  } | null;
+  user?: { __typename?: "Users"; id: any; name?: string | null } | null;
 };
 
-export type ProfileQueryQueryVariables = Exact<{
+export type UserQueryQueryVariables = Exact<{
   id: Scalars["uuid"]["input"];
 }>;
 
-export type ProfileQueryQuery = {
+export type UserQueryQuery = {
   __typename?: "query_root";
-  profilesByPk?: {
-    __typename?: "Profiles";
+  user?: {
+    __typename?: "Users";
     id: any;
     name?: string | null;
+    email?: string | null;
   } | null;
 };
 
@@ -270,13 +270,13 @@ export const DeleteAccountMutationDocument = {
   DeleteAccountMutationMutation,
   DeleteAccountMutationMutationVariables
 >;
-export const InsertProfileMutationDocument = {
+export const InsertUserMutationDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "InsertProfileMutation" },
+      name: { kind: "Name", value: "InsertUserMutation" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -288,7 +288,7 @@ export const InsertProfileMutationDocument = {
             kind: "NonNullType",
             type: {
               kind: "NamedType",
-              name: { kind: "Name", value: "ProfilesInsertInput" },
+              name: { kind: "Name", value: "UsersInsertInput" },
             },
           },
         },
@@ -298,7 +298,8 @@ export const InsertProfileMutationDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "insertProfilesOne" },
+            alias: { kind: "Name", value: "user" },
+            name: { kind: "Name", value: "insertUsersOne" },
             arguments: [
               {
                 kind: "Argument",
@@ -344,16 +345,16 @@ export const InsertProfileMutationDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  InsertProfileMutationMutation,
-  InsertProfileMutationMutationVariables
+  InsertUserMutationMutation,
+  InsertUserMutationMutationVariables
 >;
-export const ProfileQueryDocument = {
+export const UserQueryDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "ProfileQuery" },
+      name: { kind: "Name", value: "UserQuery" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -369,7 +370,8 @@ export const ProfileQueryDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "profilesByPk" },
+            alias: { kind: "Name", value: "user" },
+            name: { kind: "Name", value: "usersByPk" },
             arguments: [
               {
                 kind: "Argument",
@@ -385,6 +387,7 @@ export const ProfileQueryDocument = {
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "id" } },
                 { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "email" } },
               ],
             },
           },
@@ -392,7 +395,7 @@ export const ProfileQueryDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<ProfileQueryQuery, ProfileQueryQueryVariables>;
+} as unknown as DocumentNode<UserQueryQuery, UserQueryQueryVariables>;
 export const CreateStripePortalSessionDocument = {
   kind: "Document",
   definitions: [

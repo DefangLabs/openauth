@@ -17,7 +17,12 @@
 				"bpruitt-goddard.mermaid-markdown-syntax-highlighting",
 				"GitHub.copilot",
 				"github.vscode-github-actions",
-				"styled-components.vscode-styled-components"
+				"styled-components.vscode-styled-components",
+				"mtxr.sqltools",
+				"mtxr.sqltools-driver-pg",
+				"oven.bun-vscode",
+				"WallabyJs.console-ninja",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	}

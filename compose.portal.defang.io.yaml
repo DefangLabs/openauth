@@ -1,0 +1,47 @@
+name: portal-production
+
+services:
+  auth-redis:
+    extends:
+      file: compose.yaml
+      service: auth-redis
+
+  auth:
+    extends:
+      file: compose.yaml
+      service: auth
+    domainname: auth.defang.io
+    x-defang-dns-role: arn:aws:iam::258338292852:role/dnsadmin-cd22af2
+
+  hasura-postgres:
+    extends:
+      file: compose.yaml
+      service: hasura-postgres
+
+  hasura:
+    extends:
+      file: compose.yaml
+      service: hasura
+    environment:
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+    domainname: graphql.defang.io
+    x-defang-dns-role: arn:aws:iam::258338292852:role/dnsadmin-cd22af2
+
+
+  api:
+    extends:
+      file: compose.yaml
+      service: api
+    domainname: api.defang.io
+    x-defang-dns-role: arn:aws:iam::258338292852:role/dnsadmin-cd22af2
+
+  web:
+    extends:
+      file: compose.yaml
+      service: web
+    domainname: portal.defang.io
+    networks:
+      - public:
+          aliases:
+            - portal.defang.dev
+    x-defang-dns-role: arn:aws:iam::258338292852:role/dnsadmin-cd22af2

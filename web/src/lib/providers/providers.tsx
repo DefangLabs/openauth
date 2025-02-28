@@ -1,10 +1,10 @@
 "use client";
 
-import { useDevRedirect } from "@/hooks/use-dev-redirect/use-dev-redirect";
 import { AnalyticsProvider } from "@/modules/analytics/providers/analytics-provider/analytics-provider";
 import { ApolloProvider } from "@/modules/apollo/providers/apollo-provider/apollo-provider";
-import { KratosProvider } from "@/modules/kratos/providers/kratos-provider/kratos-provider";
 import { ThemeProvider } from "@/modules/mui/providers/theme-provider/theme-provider";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 console.log(
   String.raw`
@@ -18,10 +18,9 @@ console.log(
 );
 
 console.log(`Configuring......`);
+console.log(`Auth: ${process.env.NEXT_PUBLIC_AUTH_URL}`);
 console.log(`Fabric: ${process.env.NEXT_PUBLIC_FABRIC}`);
-console.log(`FN: ${process.env.NEXT_PUBLIC_FN_URL}`);
 console.log(`GraphQL: ${process.env.NEXT_PUBLIC_GRAPHQL_URL}`);
-console.log(`Kratos: ${process.env.NEXT_PUBLIC_KRATOS_PUBLIC_URL}`);
 console.log(`Let's go......`);
 
 interface ProvidersProps {
@@ -29,14 +28,10 @@ interface ProvidersProps {
 }
 
 export function Providers({ children }: ProvidersProps) {
-  useDevRedirect();
-
   return (
     <AnalyticsProvider>
       <ThemeProvider>
-        <ApolloProvider>
-          <KratosProvider>{children}</KratosProvider>
-        </ApolloProvider>
+        <ApolloProvider>{children}</ApolloProvider>
       </ThemeProvider>
     </AnalyticsProvider>
   );

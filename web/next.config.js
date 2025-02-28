@@ -29,30 +29,34 @@ const nextConfig = {
                 key: "X-Frame-Options",
                 value: "DENY",
               },
-              // {
-              //   key: "X-Content-Type-Options",
-              //   value: "nosniff",
-              // },
-              // {
-              //   key: "X-XSS-Protection",
-              //   value: "1; mode=block",
-              // },
-              // {
-              //   key: "Referrer-Policy",
-              //   value: "same-origin",
-              // },
-              // {
-              //   key: "Content-Security-Policy",
-              //   value: "default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://api.github.com",
-              // },
-              // {
-              //   key: "Permissions-Policy",
-              //   value: "geolocation=(), microphone=(), camera=(), interest-cohort=()",
-              // },
-              // {
-              //   key: "Feature-Policy",
-              //   value: "geolocation 'none'; microphone 'none'; camera 'none'; interest-cohort 'none'",
-              // },
+              {
+                key: "X-Content-Type-Options",
+                value: "nosniff",
+              },
+              {
+                key: "X-XSS-Protection",
+                value: "1; mode=block",
+              },
+              {
+                key: "Referrer-Policy",
+                value: "same-origin",
+              },
+              {
+                key: "Content-Security-Policy",
+                // TODO: update this to use a pattern based on deployed env
+                value:
+                  "default-src 'self'; frame-src 'self' https://js.stripe.com; img-src 'self' data: https://*.gravatar.com http://*.gravatar.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://api.github.com https://*.gnafed.click https://*.dev.gnafed.click https://*.staging.gnafed.click https://*.defang.dev https://*.defang.io https://js.stripe.com https://cdn.segment.com https://api.segment.io",
+              },
+              {
+                key: "Permissions-Policy",
+                value:
+                  "geolocation=(), microphone=(), camera=(), interest-cohort=()",
+              },
+              {
+                key: "Feature-Policy",
+                value:
+                  "geolocation 'none'; microphone 'none'; camera 'none'; interest-cohort 'none'",
+              },
             ],
           },
         ];

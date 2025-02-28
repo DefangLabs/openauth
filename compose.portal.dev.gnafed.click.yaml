@@ -1,0 +1,39 @@
+name: portal-dev
+
+services:
+  auth-redis:
+    extends:
+      file: compose.yaml
+      service: auth-redis
+
+  auth:
+    extends:
+      file: compose.yaml
+      service: auth
+    domainname: auth.dev.gnafed.click
+
+  hasura-postgres:
+    extends:
+      file: compose.yaml
+      service: hasura-postgres
+
+  hasura:
+    extends:
+      file: compose.yaml
+      service: hasura
+    environment:
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+    domainname: graphql.dev.gnafed.click
+
+
+  api:
+    extends:
+      file: compose.yaml
+      service: api
+    domainname: api.dev.gnafed.click
+
+  web:
+    extends:
+      file: compose.yaml
+      service: web
+    domainname: portal.dev.gnafed.click

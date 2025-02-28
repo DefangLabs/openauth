@@ -22,7 +22,7 @@ export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
     setLoading(true);
     client?.getServices({}, (err, res) => {
       if (err) {
-        console.log("@@ error getting services", err);
+        console.error("@@ error getting services", err);
         setLoading(false);
         return;
       }
@@ -38,7 +38,7 @@ export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
     const i = setInterval(() => {
       client?.getServices({}, (err, res) => {
         if (err) {
-          console.log("@@ error getting services", err);
+          console.error("@@ error getting services", err);
           return;
         }
         setProject(res.project);

@@ -1,11 +1,12 @@
-import { useSession } from "@/modules/kratos/hooks/use-session/use-session";
+import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
 import { useQuery } from "@apollo/client";
-import { ProfileQuery } from "../../graphql/queries/profile-query";
+import { userQuery } from "../../graphql/queries/user-query";
 
 export function useCurrentUserProfileQuery() {
-  const { session } = useSession();
-  return useQuery(ProfileQuery, {
-    variables: { id: session?.identity?.id },
-    skip: !session?.identity?.id,
+  const id = useAccessToken()?.claims?.properties?.id;
+
+  return useQuery(userQuery, {
+    variables: { id },
+    skip: !id,
   });
 }

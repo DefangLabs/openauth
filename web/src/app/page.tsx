@@ -1,12 +1,8 @@
-"use client";
+import { requireAuth } from "@/modules/auth/lib/require-auth";
+import { redirect } from "next/navigation";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+export default async function HomePage() {
+  await requireAuth();
 
-export default function HomePage() {
-  const router = useRouter();
-  useEffect(() => {
-    router.push("/projects");
-  }, [router]);
-  return <></>;
+  return redirect("/projects");
 }

@@ -1,111 +1,101 @@
 services:
-  kratos-migrate:
-    image: oryd/kratos:v0.13.0
-    environment:
-      - DSN=postgres://kratos:secret@kratos-postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
-    volumes:
-      - type: bind
-        source: ./kratos/config
-        target: /etc/config/kratos
-    command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
-    restart: on-failure
-    depends_on:
-      - kratos-postgres
-
-  kratos:
-    depends_on:
-      - kratos-migrate
-    image: oryd/kratos:v0.13.0
-    restart: unless-stopped
-    environment:
-      - DSN=postgres://kratos:secret@kratos-postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
-      - LOG_LEVEL=trace
-    command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
-    expose:
-      - 4433 # Public port
-      - 4434 # Admin port
-    volumes:
-      - type: bind
-        source: ./kratos/config
-        target: /etc/config/kratos
-
-  mailslurper:
-    image: oryd/mailslurper:latest-smtps
+  auth-redis:
+    image: redis:6.2
+    x-defang-redis: true
     ports:
-      - "4436:4436"
-      - "4437:4437"
+      - mode: host
+        target: 6379
+        published: 6379
 
-  kratos-postgres:
-    image: postgres:16
-    environment:
-      - POSTGRES_USER=kratos
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=kratos
-    volumes:
-      - "./.data/kratos-postgres:/var/lib/postgresql/data:rw"
-    ports:
-      - "54322:5432"
-
-
-  heimdall:
+  auth:
+    domainname: auth.${DOMAIN_NAME}
     build:
-      context: ./heimdall
-      dockerfile: Dockerfile
-      args:
-        - ENV=dev
-        - PUBLIC_ROOT_URL=http://localhost:8000
-    volumes:
-      - ./heimdall/config:/heimdall/conf
-      - ./heimdall/config/keys/dev/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
-    depends_on:
-      - kratos
+      context: ./auth
     ports:
-      - 8000:4455
-      - 4457:4457
-    command: -c /heimdall/conf/dev.config.yaml serve proxy
+      - mode: ingress
+        target: 3001
+        published: 3001
     environment:
-      - RULES_FILE_PATH=/heimdall/conf/rules/dev.rules.yaml
-      - KEYSTORE_FILE_PATH=/heimdall/conf/keys/dev/keystore.pem
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - PORT=3001
+      - REDIS_URL=redis://auth-redis:6379
+      # DEFANG CONFIG
+      - ALLOWED_ORIGINS=https://${DOMAIN_NAME},https://portal.${DOMAIN_NAME}
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@database:5432/postgres
+      - HASURA_ENDPOINT=https://graphql.${DOMAIN_NAME}
+      - GITHUB_CLIENT_ID
+      - GITHUB_CLIENT_SECRET
+      - HASURA_GRAPHQL_ADMIN_SECRET
+      - SEGMENT_WRITE_KEY
 
   hasura-postgres:
-    restart: unless-stopped
     image: postgres:16
-    environment:
-      POSTGRES_PASSWORD: password
-    volumes:
-      - "./.data/hasura-postgres:/var/lib/postgresql/data:rw"
+    x-defang-postgres: true
     ports:
-      - "54321:5432"
+      - mode: host
+        target: 5432
+    environment:
+      POSTGRES_PASSWORD:
 
   hasura:
+    domainname: graphql.${DOMAIN_NAME}
     restart: unless-stopped
-    env_file:
-      - ./hasura/.env
-    depends_on:
-      - hasura-postgres
     build:
       context: hasura
       dockerfile: Dockerfile
-    volumes:
-      - ./hasura:/project
-
-
-  fn:
-    build:
-      context: ./fn
-      dockerfile: dev.Dockerfile
-      args:
-        - APP=/app
-    command: dev
-    environment:
-      - JWKS_ENDPOINT=http://heimdall:4457/.well-known/jwks
-      - KRATOS_DOMAIN=kratos:4433
-      - HASURA_DOMAIN=hasura:8080
-      - STRIPE_SECRET_KEY=rk_test_51QJ1i6GzPK2DOcG5XJxzf6GmkKbCESzOfThaVkGxMzVMS7p6UQOycxMuNQG7lPbEJkAvxGwEEvfcsLObiGpNyIX200fxhtNlJG
-      - PUBLIC_ROOT_URL=http://localhost:8000
     ports:
-      - 8001:8001
-    volumes:
-      - ./fn:/app
+      - mode: ingress
+        target: 8080
+        published: 3002
+    environment:
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=false
+      - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup,http-log,webhook-log,websocket-log,query-log
+      - HASURA_GRAPHQL_UNAUTHORIZED_ROLE=public
+      - HASURA_GRAPHQL_INFER_FUNCTION_PERMISSIONS=false
+      - HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS=true
+      - HASURA_GRAPHQL_EXPERIMENTAL_FEATURES=naming_convention
+      # DEFANG CONFIG
+      - HASURA_GRAPHQL_CORS_DOMAIN=https://${DOMAIN_NAME},https://*.${DOMAIN_NAME}
+      - DEFANG_FN_ENDPOINT=https://api.${DOMAIN_NAME}
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:${POSTGRES_PASSWORD}@hasura-postgres:5432/postgres
+      - HASURA_GRAPHQL_JWT_SECRET={"jwk_url":"https://auth.${DOMAIN_NAME}/.well-known/jwks.json","claims_namespace_path":"$.properties.hasura"}
+      - HASURA_GRAPHQL_ADMIN_SECRET
+      # Trigger action to investigate weird DOMAIN_NAME interpolation
+    depends_on:
+      - hasura-postgres
+
+
+  api:
+    domainname: api.${DOMAIN_NAME}
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3003
+      # DEFANG CONFIG
+      - AUTH_ENDPOINT=https://auth.${DOMAIN_NAME}
+      - HASURA_ENDPOINT=https://graphql.${DOMAIN_NAME}
+      - PUBLIC_ROOT_URL=https://portal.${DOMAIN_NAME}
+      - STRIPE_SECRET_KEY
+    ports:
+      - mode: ingress
+        target: 3003
+        published: 3003
+
+  web:
+    domainname: portal.${DOMAIN_NAME}
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_AUTH_URL=https://auth.${DOMAIN_NAME}
+        - NEXT_PUBLIC_GRAPHQL_URL=https://graphql.${DOMAIN_NAME}/v1/graphql
+        - NEXT_PUBLIC_FABRIC=${NEXT_PUBLIC_FABRIC}
+        # DEFANG CONFIG
+        - NEXT_PUBLIC_SEGMENT_WRITE_KEY
+        - NEXT_PUBLIC_VERSION
+        - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        - NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID
+    ports:
+      - mode: ingress
+        target: 3000
+        published: 3000
