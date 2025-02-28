@@ -72,7 +72,7 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
       try {
         stopTail();
       } catch (e) {
-        console.log("@@ error stopping tail", e);
+        console.error("@@ error stopping tail", e);
       }
     };
   }, [callback, client, etag, service, sinceMins]);

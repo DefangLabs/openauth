@@ -32,21 +32,15 @@ export async function loginAction(provider?: string) {
   const accessToken = cookies().get("access_token");
   const refreshToken = cookies().get("refresh_token");
 
-  console.log("@@ login", provider, !!accessToken, !!refreshToken);
-
   if (accessToken) {
-    console.log("@@ accessToken!");
     const verified = await authClient.verify(subjects, accessToken.value, {
       refresh: refreshToken?.value,
     });
     if (!verified.err && verified.tokens) {
-      console.log("@@ no error and verified tokens");
       await setTokens(verified.tokens.access, verified.tokens.refresh);
       redirect("/");
     }
   }
-  console.log("@@ no access token, redirecting to auth");
-
   const host = headers().get("x-forwarded-host") ?? headers().get("host");
   const protocol =
     headers().get("x-forwarded-proto") ?? headers().get("proto") ?? "http";
@@ -57,7 +51,6 @@ export async function loginAction(provider?: string) {
       provider,
     },
   );
-  console.log("@@ url", url, challenge);
   redirect(url);
 }
 
