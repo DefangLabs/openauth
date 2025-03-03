@@ -94,7 +94,7 @@ jobs:
 
       - uses: ./.github/actions/deploy
         env:
-          DEFANG_CD_IMAGE: docker.io/defangio/cd-sandbox@sha256:8f175d0eea52c511c5416d8bf95d6913cfaf33ffd855ea4e85e96f7460ee5de2
+          DEFANG_CD_IMAGE: docker.io/defangio/cd-sandbox@sha256:c5e3708a11b4e82ea916ec247a4d01bc1143b092cb7471066596242ad48d5431
         with:
           mode: production
           compose_file: compose.portal.defang.io.yaml
