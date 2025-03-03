@@ -10,6 +10,8 @@ export function middleware(request: NextRequest) {
 
   if (hostname === "portal.defang.dev") {
     url.hostname = "portal.defang.io";
+    url.port = "";
+    url.protocol = "https";
     return NextResponse.redirect(url.toString(), { status: 301 });
   }
 
