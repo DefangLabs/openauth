@@ -93,8 +93,6 @@ jobs:
         run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
 
       - uses: ./.github/actions/deploy
-        env:
-          DEFANG_CD_IMAGE: docker.io/defangio/cd-sandbox@sha256:c5e3708a11b4e82ea916ec247a4d01bc1143b092cb7471066596242ad48d5431
         with:
           mode: production
           compose_file: compose.portal.defang.io.yaml
