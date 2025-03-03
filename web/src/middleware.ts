@@ -3,6 +3,13 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
+  console.log(
+    "@@ urlinfo: ",
+    request.headers.get("x-forwarded-host"),
+    request.headers.get("host"),
+    url.hostname,
+  );
+  console.log("@@ nexturl: ", request.nextUrl.toString());
   const hostname =
     request.headers.get("x-forwarded-host") ||
     request.headers.get("host") ||
