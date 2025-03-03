@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
     url.hostname = "portal.defang.io";
     url.port = "";
     url.protocol = "https";
-    return NextResponse.redirect(url.toString(), { status: 301 });
+    return NextResponse.redirect(url.toString(), { status: 302 });
   }
 
   return NextResponse.next();
