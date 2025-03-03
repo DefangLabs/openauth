@@ -3,8 +3,12 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
+  const hostname =
+    request.headers.get("x-forwarded-host") ||
+    request.headers.get("host") ||
+    url.hostname;
 
-  if (url.hostname === "portal.defang.dev") {
+  if (hostname === "portal.defang.dev") {
     url.hostname = "portal.defang.io";
     return NextResponse.redirect(url.toString(), { status: 301 });
   }
