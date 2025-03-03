@@ -94,7 +94,7 @@ jobs:
 
       - uses: ./.github/actions/deploy
         env:
-          FABRIC_CD_IMAGE: 532501343364.dkr.ecr.us-west-2.amazonaws.com/cd:public-v0.6.0-374-g03b3f765
+          DEFANG_CD_IMAGE: 532501343364.dkr.ecr.us-west-2.amazonaws.com/cd:public-v0.6.0-374-g03b3f765
         with:
           mode: production
           compose_file: compose.portal.defang.io.yaml
