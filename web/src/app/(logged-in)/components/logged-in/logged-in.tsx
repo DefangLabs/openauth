@@ -35,6 +35,9 @@ import { NavButton } from "./components/nav-button/nav-button";
 import { NAV_SURFACE } from "./constants";
 import { useSidebarOpen } from "./hooks/use-sidebar-open/use-sidebar-open";
 import { useCurrentUserProfileQuery } from "@/modules/profiles/hooks/use-current-user-profile-query/use-current-user-profile-query";
+import { useEffect } from "react";
+import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
+import { analytics } from "@/modules/analytics/lib/analytics";
 
 const UserChip = styled(Chip)`
   ${NAV_SURFACE}
@@ -80,7 +83,15 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { sidebarOpen, setSidebarOpen } = useSidebarOpen();
+  const { claims } = useAccessToken();
+  const userId = claims?.properties?.id;
   useSignTos();
+
+  useEffect(() => {
+    if (userId) {
+      analytics.identify(userId);
+    }
+  }, [userId]);
 
   return (
     <>
@@ -214,7 +225,10 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
                 </Avatar>
               }
               label="Logout"
-              onClick={() => logoutAction()}
+              onClick={() => {
+                analytics.reset();
+                logoutAction();
+              }}
               sx={{
                 "& .MuiChip-label": {
                   color: "white",

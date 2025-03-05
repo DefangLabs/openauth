@@ -6,7 +6,7 @@ export function useSignTos() {
   const defang = useDefangClient();
   const { claims } = useAccessToken();
   const id = claims?.properties?.id;
-  return useSWR(["defang/tos/sign", defang, id], async () => {
+  return useSWR(["defang/tos/sign", id], async () => {
     if (!id || !defang) return;
 
     await new Promise((resolve, reject) => {
