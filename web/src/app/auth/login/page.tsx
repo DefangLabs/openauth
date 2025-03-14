@@ -8,6 +8,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import { LOGIN_ROUTE, REGISTER_ROUTE } from "../constants";
+import DefangIcon from "./assets/defang-icon.svg";
 
 function LoginPage() {
   const pathname = usePathname();
@@ -17,12 +18,7 @@ function LoginPage() {
   return (
     <>
       <Box flexGrow={1} />
-      <Image
-        src="/DEFANG-1_4x-no-text-256.svg"
-        height={100}
-        width={100}
-        alt="Defang logo"
-      />
+      <Image src={DefangIcon} height={100} width={100} alt="Defang logo" />
       <Typography variant="h2">
         {isRegister ? "Register for Defang" : "Login to Defang"}
       </Typography>
