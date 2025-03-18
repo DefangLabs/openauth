@@ -35,9 +35,10 @@ import { NavButton } from "./components/nav-button/nav-button";
 import { NAV_SURFACE } from "./constants";
 import { useSidebarOpen } from "./hooks/use-sidebar-open/use-sidebar-open";
 import { useCurrentUserProfileQuery } from "@/modules/profiles/hooks/use-current-user-profile-query/use-current-user-profile-query";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
 import { analytics } from "@/modules/analytics/lib/analytics";
+import { useTrackLogin } from "@/modules/auth/hooks/use-track-login";
 
 const UserChip = styled(Chip)`
   ${NAV_SURFACE}
@@ -85,13 +86,17 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
   const { sidebarOpen, setSidebarOpen } = useSidebarOpen();
   const { claims } = useAccessToken();
   const userId = claims?.properties?.id;
+  const { trackLogin } = useTrackLogin();
+  const trackedRef = useRef(false);
   useSignTos();
 
   useEffect(() => {
-    if (userId) {
+    if (userId && !trackedRef.current) {
       analytics.identify(userId);
+      trackLogin();
+      trackedRef.current = true;
     }
-  }, [userId]);
+  }, [trackLogin, userId]);
 
   return (
     <>

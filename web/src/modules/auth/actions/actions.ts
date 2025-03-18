@@ -7,6 +7,7 @@ import { authClient } from "../lib/auth-client";
 import { getAuth } from "../lib/get-auth";
 import { setTokens } from "../lib/set-tokens";
 import { subjects } from "../lib/subjects";
+import { loginCompleteCookie } from "./constants";
 
 export async function getAuthAction() {
   return getAuth();
@@ -59,4 +60,18 @@ export async function logoutAction() {
   cookies().delete("refresh_token");
 
   redirect("/");
+}
+
+export async function setLoginCompleteCookie() {
+  cookies().set({
+    name: loginCompleteCookie,
+    value: new Date().toISOString(),
+    httpOnly: false,
+    sameSite: "lax",
+  });
+}
+
+export async function unsetLoginCompleteCookie() {
+  cookies().delete(loginCompleteCookie);
+  return true;
 }
