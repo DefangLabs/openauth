@@ -45,7 +45,7 @@ const nextConfig = {
                 key: "Content-Security-Policy",
                 // TODO: update this to use a pattern based on deployed env
                 value:
-                  "default-src 'self'; frame-src 'self' https://js.stripe.com; img-src 'self' data: https://*.gravatar.com http://*.gravatar.com https://defang.io; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://cdn.segment.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://api.github.com https://*.gnafed.click https://*.dev.gnafed.click https://*.staging.gnafed.click https://*.defang.dev https://*.defang.io https://js.stripe.com https://cdn.segment.com https://api.segment.io",
+                  "default-src 'self'; frame-src 'self' https://js.stripe.com; img-src 'self' data: https://*.gravatar.com http://*.gravatar.com https://defang.io; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://cdn.segment.com https://www.googletagmanager.com https://widget.intercom.io; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://api.github.com https://*.gnafed.click https://*.dev.gnafed.click https://*.staging.gnafed.click https://*.defang.dev https://*.defang.io https://js.stripe.com https://cdn.segment.com https://api.segment.io",
               },
               {
                 key: "Permissions-Policy",
