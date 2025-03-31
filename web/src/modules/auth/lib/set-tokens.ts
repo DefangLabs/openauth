@@ -1,7 +1,7 @@
 import { cookies as getCookies } from "next/headers";
 
 export async function setTokens(access: string, refresh: string) {
-  const cookies = getCookies();
+  const cookies = await getCookies();
 
   cookies.set({
     name: "access_token",

@@ -8,8 +8,8 @@ interface getAuthOptions {
 }
 
 export async function getAuth({ refresh = false }: getAuthOptions = {}) {
-  const accessToken = cookies().get("access_token");
-  const refreshToken = cookies().get("refresh_token");
+  const accessToken = (await cookies()).get("access_token");
+  const refreshToken = (await cookies()).get("refresh_token");
 
   if (!accessToken) {
     return false;

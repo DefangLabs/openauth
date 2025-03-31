@@ -4,6 +4,10 @@ import { useCallback } from "react";
 import { unsetLoginCompleteCookie } from "../actions/actions";
 import { loginCompleteCookie } from "../actions/constants";
 
+/**
+ * We do this client-side because we want Google Ads
+ * to be able to track mark this as a conversion.
+ */
 export function useTrackLogin() {
   const trackLogin = useCallback(async () => {
     // first check if the login complete cookie exists

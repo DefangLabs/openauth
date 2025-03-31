@@ -23,7 +23,9 @@ function LoginPage() {
         {isRegister ? "Register for Defang" : "Login to Defang"}
       </Typography>
       <Button
-        onClick={() => loginAction("github")}
+        onClick={async () => {
+          await loginAction("github");
+        }}
         variant="contained"
         disableElevation
       >

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export function GET(req: NextRequest, res: NextResponse) {
+export function GET(req: NextRequest) {
   const authUrl = new URL(process.env.NEXT_PUBLIC_AUTH_URL!);
   const url = new URL(req.url);
   authUrl.pathname = "/github/callback";

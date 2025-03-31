@@ -16,7 +16,7 @@ export async function getAuthAction() {
 export async function getAccessTokenAction(
   ...options: Parameters<typeof getAuth>
 ) {
-  const accessToken = cookies().get("access_token");
+  const accessToken = (await cookies()).get("access_token");
   const auth = await getAuth(...options);
 
   if (!accessToken || !auth) {
@@ -30,8 +30,8 @@ export async function getAccessTokenAction(
 }
 
 export async function loginAction(provider?: string) {
-  const accessToken = cookies().get("access_token");
-  const refreshToken = cookies().get("refresh_token");
+  const accessToken = (await cookies()).get("access_token");
+  const refreshToken = (await cookies()).get("refresh_token");
 
   if (accessToken) {
     const verified = await authClient.verify(subjects, accessToken.value, {
@@ -39,12 +39,15 @@ export async function loginAction(provider?: string) {
     });
     if (!verified.err && verified.tokens) {
       await setTokens(verified.tokens.access, verified.tokens.refresh);
-      redirect("/");
+      redirect("/projects");
     }
   }
-  const host = headers().get("x-forwarded-host") ?? headers().get("host");
+  const host =
+    (await headers()).get("x-forwarded-host") ?? (await headers()).get("host");
   const protocol =
-    headers().get("x-forwarded-proto") ?? headers().get("proto") ?? "http";
+    (await headers()).get("x-forwarded-proto") ??
+    (await headers()).get("proto") ??
+    "http";
   const { url, challenge } = await authClient.authorize(
     `${protocol}://${host}/auth/callback`,
     "code",
@@ -56,14 +59,14 @@ export async function loginAction(provider?: string) {
 }
 
 export async function logoutAction() {
-  cookies().delete("access_token");
-  cookies().delete("refresh_token");
+  (await cookies()).delete("access_token");
+  (await cookies()).delete("refresh_token");
 
-  redirect("/");
+  redirect("/auth/login");
 }
 
 export async function setLoginCompleteCookie() {
-  cookies().set({
+  (await cookies()).set({
     name: loginCompleteCookie,
     value: new Date().toISOString(),
     httpOnly: false,
@@ -72,6 +75,6 @@ export async function setLoginCompleteCookie() {
 }
 
 export async function unsetLoginCompleteCookie() {
-  cookies().delete(loginCompleteCookie);
+  (await cookies()).delete(loginCompleteCookie);
   return true;
 }
