@@ -1,22 +1,25 @@
 // Define individual CSP directives for clarity
 const cspDefaultSrc = ["'self'"];
 const cspFrameSrc = [
-  "'self'", 
-  "https://js.stripe.com", 
-  "https://intercom-sheets.com", 
+  "'self'",
+  "https://js.stripe.com",
+  "https://intercom-sheets.com",
   "https://www.intercom-reporting.com",
   "https://www.youtube.com",
   "https://player.vimeo.com",
-  "https://fast.wistia.net"
+  "https://fast.wistia.net",
+  "https://*.doubleclick.net",
+  "https://googleads.g.doubleclick.net",
+  "https://www.google.com",
 ];
 const cspImgSrc = [
-  "'self'", 
-  "data:", 
-  "blob:", 
-  "https://*.gravatar.com", 
-  "http://*.gravatar.com", 
-  "https://defang.io", 
-  "https://intercomcdn.com", 
+  "'self'",
+  "data:",
+  "blob:",
+  "https://*.gravatar.com",
+  "http://*.gravatar.com",
+  "https://defang.io",
+  "https://intercomcdn.com",
   "https://downloads.intercomcdn.com",
   "https://js.intercomcdn.com",
   "https://static.intercomassets.com",
@@ -40,46 +43,63 @@ const cspImgSrc = [
   "https://*.intercom-attachments-8.com",
   "https://*.intercom-attachments-9.com",
   "https://static.intercomassets.eu",
-  "https://static.au.intercomassets.com"
+  "https://static.au.intercomassets.com",
+  "https://www.google-analytics.com",
+  "https://www.googletagmanager.com",
+  "https://www.google.com",
+  "https://www.google.ca",
+  "https://*.google.com",
+  "https://*.doubleclick.net",
+  "https://*.g.doubleclick.net",
+  "https://stats.g.doubleclick.net",
+  "https://cdn.mxpnl.com",
+  "https://cdn4.mxpnl.com",
 ];
 const cspScriptSrc = [
-  "'self'", 
-  "'unsafe-inline'", 
-  "'unsafe-eval'", 
-  "https://js.stripe.com", 
-  "https://cdn.segment.com", 
-  "https://www.googletagmanager.com", 
-  "https://widget.intercom.io", 
+  "'self'",
+  "'unsafe-inline'",
+  "'unsafe-eval'",
+  "https://js.stripe.com",
+  "https://cdn.segment.com",
+  "https://www.googletagmanager.com",
+  "https://widget.intercom.io",
   "https://js.intercomcdn.com",
-  "https://app.intercom.io"
+  "https://app.intercom.io",
+  "https://www.google-analytics.com",
+  "https://ssl.google-analytics.com",
+  "https://www.googleadservices.com",
+  "https://googleads.g.doubleclick.net",
+  "https://www.google.com",
+  "https://cdn.mxpnl.com",
+  "https://cdn4.mxpnl.com",
 ];
 const cspStyleSrc = [
-  "'self'", 
-  "'unsafe-inline'", 
-  "https://fonts.googleapis.com", 
-  "https://intercomcdn.com"
+  "'self'",
+  "'unsafe-inline'",
+  "https://fonts.googleapis.com",
+  "https://intercomcdn.com",
 ];
 const cspFontSrc = [
-  "'self'", 
-  "data:", 
-  "https://fonts.gstatic.com", 
+  "'self'",
+  "data:",
+  "https://fonts.gstatic.com",
   "https://intercomcdn.com",
   "https://js.intercomcdn.com",
-  "https://fonts.intercomcdn.com"
+  "https://fonts.intercomcdn.com",
 ];
 const cspConnectSrc = [
-  "'self'", 
-  "https://api.github.com", 
-  "https://*.gnafed.click", 
-  "https://*.dev.gnafed.click", 
-  "https://*.staging.gnafed.click", 
-  "https://*.defang.dev", 
-  "https://*.defang.io", 
-  "https://js.stripe.com", 
-  "https://cdn.segment.com", 
-  "https://api.segment.io", 
+  "'self'",
+  "https://api.github.com",
+  "https://*.gnafed.click",
+  "https://*.dev.gnafed.click",
+  "https://*.staging.gnafed.click",
+  "https://*.defang.dev",
+  "https://*.defang.io",
+  "https://js.stripe.com",
+  "https://cdn.segment.com",
+  "https://api.segment.io",
   "https://api-iam.intercom.io",
-  "https://nexus-websocket-a.intercom.io", 
+  "https://nexus-websocket-a.intercom.io",
   "wss://nexus-websocket-a.intercom.io",
   "https://via.intercom.io",
   "https://api.intercom.io",
@@ -98,7 +118,20 @@ const cspConnectSrc = [
   "https://uploads.intercomcdn.eu",
   "https://uploads.au.intercomcdn.com",
   "https://uploads.eu.intercomcdn.com",
-  "https://uploads.intercomusercontent.com"
+  "https://uploads.intercomusercontent.com",
+  "https://region1.google-analytics.com",
+  "https://*.google-analytics.com",
+  "https://analytics.google.com",
+  "https://www.google-analytics.com",
+  "https://api.mixpanel.com",
+  "https://api-js.mixpanel.com",
+  "https://*.doubleclick.net",
+  "https://*.g.doubleclick.net",
+  "https://stats.g.doubleclick.net",
+  "https://adservice.google.com",
+  "https://*.googlesyndication.com",
+  "https://pagead2.googlesyndication.com",
+  "https://googleads.g.doubleclick.net",
 ];
 
 // Add form-action directive as required by Intercom
@@ -107,7 +140,7 @@ const cspFormAction = [
   "https://intercom.help",
   "https://api-iam.intercom.io",
   "https://api-iam.eu.intercom.io",
-  "https://api-iam.au.intercom.io"
+  "https://api-iam.au.intercom.io",
 ];
 
 // Add media-src directive as required by Intercom
@@ -116,7 +149,7 @@ const cspMediaSrc = [
   "https://js.intercomcdn.com",
   "https://downloads.intercomcdn.com",
   "https://downloads.intercomcdn.eu",
-  "https://downloads.au.intercomcdn.com"
+  "https://downloads.au.intercomcdn.com",
 ];
 
 const csp = [
@@ -128,7 +161,7 @@ const csp = [
   `font-src ${cspFontSrc.join(" ")}`,
   `connect-src ${cspConnectSrc.join(" ")}`,
   `form-action ${cspFormAction.join(" ")}`,
-  `media-src ${cspMediaSrc.join(" ")}`
+  `media-src ${cspMediaSrc.join(" ")}`,
 ].join("; ");
 
 /** @type {import('next').NextConfig} */
