@@ -1,14 +1,10 @@
 services:
   auth-redis:
-    env_file:
-      - .env.dev
     extends:
       file: compose.yaml
       service: auth-redis
 
   auth:
-    env_file:
-      - .env.dev
     extends:
       file: compose.yaml
       service: auth
@@ -22,8 +18,6 @@ services:
     command: ["run", "dev"]
 
   hasura-postgres:
-    env_file:
-      - .env.dev
     extends:
       file: compose.yaml
       service: hasura-postgres
@@ -33,8 +27,6 @@ services:
       - "./.data/hasura-postgres:/var/lib/postgresql/data:rw"
 
   hasura:
-    env_file:
-      - .env.dev
     extends:
       file: compose.yaml
       service: hasura
@@ -45,13 +37,10 @@ services:
       - DEFANG_FN_ENDPOINT=http://api:3003
       - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:${POSTGRES_PASSWORD}@hasura-postgres:5432/postgres
       - HASURA_GRAPHQL_JWT_SECRET={"jwk_url":"http://auth:3001/.well-known/jwks.json","claims_namespace_path":"$.properties.hasura"}
-      - HASURA_GRAPHQL_ADMIN_SECRET
     volumes:
       - ./hasura:/project
 
   api:
-    env_file:
-      - .env.dev
     extends:
       file: compose.yaml
       service: api

@@ -59,6 +59,7 @@ services:
       - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:${POSTGRES_PASSWORD}@hasura-postgres:5432/postgres
       - HASURA_GRAPHQL_JWT_SECRET={"jwk_url":"https://auth.${DOMAIN_NAME}/.well-known/jwks.json","claims_namespace_path":"$.properties.hasura"}
       - HASURA_GRAPHQL_ADMIN_SECRET
+      - DEFANG_API_SECRET
       # Trigger action to investigate weird DOMAIN_NAME interpolation
     depends_on:
       - hasura-postgres
@@ -75,7 +76,11 @@ services:
       - AUTH_ENDPOINT=https://auth.${DOMAIN_NAME}
       - HASURA_ENDPOINT=https://graphql.${DOMAIN_NAME}
       - PUBLIC_ROOT_URL=https://portal.${DOMAIN_NAME}
+      - STRIPE_DEFAULT_PRICE_ID
       - STRIPE_SECRET_KEY
+      - STRIPE_WEBHOOK_SECRET
+      - SEGMENT_WRITE_KEY
+      - DEFANG_API_SECRET
     ports:
       - mode: ingress
         target: 3003

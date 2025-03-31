@@ -46,3 +46,17 @@ delete_permissions:
       filter:
         id:
           _eq: X-Hasura-User-Id
+event_triggers:
+  - name: userInserted
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 15
+      num_retries: 3
+      timeout_sec: 30
+    webhook: '{{DEFANG_FN_ENDPOINT}}/hasura/events'
+    headers:
+      - name: Authorization
+        value_from_env: DEFANG_API_SECRET

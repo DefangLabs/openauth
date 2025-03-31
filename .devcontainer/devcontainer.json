@@ -8,6 +8,7 @@
 	},
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/nullcoder/devcontainer-features/stripe-cli:1": {}
 	},
 	"customizations": {
 		"vscode": {

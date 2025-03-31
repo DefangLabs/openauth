@@ -16,6 +16,8 @@ services:
     extends:
       file: compose.yaml
       service: hasura-postgres
+    environment:
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
 
   hasura:
     extends:

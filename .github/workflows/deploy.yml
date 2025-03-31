@@ -30,7 +30,7 @@ jobs:
       - uses: ./.github/actions/deploy
         with:
           mode: development
-          compose_file: compose.portal.dev.gnafed.click.yaml
+          compose_file: compose.cloud.dev.yaml
           aws_account_id: 532501343364
           aws_region: us-west-2
           domain_name: ${{ vars.DOMAIN_NAME }}
@@ -45,6 +45,9 @@ jobs:
           segment_write_key: ${{ secrets.SEGMENT_WRITE_KEY }}
           stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
           next_public_fabric: ${{ vars.NEXT_PUBLIC_FABRIC }}
+          defang_api_secret: ${{ secrets.DEFANG_API_SECRET }}
+          stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          stripe_default_price_id: ${{ secrets.STRIPE_DEFAULT_PRICE_ID }}
   
   deploy-staging:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')
@@ -62,7 +65,7 @@ jobs:
       - uses: ./.github/actions/deploy
         with:
           mode: staging
-          compose_file: compose.portal.staging.defang.dev.yaml
+          compose_file: compose.staging.yaml
           aws_account_id: 426819183542
           aws_region: us-west-2
           domain_name: ${{ vars.DOMAIN_NAME }}
@@ -77,6 +80,9 @@ jobs:
           segment_write_key: ${{ secrets.SEGMENT_WRITE_KEY }}
           stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
           next_public_fabric: ${{ vars.NEXT_PUBLIC_FABRIC }}
+          defang_api_secret: ${{ secrets.DEFANG_API_SECRET }}
+          stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          stripe_default_price_id: ${{ secrets.STRIPE_DEFAULT_PRICE_ID }}
 
   
   deploy-production:
@@ -95,7 +101,7 @@ jobs:
       - uses: ./.github/actions/deploy
         with:
           mode: production
-          compose_file: compose.portal.defang.io.yaml
+          compose_file: compose.production.yaml
           # TODO: Update the AWS account ID to the corp account when ready
           aws_account_id: 407839483216 
           aws_region: us-west-2
@@ -111,3 +117,6 @@ jobs:
           segment_write_key: ${{ secrets.SEGMENT_WRITE_KEY }}
           stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
           next_public_fabric: ${{ vars.NEXT_PUBLIC_FABRIC }}
+          defang_api_secret: ${{ secrets.DEFANG_API_SECRET }}
+          stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          stripe_default_price_id: ${{ secrets.STRIPE_DEFAULT_PRICE_ID }}
