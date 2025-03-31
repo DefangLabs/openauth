@@ -45,6 +45,11 @@ const UserChip = styled(Chip)`
   height: 50px;
   border-radius: 25px;
   width: 100%;
+  color: white;
+
+  & .MuiChip-label {
+    color: white;
+  }
 `;
 
 const LogoutChip = styled(Chip)`
@@ -62,11 +67,7 @@ const UserLabel = styled(Typography)`
   div:first-child {
     font-size: 0.8rem;
   }
-`;
-UserLabel.defaultProps = {
-  variant: "h5",
-  color: "white",
-};
+` as typeof Typography;
 
 const UserAvatar = styled(Avatar)`
   width: 60px;
@@ -129,7 +130,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
                   </UserAvatar>
                 }
                 label={
-                  <UserLabel>
+                  <UserLabel component="div" variant="h5" color="white">
                     <div>{name}</div>
                     <div
                       style={{
