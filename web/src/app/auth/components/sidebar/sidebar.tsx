@@ -76,7 +76,7 @@ export function SideBar() {
     >
       <Stack direction="column" spacing={1}>
         <Typography component="h2" variant="h1" color="white">
-          The easiest way to develop, deploy, and debug cloud apps.
+          Develop Anything, Deploy Anywhere
         </Typography>
         <Typography variant="h4" color="white">
           Sign in with GitHub to join hundreds of developers using Defang to
