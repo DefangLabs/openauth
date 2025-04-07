@@ -1,8 +1,6 @@
 import { Context } from "hono";
 import { HasuraEvent } from "../../../../lib/hasura/hasura-event-schema";
 import { createStripeCustomer } from "../../../../lib/stripe/create-stripe-customer";
-import { env } from "hono/adapter";
-import { getStripeClient } from "../../../../lib/stripe/get-stripe-client";
 
 export async function userInserted(event: HasuraEvent, c: Context){
     const userId = event.event.data.new.id;
