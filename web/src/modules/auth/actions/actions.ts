@@ -7,7 +7,7 @@ import { authClient } from "../lib/auth-client";
 import { getAuth } from "../lib/get-auth";
 import { setTokens } from "../lib/set-tokens";
 import { subjects } from "../lib/subjects";
-import { loginCompleteCookie } from "./constants";
+import { loginCompleteCookie, loginRedirectCookie } from "../constants";
 
 export async function getAuthAction() {
   return getAuth();
@@ -29,7 +29,23 @@ export async function getAccessTokenAction(
   };
 }
 
-export async function loginAction(provider?: string) {
+export async function loginAction(
+  provider?: string,
+  redirectPath?: string | null,
+) {
+  // Handle redirectPath first - store it in a cookie if provided
+  if (redirectPath) {
+    const cookieStore = await cookies();
+    cookieStore.set({
+      name: loginRedirectCookie,
+      value: redirectPath,
+      path: "/",
+      maxAge: 300, // 5 minutes
+      httpOnly: true,
+      sameSite: "lax",
+    });
+  }
+
   const accessToken = (await cookies()).get("access_token");
   const refreshToken = (await cookies()).get("refresh_token");
 
@@ -42,19 +58,20 @@ export async function loginAction(provider?: string) {
       redirect("/projects");
     }
   }
+
+  // Prepare callback URL for authorization
   const host =
     (await headers()).get("x-forwarded-host") ?? (await headers()).get("host");
   const protocol =
     (await headers()).get("x-forwarded-proto") ??
     (await headers()).get("proto") ??
     "http";
-  const { url, challenge } = await authClient.authorize(
-    `${protocol}://${host}/auth/callback`,
-    "code",
-    {
-      provider,
-    },
-  );
+  const callbackUrl = `${protocol}://${host}/auth/callback`;
+
+  // Authorize with the provider
+  const { url } = await authClient.authorize(callbackUrl, "code", {
+    provider,
+  });
   redirect(url);
 }
 

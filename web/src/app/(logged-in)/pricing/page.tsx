@@ -1,26 +1,10 @@
-"use client";
+import { requireAuth } from "@/modules/auth/lib/require-auth";
+import { Pricing } from "./components/pricing/pricing";
 
-import { CustomPricingTable } from "@/components/custom-pricing-table/custom-pricing-table";
-import { StripePricingTable } from "@/components/stripe-pricing-table/stripe-pricing-table";
-import { SubscriptionTier } from "@/modules/defang/generated/fabric_pb";
-import { useWhoami } from "@/modules/defang/hooks/use-whoami/use-whoami";
+export default async function PricingPage() {
+  await requireAuth({
+    redirectPath: "/pricing",
+  });
 
-function PricingPage() {
-  const { data, isLoading } = useWhoami();
-  const tier = data?.tier;
-  const tierUnspecified =
-    tier === undefined ||
-    tier === SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED;
-
-  if (isLoading) {
-    return null;
-  }
-
-  if (tierUnspecified) {
-    return <StripePricingTable />;
-  }
-
-  return <CustomPricingTable />;
+  return <Pricing />;
 }
-
-export default PricingPage;

@@ -6,12 +6,15 @@ import { GitHub } from "@mui/icons-material";
 import { Box, Button, Link, Typography } from "@mui/material";
 import Image from "next/image";
 import NextLink from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { LOGIN_ROUTE, REGISTER_ROUTE } from "../constants";
 import DefangIcon from "./assets/defang-icon.svg";
+import { loginRedirectParam } from "@/modules/auth/constants";
 
 function LoginPage() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get(loginRedirectParam);
   const isRegister = pathname === REGISTER_ROUTE;
   const verb = isRegister ? "Register" : "Login";
 
@@ -24,7 +27,7 @@ function LoginPage() {
       </Typography>
       <Button
         onClick={async () => {
-          await loginAction("github");
+          await loginAction("github", redirectPath);
         }}
         variant="contained"
         disableElevation

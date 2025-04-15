@@ -20,10 +20,7 @@ export function useDefangClient() {
   }, [token]);
 
   const memoClient = useMemo(() => {
-    if (
-      process.env.NODE_ENV === "development" &&
-      !process.env.NEXT_PUBLIC_FABRIC
-    ) {
+    if (process.env.NODE_ENV === "development") {
       return mockClient as Client;
     }
 

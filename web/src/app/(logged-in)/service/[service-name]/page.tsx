@@ -1,99 +1,21 @@
-"use client";
+import { requireAuth } from "@/modules/auth/lib/require-auth";
+import Service from "./components/service/service";
 
-import { Loader } from "@/components/loader/loader";
-import { StatusIcon } from "@/components/status-icon/status-icon";
-import { Mode } from "@/modules/defang/generated/fabric_pb";
-import { COLORS } from "@/modules/mui/constants";
-import { OpenInNew } from "@mui/icons-material";
-import {
-  Box,
-  CircularProgress,
-  Stack,
-  Typography,
-  styled,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { ClickableDetail } from "./components/clickable-detail/clickable-detail";
-import { Endpoints } from "./components/endpoints/endpoints";
-import { Environment } from "./components/environment/environment";
-import { Logs } from "./components/logs/logs";
-import { useService } from "./hooks/use-service/use-service";
-import { PageLoading } from "@/components/page-loading/page-loading";
+export default async function ServicePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ ["service-name"]?: string }>;
+  searchParams: Promise<{ ["service-name"]?: string }>;
+}) {
+  const awaitedParams = await params;
+  const awaitedSearchParams = await searchParams;
+  const serviceName =
+    awaitedParams["service-name"] || awaitedSearchParams["service-name"];
 
-const Small = styled("small")`
-  color: ${COLORS.darkGrey};
-`;
+  await requireAuth({
+    redirectPath: `/service/${serviceName}`,
+  });
 
-const OpenIcon = styled(OpenInNew)`
-  margin-left: 5px;
-  cursor: pointer;
-  color: ${COLORS.darkGrey};
-`;
-
-function ProjectsPageInner() {
-  const { service, loading } = useService({ poll: 8000 });
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  if (loading) {
-    return <PageLoading />;
-  }
-
-  const firstEndpoint = service?.endpoints?.[0];
-  const isPublic = service?.service.ports?.[0]?.mode === Mode.INGRESS;
-
-  return (
-    <Stack p={2} spacing={4} mb={10}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h1">
-          <StatusIcon status={service?.status} state={service?.state} />
-          {service?.service?.name}
-          <Small>
-            {` service `}
-            {firstEndpoint && isPublic && (
-              <a href={`https://${firstEndpoint}`} target="_blank">
-                <OpenIcon />
-              </a>
-            )}
-          </Small>
-        </Typography>
-      </Stack>
-      <Stack
-        direction={isMobile ? "column" : "row"}
-        spacing={isMobile ? 2 : 4}
-        flexWrap="wrap"
-        width="100%"
-      >
-        <ClickableDetail
-          title="Container Image"
-          content={service?.service?.image || service?.service?.build?.context}
-        />
-        <ClickableDetail
-          title="Deployment ID / ETag"
-          content={service?.etag || ""}
-        />
-        <ClickableDetail
-          title="Private Domain Name"
-          content={service?.privateFqdn || ""}
-        />
-        <ClickableDetail
-          title="Public Domain Name"
-          content={service?.service?.domainname || service?.publicFqdn || ""}
-        />
-      </Stack>
-      <Endpoints />
-      <Logs />
-      <Environment />
-      {/* <Secrets /> */}
-    </Stack>
-  );
-}
-
-export default function ProjectsPage() {
-  return (
-    <Loader>
-      <ProjectsPageInner />
-    </Loader>
-  );
+  return <Service />;
 }

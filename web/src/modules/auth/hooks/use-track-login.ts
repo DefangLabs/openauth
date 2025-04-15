@@ -2,7 +2,7 @@ import { analytics } from "@/modules/analytics/lib/analytics";
 import { EVENTS } from "@/modules/analytics/lib/constants";
 import { useCallback } from "react";
 import { unsetLoginCompleteCookie } from "../actions/actions";
-import { loginCompleteCookie } from "../actions/constants";
+import { loginCompleteCookie } from "../constants";
 
 /**
  * We do this client-side because we want Google Ads
