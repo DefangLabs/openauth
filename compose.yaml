@@ -20,12 +20,13 @@ services:
       - REDIS_URL=redis://auth-redis:6379
       # DEFANG CONFIG
       - ALLOWED_ORIGINS=https://${DOMAIN_NAME},https://portal.${DOMAIN_NAME}
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@database:5432/postgres
       - HASURA_ENDPOINT=https://graphql.${DOMAIN_NAME}
       - GITHUB_CLIENT_ID
       - GITHUB_CLIENT_SECRET
       - HASURA_GRAPHQL_ADMIN_SECRET
       - SEGMENT_WRITE_KEY
+    depends_on:
+      - auth-redis
 
   hasura-postgres:
     image: postgres:16
@@ -63,7 +64,7 @@ services:
       # Trigger action to investigate weird DOMAIN_NAME interpolation
     depends_on:
       - hasura-postgres
-
+      - auth
 
   api:
     domainname: api.${DOMAIN_NAME}

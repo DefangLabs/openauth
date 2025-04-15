@@ -1,6 +1,7 @@
 import { issuer } from "@openauthjs/openauth"
 import * as v from 'valibot'
 import { upsertAccount } from "../accounts/upsert-account"
+import "../analytics/analytics"
 import { analytics } from "../analytics/analytics"
 import { getAllowedOrigins } from "../lib/get-allowed-origins"
 import { getCodeData } from "../providers/code"
@@ -10,7 +11,6 @@ import { providers } from "../providers/providers"
 import { subjects } from "../subjects"
 import { upsertAccountUser } from "../users/upsert-account-user"
 import { storage } from "./storage"
-import "../analytics/analytics"
 
 export const issuerRouter = issuer({
   subjects,
@@ -78,12 +78,17 @@ export const issuerRouter = issuer({
   allow: async function allow(input, req) {
     // check redirect uri, client id, etc. to make sure it's a valid request from authorized sources
     // for now we'll just check that the origin of the redirect is in an authorized list
-    const origin = new URL(input.redirectURI).origin
+    const redirectURI = new URL(input.redirectURI)
+
+    // The redirect_uri does not need to match the port specified in the callback URL for the app.
+    if (redirectURI.hostname === "127.0.0.1" || redirectURI.hostname === "[::1]") {
+      return true
+    }
+
     const validOrigins = getAllowedOrigins()
 
     // check that the origin is in the list of valid origins
-    const isValidOrigin = validOrigins.includes(origin)
-
+    const isValidOrigin = validOrigins.includes(redirectURI.origin)
     if (isValidOrigin) {
       return true
     }
