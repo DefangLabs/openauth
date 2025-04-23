@@ -374,7 +374,8 @@ const prices = JSON.parse(process.env.NEXT_PUBLIC_PRICE_IDS) as PlanPrices;
 
 export function CustomPricingTable() {
   const { data } = useWhoami();
-  const currentTier = data?.tier;
+  const currentTier =
+    data?.tier || SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED;
 
   // if the user has a paid plan already, we send them to the portal
   // otherwise we create a checkout linke when they click
