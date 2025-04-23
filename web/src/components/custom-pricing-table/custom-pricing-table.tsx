@@ -423,7 +423,7 @@ export function CustomPricingTable() {
               const { data } = await createStripePortalSession();
               window.location.href = data?.createStripePortalSession?.url;
             }}
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, width: "fit-content" }}
           >
             Manage your subscription
           </Button>
