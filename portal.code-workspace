@@ -52,6 +52,7 @@
 				"password": "password"
 			}
 		],
+		"typescript.tsdk": "web/node_modules/typescript/lib",
 	},
 	"tasks": {
 		"version": "2.0.0",
@@ -84,7 +85,7 @@
 			},
 			// install rest auth dependencies
 			{
-				"label": "api: install",
+				"label": "auth: install",
 				"type": "shell",
 				"command": "docker compose -f ./compose.dev.yaml --env-file .env.dev run --rm auth i",
 				"problemMatcher": []
@@ -106,7 +107,8 @@
 				"problemMatcher": [],
 				"dependsOrder": "parallel",
 				"dependsOn": [
-					"api: install"
+					"api: install",
+					"auth: install"
 				]
 			},
 			{
@@ -148,6 +150,14 @@
 				},
 				"problemMatcher": []
 			},
+			{
+				"label": "stripe: listen",
+				"type": "shell",
+				"command": "stripe listen --forward-to http://localhost:3003/stripe/webhook",
+				"runOptions": {
+					"runOn": "folderOpen"
+				},
+			}
 		]
 	},
 	"extensions": {

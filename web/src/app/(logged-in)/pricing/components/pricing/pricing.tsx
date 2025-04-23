@@ -1,23 +1,16 @@
 "use client";
 
 import { CustomPricingTable } from "@/components/custom-pricing-table/custom-pricing-table";
-import { StripePricingTable } from "@/components/stripe-pricing-table/stripe-pricing-table";
-import { SubscriptionTier } from "@/modules/defang/generated/fabric_pb";
+import { PageLoading } from "@/components/page-loading/page-loading";
+import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
 import { useWhoami } from "@/modules/defang/hooks/use-whoami/use-whoami";
 
 export function Pricing() {
   const { data, isLoading } = useWhoami();
-  const tier = data?.tier;
-  const tierUnspecified =
-    tier === undefined ||
-    tier === SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED;
+  const { token } = useAccessToken();
 
-  if (isLoading) {
-    return null;
-  }
-
-  if (tierUnspecified) {
-    return <StripePricingTable />;
+  if (isLoading || !token || !data) {
+    return <PageLoading />;
   }
 
   return <CustomPricingTable />;

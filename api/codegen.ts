@@ -6,7 +6,7 @@ const config: CodegenConfig = {
             "http://localhost:3002/v1/graphql": {
                 headers: {
                     "x-hasura-admin-secret": "password",
-                    "x-hasura-role": "user",
+                    "x-hasura-role": "admin",
                 },
             },
         },
@@ -17,8 +17,11 @@ const config: CodegenConfig = {
         './src/graphql/': {
             preset: 'client',
             config: {
-                documentMode: 'string'
-            }
+                documentMode: 'string',
+                scalars: {
+                    uuid: 'string',
+                }
+            },
         },
         './schema.graphql': {
             plugins: ['schema-ast'],

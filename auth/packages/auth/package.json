@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "bun run --inspect --hot src/index.ts",
     "start": "bun run src/index.ts",
-    "graphql-codegen": "bunx graphql-codegen",
+    "graphql-codegen": "graphql-codegen",
     "test": "jest"
   },
   "dependencies": {

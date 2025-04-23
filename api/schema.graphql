@@ -447,201 +447,6 @@ input StringComparisonExp {
 }
 
 """
-columns and relationships of "stripeEvents"
-"""
-type StripeEvents {
-  data(
-    """JSON select path"""
-    path: String
-  ): jsonb!
-  id: String!
-}
-
-"""
-aggregated selection of "stripeEvents"
-"""
-type StripeEventsAggregate {
-  aggregate: StripeEventsAggregateFields
-  nodes: [StripeEvents!]!
-}
-
-"""
-aggregate fields of "stripeEvents"
-"""
-type StripeEventsAggregateFields {
-  count(columns: [StripeEventsSelectColumn!], distinct: Boolean): Int!
-  max: StripeEventsMaxFields
-  min: StripeEventsMinFields
-}
-
-"""append existing jsonb value of filtered columns with new jsonb value"""
-input StripeEventsAppendInput {
-  data: jsonb
-}
-
-"""
-Boolean expression to filter rows from the table "stripeEvents". All fields are combined with a logical 'AND'.
-"""
-input StripeEventsBoolExp {
-  _and: [StripeEventsBoolExp!]
-  _not: StripeEventsBoolExp
-  _or: [StripeEventsBoolExp!]
-  data: JsonbComparisonExp
-  id: StringComparisonExp
-}
-
-"""
-unique or primary key constraints on table "stripeEvents"
-"""
-enum StripeEventsConstraint {
-  """
-  unique or primary key constraint on columns "id"
-  """
-  stripeEvents_pkey
-}
-
-"""
-delete the field or element with specified path (for JSON arrays, negative integers count from the end)
-"""
-input StripeEventsDeleteAtPathInput {
-  data: [String!]
-}
-
-"""
-delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
-"""
-input StripeEventsDeleteElemInput {
-  data: Int
-}
-
-"""
-delete key/value pair or string element. key/value pairs are matched based on their key value
-"""
-input StripeEventsDeleteKeyInput {
-  data: String
-}
-
-"""
-input type for inserting data into table "stripeEvents"
-"""
-input StripeEventsInsertInput {
-  data: jsonb
-  id: String
-}
-
-"""aggregate max on columns"""
-type StripeEventsMaxFields {
-  id: String
-}
-
-"""aggregate min on columns"""
-type StripeEventsMinFields {
-  id: String
-}
-
-"""
-response of any mutation on the table "stripeEvents"
-"""
-type StripeEventsMutationResponse {
-  """number of rows affected by the mutation"""
-  affectedRows: Int!
-  """data from the rows affected by the mutation"""
-  returning: [StripeEvents!]!
-}
-
-"""
-on_conflict condition type for table "stripeEvents"
-"""
-input StripeEventsOnConflict {
-  constraint: StripeEventsConstraint!
-  updateColumns: [StripeEventsUpdateColumn!]! = []
-  where: StripeEventsBoolExp
-}
-
-"""Ordering options when selecting data from "stripeEvents"."""
-input StripeEventsOrderBy {
-  data: OrderBy
-  id: OrderBy
-}
-
-"""primary key columns input for table: stripeEvents"""
-input StripeEventsPkColumnsInput {
-  id: String!
-}
-
-"""prepend existing jsonb value of filtered columns with new jsonb value"""
-input StripeEventsPrependInput {
-  data: jsonb
-}
-
-"""
-select columns of table "stripeEvents"
-"""
-enum StripeEventsSelectColumn {
-  """column name"""
-  data
-  """column name"""
-  id
-}
-
-"""
-input type for updating data in table "stripeEvents"
-"""
-input StripeEventsSetInput {
-  data: jsonb
-  id: String
-}
-
-"""
-Streaming cursor of the table "stripeEvents"
-"""
-input StripeEventsStreamCursorInput {
-  """Stream column input with initial value"""
-  initialValue: StripeEventsStreamCursorValueInput!
-  """cursor ordering"""
-  ordering: CursorOrdering
-}
-
-"""Initial value of the column from where the streaming should start"""
-input StripeEventsStreamCursorValueInput {
-  data: jsonb
-  id: String
-}
-
-"""
-update columns of table "stripeEvents"
-"""
-enum StripeEventsUpdateColumn {
-  """column name"""
-  data
-  """column name"""
-  id
-}
-
-input StripeEventsUpdates {
-  """append existing jsonb value of filtered columns with new jsonb value"""
-  _append: StripeEventsAppendInput
-  """
-  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
-  """
-  _deleteAtPath: StripeEventsDeleteAtPathInput
-  """
-  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
-  """
-  _deleteElem: StripeEventsDeleteElemInput
-  """
-  delete key/value pair or string element. key/value pairs are matched based on their key value
-  """
-  _deleteKey: StripeEventsDeleteKeyInput
-  """prepend existing jsonb value of filtered columns with new jsonb value"""
-  _prepend: StripeEventsPrependInput
-  """sets the columns of the filtered rows to the given values"""
-  _set: StripeEventsSetInput
-  """filter the rows which have to be updated"""
-  where: StripeEventsBoolExp!
-}
-
-"""
 Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
 """
 input TimestamptzComparisonExp {
@@ -1138,17 +943,6 @@ type mutation_root {
   """
   deleteAccountsByPk(id: uuid!): Accounts
   """
-  delete data from the table: "stripeEvents"
-  """
-  deleteStripeEvents(
-    """filter the rows which have to be deleted"""
-    where: StripeEventsBoolExp!
-  ): StripeEventsMutationResponse
-  """
-  delete single row from the table: "stripeEvents"
-  """
-  deleteStripeEventsByPk(id: String!): StripeEvents
-  """
   delete data from the table: "userAccounts"
   """
   deleteUserAccounts(
@@ -1188,24 +982,6 @@ type mutation_root {
     """upsert condition"""
     onConflict: AccountsOnConflict
   ): Accounts
-  """
-  insert data into the table: "stripeEvents"
-  """
-  insertStripeEvents(
-    """the rows to be inserted"""
-    objects: [StripeEventsInsertInput!]!
-    """upsert condition"""
-    onConflict: StripeEventsOnConflict
-  ): StripeEventsMutationResponse
-  """
-  insert a single row into the table: "stripeEvents"
-  """
-  insertStripeEventsOne(
-    """the row to be inserted"""
-    object: StripeEventsInsertInput!
-    """upsert condition"""
-    onConflict: StripeEventsOnConflict
-  ): StripeEvents
   """
   insert data into the table: "userAccounts"
   """
@@ -1299,62 +1075,6 @@ type mutation_root {
     updates: [AccountsUpdates!]!
   ): [AccountsMutationResponse]
   """
-  update data of the table: "stripeEvents"
-  """
-  updateStripeEvents(
-    """append existing jsonb value of filtered columns with new jsonb value"""
-    _append: StripeEventsAppendInput
-    """
-    delete the field or element with specified path (for JSON arrays, negative integers count from the end)
-    """
-    _deleteAtPath: StripeEventsDeleteAtPathInput
-    """
-    delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
-    """
-    _deleteElem: StripeEventsDeleteElemInput
-    """
-    delete key/value pair or string element. key/value pairs are matched based on their key value
-    """
-    _deleteKey: StripeEventsDeleteKeyInput
-    """prepend existing jsonb value of filtered columns with new jsonb value"""
-    _prepend: StripeEventsPrependInput
-    """sets the columns of the filtered rows to the given values"""
-    _set: StripeEventsSetInput
-    """filter the rows which have to be updated"""
-    where: StripeEventsBoolExp!
-  ): StripeEventsMutationResponse
-  """
-  update single row of the table: "stripeEvents"
-  """
-  updateStripeEventsByPk(
-    """append existing jsonb value of filtered columns with new jsonb value"""
-    _append: StripeEventsAppendInput
-    """
-    delete the field or element with specified path (for JSON arrays, negative integers count from the end)
-    """
-    _deleteAtPath: StripeEventsDeleteAtPathInput
-    """
-    delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
-    """
-    _deleteElem: StripeEventsDeleteElemInput
-    """
-    delete key/value pair or string element. key/value pairs are matched based on their key value
-    """
-    _deleteKey: StripeEventsDeleteKeyInput
-    """prepend existing jsonb value of filtered columns with new jsonb value"""
-    _prepend: StripeEventsPrependInput
-    """sets the columns of the filtered rows to the given values"""
-    _set: StripeEventsSetInput
-    pkColumns: StripeEventsPkColumnsInput!
-  ): StripeEvents
-  """
-  update multiples rows of table: "stripeEvents"
-  """
-  updateStripeEventsMany(
-    """updates to execute, in order"""
-    updates: [StripeEventsUpdates!]!
-  ): [StripeEventsMutationResponse]
-  """
   update data of the table: "userAccounts"
   """
   updateUserAccounts(
@@ -1437,38 +1157,6 @@ type query_root {
   ): AccountsAggregate!
   """fetch data from the table: "accounts" using primary key columns"""
   accountsByPk(id: uuid!): Accounts
-  """
-  fetch data from the table: "stripeEvents"
-  """
-  stripeEvents(
-    """distinct select on columns"""
-    distinctOn: [StripeEventsSelectColumn!]
-    """limit the number of rows returned"""
-    limit: Int
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-    """sort the rows by one or more columns"""
-    orderBy: [StripeEventsOrderBy!]
-    """filter the rows returned"""
-    where: StripeEventsBoolExp
-  ): [StripeEvents!]!
-  """
-  fetch aggregated fields from the table: "stripeEvents"
-  """
-  stripeEventsAggregate(
-    """distinct select on columns"""
-    distinctOn: [StripeEventsSelectColumn!]
-    """limit the number of rows returned"""
-    limit: Int
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-    """sort the rows by one or more columns"""
-    orderBy: [StripeEventsOrderBy!]
-    """filter the rows returned"""
-    where: StripeEventsBoolExp
-  ): StripeEventsAggregate!
-  """fetch data from the table: "stripeEvents" using primary key columns"""
-  stripeEventsByPk(id: String!): StripeEvents
   """
   fetch data from the table: "userAccounts"
   """
@@ -1579,49 +1267,6 @@ type subscription_root {
     """filter the rows returned"""
     where: AccountsBoolExp
   ): [Accounts!]!
-  """
-  fetch data from the table: "stripeEvents"
-  """
-  stripeEvents(
-    """distinct select on columns"""
-    distinctOn: [StripeEventsSelectColumn!]
-    """limit the number of rows returned"""
-    limit: Int
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-    """sort the rows by one or more columns"""
-    orderBy: [StripeEventsOrderBy!]
-    """filter the rows returned"""
-    where: StripeEventsBoolExp
-  ): [StripeEvents!]!
-  """
-  fetch aggregated fields from the table: "stripeEvents"
-  """
-  stripeEventsAggregate(
-    """distinct select on columns"""
-    distinctOn: [StripeEventsSelectColumn!]
-    """limit the number of rows returned"""
-    limit: Int
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-    """sort the rows by one or more columns"""
-    orderBy: [StripeEventsOrderBy!]
-    """filter the rows returned"""
-    where: StripeEventsBoolExp
-  ): StripeEventsAggregate!
-  """fetch data from the table: "stripeEvents" using primary key columns"""
-  stripeEventsByPk(id: String!): StripeEvents
-  """
-  fetch data from the table in a streaming manner: "stripeEvents"
-  """
-  stripeEventsStream(
-    """maximum number of rows returned in a single batch"""
-    batchSize: Int!
-    """cursor to stream the results returned by the query"""
-    cursor: [StripeEventsStreamCursorInput]!
-    """filter the rows returned"""
-    where: StripeEventsBoolExp
-  ): [StripeEvents!]!
   """
   fetch data from the table: "userAccounts"
   """

@@ -1,4 +1,10 @@
 type Mutation {
+  createStripeCheckoutSession(
+    input: CreateStripeCheckoutSessionInput!
+  ): CreateStripePortalSessionOutput
+}
+
+type Mutation {
   createStripePortalSession: CreateStripePortalSessionOutput
 }
 
@@ -10,6 +16,10 @@ type Mutation {
   deleteAccount: DeleteAccountOutput
 }
 
+input CreateStripeCheckoutSessionInput {
+  priceId: String!
+}
+
 type DeleteAccountOutput {
   message: String!
 }
@@ -19,6 +29,10 @@ type CreateStripeSecretOutput {
 }
 
 type CreateStripePortalSessionOutput {
+  url: String!
+}
+
+type CreateStripeCheckoutSessionOutput {
   url: String!
 }
 

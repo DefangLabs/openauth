@@ -22,5 +22,5 @@ export function useWhoami() {
     });
   }, [client]);
 
-  return useSWR<WhoAmIResponse>(["defang/whoami", client], fetcher);
+  return useSWR<WhoAmIResponse>("defang/whoami", fetcher);
 }

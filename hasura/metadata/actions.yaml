@@ -1,4 +1,11 @@
 actions:
+  - name: createStripeCheckoutSession
+    definition:
+      kind: synchronous
+      handler: '{{DEFANG_FN_ENDPOINT}}/stripe/checkout'
+      forward_client_headers: true
+    permissions:
+      - role: user
   - name: createStripePortalSession
     definition:
       kind: synchronous
@@ -30,9 +37,11 @@ actions:
       - role: user
 custom_types:
   enums: []
-  input_objects: []
+  input_objects:
+    - name: CreateStripeCheckoutSessionInput
   objects:
     - name: DeleteAccountOutput
     - name: CreateStripeSecretOutput
     - name: CreateStripePortalSessionOutput
+    - name: CreateStripeCheckoutSessionOutput
   scalars: []

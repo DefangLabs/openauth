@@ -6,5 +6,11 @@
     "esModuleInterop": true,
     "module": "NodeNext",
     "moduleResolution": "Bundler",
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "./schema.graphql"
+      }
+    ]
   }
 }

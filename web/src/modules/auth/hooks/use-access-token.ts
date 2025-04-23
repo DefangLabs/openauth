@@ -8,7 +8,8 @@ export function useAccessToken(
   const fetcher = useCallback(async () => {
     return await getAccessTokenAction(...options);
   }, [options]);
-  const { data, mutate, ...rest } = useSWR("auth/access-token", fetcher);
+  const cacheKey = ["auth/access-token", JSON.stringify(options)];
+  const { data, mutate, ...rest } = useSWR(cacheKey, fetcher);
 
   return {
     token: data?.token,

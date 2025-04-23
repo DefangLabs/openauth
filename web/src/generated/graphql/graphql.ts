@@ -30,6 +30,10 @@ export type Scalars = {
   uuid: { input: any; output: any };
 };
 
+export type CreateStripeCheckoutSessionInput = {
+  priceId: Scalars["String"]["input"];
+};
+
 /** ordering argument of a cursor */
 export enum CursorOrdering {
   /** ascending ordering of the cursor */
@@ -218,6 +222,18 @@ export type UserQueryQuery = {
   } | null;
 };
 
+export type CreateStripeCheckoutSessionMutationVariables = Exact<{
+  priceId: Scalars["String"]["input"];
+}>;
+
+export type CreateStripeCheckoutSessionMutation = {
+  __typename?: "mutation_root";
+  createStripeCheckoutSession?: {
+    __typename?: "CreateStripePortalSessionOutput";
+    url: string;
+  } | null;
+};
+
 export type CreateStripePortalSessionMutationVariables = Exact<{
   [key: string]: never;
 }>;
@@ -396,6 +412,69 @@ export const UserQueryDocument = {
     },
   ],
 } as unknown as DocumentNode<UserQueryQuery, UserQueryQueryVariables>;
+export const CreateStripeCheckoutSessionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateStripeCheckoutSession" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "priceId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createStripeCheckoutSession" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "priceId" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "priceId" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "url" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateStripeCheckoutSessionMutation,
+  CreateStripeCheckoutSessionMutationVariables
+>;
 export const CreateStripePortalSessionDocument = {
   kind: "Document",
   definitions: [

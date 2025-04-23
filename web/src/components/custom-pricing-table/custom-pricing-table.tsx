@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 // Replace imports with MUI components
+import { useWhoami } from "@/modules/defang/hooks/use-whoami/use-whoami";
 import { CreateStripePortalSessionMutation } from "@/modules/stripe/graphql/mutations/create-stripe-portal-session-mutation";
 import { useMutation } from "@apollo/client";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -13,24 +14,20 @@ import {
   Button,
   CircularProgress,
   Container,
+  Divider,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Typography,
 } from "@mui/material";
-import { useWhoami } from "@/modules/defang/hooks/use-whoami/use-whoami";
 import { SubscriptionTier } from "@/modules/defang/generated/fabric_pb";
+import { CreateStripeCheckoutSessionMutation } from "@/modules/stripe/graphql/mutations/create-stripe-checkout-mutation";
 
 const freqs: {
   value: "monthly" | "annually";
   label: string;
   priceSuffix: string;
 }[] = [
-  { value: "monthly", label: "Monthly", priceSuffix: "/user /month" },
-  { value: "annually", label: "Annually", priceSuffix: "/user /year" },
+  { value: "monthly", label: "Monthly", priceSuffix: "/user/month" },
+  { value: "annually", label: "Annually", priceSuffix: "/user/year" },
 ];
 
 const plans: {
@@ -38,15 +35,16 @@ const plans: {
   id: string;
   href: string;
   price: { monthly: string; annually: string };
-  description: string;
-  apiId?: SubscriptionTier;
+  description: ReactNode;
+  tier: SubscriptionTier;
+  matchTiers: SubscriptionTier[];
   features: {
     type: "title" | "content";
     title?: string;
     content: string;
     caveat?: string;
   }[];
-  mostPopular: boolean;
+
   cta?: {
     label: string;
     href: string;
@@ -57,14 +55,18 @@ const plans: {
     id: "hobby",
     href: "#",
     price: { monthly: "Free", annually: "Free" },
-    description: "Start in the Defang Playground",
-    apiId: SubscriptionTier.HOBBY,
+    tier: SubscriptionTier.HOBBY,
+    matchTiers: [
+      SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED,
+      SubscriptionTier.HOBBY,
+    ],
+    description: (
+      <>
+        Kick the tires for free by deploying your hackathon / hobby projects to
+        our Playground environment. Limited in scale, features, and persistence.
+      </>
+    ),
     features: [
-      {
-        type: "content",
-        title: "Use Case",
-        content: "For Testing Purposes Only",
-      },
       {
         type: "content",
         title: "Target Platforms",
@@ -111,21 +113,22 @@ const plans: {
         content: "Community support via Public Discord Channel",
       },
     ],
-    mostPopular: false,
   },
   {
     name: "Personal",
     id: "personal",
     href: "#",
     price: { monthly: "$10", annually: "$100" },
-    description: "Deploy your personal project.",
-    apiId: SubscriptionTier.PERSONAL,
+    tier: SubscriptionTier.PERSONAL,
+    matchTiers: [SubscriptionTier.PERSONAL],
+    description: (
+      <>
+        Deploy that one personal or side-hustle application {"you've"} been
+        working on to your own cloud account without restrictions. Limited AI
+        features and support.
+      </>
+    ),
     features: [
-      {
-        type: "content",
-        title: "Use Case",
-        content: "Certified for Production Use",
-      },
       {
         type: "content",
         title: "Target Platforms",
@@ -173,21 +176,21 @@ const plans: {
           "Team support via Public Discord Channel - 3 day response time",
       },
     ],
-    mostPopular: false,
   },
   {
     name: "Pro",
     id: "pro",
     href: "#",
     price: { monthly: "$30", annually: "$300" },
-    description: "Deploy professional applications.",
-    apiId: SubscriptionTier.PRO,
+    tier: SubscriptionTier.PRO,
+    matchTiers: [SubscriptionTier.PRO],
+    description: (
+      <>
+        Deploy multiple projects across multiple clouds. Great for every-day
+        production use for complex projects in startups and software studios.
+      </>
+    ),
     features: [
-      {
-        type: "content",
-        title: "Use Case",
-        content: "Certified for Production Use",
-      },
       {
         type: "content",
         title: "Target Platforms",
@@ -235,24 +238,30 @@ const plans: {
           "Team support via Public Discord Channel - 1 day response time",
       },
     ],
-    mostPopular: false,
   },
   {
     name: "Enterprise",
     id: "enterprise",
     href: "#",
     price: { monthly: "Contact us", annually: "Contact us" },
-    description: "Deploy enterprise applications.",
-    apiId: SubscriptionTier.TEAM,
+    tier: SubscriptionTier.TEAM,
+    matchTiers: [SubscriptionTier.TEAM],
+    description: (
+      <>
+        Coming soon, with collaboration and control features specifically
+        targeted for enterprise use cases. Enterprise-grade support.
+      </>
+    ),
+
     features: [
-      {
-        type: "content",
-        title: "Use Case",
-        content:
-          "Custom pricing for advanced features, large teams, and dedicated support",
-      },
+      // {
+      //   type: "content",
+      //   title: "Use Case",
+      //   content:
+      //     "Custom pricing for advanced features, large teams, and dedicated support",
+      // },
     ],
-    mostPopular: false,
+
     cta: {
       label: "Contact us",
       href: "mailto:sales@defang.io",
@@ -346,27 +355,48 @@ const faqs: {
   },
 ];
 
+type PlanPriceIDs = {
+  MONTHLY: string;
+  YEARLY: string;
+};
+
+type PlanPrices = {
+  PERSONAL: PlanPriceIDs;
+  PRO: PlanPriceIDs;
+};
+
+if (!process.env.NEXT_PUBLIC_PRICE_IDS) {
+  throw new Error("NEXT_PUBLIC_PRICE_IDS is not defined");
+}
+
+console.log("@@ PLAN_PRICES", process.env.NEXT_PUBLIC_PRICE_IDS);
+const prices = JSON.parse(process.env.NEXT_PUBLIC_PRICE_IDS) as PlanPrices;
+
 export function CustomPricingTable() {
   const { data } = useWhoami();
   const currentTier = data?.tier;
+
+  // if the user has a paid plan already, we send them to the portal
+  // otherwise we create a checkout linke when they click
+  const linkToStripePortal = [
+    SubscriptionTier.PERSONAL,
+    SubscriptionTier.PRO,
+    SubscriptionTier.TEAM,
+  ].includes(currentTier ?? SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED);
+
   const [
     createStripePortalSession,
     { data: portalData, loading: stripeSessionLoading },
-  ] = useMutation(CreateStripePortalSessionMutation);
+  ] = useMutation(CreateStripePortalSessionMutation as any);
 
-  const portalUrl = portalData?.createStripePortalSession?.url;
+  const [
+    createStripeCheckoutSession,
+    { data: checkoutData, loading: checkoutLoading },
+  ] = useMutation(CreateStripeCheckoutSessionMutation as any);
 
-  useEffect(() => {
-    createStripePortalSession();
-  }, [createStripePortalSession]);
+  const anythingLoading = stripeSessionLoading || checkoutLoading;
 
   const [frequency, setFrequency] = useState(freqs[0]);
-
-  const uniqueTitles = Array.from(
-    new Set(
-      plans.flatMap((plan) => plan.features.map((feature) => feature.title)),
-    ),
-  );
 
   return (
     <Container
@@ -386,139 +416,198 @@ export function CustomPricingTable() {
       </Stack>
 
       {/* PRICING TABLE */}
-      <Box sx={{ overflowX: "auto", mt: 4 }}>
-        <Table sx={{ backgroundColor: "transparent" }}>
-          <TableHead>
-            <TableRow>
-              <TableCell
-                style={{ backgroundColor: "transparent", borderBottom: "none" }}
-              ></TableCell>
-              {plans.map((tier, idx) => {
-                const price = tier.price[frequency.value];
-                // if this tier is a lower in the list than currentTier,
-                // then verb should be downgrade, otherwise upgrade
-                const verb =
-                  idx < plans.findIndex((p) => p.apiId === currentTier)
-                    ? "Downgrade"
-                    : "Upgrade";
+      <Box
+        sx={{
+          display: {
+            xs: "flex",
+            lg: "grid",
+          },
+          gap: 2,
+          mt: 4,
+          overflowX: {
+            xs: "auto",
+            lg: "unset",
+          },
+          gridTemplateColumns: {
+            lg: "repeat(4, 1fr)",
+          },
+          pb: 4,
+          width: "100%",
+        }}
+      >
+        {plans.map((plan, idx) => {
+          const price = plan.price[frequency.value];
+          const currentPlan =
+            !!currentTier && plan.matchTiers.includes(currentTier);
 
-                const button = (
-                  <Button
-                    variant="contained"
-                    href={tier.cta?.href || portalUrl}
-                    fullWidth
-                    disabled={
-                      tier.apiId === currentTier || stripeSessionLoading
-                    }
-                    sx={{
-                      mt: 2,
-                      backgroundColor: "white",
-                      color: "#066ebc",
-                      "&:hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                    }}
-                  >
-                    {stripeSessionLoading && <CircularProgress size={24} />}
-                    {tier.apiId === currentTier
-                      ? "Current"
-                      : tier.cta?.label || verb}
-                  </Button>
-                );
+          let priceId: string | undefined;
 
-                return (
-                  <TableCell
-                    key={tier.id}
-                    style={{
-                      padding: 0,
-                      borderBottom: "none",
-                      verticalAlign: "bottom",
-                    }}
+          if (plan.tier === SubscriptionTier.PERSONAL) {
+            priceId = prices.PERSONAL.MONTHLY;
+          } else if (plan.tier === SubscriptionTier.PRO) {
+            priceId = prices.PRO.MONTHLY;
+          }
+
+          let label: string = "";
+          if (plan.cta?.label) {
+            label = plan.cta.label;
+          } else if (plan.name === "Enterprise") {
+            label = "Contact us";
+          } else if (currentTier! > plan.tier) {
+            label = "Downgrade";
+          } else if (currentTier! < plan.tier) {
+            label = "Get Started";
+          } else {
+            label = "Current Plan";
+          }
+
+          async function onClick() {
+            if (plan.cta?.href) {
+              return null;
+            }
+            if (linkToStripePortal && !currentPlan) {
+              const { data } = await createStripePortalSession({
+                variables: { priceId },
+              });
+              window.location.href = data?.createStripePortalSession?.url;
+            } else if (
+              !linkToStripePortal &&
+              !currentPlan &&
+              priceId !== undefined
+            ) {
+              const { data } = await createStripeCheckoutSession({
+                variables: { priceId },
+              });
+              window.location.href = data?.createStripeCheckoutSession?.url;
+            }
+          }
+
+          return (
+            <Box
+              key={plan.id}
+              sx={{
+                minWidth: { xs: 280, lg: "unset" },
+                maxWidth: 380,
+                flex: { xs: "0 0 auto", lg: "unset" },
+                backgroundColor: idx % 2 === 0 ? "#fff" : "#f0f6ff",
+                outline: "2px solid #d1e4ff",
+                borderRadius: 2,
+                boxShadow: "0 1px 4px #0001",
+                px: 2,
+                py: 2,
+                position: "relative",
+                scrollSnapAlign: { xs: "start", lg: "unset" },
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "stretch",
+              }}
+            >
+              <Typography variant="h2" fontWeight={700} mb={1}>
+                {plan.name}
+              </Typography>
+              <Typography mb={2} sx={{ fontSize: "15px" }}>
+                {plan.description}
+              </Typography>
+
+              <Button
+                variant={plan.name === "Enterprise" ? "outlined" : "contained"}
+                href={plan.cta?.href}
+                onClick={onClick}
+                fullWidth
+                sx={{
+                  mb: 2,
+                  background:
+                    plan.name === "Enterprise" ? "transparent" : "#1D69F4",
+                  color: plan.name === "Enterprise" ? "#1D69F4" : "white",
+                  borderColor: "#1D69F4",
+                  fontWeight: 700,
+                  "&:hover": {
+                    background:
+                      plan.name === "Enterprise" ? "#f5faff" : "#145fc9",
+                    color: plan.name === "Enterprise" ? "#1D69F4" : "white",
+                  },
+                }}
+                disabled={stripeSessionLoading || currentPlan}
+              >
+                {stripeSessionLoading && (
+                  <CircularProgress size={24} sx={{ mr: 1 }} />
+                )}
+                {label}
+              </Button>
+              <Box mb={2}>
+                <Typography variant="h2" fontWeight={700} display="inline">
+                  {price}
+                </Typography>
+                {!["Free", "Contact us"].includes(price) && (
+                  <Typography
+                    variant="subtitle2"
+                    color="text.secondary"
+                    display="inline"
                   >
-                    <Box sx={{ px: 2 }}>
-                      <Box
-                        sx={{
-                          backgroundColor: "#066ebc",
-                          color: "common.white",
-                          p: 2,
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          borderTopLeftRadius: 32, // Heavily rounded corners
-                          borderTopRightRadius: 32, // Heavily rounded corners
-                          py: 4, // Increase vertical padding
-                        }}
-                      >
-                        <Typography variant="h6">{tier.name}</Typography>
-                        <Typography variant="h4" sx={{ mt: 2 }}>
-                          {price}
-                        </Typography>
-                        {!["Free", "Contact us"].includes(price) && (
-                          <Typography variant="subtitle1">
-                            {frequency.priceSuffix}
-                          </Typography>
-                        )}
-                        {button}
-                      </Box>
-                    </Box>
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableHead>
-          <TableBody sx={{ backgroundColor: "#FFFFFF" }}>
-            {uniqueTitles.map((title, rowIndex) => (
-              <TableRow key={title}>
-                <TableCell
-                  sx={{
-                    // Apply border radius to top-left and bottom-left cells
-                    ...(rowIndex === 0 && {
-                      borderTopLeftRadius: 16,
-                    }),
-                    ...(rowIndex === uniqueTitles.length - 1 && {
-                      borderBottomLeftRadius: 16,
-                    }),
-                    // Remove border at the bottom of the last row
-                    ...(rowIndex === uniqueTitles.length - 1 && {
-                      borderBottom: "none",
-                    }),
-                  }}
-                >
-                  {title}
-                </TableCell>
-                {plans.map((plan, cellIndex) => {
-                  const feature = plan.features.find(
-                    (feature) => feature.title === title,
-                  );
-                  return (
-                    <TableCell
-                      key={plan.id}
-                      sx={{
-                        // Apply border radius to top-right and bottom-right cells
-                        ...(rowIndex === 0 &&
-                          cellIndex === plans.length - 1 && {
-                            borderTopRightRadius: 16,
-                          }),
-                        ...(rowIndex === uniqueTitles.length - 1 &&
-                          cellIndex === plans.length - 1 && {
-                            borderBottomRightRadius: 16,
-                          }),
-                        // Remove border at the bottom of the last row
-                        ...(rowIndex === uniqueTitles.length - 1 && {
-                          borderBottom: "none",
-                        }),
+                    {frequency.priceSuffix}
+                  </Typography>
+                )}
+              </Box>
+              <Divider sx={{ mb: 2 }} />
+              <Box
+                component="ul"
+                sx={{
+                  listStyle: "none",
+                  p: 0,
+                  m: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                  flexGrow: 1,
+                }}
+              >
+                {plan.features.map((feature, i) => (
+                  <Box
+                    component="li"
+                    key={i}
+                    sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}
+                  >
+                    <span
+                      style={{
+                        color: "#1D69F4",
+                        fontSize: 18,
+                        marginTop: 2,
+                        marginRight: 6,
                       }}
                     >
-                      {feature ? feature.content : "-"}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                      {/* Checkmark SVG */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={15}
+                        height={15}
+                        fill="none"
+                      >
+                        <g clipPath="url(#a)">
+                          <path
+                            fill="#1D69F4"
+                            d="M13.928.913a.849.849 0 0 0-1.19.194L4.742 12.26 2.07 9.586a.855.855 0 0 0-1.208 1.208l3.38 3.385a.872.872 0 0 0 1.298-.108l8.588-11.967a.848.848 0 0 0-.2-1.19Z"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="a">
+                            <path
+                              fill="#fff"
+                              d="M.613.748H14.29v13.676H.613z"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </span>
+                    <Typography variant="body2" component="span">
+                      {feature.content}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          );
+        })}
       </Box>
-
       <Box sx={{ mt: 8, maxWidth: "lg", mx: "auto" }}>
         <Typography variant="h4" fontWeight="bold" gutterBottom>
           Frequently Asked Questions

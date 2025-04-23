@@ -52,6 +52,11 @@ inputs:
     description: 'Next Public Fabric'
     required: false
     default: ''
+  # Next Public Price IDs is a json object that looks like this (Tier, Timeframe, Price ID):
+  # {"PERSONAL":{"MONTHLY":"price_1QKRCqGzPK2DOcG5PHH1e9TY"},"PRO":{"MONTHLY":"price_1QKRDsGzPK2DOcG5Didy72JY"}}
+  next_public_price_ids:
+    description: 'Next Public Price IDs'
+    required: true
   stripe_webhook_secret:
     description: 'Stripe Webhook Secret'
     required: true
@@ -90,6 +95,8 @@ runs:
         echo "NEXT_PUBLIC_VERSION=${{ inputs.next_public_version }}" >> .env
         echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ inputs.next_public_stripe_publishable_key }}" >> .env
         echo "NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID=${{ inputs.next_public_stripe_pricing_table_id }}" >> .env
+        echo 'NEXT_PUBLIC_PRICE_IDS=${{ inputs.next_public_price_ids }}' >> .env
+        cat .env
     - name: Deploy
       uses: DefangLabs/defang-github-action@v1.2.0
       with:

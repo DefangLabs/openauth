@@ -414,6 +414,179 @@ export type StringComparisonExp = {
   _similar?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** columns and relationships of "stripeEvents" */
+export type StripeEvents = {
+  __typename?: 'StripeEvents';
+  data: Scalars['jsonb']['output'];
+  id: Scalars['String']['output'];
+};
+
+
+/** columns and relationships of "stripeEvents" */
+export type StripeEventsDataArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** aggregated selection of "stripeEvents" */
+export type StripeEventsAggregate = {
+  __typename?: 'StripeEventsAggregate';
+  aggregate?: Maybe<StripeEventsAggregateFields>;
+  nodes: Array<StripeEvents>;
+};
+
+/** aggregate fields of "stripeEvents" */
+export type StripeEventsAggregateFields = {
+  __typename?: 'StripeEventsAggregateFields';
+  count: Scalars['Int']['output'];
+  max?: Maybe<StripeEventsMaxFields>;
+  min?: Maybe<StripeEventsMinFields>;
+};
+
+
+/** aggregate fields of "stripeEvents" */
+export type StripeEventsAggregateFieldsCountArgs = {
+  columns?: InputMaybe<Array<StripeEventsSelectColumn>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type StripeEventsAppendInput = {
+  data?: InputMaybe<Scalars['jsonb']['input']>;
+};
+
+/** Boolean expression to filter rows from the table "stripeEvents". All fields are combined with a logical 'AND'. */
+export type StripeEventsBoolExp = {
+  _and?: InputMaybe<Array<StripeEventsBoolExp>>;
+  _not?: InputMaybe<StripeEventsBoolExp>;
+  _or?: InputMaybe<Array<StripeEventsBoolExp>>;
+  data?: InputMaybe<JsonbComparisonExp>;
+  id?: InputMaybe<StringComparisonExp>;
+};
+
+/** unique or primary key constraints on table "stripeEvents" */
+export enum StripeEventsConstraint {
+  /** unique or primary key constraint on columns "id" */
+  StripeEventsPkey = 'stripeEvents_pkey'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type StripeEventsDeleteAtPathInput = {
+  data?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type StripeEventsDeleteElemInput = {
+  data?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type StripeEventsDeleteKeyInput = {
+  data?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** input type for inserting data into table "stripeEvents" */
+export type StripeEventsInsertInput = {
+  data?: InputMaybe<Scalars['jsonb']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** aggregate max on columns */
+export type StripeEventsMaxFields = {
+  __typename?: 'StripeEventsMaxFields';
+  id?: Maybe<Scalars['String']['output']>;
+};
+
+/** aggregate min on columns */
+export type StripeEventsMinFields = {
+  __typename?: 'StripeEventsMinFields';
+  id?: Maybe<Scalars['String']['output']>;
+};
+
+/** response of any mutation on the table "stripeEvents" */
+export type StripeEventsMutationResponse = {
+  __typename?: 'StripeEventsMutationResponse';
+  /** number of rows affected by the mutation */
+  affectedRows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<StripeEvents>;
+};
+
+/** on_conflict condition type for table "stripeEvents" */
+export type StripeEventsOnConflict = {
+  constraint: StripeEventsConstraint;
+  updateColumns?: Array<StripeEventsUpdateColumn>;
+  where?: InputMaybe<StripeEventsBoolExp>;
+};
+
+/** Ordering options when selecting data from "stripeEvents". */
+export type StripeEventsOrderBy = {
+  data?: InputMaybe<OrderBy>;
+  id?: InputMaybe<OrderBy>;
+};
+
+/** primary key columns input for table: stripeEvents */
+export type StripeEventsPkColumnsInput = {
+  id: Scalars['String']['input'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type StripeEventsPrependInput = {
+  data?: InputMaybe<Scalars['jsonb']['input']>;
+};
+
+/** select columns of table "stripeEvents" */
+export enum StripeEventsSelectColumn {
+  /** column name */
+  Data = 'data',
+  /** column name */
+  Id = 'id'
+}
+
+/** input type for updating data in table "stripeEvents" */
+export type StripeEventsSetInput = {
+  data?: InputMaybe<Scalars['jsonb']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Streaming cursor of the table "stripeEvents" */
+export type StripeEventsStreamCursorInput = {
+  /** Stream column input with initial value */
+  initialValue: StripeEventsStreamCursorValueInput;
+  /** cursor ordering */
+  ordering?: InputMaybe<CursorOrdering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type StripeEventsStreamCursorValueInput = {
+  data?: InputMaybe<Scalars['jsonb']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** update columns of table "stripeEvents" */
+export enum StripeEventsUpdateColumn {
+  /** column name */
+  Data = 'data',
+  /** column name */
+  Id = 'id'
+}
+
+export type StripeEventsUpdates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<StripeEventsAppendInput>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _deleteAtPath?: InputMaybe<StripeEventsDeleteAtPathInput>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _deleteElem?: InputMaybe<StripeEventsDeleteElemInput>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _deleteKey?: InputMaybe<StripeEventsDeleteKeyInput>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<StripeEventsPrependInput>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<StripeEventsSetInput>;
+  /** filter the rows which have to be updated */
+  where: StripeEventsBoolExp;
+};
+
 /** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
 export type TimestamptzComparisonExp = {
   _eq?: InputMaybe<Scalars['timestamptz']['input']>;
@@ -860,6 +1033,10 @@ export type Mutation_Root = {
   deleteAccounts?: Maybe<AccountsMutationResponse>;
   /** delete single row from the table: "accounts" */
   deleteAccountsByPk?: Maybe<Accounts>;
+  /** delete data from the table: "stripeEvents" */
+  deleteStripeEvents?: Maybe<StripeEventsMutationResponse>;
+  /** delete single row from the table: "stripeEvents" */
+  deleteStripeEventsByPk?: Maybe<StripeEvents>;
   /** delete data from the table: "userAccounts" */
   deleteUserAccounts?: Maybe<UserAccountsMutationResponse>;
   /** delete single row from the table: "userAccounts" */
@@ -872,6 +1049,10 @@ export type Mutation_Root = {
   insertAccounts?: Maybe<AccountsMutationResponse>;
   /** insert a single row into the table: "accounts" */
   insertAccountsOne?: Maybe<Accounts>;
+  /** insert data into the table: "stripeEvents" */
+  insertStripeEvents?: Maybe<StripeEventsMutationResponse>;
+  /** insert a single row into the table: "stripeEvents" */
+  insertStripeEventsOne?: Maybe<StripeEvents>;
   /** insert data into the table: "userAccounts" */
   insertUserAccounts?: Maybe<UserAccountsMutationResponse>;
   /** insert a single row into the table: "userAccounts" */
@@ -886,6 +1067,12 @@ export type Mutation_Root = {
   updateAccountsByPk?: Maybe<Accounts>;
   /** update multiples rows of table: "accounts" */
   updateAccountsMany?: Maybe<Array<Maybe<AccountsMutationResponse>>>;
+  /** update data of the table: "stripeEvents" */
+  updateStripeEvents?: Maybe<StripeEventsMutationResponse>;
+  /** update single row of the table: "stripeEvents" */
+  updateStripeEventsByPk?: Maybe<StripeEvents>;
+  /** update multiples rows of table: "stripeEvents" */
+  updateStripeEventsMany?: Maybe<Array<Maybe<StripeEventsMutationResponse>>>;
   /** update data of the table: "userAccounts" */
   updateUserAccounts?: Maybe<UserAccountsMutationResponse>;
   /** update single row of the table: "userAccounts" */
@@ -910,6 +1097,18 @@ export type Mutation_RootDeleteAccountsArgs = {
 /** mutation root */
 export type Mutation_RootDeleteAccountsByPkArgs = {
   id: Scalars['uuid']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteStripeEventsArgs = {
+  where: StripeEventsBoolExp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteStripeEventsByPkArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -949,6 +1148,20 @@ export type Mutation_RootInsertAccountsArgs = {
 export type Mutation_RootInsertAccountsOneArgs = {
   object: AccountsInsertInput;
   onConflict?: InputMaybe<AccountsOnConflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertStripeEventsArgs = {
+  objects: Array<StripeEventsInsertInput>;
+  onConflict?: InputMaybe<StripeEventsOnConflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertStripeEventsOneArgs = {
+  object: StripeEventsInsertInput;
+  onConflict?: InputMaybe<StripeEventsOnConflict>;
 };
 
 
@@ -1011,6 +1224,36 @@ export type Mutation_RootUpdateAccountsManyArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdateStripeEventsArgs = {
+  _append?: InputMaybe<StripeEventsAppendInput>;
+  _deleteAtPath?: InputMaybe<StripeEventsDeleteAtPathInput>;
+  _deleteElem?: InputMaybe<StripeEventsDeleteElemInput>;
+  _deleteKey?: InputMaybe<StripeEventsDeleteKeyInput>;
+  _prepend?: InputMaybe<StripeEventsPrependInput>;
+  _set?: InputMaybe<StripeEventsSetInput>;
+  where: StripeEventsBoolExp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateStripeEventsByPkArgs = {
+  _append?: InputMaybe<StripeEventsAppendInput>;
+  _deleteAtPath?: InputMaybe<StripeEventsDeleteAtPathInput>;
+  _deleteElem?: InputMaybe<StripeEventsDeleteElemInput>;
+  _deleteKey?: InputMaybe<StripeEventsDeleteKeyInput>;
+  _prepend?: InputMaybe<StripeEventsPrependInput>;
+  _set?: InputMaybe<StripeEventsSetInput>;
+  pkColumns: StripeEventsPkColumnsInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateStripeEventsManyArgs = {
+  updates: Array<StripeEventsUpdates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdateUserAccountsArgs = {
   _set?: InputMaybe<UserAccountsSetInput>;
   where: UserAccountsBoolExp;
@@ -1057,6 +1300,12 @@ export type Query_Root = {
   accountsAggregate: AccountsAggregate;
   /** fetch data from the table: "accounts" using primary key columns */
   accountsByPk?: Maybe<Accounts>;
+  /** fetch data from the table: "stripeEvents" */
+  stripeEvents: Array<StripeEvents>;
+  /** fetch aggregated fields from the table: "stripeEvents" */
+  stripeEventsAggregate: StripeEventsAggregate;
+  /** fetch data from the table: "stripeEvents" using primary key columns */
+  stripeEventsByPk?: Maybe<StripeEvents>;
   /** fetch data from the table: "userAccounts" */
   userAccounts: Array<UserAccounts>;
   /** fetch aggregated fields from the table: "userAccounts" */
@@ -1092,6 +1341,29 @@ export type Query_RootAccountsAggregateArgs = {
 
 export type Query_RootAccountsByPkArgs = {
   id: Scalars['uuid']['input'];
+};
+
+
+export type Query_RootStripeEventsArgs = {
+  distinctOn?: InputMaybe<Array<StripeEventsSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<StripeEventsOrderBy>>;
+  where?: InputMaybe<StripeEventsBoolExp>;
+};
+
+
+export type Query_RootStripeEventsAggregateArgs = {
+  distinctOn?: InputMaybe<Array<StripeEventsSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<StripeEventsOrderBy>>;
+  where?: InputMaybe<StripeEventsBoolExp>;
+};
+
+
+export type Query_RootStripeEventsByPkArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -1151,6 +1423,14 @@ export type Subscription_Root = {
   accountsByPk?: Maybe<Accounts>;
   /** fetch data from the table in a streaming manner: "accounts" */
   accountsStream: Array<Accounts>;
+  /** fetch data from the table: "stripeEvents" */
+  stripeEvents: Array<StripeEvents>;
+  /** fetch aggregated fields from the table: "stripeEvents" */
+  stripeEventsAggregate: StripeEventsAggregate;
+  /** fetch data from the table: "stripeEvents" using primary key columns */
+  stripeEventsByPk?: Maybe<StripeEvents>;
+  /** fetch data from the table in a streaming manner: "stripeEvents" */
+  stripeEventsStream: Array<StripeEvents>;
   /** fetch data from the table: "userAccounts" */
   userAccounts: Array<UserAccounts>;
   /** fetch aggregated fields from the table: "userAccounts" */
@@ -1197,6 +1477,36 @@ export type Subscription_RootAccountsStreamArgs = {
   batchSize: Scalars['Int']['input'];
   cursor: Array<InputMaybe<AccountsStreamCursorInput>>;
   where?: InputMaybe<AccountsBoolExp>;
+};
+
+
+export type Subscription_RootStripeEventsArgs = {
+  distinctOn?: InputMaybe<Array<StripeEventsSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<StripeEventsOrderBy>>;
+  where?: InputMaybe<StripeEventsBoolExp>;
+};
+
+
+export type Subscription_RootStripeEventsAggregateArgs = {
+  distinctOn?: InputMaybe<Array<StripeEventsSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<StripeEventsOrderBy>>;
+  where?: InputMaybe<StripeEventsBoolExp>;
+};
+
+
+export type Subscription_RootStripeEventsByPkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type Subscription_RootStripeEventsStreamArgs = {
+  batchSize: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<StripeEventsStreamCursorInput>>;
+  where?: InputMaybe<StripeEventsBoolExp>;
 };
 
 

@@ -3,11 +3,13 @@ import { userInserted } from "./event-handlers/user-inserted";
 import { defangApiSecret } from "../../../constants";
 import * as v from "valibot";
 import { HasuraEvent, hasuraEventSchema } from "../../../lib/hasura/hasura-event-schema";
+import { userUpdated } from "./event-handlers/user-updated";
 
 const eventHandlers: {
     [key: string]: (e: HasuraEvent, c: Context) => Promise<any>
 } = {
-    userInserted: userInserted
+    userInserted,
+    userUpdated,
 }
 
 export async function handleEvent(c: Context) {
@@ -20,11 +22,7 @@ export async function handleEvent(c: Context) {
     }
 
     const authHeader = c.req.header('authorization');
-    if (!authHeader) {
-        return c.json({ message: 'Unauthorized' }, 401);
-    }
-
-    if (authHeader !== defangApiSecret) {
+    if (!authHeader || authHeader !== defangApiSecret) {
         return c.json({ message: 'Unauthorized' }, 401);
     }
 
