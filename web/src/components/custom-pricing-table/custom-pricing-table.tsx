@@ -434,6 +434,7 @@ export function CustomPricingTable() {
       >
         {plans.map((plan, idx) => {
           const price = plan.price[frequency.value];
+          console.log("@@ tier and matchTiers", currentTier, plan.matchTiers);
           const currentPlan =
             !!currentTier && plan.matchTiers.includes(currentTier);
 
