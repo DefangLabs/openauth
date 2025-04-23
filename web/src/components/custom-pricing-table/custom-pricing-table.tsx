@@ -385,15 +385,11 @@ export function CustomPricingTable() {
     SubscriptionTier.TEAM,
   ].includes(currentTier ?? SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED);
 
-  const [
-    createStripePortalSession,
-    { data: portalData, loading: stripeSessionLoading },
-  ] = useMutation(CreateStripePortalSessionMutation as any);
+  const [createStripePortalSession, { loading: stripeSessionLoading }] =
+    useMutation(CreateStripePortalSessionMutation as any);
 
-  const [
-    createStripeCheckoutSession,
-    { data: checkoutData, loading: checkoutLoading },
-  ] = useMutation(CreateStripeCheckoutSessionMutation as any);
+  const [createStripeCheckoutSession, { loading: checkoutLoading }] =
+    useMutation(CreateStripeCheckoutSessionMutation as any);
 
   const anythingLoading = stripeSessionLoading || checkoutLoading;
 
@@ -528,9 +524,9 @@ export function CustomPricingTable() {
                     color: plan.name === "Enterprise" ? "#1D69F4" : "white",
                   },
                 }}
-                disabled={stripeSessionLoading || currentPlan}
+                disabled={anythingLoading || currentPlan}
               >
-                {stripeSessionLoading && (
+                {anythingLoading && (
                   <CircularProgress size={24} sx={{ mr: 1 }} />
                 )}
                 {label}
