@@ -374,8 +374,14 @@ const prices = JSON.parse(process.env.NEXT_PUBLIC_PRICE_IDS) as PlanPrices;
 
 export function CustomPricingTable() {
   const { data } = useWhoami();
-  const currentTier =
-    data?.tier || SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED;
+  let currentTier = data?.tier;
+
+  if (
+    currentTier === undefined ||
+    currentTier === SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED
+  ) {
+    currentTier = SubscriptionTier.HOBBY;
+  }
 
   // if the user has a paid plan already, we send them to the portal
   // otherwise we create a checkout linke when they click
@@ -410,6 +416,18 @@ export function CustomPricingTable() {
           Subscription
         </Typography>
         <Typography variant="h2">Introductory Limited Time Offer</Typography>
+        {linkToStripePortal && (
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const { data } = await createStripePortalSession();
+              window.location.href = data?.createStripePortalSession?.url;
+            }}
+            sx={{ mt: 2 }}
+          >
+            Manage your subscription
+          </Button>
+        )}
       </Stack>
 
       {/* PRICING TABLE */}
@@ -434,7 +452,6 @@ export function CustomPricingTable() {
       >
         {plans.map((plan, idx) => {
           const price = plan.price[frequency.value];
-          console.log("@@ tier and matchTiers", currentTier, plan.matchTiers);
           const currentPlan =
             !!currentTier && plan.matchTiers.includes(currentTier);
 
@@ -464,9 +481,7 @@ export function CustomPricingTable() {
               return null;
             }
             if (linkToStripePortal && !currentPlan) {
-              const { data } = await createStripePortalSession({
-                variables: { priceId },
-              });
+              const { data } = await createStripePortalSession();
               window.location.href = data?.createStripePortalSession?.url;
             } else if (
               !linkToStripePortal &&
