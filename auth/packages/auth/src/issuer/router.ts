@@ -59,6 +59,8 @@ export const issuerRouter = issuer({
       }
     })
 
+    const githubOrgs = value.provider === "github" ? providerData?.orgs?.map((org) => org.name) : []
+
     return ctx.subject(
       "user",
       {
@@ -68,7 +70,8 @@ export const issuerRouter = issuer({
           "x-hasura-allowed-roles": ["user"],
           "x-hasura-default-role": "user",
           "x-hasura-user-id": user.id,
-        }
+        },
+        githubOrgs,
       },
       {
         subject: user.id,
