@@ -234,6 +234,7 @@ export async function generateCheckoutLink(c: Context) {
     ],
     success_url: rootUrl + "/pricing/success",
     cancel_url: rootUrl + "/pricing",
+    allow_promotion_codes: true,
   });
 
   return c.json({ url: session.url }, 201);
