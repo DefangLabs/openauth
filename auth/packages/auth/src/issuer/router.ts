@@ -18,13 +18,13 @@ export const issuerRouter = issuer({
   providers,
   theme: {
     primary: '#4491fd',
-    logo: 'https://defang.io/_next/static/media/DEFANG-1_4x-no-text-256.a3fe9447.svg',
+    logo: 'https://defang.io/icon.png',
     css: 'https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap',
     font: {
       family: '"Exo 2", sans-serif',
     },
     title: 'Defang',
-    favicon: 'https://defang.io/_next/static/media/DEFANG-1_4x-no-text-256.a3fe9447.svg',
+    favicon: 'https://defang.io/icon.png',
     radius: 'lg',
   },
   ttl: {
