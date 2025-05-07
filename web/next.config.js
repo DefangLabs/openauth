@@ -16,6 +16,7 @@ const cspImgSrc = [
   "'self'",
   "data:",
   "blob:",
+  "https://raw.githubusercontent.com",
   "https://*.gravatar.com",
   "http://*.gravatar.com",
   "https://defang.io",
