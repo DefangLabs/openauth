@@ -90,6 +90,7 @@ const cspFontSrc = [
 ];
 const cspConnectSrc = [
   "'self'",
+  "https://raw.githubusercontent.com",
   "https://api.github.com",
   "https://*.gnafed.click",
   "https://*.dev.gnafed.click",
