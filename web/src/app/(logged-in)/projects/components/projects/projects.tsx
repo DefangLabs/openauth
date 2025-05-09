@@ -41,7 +41,7 @@ export function Projects() {
 
     client?.destroy({ project }, (err, res) => {
       if (err) {
-        console.error("@@ error destroying client", err);
+        console.error("@@ error destroying project", err);
       } else {
         // Hack to force a reload of the page to update the list of projects
         window.location.reload();
