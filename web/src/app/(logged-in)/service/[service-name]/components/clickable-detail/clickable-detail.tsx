@@ -1,7 +1,6 @@
 import { thinGreyBorder } from "@/modules/mui/constants";
 import {
   Alert,
-  Box,
   Paper,
   Snackbar,
   Tooltip,
@@ -73,9 +72,7 @@ export function ClickableDetail({ title, content }: ClickableDetailProps) {
           <>
             {`Click to copy:`}
             <br />
-            {`${content.toString().slice(0, 30)}${
-              content.toString().length > 30 ? "…" : ""
-            }`}
+            {content.toString()}
           </>
         }
         placement="bottom"
