@@ -167,7 +167,7 @@ const plans: {
       {
         type: "content",
         title: "Data Usage",
-        content: "Data may be used for AI Training",
+        content: "Data not used for AI training unless explicitly opted in.",
       },
       {
         type: "content",
@@ -229,7 +229,7 @@ const plans: {
       {
         type: "content",
         title: "Data Usage",
-        content: "May opt out of AI Training",
+        content: "Data not used for AI training unless explicitly opted in.",
       },
       {
         type: "content",

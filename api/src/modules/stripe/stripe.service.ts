@@ -8,6 +8,10 @@ import { upsertStripeCustomer } from "../../lib/stripe/upsert-stripe-customer";
 import { getStripeClient } from "../../lib/stripe/get-stripe-client";
 import { getStripeCustomer } from "../../lib/stripe/get-stripe-customer";
 
+/**
+ * This function takes an authed request and returns the Stripe customer for the user.
+ * If the customer doesn't exist, it will create it.
+ */
 async function authorizeCustomer(req: Context["req"]) {
   const claims = await authorizeRequest(req);
   const defangUserId = claims.sub;
@@ -25,6 +29,12 @@ async function authorizeCustomer(req: Context["req"]) {
   return customer;
 }
 
+
+/**
+ * [DEPRECATED]
+ * This is used to create links for the authed user to manage their subscriptions
+ * in the Stripe-managed pricing table.
+ */
 export async function createStripeClientSecret(c: Context) {
   const req = c.req;
   const customer = await authorizeCustomer(req);
@@ -46,6 +56,12 @@ export async function createStripeClientSecret(c: Context) {
   return c.json({ secret: customerSession.client_secret }, 201);
 }
 
+
+
+/**
+ * This is used to create links for the authed user to manage their subscriptions
+ * in the Stripe-managed portal.
+ */
 export async function createStripePortalSession(c: Context) {
   const req = c.req;
   const customer = await authorizeCustomer(req);
@@ -72,6 +88,9 @@ export async function createStripePortalSession(c: Context) {
   return c.json({ url: session.url }, 201);
 }
 
+/**
+ * This is used to handle webhooks from Stripe.
+ */
 export async function webhookHandler(c: Context) {
   const { STRIPE_WEBHOOK_SECRET } = env<{
     STRIPE_WEBHOOK_SECRET: string | undefined;
@@ -194,6 +213,11 @@ export async function webhookHandler(c: Context) {
   }
 }
 
+/**
+ * This is used to generate a checkout link for the authed user.
+ * Used in the pricing page in the Defang portal for users who
+ * do not have a subscription yet. (replaces createStripeClientSecret)
+ */
 export async function generateCheckoutLink(c: Context) {
   const req = c.req;
   const customer = await authorizeCustomer(req);
