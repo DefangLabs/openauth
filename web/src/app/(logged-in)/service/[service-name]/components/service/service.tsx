@@ -13,11 +13,12 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { quote } from "shell-quote";
+import { useService } from "../../hooks/use-service/use-service";
 import { ClickableDetail } from "../clickable-detail/clickable-detail";
 import { Endpoints } from "../endpoints/endpoints";
 import { Environment } from "../environment/environment";
 import { Logs } from "../logs/logs";
-import { useService } from "../../hooks/use-service/use-service";
 
 const Small = styled("small")`
   color: ${COLORS.darkGrey};
@@ -30,7 +31,7 @@ const OpenIcon = styled(OpenInNew)`
 `;
 
 function ProjectsPageInner() {
-  const { service, loading } = useService({ poll: 8000 });
+  const { service: serviceInfo, loading } = useService({ poll: 8000 });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -38,15 +39,15 @@ function ProjectsPageInner() {
     return <PageLoading />;
   }
 
-  const firstEndpoint = service?.endpoints?.[0];
-  const isPublic = service?.service.ports?.[0]?.mode === Mode.INGRESS;
+  const firstEndpoint = serviceInfo?.endpoints?.[0];
+  const isPublic = serviceInfo?.service.ports?.[0]?.mode === Mode.INGRESS;
 
   return (
     <Stack p={2} spacing={4} mb={10}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">
-          <StatusIcon status={service?.status} state={service?.state} />
-          {service?.service?.name}
+          <StatusIcon status={serviceInfo?.status} state={serviceInfo?.state} />
+          {serviceInfo?.service?.name}
           <Small>
             {` service `}
             {firstEndpoint && isPublic && (
@@ -65,19 +66,27 @@ function ProjectsPageInner() {
       >
         <ClickableDetail
           title="Container Image"
-          content={service?.service?.image || service?.service?.build?.context}
+          content={
+            serviceInfo?.service?.image || serviceInfo?.service?.build?.context
+          }
         />
         <ClickableDetail
           title="Deployment ID / ETag"
-          content={service?.etag || ""}
+          content={serviceInfo?.etag || ""}
+        />
+        <ClickableDetail
+          title="Command"
+          content={quote(serviceInfo?.service?.command ?? [])}
         />
         <ClickableDetail
           title="Private Domain Name"
-          content={service?.privateFqdn || ""}
+          content={serviceInfo?.privateFqdn || ""}
         />
         <ClickableDetail
           title="Public Domain Name"
-          content={service?.service?.domainname || service?.publicFqdn || ""}
+          content={
+            serviceInfo?.service?.domainname || serviceInfo?.publicFqdn || ""
+          }
         />
       </Stack>
       <Endpoints />
