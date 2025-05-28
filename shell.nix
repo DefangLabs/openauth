@@ -2,10 +2,10 @@
 pkgs.mkShell {
   buildInputs = [
     pkgs.bun
-    pkgs.nixfmt
-    pkgs.nodejs_20
+    pkgs.nodejs_18 # same as Dockerfile
     pkgs.pulumi-bin
     pkgs.hasura-cli
-    pkgs.nodePackages.pnpm
+    pkgs.nixfmt
+    pkgs.stripe-cli
   ];
 }

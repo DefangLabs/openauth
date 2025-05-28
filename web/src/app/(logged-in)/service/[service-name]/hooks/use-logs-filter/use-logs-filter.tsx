@@ -1,11 +1,11 @@
 import { atom, useAtom } from "jotai";
 
-export type LogFilter = "all" | "current" | "image";
+export type LogType = "all" | "current" | "image";
 export type LogTime = "0" | "1" | "30" | "60" | "720";
 
 export const logsFilterAtom = atom<string>("");
 export const negativeFilterAtom = atom<boolean>(false);
-export const logTypeFilterAtom = atom<LogFilter>("all");
+export const logTypeFilterAtom = atom<LogType>("current");
 export const logTimeFilterAtom = atom<LogTime>("30");
 
 export function useLogsFilter() {

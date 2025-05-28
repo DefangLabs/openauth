@@ -77,12 +77,10 @@ export function Logs() {
   const { ref: sizeRef, size } = useResizeObserver();
   const { service } = useService({ skip: true, poll: undefined });
   const { logType, logTime } = useLogsFilter();
-  const serviceName = service?.service?.name?.concat(
-    logType == "image" ? "-image" : "",
-  );
   const { logs } = useServiceLogs({
-    service: serviceName,
     etag: logType === "all" ? undefined : service?.etag,
+    logType,
+    service: service?.service?.name,
     sinceMins: parseInt(logTime),
   });
 

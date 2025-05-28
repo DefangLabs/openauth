@@ -13,8 +13,8 @@ import {
   ToggleButtonGroup,
 } from "@mui/material";
 import {
-  LogFilter,
   LogTime,
+  LogType,
   useLogsFilter,
 } from "../../../hooks/use-logs-filter/use-logs-filter";
 import { useService } from "../../../hooks/use-service/use-service";
@@ -84,12 +84,12 @@ export function LogFilterBar() {
             analytics.track(EVENTS.toggleLogType, {
               type: e.target.value,
             });
-            setLogType(e.target.value as LogFilter);
+            setLogType(e.target.value as LogType);
           }}
           size="small"
         >
-          <MenuItem value="all">All Deployments</MenuItem>
           <MenuItem value="current">Current Deployment</MenuItem>
+          <MenuItem value="all">All Deployments</MenuItem>
           <MenuItem disabled={!service?.service.build} value="image">
             Current Image Build
           </MenuItem>

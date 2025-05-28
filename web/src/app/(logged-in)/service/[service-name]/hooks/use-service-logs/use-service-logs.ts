@@ -1,3 +1,4 @@
+import { LogEntry, TailResponse } from "@/modules/defang/generated/fabric_pb";
 import { useDefangClient } from "@/modules/defang/hooks/use-defang-client/use-defang-client";
 import {
   useCallback,
@@ -6,22 +7,19 @@ import {
   useMemo,
   useState,
 } from "react";
-// import {
-//   LogEntry,
-//   TailResponse,
-// } from "../../../../../modules/defang/generated/fabric_pb";
-import { useLogsFilter } from "../use-logs-filter/use-logs-filter";
-import { LogEntry, TailResponse } from "@/modules/defang/generated/fabric_pb";
+import { LogType, useLogsFilter } from "../use-logs-filter/use-logs-filter";
 
 interface UseServiceLogsOpts {
   etag?: string;
+  logType?: LogType;
   service?: string;
   sinceMins?: number;
 }
 
 export function useServiceLogs(opts: UseServiceLogsOpts) {
-  const service = opts?.service;
   const etag = opts?.etag;
+  const logType = opts?.logType ?? "all";
+  const service = opts?.service;
   const sinceMins = opts?.sinceMins;
   const client = useDefangClient();
   const { filter, negativeFilter } = useLogsFilter();
@@ -45,9 +43,9 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
 
   useEffect(() => {
     resetLogs();
-  }, [resetLogs, service, etag, sinceMins]);
+  }, [resetLogs, service, etag, sinceMins, logType]);
 
-  const callback = useCallback((res: TailResponse) => {
+  const messageCallback = useCallback((res: TailResponse) => {
     setLogs((prevLogs) => {
       return [...prevLogs, ...res.entries];
     });
@@ -56,28 +54,44 @@ export function useServiceLogs(opts: UseServiceLogsOpts) {
   useEffect(() => {
     if (!client || (!service && !etag)) return;
 
-    const stopTail = client.tail(
+    const cancelTail = client.tail(
       {
-        services: service ? [service] : undefined,
+        services: service ? getServicesFilter(logType, service) : undefined,
         etag,
         since: sinceMins
           ? { seconds: BigInt(Math.floor(Date.now() / 1000) - 60 * sinceMins) }
           : undefined,
       },
-      callback,
-      () => {},
+      messageCallback,
+      (err) => {
+        console.error("@@ tail stopped", err);
+      },
     );
 
     return () => {
       try {
-        stopTail();
+        cancelTail();
       } catch (e) {
         console.error("@@ error stopping tail", e);
       }
     };
-  }, [callback, client, etag, service, sinceMins]);
+  }, [messageCallback, client, etag, service, sinceMins, logType]);
 
   return {
     logs: filteredLogs,
   };
+}
+
+function getServicesFilter(
+  logType: LogType,
+  service: string,
+): string[] | undefined {
+  switch (logType) {
+    case "all":
+      return undefined;
+    case "image":
+      return [service + "-image"];
+    case "current":
+      return [service, service + "-image"];
+  }
 }
