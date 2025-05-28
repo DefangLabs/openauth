@@ -52,9 +52,11 @@ export const mockClient: Partial<Client> = {
       state: ServiceState.BUILD_RUNNING,
       domainname: "mock-domainname",
       endpoints: ["mock-endpoint1"],
+      publicFqdn: "mock-public-fqdn1",
       service: new Service({
         name: "mock-service1",
         image: "mock-image1",
+        domainname: "mock-domainname1",
         ports: [
           new Port({
             protocol: Protocol.HTTP,

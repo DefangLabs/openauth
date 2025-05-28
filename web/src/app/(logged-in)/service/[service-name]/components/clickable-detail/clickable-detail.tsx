@@ -16,6 +16,8 @@ import { MouseEvent, useState } from "react";
 interface ClickableDetailProps {
   title: string;
   content: string | number | undefined;
+  fullWidth?: boolean;
+  link?: boolean;
 }
 
 const ClickableTypography = styled(Typography)`
@@ -39,7 +41,12 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-export function ClickableDetail({ title, content }: ClickableDetailProps) {
+export function ClickableDetail({
+  title,
+  content,
+  fullWidth = false,
+  link = false,
+}: ClickableDetailProps) {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -54,12 +61,14 @@ export function ClickableDetail({ title, content }: ClickableDetailProps) {
   return (
     <Paper
       sx={{
-        width: {
-          xs: "100%",
-          sm: "50%",
-          md: "25%",
-          lg: "20%",
-        },
+        width: fullWidth
+          ? "100%"
+          : {
+              xs: "100%",
+              sm: "50%",
+              md: "25%",
+              lg: "20%",
+            },
         p: 1,
         ...thinGreyBorder,
       }}

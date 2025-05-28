@@ -5,7 +5,7 @@ import { PageLoading } from "@/components/page-loading/page-loading";
 import { StatusIcon } from "@/components/status-icon/status-icon";
 import { Mode } from "@/modules/defang/generated/fabric_pb";
 import { COLORS } from "@/modules/mui/constants";
-import { OpenInNew } from "@mui/icons-material";
+import { OpenInBrowser } from "@mui/icons-material";
 import {
   Stack,
   Typography,
@@ -19,13 +19,16 @@ import { ClickableDetail } from "../clickable-detail/clickable-detail";
 import { Endpoints } from "../endpoints/endpoints";
 import { Environment } from "../environment/environment";
 import { Logs } from "../logs/logs";
+import { FONTS } from "@/modules/mui/providers/theme-provider/theme-provider";
 
 const Small = styled("small")`
   color: ${COLORS.darkGrey};
 `;
 
-const OpenIcon = styled(OpenInNew)`
-  margin-left: 5px;
+const OpenIcon = styled(OpenInBrowser)`
+  margin-left: 10px;
+  margin-right: 5px;
+  margin-bottom: -5px;
   cursor: pointer;
   color: ${COLORS.darkGrey};
 `;
@@ -39,7 +42,8 @@ function ProjectsPageInner() {
     return <PageLoading />;
   }
 
-  const firstEndpoint = serviceInfo?.endpoints?.[0];
+  const firstEndpoint =
+    serviceInfo?.service?.domainname || serviceInfo?.publicFqdn;
   const isPublic = serviceInfo?.service.ports?.[0]?.mode === Mode.INGRESS;
 
   return (
@@ -48,46 +52,75 @@ function ProjectsPageInner() {
         <Typography variant="h1">
           <StatusIcon status={serviceInfo?.status} state={serviceInfo?.state} />
           {serviceInfo?.service?.name}
-          <Small>
-            {` service `}
+          <Small
+            sx={{
+              fontSize: "2.5rem",
+              marginLeft: "10px",
+              fontWeight: 400,
+              fontFamily: FONTS.body.style.fontFamily,
+              // allcaps
+              textTransform: "uppercase",
+              "& a": {
+                color: COLORS.darkGrey,
+                textDecoration: "none",
+                fontSize: "0.8rem",
+              },
+            }}
+          >
             {firstEndpoint && isPublic && (
-              <a href={`https://${firstEndpoint}`} target="_blank">
+              <a
+                href={`https://${firstEndpoint}`}
+                target="_blank"
+                style={{
+                  textDecoration: "none",
+                }}
+                title="Open in browser"
+              >
                 <OpenIcon />
+                open
               </a>
             )}
           </Small>
         </Typography>
       </Stack>
-      <Stack
-        direction={isMobile ? "column" : "row"}
-        spacing={isMobile ? 2 : 4}
-        flexWrap="wrap"
-        width="100%"
-      >
+      <Stack direction="column" spacing={1}>
+        <Typography variant="h2">Public Domain Name</Typography>
         <ClickableDetail
-          title="Container Image"
-          content={
-            serviceInfo?.service?.image || serviceInfo?.service?.build?.context
-          }
-        />
-        <ClickableDetail
-          title="Deployment ID / ETag"
-          content={serviceInfo?.etag || ""}
-        />
-        <ClickableDetail
-          title="Command"
-          content={quote(serviceInfo?.service?.command ?? [])}
-        />
-        <ClickableDetail
-          title="Private Domain Name"
-          content={serviceInfo?.privateFqdn || ""}
-        />
-        <ClickableDetail
-          title="Public Domain Name"
+          title=""
           content={
             serviceInfo?.service?.domainname || serviceInfo?.publicFqdn || ""
           }
+          fullWidth
         />
+      </Stack>
+      <Stack direction="column" spacing={1}>
+        <Typography variant="h2">Details</Typography>
+        <Stack
+          direction={isMobile ? "column" : "row"}
+          spacing={isMobile ? 2 : 4}
+          flexWrap="wrap"
+          width="100%"
+        >
+          <ClickableDetail
+            title="Container Image"
+            content={
+              serviceInfo?.service?.image ||
+              serviceInfo?.service?.build?.context
+            }
+          />
+          <ClickableDetail
+            title="Deployment ID / ETag"
+            content={serviceInfo?.etag || ""}
+          />
+          <ClickableDetail
+            title="Command"
+            content={quote(serviceInfo?.service?.command ?? [])}
+          />
+          <ClickableDetail
+            title="Private Domain Name"
+            content={serviceInfo?.privateFqdn || ""}
+          />
+        </Stack>
       </Stack>
       <Endpoints />
       <Logs />
