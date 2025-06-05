@@ -1,0 +1,7 @@
+version: v2
+inputs:
+  - directory: src/modules/defang
+plugins:
+  - local: protoc-gen-es
+    out: src/modules/defang/generated
+    opt: target=js+dts,import_extension=.js

@@ -1,0 +1,7 @@
+version: v2
+inputs:
+  - directory: src/modules/defang/google/type
+plugins:
+  - local: protoc-gen-es
+    out: src/modules/defang/generated/google/type
+    opt: target=js,import_extension=.js

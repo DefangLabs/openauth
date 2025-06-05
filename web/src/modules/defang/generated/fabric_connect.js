@@ -6,7 +6,7 @@
 // @ts-nocheck
 
 import { Empty, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
-import { DebugRequest, DebugResponse, DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteConfigsRequest, DeleteRequest, DeleteResponse, DeployRequest, DeployResponse, DestroyRequest, DestroyResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, GetConfigsRequest, GetConfigsResponse, GetRequest, GetSelectedProviderRequest, GetSelectedProviderResponse, GetServicesRequest, GetServicesResponse, ListConfigsRequest, ListConfigsResponse, PublishRequest, PutConfigRequest, Secrets, Service, ServiceInfo, SetSelectedProviderRequest, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, VerifyDNSSetupRequest, Version, WhoAmIResponse } from "./fabric_pb.js";
+import { CanIUseRequest, CanIUseResponse, DebugRequest, DebugResponse, DelegateSubdomainZoneRequest, DelegateSubdomainZoneResponse, DeleteConfigsRequest, DeleteRequest, DeleteResponse, DeleteSubdomainZoneRequest, DeployRequest, DeployResponse, DestroyRequest, DestroyResponse, EstimateRequest, EstimateResponse, GenerateFilesRequest, GenerateFilesResponse, GenerateStatusRequest, GetConfigsRequest, GetConfigsResponse, GetDelegateSubdomainZoneRequest, GetRequest, GetSelectedProviderRequest, GetSelectedProviderResponse, GetServicesRequest, GetServicesResponse, ListConfigsRequest, ListConfigsResponse, ListDeploymentsRequest, ListDeploymentsResponse, PublishRequest, PutConfigRequest, PutDeploymentRequest, Secrets, Service, ServiceInfo, SetOptionsRequest, SetSelectedProviderRequest, StartGenerateResponse, Status, SubscribeRequest, SubscribeResponse, TailRequest, TailResponse, TokenRequest, TokenResponse, TrackRequest, UploadURLRequest, UploadURLResponse, VerifyDNSSetupRequest, Version, WhoAmIResponse } from "./fabric_pb.js";
 
 /**
  * @generated from service io.defang.v1.FabricController
@@ -277,6 +277,26 @@ export const FabricController = {
       idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
+     * @generated from rpc io.defang.v1.FabricController.PutDeployment
+     */
+    putDeployment: {
+      name: "PutDeployment",
+      I: PutDeploymentRequest,
+      O: Empty,
+      kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.Idempotent,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.ListDeployments
+     */
+    listDeployments: {
+      name: "ListDeployments",
+      I: ListDeploymentsRequest,
+      O: ListDeploymentsResponse,
+      kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
      * @generated from rpc io.defang.v1.FabricController.CreateUploadURL
      */
     createUploadURL: {
@@ -299,19 +319,30 @@ export const FabricController = {
      */
     deleteSubdomainZone: {
       name: "DeleteSubdomainZone",
-      I: Empty,
+      I: DeleteSubdomainZoneRequest,
       O: Empty,
       kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.Idempotent,
     },
     /**
      * @generated from rpc io.defang.v1.FabricController.GetDelegateSubdomainZone
      */
     getDelegateSubdomainZone: {
       name: "GetDelegateSubdomainZone",
-      I: Empty,
+      I: GetDelegateSubdomainZoneRequest,
       O: DelegateSubdomainZoneResponse,
       kind: MethodKind.Unary,
       idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.SetOptions
+     */
+    setOptions: {
+      name: "SetOptions",
+      I: SetOptionsRequest,
+      O: Empty,
+      kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.Idempotent,
     },
     /**
      * @generated from rpc io.defang.v1.FabricController.WhoAmI
@@ -373,6 +404,25 @@ export const FabricController = {
       O: Empty,
       kind: MethodKind.Unary,
       idempotency: MethodIdempotency.Idempotent,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.CanIUse
+     */
+    canIUse: {
+      name: "CanIUse",
+      I: CanIUseRequest,
+      O: CanIUseResponse,
+      kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.NoSideEffects,
+    },
+    /**
+     * @generated from rpc io.defang.v1.FabricController.Estimate
+     */
+    estimate: {
+      name: "Estimate",
+      I: EstimateRequest,
+      O: EstimateResponse,
+      kind: MethodKind.Unary,
     },
   }
 };

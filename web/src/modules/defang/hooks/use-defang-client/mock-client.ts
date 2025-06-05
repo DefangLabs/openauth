@@ -21,7 +21,7 @@ type Client = ReturnType<typeof createCallbackClient<typeof FabricController>>;
 export const mockClient: Partial<Client> = {
   whoAmI(request, callback, options) {
     const whoamiResponse = new WhoAmIResponse();
-    whoamiResponse.account = "mock-account";
+    whoamiResponse.providerAccountId = "mock-account";
     whoamiResponse.userId = "mock-user-id";
     whoamiResponse.region = "mock-region";
     whoamiResponse.tenant = "mock-tenant";
