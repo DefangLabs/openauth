@@ -11,6 +11,7 @@ import {
   Forum,
   GitHub,
   Layers,
+  Publish,
   OpenInNew,
   TipsAndUpdates,
 } from "@mui/icons-material";
@@ -160,7 +161,13 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               Playground Projects
             </NavButton>
             <NavButton
-              href="/sample"
+              href="/deployments"
+              iconLeft={<Publish sx={{ mr: 1 }} fontSize="small" />}
+            >
+              Deployments
+            </NavButton>
+            <NavButton
+              href="/samples"
               iconLeft={<TipsAndUpdates sx={{ mr: 1 }} fontSize="small" />}
             >
               Samples

@@ -3,13 +3,15 @@ import { Empty, Timestamp } from "@bufbuild/protobuf";
 import { FabricController } from "../../generated/fabric_connect";
 import {
   GetServicesResponse,
+  ListDeploymentsResponse,
   LogEntry,
+  Provider,
+  Service,
   ServiceInfo,
   ServiceState,
   SubscriptionTier,
   TailResponse,
   WhoAmIResponse,
-  Service,
   Protocol,
   Mode,
   Port,
@@ -71,8 +73,44 @@ export const mockClient: Partial<Client> = {
     callback(undefined, getServicesResponse);
     return () => {};
   },
+
   signEULA(request, callback, options) {
     callback(undefined, new Empty());
     return () => {};
   },
+
+  listDeployments(request, callback, options) {
+    const response = new ListDeploymentsResponse({
+      deployments: createMockDeployments(10),
+    });
+
+    callback(undefined, response);
+    return () => {};
+  },
 };
+
+function getRandomProvider(): Provider {
+  const providers = [
+    Provider.DEFANG,
+    Provider.AWS,
+    Provider.DIGITALOCEAN,
+    Provider.GCP,
+  ];
+  const index = Math.floor(Math.random() * providers.length);
+  return providers[index];
+}
+
+function createMockDeployments(count: number) {
+  return Array.from({ length: count }, (_, i) => {
+    const provider = getRandomProvider();
+    return {
+      id: `mock-deployment-id${i + 1}`,
+      project: `mock-project${i + 1}`,
+      provider,
+      providerString: `mock-provider-str${i + 1}-${provider}`,
+      providerAccountId: `mock-account-id${i + 1}`,
+      timestamp: Timestamp.now(),
+      region: "mock-region",
+    };
+  });
+}

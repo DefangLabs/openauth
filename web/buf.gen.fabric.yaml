@@ -5,3 +5,6 @@ plugins:
   - local: protoc-gen-es
     out: src/modules/defang/generated
     opt: target=js+dts,import_extension=.js
+  - local: protoc-gen-connect-es
+    out: src/modules/defang/generated
+    opt: target=js+dts,import_extension=.js
