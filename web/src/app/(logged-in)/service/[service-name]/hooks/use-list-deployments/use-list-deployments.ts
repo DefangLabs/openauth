@@ -28,6 +28,6 @@ export function useListDeployments(opts: UseListDeploymentsOpts) {
 
   return useSWR<ListDeploymentsResponse>(
     !!client ? "defang/listdeployments" : null,
-     fetcher,
+    fetcher,
   );
 }

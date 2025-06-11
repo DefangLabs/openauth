@@ -50,7 +50,7 @@ function DeploymentsPageInner() {
             alignItems="center"
             justifyContent="space-between"
             width={"100%"}
-            >
+          >
             <DataGrid
               style={{ width: "100%", flexGrow: 1 }}
               autoHeight
@@ -60,37 +60,37 @@ function DeploymentsPageInner() {
                   flex: 1,
                   field: "timestamp",
                   headerName: "Timestamp",
-                  minWidth: 150
+                  minWidth: 150,
                 },
                 {
                   flex: 1,
                   field: "id",
                   headerName: "Id",
-                  minWidth: 200
+                  minWidth: 200,
                 },
                 {
                   flex: 1,
                   field: "project",
                   headerName: "Project",
-                  minWidth: 200
+                  minWidth: 200,
                 },
                 {
                   flex: 1,
                   field: "provider",
                   headerName: "Provider",
-                  minWidth: 150
+                  minWidth: 150,
                 },
                 {
                   flex: 1,
                   field: "providerAccountId",
                   headerName: "Account",
-                  minWidth: 150
+                  minWidth: 150,
                 },
                 {
                   flex: 1,
                   field: "region",
                   headerName: "Region",
-                  minWidth: 150
+                  minWidth: 150,
                 },
               ]}
               rows={rows || []}
