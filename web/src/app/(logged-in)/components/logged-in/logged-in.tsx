@@ -167,7 +167,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
               Deployments
             </NavButton>
             <NavButton
-              href="/samples"
+              href="/sample"
               iconLeft={<TipsAndUpdates sx={{ mr: 1 }} fontSize="small" />}
             >
               Samples
