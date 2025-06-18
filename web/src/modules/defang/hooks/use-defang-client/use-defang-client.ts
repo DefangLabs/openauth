@@ -3,7 +3,7 @@ import { createCallbackClient } from "@bufbuild/connect";
 import { createGrpcWebTransport } from "@bufbuild/connect-web";
 import { useMemo, useRef, useEffect } from "react";
 import { FabricController } from "../../generated/fabric_connect";
-import { mockClient } from "./mock-client";
+import { createMockClient } from "./mock-client";
 
 type Client =
   | ReturnType<typeof createCallbackClient<typeof FabricController>>
@@ -21,7 +21,7 @@ export function useDefangClient() {
 
   const memoClient = useMemo(() => {
     if (process.env.NODE_ENV === "development") {
-      return mockClient as Client;
+      return createMockClient() as Client;
     }
 
     if (clientRef.current) {

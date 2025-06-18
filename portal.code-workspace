@@ -83,13 +83,6 @@
 				},
 				"problemMatcher": []
 			},
-			// install rest auth dependencies
-			{
-				"label": "auth: install",
-				"type": "shell",
-				"command": "docker compose -f ./compose.dev.yaml --env-file .env.dev run --rm auth i",
-				"problemMatcher": []
-			},
 			// install rest api dependencies
 			{
 				"label": "api: install",
@@ -108,7 +101,6 @@
 				"dependsOrder": "parallel",
 				"dependsOn": [
 					"api: install",
-					"auth: install"
 				]
 			},
 			{

@@ -15,7 +15,7 @@ services:
       - HASURA_ENDPOINT=http://hasura:8080
     volumes:
       - ./auth:/app
-    command: ["run", "dev"]
+    entrypoint: ["/app/scripts/dev.sh"]
 
   hasura-postgres:
     extends:
