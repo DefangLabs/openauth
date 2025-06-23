@@ -18,6 +18,10 @@ jobs:
     if: github.event_name == 'pull_request'
     environment: dev
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: deploy-dev
+
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -31,7 +35,7 @@ jobs:
         with:
           # Just so we can get things running in dev
           # Dev mode has downtime, which breaks hasura because it starts faster than OpenAuth
-          # and tries to load jwks, which aren't available yet. Staging mode fixes this because 
+          # and tries to load jwks, which aren't available yet. Staging mode fixes this because
           # zero downtime keeps the openauth server up while the new version is being deployed.
           mode: staging
           compose_file: compose.cloud.dev.yaml
@@ -53,11 +57,14 @@ jobs:
           stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
           stripe_default_price_id: ${{ secrets.STRIPE_DEFAULT_PRICE_ID }}
           next_public_price_ids: ${{ vars.NEXT_PUBLIC_PRICE_IDS }}
-  
+
   deploy-staging:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')
     environment: staging
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: deploy-staging
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -90,11 +97,13 @@ jobs:
           stripe_default_price_id: ${{ secrets.STRIPE_DEFAULT_PRICE_ID }}
           next_public_price_ids: ${{ vars.NEXT_PUBLIC_PRICE_IDS }}
 
-  
   deploy-production:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     environment: production
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: deploy-production
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -109,7 +118,7 @@ jobs:
           mode: production
           compose_file: compose.production.yaml
           # TODO: Update the AWS account ID to the corp account when ready
-          aws_account_id: 407839483216 
+          aws_account_id: 407839483216
           aws_region: us-west-2
           domain_name: ${{ vars.DOMAIN_NAME }}
           github_client_id: ${{ secrets.AUTH_GITHUB_CLIENT_ID }}
