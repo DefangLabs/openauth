@@ -29,10 +29,7 @@ export async function getAccessTokenAction(
   };
 }
 
-export async function loginAction(
-  provider?: string,
-  redirectPath?: string | null,
-) {
+export async function loginAction(redirectPath?: string | null) {
   // Handle redirectPath first - store it in a cookie if provided
   if (redirectPath) {
     const cookieStore = await cookies();
@@ -69,9 +66,7 @@ export async function loginAction(
   const callbackUrl = `${protocol}://${host}/auth/callback`;
 
   // Authorize with the provider
-  const { url } = await authClient.authorize(callbackUrl, "code", {
-    provider,
-  });
+  const { url } = await authClient.authorize(callbackUrl, "code");
   redirect(url);
 }
 

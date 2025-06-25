@@ -3,8 +3,6 @@
 import { AnalyticsProvider } from "@/modules/analytics/providers/analytics-provider/analytics-provider";
 import { ApolloProvider } from "@/modules/apollo/providers/apollo-provider/apollo-provider";
 import { ThemeProvider } from "@/modules/mui/providers/theme-provider/theme-provider";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 console.log(
   String.raw`

@@ -4,29 +4,19 @@ import { upsertAccount } from "../accounts/upsert-account"
 import "../analytics/analytics"
 import { analytics } from "../analytics/analytics"
 import { getAllowedOrigins } from "../lib/get-allowed-origins"
-import { getCodeData } from "../providers/code"
 import { getGithubData } from "../providers/github"
 import { ProviderData, providerDataSchema } from "../providers/provider-data-schema"
 import { providers } from "../providers/providers"
 import { subjects } from "../subjects"
 import { upsertAccountUser } from "../users/upsert-account-user"
 import { storage } from "./storage"
+import { Select } from "./select"
 
 export const issuerRouter = issuer({
+  select: Select(),
   subjects,
   storage,
   providers,
-  theme: {
-    primary: '#4491fd',
-    logo: 'https://defang.io/icon.png',
-    css: 'https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap',
-    font: {
-      family: '"Exo 2", sans-serif',
-    },
-    title: 'Defang',
-    favicon: 'https://defang.io/icon.png',
-    radius: 'lg',
-  },
   ttl: {
     access: 60 * 60 * 24, // Default to 24 hours
     refresh: 60 * 60 * 24 * 30, // Default to 30 days
@@ -35,11 +25,11 @@ export const issuerRouter = issuer({
     let providerData: ProviderData | undefined;
     let clientID: string | undefined;
 
-    if (value.provider === 'code') {
-      providerData = getCodeData(value.claims.email)
-      clientID = value.claims.client_id
-    }
-    else if (value.provider === 'github') {
+    // if (value.provider === 'code') {
+    //   providerData = getCodeData(value.claims.email)
+    //   clientID = value.claims.client_id
+    // }
+    if (value.provider === 'github') {
       providerData = await getGithubData(value.tokenset.access)
       clientID = value.clientID
     }

@@ -3,7 +3,6 @@
 import { logoutAction } from "@/modules/auth/actions/actions";
 import { useSignTos } from "@/modules/defang/hooks/use-sign-tos/use-sign-tos";
 import { COLORS, GRADIENTS } from "@/modules/mui/constants";
-import { useName } from "@/modules/profiles/hooks/use-name/use-name";
 import {
   Article,
   ChevronRight,
