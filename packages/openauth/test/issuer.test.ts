@@ -108,6 +108,7 @@ describe("code flow", () => {
     expect(tokens).toStrictEqual({
       access: expectNonEmptyString,
       refresh: expectNonEmptyString,
+      expiresIn: 60,
     })
     const verified = await client.verify(subjects, tokens.access)
     if (verified.err) throw verified.err
@@ -234,6 +235,7 @@ describe("refresh token", () => {
     expect(refreshed).toStrictEqual({
       access_token: expectNonEmptyString,
       refresh_token: expectNonEmptyString,
+      expires_in: expect.any(Number),
     })
     expect(refreshed.access_token).not.toEqual(tokens.access)
     expect(refreshed.refresh_token).not.toEqual(tokens.refresh)
@@ -259,6 +261,7 @@ describe("refresh token", () => {
     expect(refreshed).toStrictEqual({
       access_token: expectNonEmptyString,
       refresh_token: expectNonEmptyString,
+      expires_in: expect.any(Number),
     })
 
     expect(refreshed.access_token).not.toEqual(tokens.access)
@@ -373,5 +376,56 @@ describe("refresh token", () => {
     expect(response.status).toBe(200)
     const reused = await response.json()
     expect(reused.scope).toBe("foo")
+  })
+})
+
+describe("user info", () => {
+  let tokens: { access: string; refresh: string }
+  let client: ReturnType<typeof createClient>
+
+  const generateTokens = async (issuer: typeof auth) => {
+    const { challenge, url } = await client.authorize(
+      "https://client.example.com/callback",
+      "code",
+      { pkce: true },
+    )
+    let response = await issuer.request(url)
+    response = await issuer.request(response.headers.get("location")!, {
+      headers: {
+        cookie: response.headers.get("set-cookie")!,
+      },
+    })
+    const location = new URL(response.headers.get("location")!)
+    const code = location.searchParams.get("code")
+    const exchanged = await client.exchange(
+      code!,
+      "https://client.example.com/callback",
+      challenge.verifier,
+    )
+    if (exchanged.err) throw exchanged.err
+    return exchanged.tokens
+  }
+
+  const createClientAndTokens = async (issuer: typeof auth) => {
+    client = createClient({
+      issuer: "https://auth.example.com",
+      clientID: "123",
+      fetch: (a, b) => Promise.resolve(issuer.request(a, b)),
+    })
+    tokens = await generateTokens(issuer)
+  }
+
+  beforeEach(async () => {
+    await createClientAndTokens(auth)
+  })
+
+  test("success", async () => {
+    const response = await auth.request("https://auth.example.com/userinfo", {
+      headers: { Authorization: `Bearer ${tokens.access}` },
+    })
+
+    const userinfo = await response.json()
+
+    expect(userinfo).toStrictEqual({ userID: "123" })
   })
 })

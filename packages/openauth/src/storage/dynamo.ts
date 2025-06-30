@@ -66,7 +66,6 @@ export interface DynamoStorageOptions {
  * @param options - The config for the adapter.
  */
 export function DynamoStorage(options: DynamoStorageOptions): StorageAdapter {
-  const c = client()
   const pk = options.pk || "pk"
   const sk = options.sk || "sk"
   const ttl = options.ttl || "expiry"
@@ -86,10 +85,10 @@ export function DynamoStorage(options: DynamoStorageOptions): StorageAdapter {
   }
 
   async function dynamo(action: string, payload: any) {
-    const client = await c
+    const c = await client()
     const endpoint =
-      options.endpoint || `https://dynamodb.${client.region}.amazonaws.com`
-    const response = await client.fetch(endpoint, {
+      options.endpoint || `https://dynamodb.${c.region}.amazonaws.com`
+    const response = await c.fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-amz-json-1.0",

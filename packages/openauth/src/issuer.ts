@@ -130,6 +130,7 @@ import { deleteCookie, getCookie, setCookie } from "hono/cookie"
 import { Hono } from "hono/tiny"
 import { Provider, ProviderOptions } from "./provider/provider.js"
 import { SubjectPayload, SubjectSchema } from "./subject.js"
+import type { v1 } from "@standard-schema/spec"
 
 /**
  * Sets the subject payload in the JWT token and returns the response.
@@ -185,23 +186,24 @@ export type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {}
 
-import { cors } from "hono/cors"
-import { compactDecrypt, CompactEncrypt, SignJWT } from "jose"
 import {
   MissingParameterError,
   OauthError,
   UnauthorizedClientError,
   UnknownStateError,
 } from "./error.js"
+import { compactDecrypt, CompactEncrypt, jwtVerify, SignJWT } from "jose"
+import { Storage, StorageAdapter } from "./storage/storage.js"
 import { encryptionKeys, legacySigningKeys, signingKeys } from "./keys.js"
 import { validatePKCE } from "./pkce.js"
 import { parseScopes, validateScopes } from "./scopes.js"
 import { DynamoStorage } from "./storage/dynamo.js"
 import { MemoryStorage } from "./storage/memory.js"
-import { Storage, StorageAdapter } from "./storage/storage.js"
 import { Select } from "./ui/select.js"
 import { setTheme, Theme } from "./ui/theme.js"
-import { getRelativeUrl, isDomainMatch } from "./util.js"
+import { getRelativeUrl, isDomainMatch, lazy } from "./util.js"
+import { cors } from "hono/cors"
+import { logger } from "hono/logger"
 
 /** @internal */
 export const aws = awsHandle
@@ -481,21 +483,23 @@ export function issuer<
     setTheme(input.theme)
   }
 
-  const select = input.select ?? Select()
-  const allow =
-    input.allow ??
-    (async (input, req) => {
-      const redir = new URL(input.redirectURI).hostname
-      if (redir === "localhost" || redir === "127.0.0.1") {
-        return true
-      }
-      const forwarded = req.headers.get("x-forwarded-host")
-      const host = forwarded
-        ? new URL(`https://${forwarded}`).hostname
-        : new URL(req.url).hostname
+  const select = lazy(() => input.select ?? Select())
+  const allow = lazy(
+    () =>
+      input.allow ??
+      (async (input: any, req: Request) => {
+        const redir = new URL(input.redirectURI).hostname
+        if (redir === "localhost" || redir === "127.0.0.1") {
+          return true
+        }
+        const forwarded = req.headers.get("x-forwarded-host")
+        const host = forwarded
+          ? new URL(`https://${forwarded}`).hostname
+          : new URL(req.url).hostname
 
-      return isDomainMatch(redir, host)
-    })
+        return isDomainMatch(redir, host)
+      }),
+  )
 
   let storage = input.storage
   if (process.env.OPENAUTH_STORAGE) {
@@ -511,13 +515,14 @@ export function issuer<
     throw new Error(
       "Store is not configured. Either set the `storage` option or set `OPENAUTH_STORAGE` environment variable.",
     )
-  const allSigning = Promise.all([
-    signingKeys(storage),
-    legacySigningKeys(storage),
-  ]).then(([a, b]) => [...a, ...b])
-  const allEncryption = encryptionKeys(storage)
-  const signingKey = allSigning.then((all) => all[0])
-  const encryptionKey = allEncryption.then((all) => all[0])
+  const allSigning = lazy(() =>
+    Promise.all([signingKeys(storage), legacySigningKeys(storage)]).then(
+      ([a, b]) => [...a, ...b],
+    ),
+  )
+  const allEncryption = lazy(() => encryptionKeys(storage))
+  const signingKey = lazy(() => allSigning().then((all) => all[0]))
+  const encryptionKey = lazy(() => allEncryption().then((all) => all[0]))
 
   const auth: Omit<ProviderOptions<any>, "name"> = {
     async success(ctx: Context, properties: any, successOpts) {
@@ -641,7 +646,7 @@ export function issuer<
       new TextEncoder().encode(JSON.stringify(value)),
     )
       .setProtectedHeader({ alg: "RSA-OAEP-512", enc: "A256GCM" })
-      .encrypt(await encryptionKey.then((k) => k.public))
+      .encrypt(await encryptionKey().then((k) => k.public))
   }
 
   async function resolveSubject(type: string, properties: any) {
@@ -695,6 +700,7 @@ export function issuer<
         value.ttl.refresh,
       )
     }
+    const accessTimeUsed = Math.floor((value.timeUsed ?? Date.now()) / 1000)
     return {
       access: await new SignJWT({
         mode: "access",
@@ -705,17 +711,18 @@ export function issuer<
         sub: value.subject,
         scopes: value.scopes,
       })
-        .setExpirationTime(
-          Math.floor((value.timeUsed ?? Date.now()) / 1000 + value.ttl.access),
-        )
+        .setExpirationTime(Math.floor(accessTimeUsed + value.ttl.access))
         .setProtectedHeader(
-          await signingKey.then((k) => ({
+          await signingKey().then((k) => ({
             alg: k.alg,
             kid: k.id,
             typ: "JWT",
           })),
         )
-        .sign(await signingKey.then((item) => item.private)),
+        .sign(await signingKey().then((item) => item.private)),
+      expiresIn: Math.floor(
+        accessTimeUsed + value.ttl.access - Date.now() / 1000,
+      ),
       refresh: [value.subject, refreshToken].join(":"),
     }
   }
@@ -725,7 +732,7 @@ export function issuer<
       new TextDecoder().decode(
         await compactDecrypt(
           value,
-          await encryptionKey.then((v) => v.private),
+          await encryptionKey().then((v) => v.private),
         ).then((value) => value.plaintext),
       ),
     )
@@ -739,7 +746,7 @@ export function issuer<
     Variables: {
       authorization: AuthorizationState
     }
-  }>()
+  }>().use(logger())
 
   for (const [name, value] of Object.entries(input.providers)) {
     const route = new Hono<any>()
@@ -763,10 +770,11 @@ export function issuer<
       credentials: false,
     }),
     async (c) => {
-      const all = await allSigning
+      const all = await allSigning()
       return c.json({
         keys: all.map((item) => ({
           ...item.jwk,
+          alg: item.alg,
           exp: item.expired
             ? Math.floor(item.expired.getTime() / 1000)
             : undefined,
@@ -792,6 +800,7 @@ export function issuer<
         jwks_uri: `${iss}/.well-known/jwks.json`,
         response_types_supported: ["code", "token"],
         scopes_supported: input.scopes_supported,
+        userinfo_endpoint: `${iss}/userinfo`,
       })
     },
   )
@@ -842,7 +851,6 @@ export function issuer<
             400,
           )
         }
-        await Storage.remove(storage, key)
         if (payload.redirectURI !== form.get("redirect_uri")) {
           return c.json(
             {
@@ -892,8 +900,10 @@ export function issuer<
         }
         payload.scopes = validateScopes(scope, payload.scopes)
         const tokens = await generateTokens(c, payload)
+        await Storage.remove(storage, key)
         return c.json({
           access_token: tokens.access,
+          expires_in: tokens.expiresIn,
           refresh_token: tokens.refresh,
           scope: payload.scopes?.join(" "),
         })
@@ -966,6 +976,7 @@ export function issuer<
           access_token: tokens.access,
           refresh_token: tokens.refresh,
           scope: payload.scopes?.join(" "),
+          expires_in: tokens.expiresIn,
         })
       }
 
@@ -1069,7 +1080,7 @@ export function issuer<
     }
 
     if (
-      !(await allow(
+      !(await allow()(
         {
           clientID: client_id,
           redirectURI: redirect_uri,
@@ -1085,7 +1096,7 @@ export function issuer<
     if (providers.length === 1) return c.redirect(`/${providers[0]}/authorize`)
     return auth.forward(
       c,
-      await select(
+      await select()(
         Object.fromEntries(
           Object.entries(input.providers).map(([key, value]) => [
             key,
@@ -1095,6 +1106,63 @@ export function issuer<
         c.req.raw,
       ),
     )
+  })
+
+  app.get("/userinfo", async (c) => {
+    const header = c.req.header("Authorization")
+
+    if (!header) {
+      return c.json(
+        {
+          error: "invalid_request",
+          error_description: "Missing Authorization header",
+        },
+        400,
+      )
+    }
+
+    const [type, token] = header.split(" ")
+
+    if (type !== "Bearer") {
+      return c.json(
+        {
+          error: "invalid_request",
+          error_description: "Missing or invalid Authorization header",
+        },
+        400,
+      )
+    }
+
+    if (!token) {
+      return c.json(
+        {
+          error: "invalid_request",
+          error_description: "Missing token",
+        },
+        400,
+      )
+    }
+
+    const result = await jwtVerify<{
+      mode: "access"
+      type: keyof SubjectSchema
+      properties: v1.InferInput<SubjectSchema[keyof SubjectSchema]>
+    }>(token, () => signingKey().then((item) => item.public), {
+      issuer: issuer(c),
+    })
+
+    const validated = await input.subjects[result.payload.type][
+      "~standard"
+    ].validate(result.payload.properties)
+
+    if (!validated.issues && result.payload.mode === "access") {
+      return c.json(validated.value as SubjectSchema)
+    }
+
+    return c.json({
+      error: "invalid_token",
+      error_description: "Invalid token",
+    })
   })
 
   app.onError(async (err, c) => {

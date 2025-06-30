@@ -9,7 +9,7 @@
  * export default issuer({
  *   providers: {
  *     google: GoogleProvider({
- *       clientId: "1234567890",
+ *       clientID: "1234567890",
  *       clientSecret: "0987654321"
  *     })
  *   }
@@ -24,7 +24,7 @@
  * export default issuer({
  *   providers: {
  *     google: GoogleOidcProvider({
- *       clientId: "1234567890"
+ *       clientID: "1234567890"
  *     })
  *   }
  * })
@@ -46,7 +46,7 @@ export interface GoogleOidcConfig extends OidcWrappedConfig {}
  * @example
  * ```ts
  * GoogleProvider({
- *   clientId: "1234567890",
+ *   clientID: "1234567890",
  *   clientSecret: "0987654321"
  * })
  * ```
@@ -58,6 +58,7 @@ export function GoogleProvider(config: GoogleConfig) {
     endpoint: {
       authorization: "https://accounts.google.com/o/oauth2/v2/auth",
       token: "https://oauth2.googleapis.com/token",
+      jwks: "https://www.googleapis.com/oauth2/v3/certs",
     },
   })
 }
@@ -71,7 +72,7 @@ export function GoogleProvider(config: GoogleConfig) {
  * @example
  * ```ts
  * GoogleOidcProvider({
- *   clientId: "1234567890"
+ *   clientID: "1234567890"
  * })
  * ```
  */

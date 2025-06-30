@@ -1,14 +1,11 @@
 ---
 title: DiscordProvider
-editUrl: https://github.com/openauthjs/openauth/blob/master/packages/openauth/src/provider/discord.ts
+editUrl: https://github.com/toolbeam/openauth/blob/master/packages/openauth/src/provider/discord.ts
 description: Reference doc for the `DiscordProvider`.
 ---
 
-import Segment from '../../../../components/tsdoc/Segment.astro';
-import Section from '../../../../components/tsdoc/Section.astro';
-import NestedTitle from '../../../../components/tsdoc/NestedTitle.astro';
-import InlineSection from '../../../../components/tsdoc/InlineSection.astro';
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Segment, Section, NestedTitle, InlineSection } from 'toolbeam-docs-theme/components'
+import { Tabs, TabItem } from '@astrojs/starlight/components'
 
 <div class="tsdoc">
 <Section type="about">
@@ -20,7 +17,7 @@ import { DiscordProvider } from "@openauthjs/openauth/provider/discord"
 export default issuer({
   providers: {
     discord: DiscordProvider({
-      clientId: "1234567890",
+      clientID: "1234567890",
       clientSecret: "0987654321"
     })
   }
@@ -47,7 +44,7 @@ The config for the provider.
 Create a Discord OAuth2 provider.
 ```ts
 DiscordProvider({
-  clientId: "1234567890",
+  clientID: "1234567890",
   clientSecret: "0987654321"
 })
 ```
@@ -57,6 +54,7 @@ DiscordProvider({
 <Section type="parameters">
 - <p>[<code class="key">clientID</code>](#discordconfig.clientid) <code class="primitive">string</code></p>
 - <p>[<code class="key">clientSecret</code>](#discordconfig.clientsecret) <code class="primitive">string</code></p>
+- <p>[<code class="key">pkce?</code>](#discordconfig.pkce) <code class="primitive">boolean</code></p>
 - <p>[<code class="key">query?</code>](#discordconfig.query) <code class="primitive">Record</code><code class="symbol">&lt;</code><code class="primitive">string</code>, <code class="primitive">string</code><code class="symbol">&gt;</code></p>
 - <p>[<code class="key">scopes</code>](#discordconfig.scopes) <code class="primitive">string</code><code class="symbol">[]</code></p>
 </Section>
@@ -92,6 +90,20 @@ This is a private key that's used to authenticate your app. It should be kept se
   clientSecret: "0987654321"
 }
 ```
+</Segment>
+<NestedTitle id="discordconfig.pkce" Tag="h4" parent="DiscordConfig.">pkce?</NestedTitle>
+<Segment>
+<Section type="parameters">
+<InlineSection>
+**Type** <code class="primitive">boolean</code>
+</InlineSection>
+</Section>
+
+<InlineSection>
+**Default** false
+</InlineSection>
+Whether to use PKCE (Proof Key for Code Exchange) for the authorization code flow.
+Some providers like x.com require this.
 </Segment>
 <NestedTitle id="discordconfig.query" Tag="h4" parent="DiscordConfig.">query?</NestedTitle>
 <Segment>

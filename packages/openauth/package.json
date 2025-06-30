@@ -1,6 +1,6 @@
 {
   "name": "@openauthjs/openauth",
-  "version": "0.3.7",
+  "version": "0.4.3",
   "type": "module",
   "scripts": {
     "build": "bun run script/build.ts",
@@ -15,7 +15,7 @@
     "hono": "4.6.9",
     "ioredis": "5.4.1",
     "typescript": "5.6.3",
-    "valibot": "1.0.0-beta.5"
+    "valibot": "1.0.0-beta.15"
   },
   "exports": {
     ".": {
@@ -32,8 +32,8 @@
     }
   },
   "peerDependencies": {
-    "hono": "^4.0.0",
-    "arctic": "^2.2.2"
+    "arctic": "^2.2.2",
+    "hono": "^4.0.0"
   },
   "dependencies": {
     "@standard-schema/spec": "1.0.0-beta.3",

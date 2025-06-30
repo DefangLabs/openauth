@@ -1,5 +1,48 @@
 # @openauthjs/openauth
 
+## 0.4.3
+
+### Patch Changes
+
+- ec8ca65: include expires_in for refresh response
+
+## 0.4.2
+
+### Patch Changes
+
+- a03e510: fix for fetch timeout, wrap everything in lazy
+
+## 0.4.1
+
+### Patch Changes
+
+- 33959c3: better logging on oidc wellknown errors
+
+## 0.4.0
+
+### Minor Changes
+
+- 4e38fa6: feat: Return expires_in from /token endpoint
+- fcaafcf: Return signing alg from jwks.json endpoint
+
+### Patch Changes
+
+- 9e3c2ac: Call password validation callback on password reset
+- dc40b02: Fix providers client id case from `clientId` to `clientID`
+
+## 0.3.9
+
+### Patch Changes
+
+- 40f6033: enable logger by default
+- 3ce40fd: log dynamo error cause
+
+## 0.3.8
+
+### Patch Changes
+
+- c75005b: retry failed dynamo calls
+
 ## 0.3.7
 
 ### Patch Changes

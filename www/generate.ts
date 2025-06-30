@@ -311,10 +311,6 @@ function renderHeader(input: {
   editUrl: string | boolean
   description: string
 }) {
-  const relativePath = path.relative(
-    path.dirname(path.join(OUTPUT_DIR, `${input.moduleName}.mdx`)),
-    "src/components/tsdoc",
-  )
   return [
     `---`,
     `title: ${input.title}`,
@@ -322,11 +318,8 @@ function renderHeader(input: {
     `description: ${input.description}`,
     `---`,
     "",
-    `import Segment from '${relativePath}/Segment.astro';`,
-    `import Section from '${relativePath}/Section.astro';`,
-    `import NestedTitle from '${relativePath}/NestedTitle.astro';`,
-    `import InlineSection from '${relativePath}/InlineSection.astro';`,
-    `import { Tabs, TabItem } from '@astrojs/starlight/components';`,
+    "import { Segment, Section, NestedTitle, InlineSection } from 'toolbeam-docs-theme/components'",
+    "import { Tabs, TabItem } from '@astrojs/starlight/components'",
     "",
   ]
 }
