@@ -782,6 +782,7 @@ export function issuer<
         token_endpoint: `${iss}/token`,
         jwks_uri: `${iss}/.well-known/jwks.json`,
         response_types_supported: ["code", "token"],
+        userinfo_endpoint: `${iss}/userinfo`,
       })
     },
   )
