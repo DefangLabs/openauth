@@ -74,7 +74,6 @@ export function Select(props?: SelectProps) {
               <a
                 href={`/${key}/authorize`}
                 data-component="button"
-                data-color="ghost"
               >
                 {icon && <i data-slot="icon">{icon}</i>}
                 Continue with {match?.display || DISPLAY[type] || type}
