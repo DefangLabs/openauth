@@ -9,6 +9,7 @@ import { ProviderData, providerDataSchema } from "../providers/provider-data-sch
 import { providers } from "../providers/providers"
 import { subjects } from "../subjects"
 import { upsertAccountUser } from "../users/upsert-account-user"
+import { upsertUserTenant } from "../tenants/upsert-user-tenant"
 import { storage } from "./storage"
 import { Select } from "./select"
 
@@ -38,8 +39,9 @@ export const issuerRouter = issuer({
     const validProviderData = v.parse(providerDataSchema, providerData)
 
     const { account } = await upsertAccount(validProviderData, value.provider)
-
-    const { user, tenant } = await upsertAccountUser(account);
+    const { user } = await upsertAccountUser(account);
+    const { tenants } = await upsertUserTenant(user);
+    const tenant = tenants[0]?.name ?? "";
 
     analytics.track({
       userId: user.id,
@@ -55,7 +57,7 @@ export const issuerRouter = issuer({
       "user",
       {
         id: user.id,
-        tenant: tenant ?? "",
+        tenant: tenant,
         hasura: {
           "x-hasura-allowed-roles": ["user"],
           "x-hasura-default-role": "user",

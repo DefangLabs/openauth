@@ -322,6 +322,10 @@ input AccountsUpdates {
   where: AccountsBoolExp!
 }
 
+input CreateStripeCheckoutSessionInput {
+  priceId: String!
+}
+
 type CreateStripePortalSessionOutput {
   url: String!
 }
@@ -447,198 +451,715 @@ input StringComparisonExp {
 }
 
 """
-columns and relationships of "stripeEvents"
+columns and relationships of "tenantMembers"
 """
-type StripeEvents {
-  data(
-    """JSON select path"""
-    path: String
-  ): jsonb!
-  id: String!
+type TenantMembers {
+  createdAt: timestamptz!
+  role: String
+  """An object relationship"""
+  tenant: Tenants!
+  tenantId: uuid!
+  """An object relationship"""
+  tenantRole: TenantRoles
+  updatedAt: timestamptz!
+  """An object relationship"""
+  user: Users!
+  userId: uuid!
 }
 
 """
-aggregated selection of "stripeEvents"
+aggregated selection of "tenantMembers"
 """
-type StripeEventsAggregate {
-  aggregate: StripeEventsAggregateFields
-  nodes: [StripeEvents!]!
+type TenantMembersAggregate {
+  aggregate: TenantMembersAggregateFields
+  nodes: [TenantMembers!]!
+}
+
+input TenantMembersAggregateBoolExp {
+  count: tenantMembersAggregateBoolExpCount
 }
 
 """
-aggregate fields of "stripeEvents"
+aggregate fields of "tenantMembers"
 """
-type StripeEventsAggregateFields {
-  count(columns: [StripeEventsSelectColumn!], distinct: Boolean): Int!
-  max: StripeEventsMaxFields
-  min: StripeEventsMinFields
-}
-
-"""append existing jsonb value of filtered columns with new jsonb value"""
-input StripeEventsAppendInput {
-  data: jsonb
+type TenantMembersAggregateFields {
+  count(columns: [TenantMembersSelectColumn!], distinct: Boolean): Int!
+  max: TenantMembersMaxFields
+  min: TenantMembersMinFields
 }
 
 """
-Boolean expression to filter rows from the table "stripeEvents". All fields are combined with a logical 'AND'.
+order by aggregate values of table "tenantMembers"
 """
-input StripeEventsBoolExp {
-  _and: [StripeEventsBoolExp!]
-  _not: StripeEventsBoolExp
-  _or: [StripeEventsBoolExp!]
-  data: JsonbComparisonExp
-  id: StringComparisonExp
+input TenantMembersAggregateOrderBy {
+  count: OrderBy
+  max: TenantMembersMaxOrderBy
+  min: TenantMembersMinOrderBy
 }
 
 """
-unique or primary key constraints on table "stripeEvents"
+input type for inserting array relation for remote table "tenantMembers"
 """
-enum StripeEventsConstraint {
+input TenantMembersArrRelInsertInput {
+  data: [TenantMembersInsertInput!]!
+  """upsert condition"""
+  onConflict: TenantMembersOnConflict
+}
+
+"""
+Boolean expression to filter rows from the table "tenantMembers". All fields are combined with a logical 'AND'.
+"""
+input TenantMembersBoolExp {
+  _and: [TenantMembersBoolExp!]
+  _not: TenantMembersBoolExp
+  _or: [TenantMembersBoolExp!]
+  createdAt: TimestamptzComparisonExp
+  role: StringComparisonExp
+  tenant: TenantsBoolExp
+  tenantId: UuidComparisonExp
+  tenantRole: TenantRolesBoolExp
+  updatedAt: TimestamptzComparisonExp
+  user: UsersBoolExp
+  userId: UuidComparisonExp
+}
+
+"""
+unique or primary key constraints on table "tenantMembers"
+"""
+enum TenantMembersConstraint {
   """
-  unique or primary key constraint on columns "id"
+  unique or primary key constraint on columns "tenantId", "userId"
   """
-  stripeEvents_pkey
+  tenantMembers_pkey
 }
 
 """
-delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+input type for inserting data into table "tenantMembers"
 """
-input StripeEventsDeleteAtPathInput {
-  data: [String!]
-}
-
-"""
-delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
-"""
-input StripeEventsDeleteElemInput {
-  data: Int
-}
-
-"""
-delete key/value pair or string element. key/value pairs are matched based on their key value
-"""
-input StripeEventsDeleteKeyInput {
-  data: String
-}
-
-"""
-input type for inserting data into table "stripeEvents"
-"""
-input StripeEventsInsertInput {
-  data: jsonb
-  id: String
+input TenantMembersInsertInput {
+  createdAt: timestamptz
+  role: String
+  tenant: TenantsObjRelInsertInput
+  tenantId: uuid
+  tenantRole: TenantRolesObjRelInsertInput
+  updatedAt: timestamptz
+  user: UsersObjRelInsertInput
+  userId: uuid
 }
 
 """aggregate max on columns"""
-type StripeEventsMaxFields {
-  id: String
+type TenantMembersMaxFields {
+  createdAt: timestamptz
+  role: String
+  tenantId: uuid
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+order by max() on columns of table "tenantMembers"
+"""
+input TenantMembersMaxOrderBy {
+  createdAt: OrderBy
+  role: OrderBy
+  tenantId: OrderBy
+  updatedAt: OrderBy
+  userId: OrderBy
 }
 
 """aggregate min on columns"""
-type StripeEventsMinFields {
-  id: String
+type TenantMembersMinFields {
+  createdAt: timestamptz
+  role: String
+  tenantId: uuid
+  updatedAt: timestamptz
+  userId: uuid
 }
 
 """
-response of any mutation on the table "stripeEvents"
+order by min() on columns of table "tenantMembers"
 """
-type StripeEventsMutationResponse {
+input TenantMembersMinOrderBy {
+  createdAt: OrderBy
+  role: OrderBy
+  tenantId: OrderBy
+  updatedAt: OrderBy
+  userId: OrderBy
+}
+
+"""
+response of any mutation on the table "tenantMembers"
+"""
+type TenantMembersMutationResponse {
   """number of rows affected by the mutation"""
   affectedRows: Int!
   """data from the rows affected by the mutation"""
-  returning: [StripeEvents!]!
+  returning: [TenantMembers!]!
 }
 
 """
-on_conflict condition type for table "stripeEvents"
+on_conflict condition type for table "tenantMembers"
 """
-input StripeEventsOnConflict {
-  constraint: StripeEventsConstraint!
-  updateColumns: [StripeEventsUpdateColumn!]! = []
-  where: StripeEventsBoolExp
+input TenantMembersOnConflict {
+  constraint: TenantMembersConstraint!
+  updateColumns: [TenantMembersUpdateColumn!]! = []
+  where: TenantMembersBoolExp
 }
 
-"""Ordering options when selecting data from "stripeEvents"."""
-input StripeEventsOrderBy {
-  data: OrderBy
-  id: OrderBy
+"""Ordering options when selecting data from "tenantMembers"."""
+input TenantMembersOrderBy {
+  createdAt: OrderBy
+  role: OrderBy
+  tenant: TenantsOrderBy
+  tenantId: OrderBy
+  tenantRole: TenantRolesOrderBy
+  updatedAt: OrderBy
+  user: UsersOrderBy
+  userId: OrderBy
 }
 
-"""primary key columns input for table: stripeEvents"""
-input StripeEventsPkColumnsInput {
-  id: String!
-}
-
-"""prepend existing jsonb value of filtered columns with new jsonb value"""
-input StripeEventsPrependInput {
-  data: jsonb
+"""primary key columns input for table: tenantMembers"""
+input TenantMembersPkColumnsInput {
+  tenantId: uuid!
+  userId: uuid!
 }
 
 """
-select columns of table "stripeEvents"
+select columns of table "tenantMembers"
 """
-enum StripeEventsSelectColumn {
+enum TenantMembersSelectColumn {
   """column name"""
-  data
+  createdAt
   """column name"""
-  id
+  role
+  """column name"""
+  tenantId
+  """column name"""
+  updatedAt
+  """column name"""
+  userId
 }
 
 """
-input type for updating data in table "stripeEvents"
+input type for updating data in table "tenantMembers"
 """
-input StripeEventsSetInput {
-  data: jsonb
-  id: String
+input TenantMembersSetInput {
+  createdAt: timestamptz
+  role: String
+  tenantId: uuid
+  updatedAt: timestamptz
+  userId: uuid
 }
 
 """
-Streaming cursor of the table "stripeEvents"
+Streaming cursor of the table "tenantMembers"
 """
-input StripeEventsStreamCursorInput {
+input TenantMembersStreamCursorInput {
   """Stream column input with initial value"""
-  initialValue: StripeEventsStreamCursorValueInput!
+  initialValue: TenantMembersStreamCursorValueInput!
   """cursor ordering"""
   ordering: CursorOrdering
 }
 
 """Initial value of the column from where the streaming should start"""
-input StripeEventsStreamCursorValueInput {
-  data: jsonb
-  id: String
+input TenantMembersStreamCursorValueInput {
+  createdAt: timestamptz
+  role: String
+  tenantId: uuid
+  updatedAt: timestamptz
+  userId: uuid
 }
 
 """
-update columns of table "stripeEvents"
+update columns of table "tenantMembers"
 """
-enum StripeEventsUpdateColumn {
+enum TenantMembersUpdateColumn {
   """column name"""
-  data
+  createdAt
+  """column name"""
+  role
+  """column name"""
+  tenantId
+  """column name"""
+  updatedAt
+  """column name"""
+  userId
+}
+
+input TenantMembersUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: TenantMembersSetInput
+  """filter the rows which have to be updated"""
+  where: TenantMembersBoolExp!
+}
+
+"""
+columns and relationships of "tenantRoles"
+"""
+type TenantRoles {
+  description: String!
+  label: String!
+  name: String!
+  """An array relationship"""
+  tenantMembers(
+    """distinct select on columns"""
+    distinctOn: [TenantMembersSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantMembersOrderBy!]
+    """filter the rows returned"""
+    where: TenantMembersBoolExp
+  ): [TenantMembers!]!
+  """An aggregate relationship"""
+  tenantMembersAggregate(
+    """distinct select on columns"""
+    distinctOn: [TenantMembersSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantMembersOrderBy!]
+    """filter the rows returned"""
+    where: TenantMembersBoolExp
+  ): TenantMembersAggregate!
+}
+
+"""
+aggregated selection of "tenantRoles"
+"""
+type TenantRolesAggregate {
+  aggregate: TenantRolesAggregateFields
+  nodes: [TenantRoles!]!
+}
+
+"""
+aggregate fields of "tenantRoles"
+"""
+type TenantRolesAggregateFields {
+  count(columns: [TenantRolesSelectColumn!], distinct: Boolean): Int!
+  max: TenantRolesMaxFields
+  min: TenantRolesMinFields
+}
+
+"""
+Boolean expression to filter rows from the table "tenantRoles". All fields are combined with a logical 'AND'.
+"""
+input TenantRolesBoolExp {
+  _and: [TenantRolesBoolExp!]
+  _not: TenantRolesBoolExp
+  _or: [TenantRolesBoolExp!]
+  description: StringComparisonExp
+  label: StringComparisonExp
+  name: StringComparisonExp
+  tenantMembers: TenantMembersBoolExp
+  tenantMembersAggregate: TenantMembersAggregateBoolExp
+}
+
+"""
+unique or primary key constraints on table "tenantRoles"
+"""
+enum TenantRolesConstraint {
+  """
+  unique or primary key constraint on columns "name"
+  """
+  tenantRoles_pkey
+}
+
+"""
+input type for inserting data into table "tenantRoles"
+"""
+input TenantRolesInsertInput {
+  description: String
+  label: String
+  name: String
+  tenantMembers: TenantMembersArrRelInsertInput
+}
+
+"""aggregate max on columns"""
+type TenantRolesMaxFields {
+  description: String
+  label: String
+  name: String
+}
+
+"""aggregate min on columns"""
+type TenantRolesMinFields {
+  description: String
+  label: String
+  name: String
+}
+
+"""
+response of any mutation on the table "tenantRoles"
+"""
+type TenantRolesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+  """data from the rows affected by the mutation"""
+  returning: [TenantRoles!]!
+}
+
+"""
+input type for inserting object relation for remote table "tenantRoles"
+"""
+input TenantRolesObjRelInsertInput {
+  data: TenantRolesInsertInput!
+  """upsert condition"""
+  onConflict: TenantRolesOnConflict
+}
+
+"""
+on_conflict condition type for table "tenantRoles"
+"""
+input TenantRolesOnConflict {
+  constraint: TenantRolesConstraint!
+  updateColumns: [TenantRolesUpdateColumn!]! = []
+  where: TenantRolesBoolExp
+}
+
+"""Ordering options when selecting data from "tenantRoles"."""
+input TenantRolesOrderBy {
+  description: OrderBy
+  label: OrderBy
+  name: OrderBy
+  tenantMembersAggregate: TenantMembersAggregateOrderBy
+}
+
+"""primary key columns input for table: tenantRoles"""
+input TenantRolesPkColumnsInput {
+  name: String!
+}
+
+"""
+select columns of table "tenantRoles"
+"""
+enum TenantRolesSelectColumn {
+  """column name"""
+  description
+  """column name"""
+  label
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "tenantRoles"
+"""
+input TenantRolesSetInput {
+  description: String
+  label: String
+  name: String
+}
+
+"""
+Streaming cursor of the table "tenantRoles"
+"""
+input TenantRolesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: TenantRolesStreamCursorValueInput!
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input TenantRolesStreamCursorValueInput {
+  description: String
+  label: String
+  name: String
+}
+
+"""
+update columns of table "tenantRoles"
+"""
+enum TenantRolesUpdateColumn {
+  """column name"""
+  description
+  """column name"""
+  label
+  """column name"""
+  name
+}
+
+input TenantRolesUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: TenantRolesSetInput
+  """filter the rows which have to be updated"""
+  where: TenantRolesBoolExp!
+}
+
+"""
+columns and relationships of "tenants"
+"""
+type Tenants {
+  createdAt: timestamptz!
+  id: uuid!
+  name: String!
+  ownerId: uuid!
+  """An array relationship"""
+  tenantMembers(
+    """distinct select on columns"""
+    distinctOn: [TenantMembersSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantMembersOrderBy!]
+    """filter the rows returned"""
+    where: TenantMembersBoolExp
+  ): [TenantMembers!]!
+  """An aggregate relationship"""
+  tenantMembersAggregate(
+    """distinct select on columns"""
+    distinctOn: [TenantMembersSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantMembersOrderBy!]
+    """filter the rows returned"""
+    where: TenantMembersBoolExp
+  ): TenantMembersAggregate!
+  updatedAt: timestamptz!
+  """An object relationship"""
+  user: Users!
+}
+
+"""
+aggregated selection of "tenants"
+"""
+type TenantsAggregate {
+  aggregate: TenantsAggregateFields
+  nodes: [Tenants!]!
+}
+
+input TenantsAggregateBoolExp {
+  count: tenantsAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "tenants"
+"""
+type TenantsAggregateFields {
+  count(columns: [TenantsSelectColumn!], distinct: Boolean): Int!
+  max: TenantsMaxFields
+  min: TenantsMinFields
+}
+
+"""
+order by aggregate values of table "tenants"
+"""
+input TenantsAggregateOrderBy {
+  count: OrderBy
+  max: TenantsMaxOrderBy
+  min: TenantsMinOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "tenants"
+"""
+input TenantsArrRelInsertInput {
+  data: [TenantsInsertInput!]!
+  """upsert condition"""
+  onConflict: TenantsOnConflict
+}
+
+"""
+Boolean expression to filter rows from the table "tenants". All fields are combined with a logical 'AND'.
+"""
+input TenantsBoolExp {
+  _and: [TenantsBoolExp!]
+  _not: TenantsBoolExp
+  _or: [TenantsBoolExp!]
+  createdAt: TimestamptzComparisonExp
+  id: UuidComparisonExp
+  name: StringComparisonExp
+  ownerId: UuidComparisonExp
+  tenantMembers: TenantMembersBoolExp
+  tenantMembersAggregate: TenantMembersAggregateBoolExp
+  updatedAt: TimestamptzComparisonExp
+  user: UsersBoolExp
+}
+
+"""
+unique or primary key constraints on table "tenants"
+"""
+enum TenantsConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  tenants_pkey
+}
+
+"""
+input type for inserting data into table "tenants"
+"""
+input TenantsInsertInput {
+  createdAt: timestamptz
+  id: uuid
+  name: String
+  ownerId: uuid
+  tenantMembers: TenantMembersArrRelInsertInput
+  updatedAt: timestamptz
+  user: UsersObjRelInsertInput
+}
+
+"""aggregate max on columns"""
+type TenantsMaxFields {
+  createdAt: timestamptz
+  id: uuid
+  name: String
+  ownerId: uuid
+  updatedAt: timestamptz
+}
+
+"""
+order by max() on columns of table "tenants"
+"""
+input TenantsMaxOrderBy {
+  createdAt: OrderBy
+  id: OrderBy
+  name: OrderBy
+  ownerId: OrderBy
+  updatedAt: OrderBy
+}
+
+"""aggregate min on columns"""
+type TenantsMinFields {
+  createdAt: timestamptz
+  id: uuid
+  name: String
+  ownerId: uuid
+  updatedAt: timestamptz
+}
+
+"""
+order by min() on columns of table "tenants"
+"""
+input TenantsMinOrderBy {
+  createdAt: OrderBy
+  id: OrderBy
+  name: OrderBy
+  ownerId: OrderBy
+  updatedAt: OrderBy
+}
+
+"""
+response of any mutation on the table "tenants"
+"""
+type TenantsMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+  """data from the rows affected by the mutation"""
+  returning: [Tenants!]!
+}
+
+"""
+input type for inserting object relation for remote table "tenants"
+"""
+input TenantsObjRelInsertInput {
+  data: TenantsInsertInput!
+  """upsert condition"""
+  onConflict: TenantsOnConflict
+}
+
+"""
+on_conflict condition type for table "tenants"
+"""
+input TenantsOnConflict {
+  constraint: TenantsConstraint!
+  updateColumns: [TenantsUpdateColumn!]! = []
+  where: TenantsBoolExp
+}
+
+"""Ordering options when selecting data from "tenants"."""
+input TenantsOrderBy {
+  createdAt: OrderBy
+  id: OrderBy
+  name: OrderBy
+  ownerId: OrderBy
+  tenantMembersAggregate: TenantMembersAggregateOrderBy
+  updatedAt: OrderBy
+  user: UsersOrderBy
+}
+
+"""primary key columns input for table: tenants"""
+input TenantsPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "tenants"
+"""
+enum TenantsSelectColumn {
+  """column name"""
+  createdAt
   """column name"""
   id
+  """column name"""
+  name
+  """column name"""
+  ownerId
+  """column name"""
+  updatedAt
 }
 
-input StripeEventsUpdates {
-  """append existing jsonb value of filtered columns with new jsonb value"""
-  _append: StripeEventsAppendInput
-  """
-  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
-  """
-  _deleteAtPath: StripeEventsDeleteAtPathInput
-  """
-  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
-  """
-  _deleteElem: StripeEventsDeleteElemInput
-  """
-  delete key/value pair or string element. key/value pairs are matched based on their key value
-  """
-  _deleteKey: StripeEventsDeleteKeyInput
-  """prepend existing jsonb value of filtered columns with new jsonb value"""
-  _prepend: StripeEventsPrependInput
+"""
+input type for updating data in table "tenants"
+"""
+input TenantsSetInput {
+  createdAt: timestamptz
+  id: uuid
+  name: String
+  ownerId: uuid
+  updatedAt: timestamptz
+}
+
+"""
+Streaming cursor of the table "tenants"
+"""
+input TenantsStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: TenantsStreamCursorValueInput!
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input TenantsStreamCursorValueInput {
+  createdAt: timestamptz
+  id: uuid
+  name: String
+  ownerId: uuid
+  updatedAt: timestamptz
+}
+
+"""
+update columns of table "tenants"
+"""
+enum TenantsUpdateColumn {
+  """column name"""
+  createdAt
+  """column name"""
+  id
+  """column name"""
+  name
+  """column name"""
+  ownerId
+  """column name"""
+  updatedAt
+}
+
+input TenantsUpdates {
   """sets the columns of the filtered rows to the given values"""
-  _set: StripeEventsSetInput
+  _set: TenantsSetInput
   """filter the rows which have to be updated"""
-  where: StripeEventsBoolExp!
+  where: TenantsBoolExp!
 }
 
 """
@@ -888,6 +1409,58 @@ type Users {
   email: String
   id: uuid!
   name: String
+  """An array relationship"""
+  tenantMembers(
+    """distinct select on columns"""
+    distinctOn: [TenantMembersSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantMembersOrderBy!]
+    """filter the rows returned"""
+    where: TenantMembersBoolExp
+  ): [TenantMembers!]!
+  """An aggregate relationship"""
+  tenantMembersAggregate(
+    """distinct select on columns"""
+    distinctOn: [TenantMembersSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantMembersOrderBy!]
+    """filter the rows returned"""
+    where: TenantMembersBoolExp
+  ): TenantMembersAggregate!
+  """An array relationship"""
+  tenants(
+    """distinct select on columns"""
+    distinctOn: [TenantsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantsOrderBy!]
+    """filter the rows returned"""
+    where: TenantsBoolExp
+  ): [Tenants!]!
+  """An aggregate relationship"""
+  tenantsAggregate(
+    """distinct select on columns"""
+    distinctOn: [TenantsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantsOrderBy!]
+    """filter the rows returned"""
+    where: TenantsBoolExp
+  ): TenantsAggregate!
   updatedAt: timestamptz
   """An array relationship"""
   usersUserAccounts(
@@ -945,6 +1518,10 @@ input UsersBoolExp {
   email: StringComparisonExp
   id: UuidComparisonExp
   name: StringComparisonExp
+  tenantMembers: TenantMembersBoolExp
+  tenantMembersAggregate: TenantMembersAggregateBoolExp
+  tenants: TenantsBoolExp
+  tenantsAggregate: TenantsAggregateBoolExp
   updatedAt: TimestamptzComparisonExp
   usersUserAccounts: UserAccountsBoolExp
   usersUserAccountsAggregate: UserAccountsAggregateBoolExp
@@ -968,6 +1545,8 @@ input UsersInsertInput {
   email: String
   id: uuid
   name: String
+  tenantMembers: TenantMembersArrRelInsertInput
+  tenants: TenantsArrRelInsertInput
   updatedAt: timestamptz
   usersUserAccounts: UserAccountsArrRelInsertInput
 }
@@ -1024,6 +1603,8 @@ input UsersOrderBy {
   email: OrderBy
   id: OrderBy
   name: OrderBy
+  tenantMembersAggregate: TenantMembersAggregateOrderBy
+  tenantsAggregate: TenantsAggregateOrderBy
   updatedAt: OrderBy
   usersUserAccountsAggregate: UserAccountsAggregateOrderBy
 }
@@ -1121,6 +1702,7 @@ scalar jsonb
 
 """mutation root"""
 type mutation_root {
+  createStripeCheckoutSession(input: CreateStripeCheckoutSessionInput!): CreateStripePortalSessionOutput
   """Create a Stripe portal session"""
   createStripePortalSession: CreateStripePortalSessionOutput
   """Create a Stripe client secret"""
@@ -1138,16 +1720,38 @@ type mutation_root {
   """
   deleteAccountsByPk(id: uuid!): Accounts
   """
-  delete data from the table: "stripeEvents"
+  delete data from the table: "tenantMembers"
   """
-  deleteStripeEvents(
+  deleteTenantMembers(
     """filter the rows which have to be deleted"""
-    where: StripeEventsBoolExp!
-  ): StripeEventsMutationResponse
+    where: TenantMembersBoolExp!
+  ): TenantMembersMutationResponse
   """
-  delete single row from the table: "stripeEvents"
+  delete single row from the table: "tenantMembers"
   """
-  deleteStripeEventsByPk(id: String!): StripeEvents
+  deleteTenantMembersByPk(tenantId: uuid!, userId: uuid!): TenantMembers
+  """
+  delete data from the table: "tenantRoles"
+  """
+  deleteTenantRoles(
+    """filter the rows which have to be deleted"""
+    where: TenantRolesBoolExp!
+  ): TenantRolesMutationResponse
+  """
+  delete single row from the table: "tenantRoles"
+  """
+  deleteTenantRolesByPk(name: String!): TenantRoles
+  """
+  delete data from the table: "tenants"
+  """
+  deleteTenants(
+    """filter the rows which have to be deleted"""
+    where: TenantsBoolExp!
+  ): TenantsMutationResponse
+  """
+  delete single row from the table: "tenants"
+  """
+  deleteTenantsByPk(id: uuid!): Tenants
   """
   delete data from the table: "userAccounts"
   """
@@ -1189,23 +1793,59 @@ type mutation_root {
     onConflict: AccountsOnConflict
   ): Accounts
   """
-  insert data into the table: "stripeEvents"
+  insert data into the table: "tenantMembers"
   """
-  insertStripeEvents(
+  insertTenantMembers(
     """the rows to be inserted"""
-    objects: [StripeEventsInsertInput!]!
+    objects: [TenantMembersInsertInput!]!
     """upsert condition"""
-    onConflict: StripeEventsOnConflict
-  ): StripeEventsMutationResponse
+    onConflict: TenantMembersOnConflict
+  ): TenantMembersMutationResponse
   """
-  insert a single row into the table: "stripeEvents"
+  insert a single row into the table: "tenantMembers"
   """
-  insertStripeEventsOne(
+  insertTenantMembersOne(
     """the row to be inserted"""
-    object: StripeEventsInsertInput!
+    object: TenantMembersInsertInput!
     """upsert condition"""
-    onConflict: StripeEventsOnConflict
-  ): StripeEvents
+    onConflict: TenantMembersOnConflict
+  ): TenantMembers
+  """
+  insert data into the table: "tenantRoles"
+  """
+  insertTenantRoles(
+    """the rows to be inserted"""
+    objects: [TenantRolesInsertInput!]!
+    """upsert condition"""
+    onConflict: TenantRolesOnConflict
+  ): TenantRolesMutationResponse
+  """
+  insert a single row into the table: "tenantRoles"
+  """
+  insertTenantRolesOne(
+    """the row to be inserted"""
+    object: TenantRolesInsertInput!
+    """upsert condition"""
+    onConflict: TenantRolesOnConflict
+  ): TenantRoles
+  """
+  insert data into the table: "tenants"
+  """
+  insertTenants(
+    """the rows to be inserted"""
+    objects: [TenantsInsertInput!]!
+    """upsert condition"""
+    onConflict: TenantsOnConflict
+  ): TenantsMutationResponse
+  """
+  insert a single row into the table: "tenants"
+  """
+  insertTenantsOne(
+    """the row to be inserted"""
+    object: TenantsInsertInput!
+    """upsert condition"""
+    onConflict: TenantsOnConflict
+  ): Tenants
   """
   insert data into the table: "userAccounts"
   """
@@ -1299,61 +1939,77 @@ type mutation_root {
     updates: [AccountsUpdates!]!
   ): [AccountsMutationResponse]
   """
-  update data of the table: "stripeEvents"
+  update data of the table: "tenantMembers"
   """
-  updateStripeEvents(
-    """append existing jsonb value of filtered columns with new jsonb value"""
-    _append: StripeEventsAppendInput
-    """
-    delete the field or element with specified path (for JSON arrays, negative integers count from the end)
-    """
-    _deleteAtPath: StripeEventsDeleteAtPathInput
-    """
-    delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
-    """
-    _deleteElem: StripeEventsDeleteElemInput
-    """
-    delete key/value pair or string element. key/value pairs are matched based on their key value
-    """
-    _deleteKey: StripeEventsDeleteKeyInput
-    """prepend existing jsonb value of filtered columns with new jsonb value"""
-    _prepend: StripeEventsPrependInput
+  updateTenantMembers(
     """sets the columns of the filtered rows to the given values"""
-    _set: StripeEventsSetInput
+    _set: TenantMembersSetInput
     """filter the rows which have to be updated"""
-    where: StripeEventsBoolExp!
-  ): StripeEventsMutationResponse
+    where: TenantMembersBoolExp!
+  ): TenantMembersMutationResponse
   """
-  update single row of the table: "stripeEvents"
+  update single row of the table: "tenantMembers"
   """
-  updateStripeEventsByPk(
-    """append existing jsonb value of filtered columns with new jsonb value"""
-    _append: StripeEventsAppendInput
-    """
-    delete the field or element with specified path (for JSON arrays, negative integers count from the end)
-    """
-    _deleteAtPath: StripeEventsDeleteAtPathInput
-    """
-    delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
-    """
-    _deleteElem: StripeEventsDeleteElemInput
-    """
-    delete key/value pair or string element. key/value pairs are matched based on their key value
-    """
-    _deleteKey: StripeEventsDeleteKeyInput
-    """prepend existing jsonb value of filtered columns with new jsonb value"""
-    _prepend: StripeEventsPrependInput
+  updateTenantMembersByPk(
     """sets the columns of the filtered rows to the given values"""
-    _set: StripeEventsSetInput
-    pkColumns: StripeEventsPkColumnsInput!
-  ): StripeEvents
+    _set: TenantMembersSetInput
+    pkColumns: TenantMembersPkColumnsInput!
+  ): TenantMembers
   """
-  update multiples rows of table: "stripeEvents"
+  update multiples rows of table: "tenantMembers"
   """
-  updateStripeEventsMany(
+  updateTenantMembersMany(
     """updates to execute, in order"""
-    updates: [StripeEventsUpdates!]!
-  ): [StripeEventsMutationResponse]
+    updates: [TenantMembersUpdates!]!
+  ): [TenantMembersMutationResponse]
+  """
+  update data of the table: "tenantRoles"
+  """
+  updateTenantRoles(
+    """sets the columns of the filtered rows to the given values"""
+    _set: TenantRolesSetInput
+    """filter the rows which have to be updated"""
+    where: TenantRolesBoolExp!
+  ): TenantRolesMutationResponse
+  """
+  update single row of the table: "tenantRoles"
+  """
+  updateTenantRolesByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: TenantRolesSetInput
+    pkColumns: TenantRolesPkColumnsInput!
+  ): TenantRoles
+  """
+  update multiples rows of table: "tenantRoles"
+  """
+  updateTenantRolesMany(
+    """updates to execute, in order"""
+    updates: [TenantRolesUpdates!]!
+  ): [TenantRolesMutationResponse]
+  """
+  update data of the table: "tenants"
+  """
+  updateTenants(
+    """sets the columns of the filtered rows to the given values"""
+    _set: TenantsSetInput
+    """filter the rows which have to be updated"""
+    where: TenantsBoolExp!
+  ): TenantsMutationResponse
+  """
+  update single row of the table: "tenants"
+  """
+  updateTenantsByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: TenantsSetInput
+    pkColumns: TenantsPkColumnsInput!
+  ): Tenants
+  """
+  update multiples rows of table: "tenants"
+  """
+  updateTenantsMany(
+    """updates to execute, in order"""
+    updates: [TenantsUpdates!]!
+  ): [TenantsMutationResponse]
   """
   update data of the table: "userAccounts"
   """
@@ -1437,38 +2093,94 @@ type query_root {
   ): AccountsAggregate!
   """fetch data from the table: "accounts" using primary key columns"""
   accountsByPk(id: uuid!): Accounts
-  """
-  fetch data from the table: "stripeEvents"
-  """
-  stripeEvents(
+  """An array relationship"""
+  tenantMembers(
     """distinct select on columns"""
-    distinctOn: [StripeEventsSelectColumn!]
+    distinctOn: [TenantMembersSelectColumn!]
     """limit the number of rows returned"""
     limit: Int
     """skip the first n rows. Use only with order_by"""
     offset: Int
     """sort the rows by one or more columns"""
-    orderBy: [StripeEventsOrderBy!]
+    orderBy: [TenantMembersOrderBy!]
     """filter the rows returned"""
-    where: StripeEventsBoolExp
-  ): [StripeEvents!]!
-  """
-  fetch aggregated fields from the table: "stripeEvents"
-  """
-  stripeEventsAggregate(
+    where: TenantMembersBoolExp
+  ): [TenantMembers!]!
+  """An aggregate relationship"""
+  tenantMembersAggregate(
     """distinct select on columns"""
-    distinctOn: [StripeEventsSelectColumn!]
+    distinctOn: [TenantMembersSelectColumn!]
     """limit the number of rows returned"""
     limit: Int
     """skip the first n rows. Use only with order_by"""
     offset: Int
     """sort the rows by one or more columns"""
-    orderBy: [StripeEventsOrderBy!]
+    orderBy: [TenantMembersOrderBy!]
     """filter the rows returned"""
-    where: StripeEventsBoolExp
-  ): StripeEventsAggregate!
-  """fetch data from the table: "stripeEvents" using primary key columns"""
-  stripeEventsByPk(id: String!): StripeEvents
+    where: TenantMembersBoolExp
+  ): TenantMembersAggregate!
+  """fetch data from the table: "tenantMembers" using primary key columns"""
+  tenantMembersByPk(tenantId: uuid!, userId: uuid!): TenantMembers
+  """
+  fetch data from the table: "tenantRoles"
+  """
+  tenantRoles(
+    """distinct select on columns"""
+    distinctOn: [TenantRolesSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantRolesOrderBy!]
+    """filter the rows returned"""
+    where: TenantRolesBoolExp
+  ): [TenantRoles!]!
+  """
+  fetch aggregated fields from the table: "tenantRoles"
+  """
+  tenantRolesAggregate(
+    """distinct select on columns"""
+    distinctOn: [TenantRolesSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantRolesOrderBy!]
+    """filter the rows returned"""
+    where: TenantRolesBoolExp
+  ): TenantRolesAggregate!
+  """fetch data from the table: "tenantRoles" using primary key columns"""
+  tenantRolesByPk(name: String!): TenantRoles
+  """An array relationship"""
+  tenants(
+    """distinct select on columns"""
+    distinctOn: [TenantsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantsOrderBy!]
+    """filter the rows returned"""
+    where: TenantsBoolExp
+  ): [Tenants!]!
+  """An aggregate relationship"""
+  tenantsAggregate(
+    """distinct select on columns"""
+    distinctOn: [TenantsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantsOrderBy!]
+    """filter the rows returned"""
+    where: TenantsBoolExp
+  ): TenantsAggregate!
+  """fetch data from the table: "tenants" using primary key columns"""
+  tenantsByPk(id: uuid!): Tenants
   """
   fetch data from the table: "userAccounts"
   """
@@ -1579,49 +2291,127 @@ type subscription_root {
     """filter the rows returned"""
     where: AccountsBoolExp
   ): [Accounts!]!
-  """
-  fetch data from the table: "stripeEvents"
-  """
-  stripeEvents(
+  """An array relationship"""
+  tenantMembers(
     """distinct select on columns"""
-    distinctOn: [StripeEventsSelectColumn!]
+    distinctOn: [TenantMembersSelectColumn!]
     """limit the number of rows returned"""
     limit: Int
     """skip the first n rows. Use only with order_by"""
     offset: Int
     """sort the rows by one or more columns"""
-    orderBy: [StripeEventsOrderBy!]
+    orderBy: [TenantMembersOrderBy!]
     """filter the rows returned"""
-    where: StripeEventsBoolExp
-  ): [StripeEvents!]!
-  """
-  fetch aggregated fields from the table: "stripeEvents"
-  """
-  stripeEventsAggregate(
+    where: TenantMembersBoolExp
+  ): [TenantMembers!]!
+  """An aggregate relationship"""
+  tenantMembersAggregate(
     """distinct select on columns"""
-    distinctOn: [StripeEventsSelectColumn!]
+    distinctOn: [TenantMembersSelectColumn!]
     """limit the number of rows returned"""
     limit: Int
     """skip the first n rows. Use only with order_by"""
     offset: Int
     """sort the rows by one or more columns"""
-    orderBy: [StripeEventsOrderBy!]
+    orderBy: [TenantMembersOrderBy!]
     """filter the rows returned"""
-    where: StripeEventsBoolExp
-  ): StripeEventsAggregate!
-  """fetch data from the table: "stripeEvents" using primary key columns"""
-  stripeEventsByPk(id: String!): StripeEvents
+    where: TenantMembersBoolExp
+  ): TenantMembersAggregate!
+  """fetch data from the table: "tenantMembers" using primary key columns"""
+  tenantMembersByPk(tenantId: uuid!, userId: uuid!): TenantMembers
   """
-  fetch data from the table in a streaming manner: "stripeEvents"
+  fetch data from the table in a streaming manner: "tenantMembers"
   """
-  stripeEventsStream(
+  tenantMembersStream(
     """maximum number of rows returned in a single batch"""
     batchSize: Int!
     """cursor to stream the results returned by the query"""
-    cursor: [StripeEventsStreamCursorInput]!
+    cursor: [TenantMembersStreamCursorInput]!
     """filter the rows returned"""
-    where: StripeEventsBoolExp
-  ): [StripeEvents!]!
+    where: TenantMembersBoolExp
+  ): [TenantMembers!]!
+  """
+  fetch data from the table: "tenantRoles"
+  """
+  tenantRoles(
+    """distinct select on columns"""
+    distinctOn: [TenantRolesSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantRolesOrderBy!]
+    """filter the rows returned"""
+    where: TenantRolesBoolExp
+  ): [TenantRoles!]!
+  """
+  fetch aggregated fields from the table: "tenantRoles"
+  """
+  tenantRolesAggregate(
+    """distinct select on columns"""
+    distinctOn: [TenantRolesSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantRolesOrderBy!]
+    """filter the rows returned"""
+    where: TenantRolesBoolExp
+  ): TenantRolesAggregate!
+  """fetch data from the table: "tenantRoles" using primary key columns"""
+  tenantRolesByPk(name: String!): TenantRoles
+  """
+  fetch data from the table in a streaming manner: "tenantRoles"
+  """
+  tenantRolesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+    """cursor to stream the results returned by the query"""
+    cursor: [TenantRolesStreamCursorInput]!
+    """filter the rows returned"""
+    where: TenantRolesBoolExp
+  ): [TenantRoles!]!
+  """An array relationship"""
+  tenants(
+    """distinct select on columns"""
+    distinctOn: [TenantsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantsOrderBy!]
+    """filter the rows returned"""
+    where: TenantsBoolExp
+  ): [Tenants!]!
+  """An aggregate relationship"""
+  tenantsAggregate(
+    """distinct select on columns"""
+    distinctOn: [TenantsSelectColumn!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    orderBy: [TenantsOrderBy!]
+    """filter the rows returned"""
+    where: TenantsBoolExp
+  ): TenantsAggregate!
+  """fetch data from the table: "tenants" using primary key columns"""
+  tenantsByPk(id: uuid!): Tenants
+  """
+  fetch data from the table in a streaming manner: "tenants"
+  """
+  tenantsStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+    """cursor to stream the results returned by the query"""
+    cursor: [TenantsStreamCursorInput]!
+    """filter the rows returned"""
+    where: TenantsBoolExp
+  ): [Tenants!]!
   """
   fetch data from the table: "userAccounts"
   """
@@ -1708,6 +2498,20 @@ type subscription_root {
     """filter the rows returned"""
     where: UsersBoolExp
   ): [Users!]!
+}
+
+input tenantMembersAggregateBoolExpCount {
+  arguments: [TenantMembersSelectColumn!]
+  distinct: Boolean
+  filter: TenantMembersBoolExp
+  predicate: IntComparisonExp!
+}
+
+input tenantsAggregateBoolExpCount {
+  arguments: [TenantsSelectColumn!]
+  distinct: Boolean
+  filter: TenantsBoolExp
+  predicate: IntComparisonExp!
 }
 
 scalar timestamptz
