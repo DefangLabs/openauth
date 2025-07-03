@@ -78,20 +78,31 @@ export async function upsertAccountUser(account: Pick<Accounts, 'id' | 'name' | 
     }
 
     const user = upsertData?.user;
+    const tenant = user?.usersUserAccounts.reduce((acc, { userAccountsAccount }) => {
+        if (acc) {
+            return acc;
+        }
+
+        return userAccountsAccount.extra.username;
+    }, '' as string | undefined);
+
     if (!user) {
         throw new Error('Failed to upsert account user');
     }
+
 
     analytics.identify({
         userId: user.id,
         traits: {
             email: user.email,
             name: user.name,
+            tenant,
             accounts: user.usersUserAccounts.map(({ userAccountsAccount }) => userAccountsAccount.provider)
         }
     });
 
     return {
         user,
-    };
+        tenant,
+    }
 }
