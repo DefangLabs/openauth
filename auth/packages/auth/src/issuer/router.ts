@@ -41,7 +41,7 @@ export const issuerRouter = issuer({
     const { account } = await upsertAccount(validProviderData, value.provider)
     const { user } = await upsertAccountUser(account);
     const { tenants } = await upsertUserTenant(user);
-    const tenant = tenants[0]?.name ?? "";
+    const tenant = account?.extra?.username ?? tenants[0]?.name ?? "";
 
     analytics.track({
       userId: user.id,
