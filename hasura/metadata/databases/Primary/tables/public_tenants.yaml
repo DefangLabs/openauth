@@ -1,0 +1,45 @@
+table:
+  name: tenants
+  schema: public
+object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: ownerId
+array_relationships:
+  - name: tenantMembers
+    using:
+      foreign_key_constraint_on:
+        column: tenantId
+        table:
+          name: tenantMembers
+          schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        ownerId:
+          _eq: X-Hasura-User-Id
+      set:
+        ownerId: x-hasura-User-Id
+      columns:
+        - id
+        - name
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - name
+        - createdAt
+        - updatedAt
+        - id
+        - ownerId
+      filter:
+        _or:
+          - ownerId:
+              _eq: X-Hasura-User-Id
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        ownerId:
+          _eq: X-Hasura-User-Id
