@@ -4,7 +4,7 @@ FROM oven/bun:1-debian
 # Set the working directory
 WORKDIR /app
 
-COPY ./package.json ./bun.lockb /app/
+COPY ./package.json ./bun.lock /app/
 COPY ./openauth/packages/openauth/package.json /app/openauth/packages/openauth/package.json
 COPY ./packages/auth/package.json /app/packages/auth/package.json
 RUN bun install --frozen-lockfile --omit=optional
