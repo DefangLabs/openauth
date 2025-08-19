@@ -5,6 +5,7 @@ import "../analytics/analytics"
 import { analytics } from "../analytics/analytics"
 import { getAllowedOrigins } from "../lib/get-allowed-origins"
 import { getGithubData } from "../providers/github"
+import { getGitlabData } from "../providers/gitlab"
 import { ProviderData, providerDataSchema } from "../providers/provider-data-schema"
 import { providers } from "../providers/providers"
 import { subjects } from "../subjects"
@@ -32,6 +33,10 @@ export const issuerRouter = issuer({
     // }
     if (value.provider === 'github') {
       providerData = await getGithubData(value.tokenset.access)
+      clientID = value.clientID
+    }
+    if (value.provider === 'gitlab') {
+      providerData = await getGitlabData(value.tokenset.access)
       clientID = value.clientID
     }
 

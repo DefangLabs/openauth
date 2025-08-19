@@ -25,6 +25,8 @@ services:
       - GITHUB_CLIENT_SECRET
       - HASURA_GRAPHQL_ADMIN_SECRET
       - SEGMENT_WRITE_KEY
+      - GITLAB_CLIENT_ID
+      - GITLAB_CLIENT_SECRET
     depends_on:
       - auth-redis
 

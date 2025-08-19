@@ -25,10 +25,10 @@ Once the frontend is running, you can access the site at `http://localhost:3000`
 
 We're using a [Defang fork of OpenAUTH](https://github.com/DefangLabs/openauth). We merge our own features into a branch called `defang` in that repo, which is pulled into a git subtree at `/auth/openauth` in this repo. To update the auth code, you can run `git subtree pull --prefix auth/openauth --squash https://github.com/DefangLabs/openauth defang`
 
-
 ## Secrets
 
 - `defang-portal:githubClientSecret`: created in GitHub settings, OAuth Apps
+- `defang-portal:gitlabClientSecret`: created in GitLab preferences, Applications
 - `defang-portal:hasuraAdminSecret`:
 - `defang-portal:stripeSecretKey`: from Stripe dashboard
 
