@@ -63,13 +63,12 @@
 }
 
 html body {
-  font-family: "Exo 2", sans-serif,
+  font-family: "Exo 2", sans-serif;
 }
 
 [data-component="root"] {
   font-family: var(--font-family);
   background-color: var(--color-background);
-  color: white;
   position: absolute;
   inset: 0;
   display: flex;
@@ -117,7 +116,7 @@ html body {
   flex-direction: column;
   gap: 2rem;
   justify-content: center;
-  background-image: url("/static/assets/bg-light.png");
+  background-image: url("/static/assets/bg-dark.png");
   background-position: bottom center;
   background-size: cover;
 
@@ -128,10 +127,14 @@ html body {
   @media screen and (min-width: 900px) {
     padding: 6rem;
   }
+
+  @media (prefers-color-scheme: light) {
+    background-image: url("/static/assets/bg-light.png");
+  }
 }
 
 [data-component="aside-content"] {
-  background: white;
+  background: var(--color-low);
   border: 1px solid #914FED;
   border-radius: calc(var(--border-radius) * 0.25rem);
   display: flex;

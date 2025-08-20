@@ -7,6 +7,7 @@ RUN git clone https://github.com/git/git.git /tmp/git && \
     rm -rf /tmp/git
 
 RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="$HOME/.bun/bin:${PATH}"
 
 # Install Hasura CLI
-RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+RUN curl -fL https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash

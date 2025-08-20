@@ -7,7 +7,7 @@ const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata = {
   title: "Defang Portal",
-  description: "Welcome to the Defang Opinionated Platform",
+  description: "Welcome to Defang: Develop Once, Deploy Anywhere.",
 };
 
 export default function RootLayout({

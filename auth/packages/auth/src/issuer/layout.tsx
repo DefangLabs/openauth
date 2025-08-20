@@ -1,6 +1,7 @@
 import { PropsWithChildren } from "hono/jsx";
 import css from "./ui.css" assert { type: "text" }
 import LogoLight from "./logo-light";
+import LogoDark from "./logo-dark";
 import Tickbox from "./tickbox";
 
 export function Layout(props: PropsWithChildren) {
@@ -19,7 +20,9 @@ export function Layout(props: PropsWithChildren) {
           <main data-component="center">
             <div data-component="center-content">
               {/* @ts-expect-error Rendering SVG component */}
-              <LogoLight data-mode="light" style={{ margin: "0 auto 2rem auto", height: "auto", maxWidth: "12rem" }} />
+              <LogoDark data-component="logo" data-mode="dark" style={{ margin: "0 auto 2rem auto", height: "auto", maxWidth: "12rem" }} />
+              {/* @ts-expect-error Rendering SVG component */}
+              <LogoLight data-component="logo" data-mode="light" style={{ margin: "0 auto 2rem auto", height: "auto", maxWidth: "12rem" }} />
               {props.children}
             </div>
           </main>
