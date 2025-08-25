@@ -8,6 +8,11 @@ on:
       - v*
   pull_request:
     branches: [main, intermediate-auth]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to deploy"
+        required: false
 
 permissions:
   contents: read
@@ -15,7 +20,7 @@ permissions:
 
 jobs:
   deploy-dev:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     environment: dev
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -25,6 +30,8 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
 
       # create a short sha and make it available to the next steps
       - name: Set short sha
