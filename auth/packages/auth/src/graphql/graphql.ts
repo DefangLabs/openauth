@@ -385,6 +385,17 @@ export enum OrderBy {
   DescNullsLast = 'DESC_NULLS_LAST'
 }
 
+export type ResolveAwsMarketplaceCustomerInput = {
+  registrationToken: Scalars['String']['input'];
+};
+
+export type ResolveAwsMarketplaceCustomerOutput = {
+  __typename?: 'ResolveAwsMarketplaceCustomerOutput';
+  customerAWSAccountId: Scalars['String']['output'];
+  customerIdentifier: Scalars['String']['output'];
+  productCode: Scalars['String']['output'];
+};
+
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type StringComparisonExp = {
   _eq?: InputMaybe<Scalars['String']['input']>;
@@ -824,10 +835,14 @@ export type TenantRolesUpdates = {
 /** columns and relationships of "tenants" */
 export type Tenants = {
   __typename?: 'Tenants';
+  awsMarketplaceAccountId?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceCustomerIdentifier?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceProductCode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['timestamptz']['output'];
   id: Scalars['uuid']['output'];
   name: Scalars['String']['output'];
   ownerId: Scalars['uuid']['output'];
+  provider: Scalars['String']['output'];
   /** An array relationship */
   tenantMembers: Array<TenantMembers>;
   /** An aggregate relationship */
@@ -902,10 +917,14 @@ export type TenantsBoolExp = {
   _and?: InputMaybe<Array<TenantsBoolExp>>;
   _not?: InputMaybe<TenantsBoolExp>;
   _or?: InputMaybe<Array<TenantsBoolExp>>;
+  awsMarketplaceAccountId?: InputMaybe<StringComparisonExp>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<StringComparisonExp>;
+  awsMarketplaceProductCode?: InputMaybe<StringComparisonExp>;
   createdAt?: InputMaybe<TimestamptzComparisonExp>;
   id?: InputMaybe<UuidComparisonExp>;
   name?: InputMaybe<StringComparisonExp>;
   ownerId?: InputMaybe<UuidComparisonExp>;
+  provider?: InputMaybe<StringComparisonExp>;
   tenantMembers?: InputMaybe<TenantMembersBoolExp>;
   tenantMembersAggregate?: InputMaybe<TenantMembersAggregateBoolExp>;
   updatedAt?: InputMaybe<TimestamptzComparisonExp>;
@@ -914,16 +933,22 @@ export type TenantsBoolExp = {
 
 /** unique or primary key constraints on table "tenants" */
 export enum TenantsConstraint {
+  /** unique or primary key constraint on columns "awsMarketplaceCustomerIdentifier" */
+  TenantsAwsMarketplaceCustomerIdentifierKey = 'tenants_awsMarketplaceCustomerIdentifier_key',
   /** unique or primary key constraint on columns "id" */
   TenantsPkey = 'tenants_pkey'
 }
 
 /** input type for inserting data into table "tenants" */
 export type TenantsInsertInput = {
+  awsMarketplaceAccountId?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceProductCode?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   ownerId?: InputMaybe<Scalars['uuid']['input']>;
+  provider?: InputMaybe<Scalars['String']['input']>;
   tenantMembers?: InputMaybe<TenantMembersArrRelInsertInput>;
   updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
   user?: InputMaybe<UsersObjRelInsertInput>;
@@ -932,38 +957,54 @@ export type TenantsInsertInput = {
 /** aggregate max on columns */
 export type TenantsMaxFields = {
   __typename?: 'TenantsMaxFields';
+  awsMarketplaceAccountId?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceCustomerIdentifier?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceProductCode?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['timestamptz']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   ownerId?: Maybe<Scalars['uuid']['output']>;
+  provider?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['timestamptz']['output']>;
 };
 
 /** order by max() on columns of table "tenants" */
 export type TenantsMaxOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
   ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
 };
 
 /** aggregate min on columns */
 export type TenantsMinFields = {
   __typename?: 'TenantsMinFields';
+  awsMarketplaceAccountId?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceCustomerIdentifier?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceProductCode?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['timestamptz']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   ownerId?: Maybe<Scalars['uuid']['output']>;
+  provider?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['timestamptz']['output']>;
 };
 
 /** order by min() on columns of table "tenants" */
 export type TenantsMinOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
   ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
 };
 
@@ -992,10 +1033,14 @@ export type TenantsOnConflict = {
 
 /** Ordering options when selecting data from "tenants". */
 export type TenantsOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
   ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
   tenantMembersAggregate?: InputMaybe<TenantMembersAggregateOrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
   user?: InputMaybe<UsersOrderBy>;
@@ -1009,6 +1054,12 @@ export type TenantsPkColumnsInput = {
 /** select columns of table "tenants" */
 export enum TenantsSelectColumn {
   /** column name */
+  AwsMarketplaceAccountId = 'awsMarketplaceAccountId',
+  /** column name */
+  AwsMarketplaceCustomerIdentifier = 'awsMarketplaceCustomerIdentifier',
+  /** column name */
+  AwsMarketplaceProductCode = 'awsMarketplaceProductCode',
+  /** column name */
   CreatedAt = 'createdAt',
   /** column name */
   Id = 'id',
@@ -1017,15 +1068,21 @@ export enum TenantsSelectColumn {
   /** column name */
   OwnerId = 'ownerId',
   /** column name */
+  Provider = 'provider',
+  /** column name */
   UpdatedAt = 'updatedAt'
 }
 
 /** input type for updating data in table "tenants" */
 export type TenantsSetInput = {
+  awsMarketplaceAccountId?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceProductCode?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   ownerId?: InputMaybe<Scalars['uuid']['input']>;
+  provider?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
 };
 
@@ -1039,15 +1096,25 @@ export type TenantsStreamCursorInput = {
 
 /** Initial value of the column from where the streaming should start */
 export type TenantsStreamCursorValueInput = {
+  awsMarketplaceAccountId?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceProductCode?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   ownerId?: InputMaybe<Scalars['uuid']['input']>;
+  provider?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
 };
 
 /** update columns of table "tenants" */
 export enum TenantsUpdateColumn {
+  /** column name */
+  AwsMarketplaceAccountId = 'awsMarketplaceAccountId',
+  /** column name */
+  AwsMarketplaceCustomerIdentifier = 'awsMarketplaceCustomerIdentifier',
+  /** column name */
+  AwsMarketplaceProductCode = 'awsMarketplaceProductCode',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -1056,6 +1123,8 @@ export enum TenantsUpdateColumn {
   Name = 'name',
   /** column name */
   OwnerId = 'ownerId',
+  /** column name */
+  Provider = 'provider',
   /** column name */
   UpdatedAt = 'updatedAt'
 }
@@ -1614,6 +1683,7 @@ export type Mutation_Root = {
   insertUsers?: Maybe<UsersMutationResponse>;
   /** insert a single row into the table: "users" */
   insertUsersOne?: Maybe<Users>;
+  resolveAwsMarketplaceCustomer?: Maybe<ResolveAwsMarketplaceCustomerOutput>;
   /** update data of the table: "accounts" */
   updateAccounts?: Maybe<AccountsMutationResponse>;
   /** update single row of the table: "accounts" */
@@ -1814,6 +1884,12 @@ export type Mutation_RootInsertUsersArgs = {
 export type Mutation_RootInsertUsersOneArgs = {
   object: UsersInsertInput;
   onConflict?: InputMaybe<UsersOnConflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootResolveAwsMarketplaceCustomerArgs = {
+  input: ResolveAwsMarketplaceCustomerInput;
 };
 
 
@@ -2430,13 +2506,17 @@ export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
 {
-  __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
+  __apiType?: NonNullable<DocumentTypeDecoration<TResult, TVariables>['__apiType']>;
+  private value: string;
+  public __meta__?: Record<string, any> | undefined;
 
-  constructor(private value: string, public __meta__?: Record<string, any> | undefined) {
+  constructor(value: string, __meta__?: Record<string, any> | undefined) {
     super(value);
+    this.value = value;
+    this.__meta__ = __meta__;
   }
 
-  toString(): string & DocumentTypeDecoration<TResult, TVariables> {
+  override toString(): string & DocumentTypeDecoration<TResult, TVariables> {
     return this.value;
   }
 }

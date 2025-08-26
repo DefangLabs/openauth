@@ -24,6 +24,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@aws-sdk/client-marketplace-metering": "^3.864.0",
     "@bufbuild/buf": "^1.44.0",
     "@bufbuild/protobuf": "^2.1.0",
     "@bufbuild/protoc-gen-es": "^2.1.0",

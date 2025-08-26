@@ -64,7 +64,7 @@ const UserLabel = styled(Typography)`
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  div:first-child {
+  div:first-of-type {
     font-size: 0.8rem;
   }
 ` as typeof Typography;

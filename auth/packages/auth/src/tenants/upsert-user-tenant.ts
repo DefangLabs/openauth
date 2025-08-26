@@ -2,7 +2,7 @@ import { graphql } from "../graphql";
 import { hasuraAdminClient } from "../hasura/hasura";
 import { upsertAccountUser } from "../users/upsert-account-user";
 
-const listTenantsQuery = graphql(`
+const ListTenantsQuery = graphql(`
   query ListTenants($ownerId: uuid!) {
      tenants(where: { ownerId: { _eq: $ownerId } }, orderBy: { createdAt: ASC }) {
        id
@@ -11,7 +11,7 @@ const listTenantsQuery = graphql(`
   }
 `);
 
-const insertDefaultTenantMutation = graphql(`
+const InsertDefaultTenantMutation = graphql(`
   mutation CreateDefaultTenant($name: String!, $ownerId: uuid!) {
      tenant: insertTenantsOne(object: { id: $ownerId, name: $name, ownerId: $ownerId }) {
        id
@@ -34,7 +34,7 @@ export interface UpsertUserTenantResult {
  * Extract GitHub username from a user's accounts
  */
 function extractGithubUsername(
-  user: NonNullable<Awaited<ReturnType<typeof upsertAccountUser>>>['user']
+  user: NonNullable<Awaited<ReturnType<typeof upsertAccountUser>>>["user"]
 ): string | undefined {
   return user.usersUserAccounts
     .map(({ userAccountsAccount }) => userAccountsAccount)
@@ -60,15 +60,15 @@ function extractUsernameFromEmail(email: string | null | undefined): string {
  * Creates and returns a tenant for a user
  */
 export async function upsertUserTenant(
-  user: NonNullable<Awaited<ReturnType<typeof upsertAccountUser>>>['user']
+  user: NonNullable<Awaited<ReturnType<typeof upsertAccountUser>>>["user"]
 ): Promise<UpsertUserTenantResult> {
   // Check if user already has tenants
-  const { data, errors } = await hasuraAdminClient(listTenantsQuery, {
+  const { data, errors } = await hasuraAdminClient(ListTenantsQuery, {
     ownerId: user.id,
   });
-  
+
   if (errors) {
-    throw new Error(errors.map(e => e.message).join("; "));
+    throw new Error(errors.map((e) => e.message).join("; "));
   }
 
   // Return existing tenants if any
@@ -89,12 +89,14 @@ export async function upsertUserTenant(
 
   // Create new tenant
   const { data: insertData, errors: insertErrors } = await hasuraAdminClient(
-    insertDefaultTenantMutation,
+    InsertDefaultTenantMutation,
     { name, ownerId: user.id }
   );
 
   if (insertErrors) {
-    const messages = insertErrors.map((err) => err.message || "Unknown error").join(", ");
+    const messages = insertErrors
+      .map((err) => err.message || "Unknown error")
+      .join(", ");
     console.error("Error inserting tenant:", messages);
     throw new Error(messages);
   }

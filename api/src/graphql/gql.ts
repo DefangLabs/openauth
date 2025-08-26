@@ -15,13 +15,18 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
-    "\n  query fetchHasuraUsers(\n    $ids: [uuid!]\n  ) {\n    users(\n      limit: 10000,\n      where:  {\n         id: {\n          _nin: $ids\n         }\n      }\n    ) {\n      id\n      email\n    }\n  }\n": types.FetchHasuraUsersDocument,
+    "\n  mutation UpdateTenantAwsMarketplace(\n    $tenantId: uuid!\n    $customerIdentifier: String!\n    $accountId: String!\n    $productCode: String!\n  ) {\n    updateTenants(\n      where: {\n        id: { _eq: $tenantId }\n        _or: [\n          {\n            awsMarketplaceCustomerIdentifier: { _isNull: true }\n            awsMarketplaceAccountId: { _isNull: true }\n            awsMarketplaceProductCode: { _isNull: true }\n          }\n          {\n            awsMarketplaceCustomerIdentifier: { _eq: $customerIdentifier }\n            awsMarketplaceAccountId: { _eq: $accountId }\n            awsMarketplaceProductCode: { _eq: $productCode }\n          }\n        ]\n      }\n      _set: {\n        awsMarketplaceCustomerIdentifier: $customerIdentifier\n        awsMarketplaceAccountId: $accountId\n        awsMarketplaceProductCode: $productCode\n      }\n    ) {\n      affectedRows\n    }\n  }\n": types.UpdateTenantAwsMarketplaceDocument,
+    "\n  query fetchHasuraUsers($ids: [uuid!]) {\n    users(limit: 10000, where: { id: { _nin: $ids } }) {\n      id\n      email\n    }\n  }\n": types.FetchHasuraUsersDocument,
 };
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query fetchHasuraUsers(\n    $ids: [uuid!]\n  ) {\n    users(\n      limit: 10000,\n      where:  {\n         id: {\n          _nin: $ids\n         }\n      }\n    ) {\n      id\n      email\n    }\n  }\n"): typeof import('./graphql').FetchHasuraUsersDocument;
+export function graphql(source: "\n  mutation UpdateTenantAwsMarketplace(\n    $tenantId: uuid!\n    $customerIdentifier: String!\n    $accountId: String!\n    $productCode: String!\n  ) {\n    updateTenants(\n      where: {\n        id: { _eq: $tenantId }\n        _or: [\n          {\n            awsMarketplaceCustomerIdentifier: { _isNull: true }\n            awsMarketplaceAccountId: { _isNull: true }\n            awsMarketplaceProductCode: { _isNull: true }\n          }\n          {\n            awsMarketplaceCustomerIdentifier: { _eq: $customerIdentifier }\n            awsMarketplaceAccountId: { _eq: $accountId }\n            awsMarketplaceProductCode: { _eq: $productCode }\n          }\n        ]\n      }\n      _set: {\n        awsMarketplaceCustomerIdentifier: $customerIdentifier\n        awsMarketplaceAccountId: $accountId\n        awsMarketplaceProductCode: $productCode\n      }\n    ) {\n      affectedRows\n    }\n  }\n"): typeof import('./graphql').UpdateTenantAwsMarketplaceDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query fetchHasuraUsers($ids: [uuid!]) {\n    users(limit: 10000, where: { id: { _nin: $ids } }) {\n      id\n      email\n    }\n  }\n"): typeof import('./graphql').FetchHasuraUsersDocument;
 
 
 export function graphql(source: string) {

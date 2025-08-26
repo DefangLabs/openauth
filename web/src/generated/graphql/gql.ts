@@ -16,6 +16,8 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
 const documents = {
   "\n  mutation DeleteAccountMutation {\n    deleteAccount {\n      message\n    }\n  }\n":
     types.DeleteAccountMutationDocument,
+  "\n  mutation ResolveAwsMarketplaceCustomer(\n    $input: ResolveAwsMarketplaceCustomerInput!\n  ) {\n    resolveAwsMarketplaceCustomer(input: $input) {\n      customerAWSAccountId\n      customerIdentifier\n      productCode\n    }\n  }\n":
+    types.ResolveAwsMarketplaceCustomerDocument,
   "\n  mutation InsertUserMutation($object: UsersInsertInput!) {\n    user: insertUsersOne(\n      object: $object\n      onConflict: { constraint: profiles_pkey, updateColumns: [name] }\n    ) {\n      id\n      name\n    }\n  }\n":
     types.InsertUserMutationDocument,
   "\n  query UserQuery($id: uuid!) {\n    user: usersByPk(id: $id) {\n      id\n      name\n      email\n    }\n  }\n":
@@ -48,6 +50,12 @@ export function graphql(source: string): unknown;
 export function graphql(
   source: "\n  mutation DeleteAccountMutation {\n    deleteAccount {\n      message\n    }\n  }\n",
 ): (typeof documents)["\n  mutation DeleteAccountMutation {\n    deleteAccount {\n      message\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation ResolveAwsMarketplaceCustomer(\n    $input: ResolveAwsMarketplaceCustomerInput!\n  ) {\n    resolveAwsMarketplaceCustomer(input: $input) {\n      customerAWSAccountId\n      customerIdentifier\n      productCode\n    }\n  }\n",
+): (typeof documents)["\n  mutation ResolveAwsMarketplaceCustomer(\n    $input: ResolveAwsMarketplaceCustomerInput!\n  ) {\n    resolveAwsMarketplaceCustomer(input: $input) {\n      customerAWSAccountId\n      customerIdentifier\n      productCode\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

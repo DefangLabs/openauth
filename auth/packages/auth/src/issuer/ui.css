@@ -252,6 +252,11 @@ html body {
   background: var(--color-primary);
   color: oklch(from var(--color-primary) clamp(0, calc((l - 0.714) * -1000), 1) 0 0);
 
+  &[data-last-used] {
+    border: 2px solid oklch(from var(--color-primary) calc(l * 1.2) calc(c * 1.3) h);
+    background: oklch(from var(--color-primary) calc(l * 1.1) c h);
+  }
+
   &[data-color="ghost"] {
     background: transparent;
     color: var(--color-high);
@@ -270,6 +275,12 @@ html body {
       width: 100%;
       height: 100%;
     }
+  }
+
+  [data-slot="hint"] {
+    font-size: var(--font-size-xs);
+    opacity: 0.8;
+    font-weight: 400;
   }
 }
 

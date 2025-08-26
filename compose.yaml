@@ -58,11 +58,13 @@ services:
       - HASURA_GRAPHQL_EXPERIMENTAL_FEATURES=naming_convention
       # DEFANG CONFIG
       - HASURA_GRAPHQL_CORS_DOMAIN=https://${DOMAIN_NAME},https://*.${DOMAIN_NAME}
+      - DEFANG_FABRIC=https://fabric-prod1.defang.dev
       - DEFANG_FN_ENDPOINT=https://api.${DOMAIN_NAME}
       - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:${POSTGRES_PASSWORD}@hasura-postgres:5432/postgres
       - HASURA_GRAPHQL_JWT_SECRET={"jwk_url":"https://auth.${DOMAIN_NAME}/.well-known/jwks.json","claims_namespace_path":"$.properties.hasura"}
       - HASURA_GRAPHQL_ADMIN_SECRET
       - DEFANG_API_SECRET
+      - DEFANG_FABRIC_SHARED_SECRET
       # Trigger action to investigate weird DOMAIN_NAME interpolation
     depends_on:
       - hasura-postgres

@@ -4,9 +4,8 @@ import { analytics } from "../../lib/analytics/analytics";
 import { authorizeRequest } from "../../lib/auth/authorize-request";
 import { fetchUserinfo } from "../../lib/auth/fetch-userinfo";
 import { getJwtFromRequest } from "../../lib/auth/get-jwt-from-request";
-import { upsertStripeCustomer } from "../../lib/stripe/upsert-stripe-customer";
 import { getStripeClient } from "../../lib/stripe/get-stripe-client";
-import { getStripeCustomer } from "../../lib/stripe/get-stripe-customer";
+import { upsertStripeCustomer } from "../../lib/stripe/upsert-stripe-customer";
 
 /**
  * This function takes an authed request and returns the Stripe customer for the user.
@@ -29,7 +28,6 @@ async function authorizeCustomer(req: Context["req"]) {
   return customer;
 }
 
-
 /**
  * [DEPRECATED]
  * This is used to create links for the authed user to manage their subscriptions
@@ -39,7 +37,7 @@ export async function createStripeClientSecret(c: Context) {
   const req = c.req;
   const customer = await authorizeCustomer(req);
   if (!customer) {
-    return c.json({ error: "Failed to create customer" }, 500);
+    return c.json({ message: "Failed to create customer" }, 500);
   }
 
   const stripe = getStripeClient();
@@ -56,8 +54,6 @@ export async function createStripeClientSecret(c: Context) {
   return c.json({ secret: customerSession.client_secret }, 201);
 }
 
-
-
 /**
  * This is used to create links for the authed user to manage their subscriptions
  * in the Stripe-managed portal.
@@ -66,7 +62,7 @@ export async function createStripePortalSession(c: Context) {
   const req = c.req;
   const customer = await authorizeCustomer(req);
   if (!customer) {
-    return c.json({ error: "Failed to create customer" }, 500);
+    return c.json({ message: "Failed to create customer" }, 500);
   }
 
   const stripeClient = getStripeClient();
@@ -77,7 +73,7 @@ export async function createStripePortalSession(c: Context) {
 
   if (!rootUrl) {
     console.error("PUBLIC_ROOT_URL is not set in the environment variables.");
-    return c.text("Misconfigured.", 500);
+    return c.json({ message: "Misconfigured." }, 500);
   }
 
   const session = await stripeClient.billingPortal.sessions.create({
@@ -97,20 +93,26 @@ export async function webhookHandler(c: Context) {
   }>(c);
 
   if (!STRIPE_WEBHOOK_SECRET) {
-    console.error("STRIPE_WEBHOOK_SECRET is not set in the environment variables.");
-    return c.text("Misconfigured.", 500);
+    console.error(
+      "STRIPE_WEBHOOK_SECRET is not set in the environment variables."
+    );
+    return c.json({ message: "Misconfigured." }, 500);
   }
 
-  const signature = c.req.header('stripe-signature');
+  const signature = c.req.header("stripe-signature");
   const stripe = getStripeClient();
 
   if (!signature) {
-    return c.text('Missing signature', 400);
+    return c.json({ message: "Missing signature" }, 400);
   }
 
   try {
     const body = await c.req.text();
-    const event = await stripe.webhooks.constructEventAsync(body, signature, STRIPE_WEBHOOK_SECRET);
+    const event = await stripe.webhooks.constructEventAsync(
+      body,
+      signature,
+      STRIPE_WEBHOOK_SECRET
+    );
 
     /**
      * Handle:
@@ -123,21 +125,20 @@ export async function webhookHandler(c: Context) {
      * 7.	payment_intent.succeeded
      */
     switch (event.type) {
-      case 'customer.subscription.created':
-      case 'customer.subscription.deleted':
-      case 'customer.subscription.paused':
-      case 'customer.subscription.resumed':
-      case 'customer.subscription.trial_will_end':
-      case 'customer.subscription.updated':
+      case "customer.subscription.created":
+      case "customer.subscription.deleted":
+      case "customer.subscription.paused":
+      case "customer.subscription.resumed":
+      case "customer.subscription.trial_will_end":
+      case "customer.subscription.updated":
         const customerId = event.data.object.customer as string;
         const customer = await stripe.customers.retrieve(customerId);
 
-        if (customer.deleted)
-          break;
+        if (customer.deleted) break;
 
         const defangUserId = customer.metadata.defangUserId;
         if (!defangUserId) {
-          throw new Error('No defangUserId found in customer metadata');
+          throw new Error("No defangUserId found in customer metadata");
         }
 
         analytics.identify({
@@ -145,7 +146,7 @@ export async function webhookHandler(c: Context) {
           traits: {
             email: customer.email,
             stripeCustomerId: customerId,
-          }
+          },
         });
 
         analytics.track({
@@ -158,27 +159,28 @@ export async function webhookHandler(c: Context) {
             priceId: event.data.object.items.data[0]?.price?.id,
             priceName: event.data.object.items.data[0]?.price?.nickname,
             productId: event.data.object.items.data[0]?.price?.product,
-          }
+          },
         });
 
         break;
 
-      case 'payment_intent.succeeded':
+      case "payment_intent.succeeded":
         const paymentIntent = event.data.object;
         const paymentCustomerId = paymentIntent.customer as string;
 
         if (!paymentCustomerId) {
-          throw new Error('No customer ID found in payment intent');
+          throw new Error("No customer ID found in payment intent");
         }
 
-        const paymentCustomer = await stripe.customers.retrieve(paymentCustomerId);
+        const paymentCustomer = await stripe.customers.retrieve(
+          paymentCustomerId
+        );
 
-        if (paymentCustomer.deleted)
-          break;
+        if (paymentCustomer.deleted) break;
 
         const paymentDefangUserId = paymentCustomer.metadata.defangUserId;
         if (!paymentDefangUserId) {
-          throw new Error('No defangUserId found in customer metadata');
+          throw new Error("No defangUserId found in customer metadata");
         }
 
         analytics.identify({
@@ -186,7 +188,7 @@ export async function webhookHandler(c: Context) {
           traits: {
             email: paymentCustomer.email,
             stripeCustomerId: paymentCustomer.id,
-          }
+          },
         });
 
         analytics.track({
@@ -198,7 +200,7 @@ export async function webhookHandler(c: Context) {
             revenue: paymentIntent.amount,
             currency: paymentIntent.currency,
             status: paymentIntent.status,
-          }
+          },
         });
         break;
 
@@ -206,10 +208,10 @@ export async function webhookHandler(c: Context) {
         console.log(`Unhandled event type: ${event.type}`);
     }
 
-    return c.text('Event received', 200);
+    return c.json({ message: "Event received" }, 200);
   } catch (err) {
     console.error(`Webhook signature verification failed.`, err);
-    return c.text('Webhook Error', 400);
+    return c.json({ message: "Webhook Error" }, 400);
   }
 }
 
@@ -222,7 +224,7 @@ export async function generateCheckoutLink(c: Context) {
   const req = c.req;
   const customer = await authorizeCustomer(req);
   if (!customer) {
-    return c.json({ error: "Failed to create customer" }, 500);
+    return c.json({ message: "Failed to create customer" }, 500);
   }
 
   const stripeClient = getStripeClient();
@@ -233,15 +235,15 @@ export async function generateCheckoutLink(c: Context) {
 
   if (!rootUrl) {
     console.error("PUBLIC_ROOT_URL is not set in the environment variables.");
-    return c.text("Misconfigured.", 500);
+    return c.json({ message: "Misconfigured." }, 500);
   }
 
   // get price ID from request json
   const json = await c.req.json();
   const priceId = json?.input?.input?.priceId;
 
-  if (!priceId || typeof priceId !== 'string') {
-    return c.json({ message: 'Invalid request' }, 400);
+  if (!priceId || typeof priceId !== "string") {
+    return c.json({ message: "Invalid request" }, 400);
   }
 
   const session = await stripeClient.checkout.sessions.create({

@@ -16,8 +16,18 @@ type Mutation {
   deleteAccount: DeleteAccountOutput
 }
 
+type Mutation {
+  resolveAwsMarketplaceCustomer(
+    input: ResolveAwsMarketplaceCustomerInput!
+  ): ResolveAwsMarketplaceCustomerOutput
+}
+
 input CreateStripeCheckoutSessionInput {
   priceId: String!
+}
+
+input ResolveAwsMarketplaceCustomerInput {
+  registrationToken: String!
 }
 
 type DeleteAccountOutput {
@@ -34,5 +44,11 @@ type CreateStripePortalSessionOutput {
 
 type CreateStripeCheckoutSessionOutput {
   url: String!
+}
+
+type ResolveAwsMarketplaceCustomerOutput {
+  customerAWSAccountId: String!
+  customerIdentifier: String!
+  productCode: String!
 }
 

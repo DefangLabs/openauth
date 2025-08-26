@@ -1,8 +1,7 @@
-import { redirect } from "next/navigation";
-
 import { LOGIN_ROUTE } from "@/app/auth/constants";
-import { getAuth } from "./get-auth";
+import { redirect } from "next/navigation";
 import { loginRedirectParam } from "../constants";
+import { getAuth } from "./get-auth";
 
 interface RequireAuthOptions {
   redirectPath?: string;

@@ -35,13 +35,22 @@ actions:
         version: 2
     permissions:
       - role: user
+  - name: resolveAwsMarketplaceCustomer
+    definition:
+      kind: synchronous
+      handler: '{{DEFANG_FN_ENDPOINT}}/aws-marketplace/resolve'
+      forward_client_headers: true
+    permissions:
+      - role: user
 custom_types:
   enums: []
   input_objects:
     - name: CreateStripeCheckoutSessionInput
+    - name: ResolveAwsMarketplaceCustomerInput
   objects:
     - name: DeleteAccountOutput
     - name: CreateStripeSecretOutput
     - name: CreateStripePortalSessionOutput
     - name: CreateStripeCheckoutSessionOutput
+    - name: ResolveAwsMarketplaceCustomerOutput
   scalars: []

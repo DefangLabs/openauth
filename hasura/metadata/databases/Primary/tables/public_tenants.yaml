@@ -43,3 +43,21 @@ delete_permissions:
       filter:
         ownerId:
           _eq: X-Hasura-User-Id
+event_triggers:
+  - name: tenantAwsMarketplaceUpdated
+    definition:
+      enable_manual: true
+      update:
+        columns:
+          - id
+          - awsMarketplaceProductCode
+          - awsMarketplaceCustomerIdentifier
+          - awsMarketplaceAccountId
+    retry_conf:
+      interval_sec: 10
+      num_retries: 4
+      timeout_sec: 60
+    webhook: "{{DEFANG_FABRIC}}/aws-marketplace"
+    headers:
+      - name: Authorization
+        value_from_env: DEFANG_FABRIC_SHARED_SECRET

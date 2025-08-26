@@ -22,38 +22,37 @@ import { createCallbackClient } from "@bufbuild/connect";
 import { Empty, Timestamp } from "@bufbuild/protobuf";
 import { FabricController } from "../../generated/fabric_connect";
 import {
-  Build,
   CanIUseResponse,
   DebugResponse,
   DelegateSubdomainZoneResponse,
+  DeleteResponse,
   DeployResponse,
   DestroyResponse,
-  DeleteResponse,
   EstimateResponse,
   GenerateFilesResponse,
-  Secrets,
   GetConfigsResponse,
   GetSelectedProviderResponse,
   GetServicesResponse,
   ListConfigsResponse,
   ListDeploymentsResponse,
   LogEntry,
+  Mode,
+  Port,
   PreviewResponse,
-  Status,
+  Protocol,
   Provider,
+  Secrets,
   Service,
   ServiceInfo,
   ServiceState,
   StartGenerateResponse,
+  Status,
   SubscriptionTier,
   TailResponse,
-  UploadURLResponse,
   TokenResponse,
+  UploadURLResponse,
   Version,
   WhoAmIResponse,
-  Protocol,
-  Mode,
-  Port,
 } from "../../generated/fabric_pb";
 
 /** Type alias for the generated client type */
@@ -112,9 +111,10 @@ export function createMockClient(
     tail(_, cb) {
       const resp = new TailResponse();
       for (let i = 0; i < 10; i++) {
-        const entry = new LogEntry();
-        entry.message = `Log entry ${i}`;
-        resp.entries.push(entry);
+        const logEntry = new LogEntry();
+        logEntry.message = `Log entry ${i}`;
+        logEntry.service = "mock-service";
+        resp.entries.push(logEntry);
       }
       cb(resp);
       return () => {};
