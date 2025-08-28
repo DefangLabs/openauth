@@ -21,7 +21,7 @@
 import { CustomPricingTable } from "@/components/custom-pricing-table/custom-pricing-table";
 import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
 import { createTenantMutation } from "@/modules/tenants/graphql/mutations/create-tenant-mutation";
-import { useCurrentTenant } from "@/modules/tenants/hooks/use-current-tenant";
+import { useCurrentTenantId } from "@/modules/tenants/hooks/use-current-tenant-id";
 import { useTenantsQuery } from "@/modules/tenants/hooks/use-tenants-query";
 import { useMutation } from "@apollo/client";
 import {
@@ -39,7 +39,7 @@ import { FormEvent, useState } from "react";
 
 export function TenantOnboarding() {
   const [createTenant, { loading }] = useMutation(createTenantMutation);
-  const { setCurrentTenant } = useCurrentTenant();
+  const { setCurrentTenantId } = useCurrentTenantId();
   const router = useRouter();
   const { refresh } = useAccessToken();
   const { data: tenantsQuery, refetch: refetchTenants } = useTenantsQuery();
@@ -66,7 +66,7 @@ export function TenantOnboarding() {
       const id = data?.tenant?.id;
       if (id) {
         setTenantId(id);
-        setCurrentTenant(id);
+        setCurrentTenantId(id);
         // Reload the tenants list to update the UI (like the tenant switcher)
         await refetchTenants();
       }

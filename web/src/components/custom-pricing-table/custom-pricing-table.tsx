@@ -26,6 +26,15 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { useCustomPricingTableQuery } from "./hooks/use-custom-pricing-table-query";
+import Link from "next/link";
+import { PageLoading } from "../page-loading/page-loading";
+
+interface FrequencyOption {
+  value: "monthly" | "annually";
+  label: string;
+  priceSuffix: string;
+}
 
 const freqs: {
   value: "monthly" | "annually";
@@ -382,36 +391,28 @@ export interface CustomPricingTableProps {
   hideFreeTier?: boolean;
 }
 
-export function CustomPricingTable(props: CustomPricingTableProps) {
-  const { data } = useWhoami();
-  let currentTier = data?.tier;
+interface PricingTableGridProps {
+  hideFreeTier?: boolean;
+  frequency: FrequencyOption;
+  currentTier: SubscriptionTier;
+  linkToStripePortal: boolean;
+  createStripePortalSession: (options?: any) => Promise<any>;
+  createStripeCheckoutSession: (options?: any) => Promise<any>;
+  anythingLoading: boolean;
+}
 
-  if (
-    currentTier === undefined ||
-    currentTier === SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED
-  ) {
-    currentTier = SubscriptionTier.HOBBY;
-  }
+function PricingTableGrid(props: PricingTableGridProps) {
+  const {
+    hideFreeTier,
+    frequency,
+    currentTier,
+    linkToStripePortal,
+    createStripePortalSession,
+    createStripeCheckoutSession,
+    anythingLoading,
+  } = props;
 
-  // if the user has a paid plan already, we send them to the portal
-  // otherwise we create a checkout linke when they click
-  const linkToStripePortal = [
-    SubscriptionTier.PERSONAL,
-    SubscriptionTier.PRO,
-    SubscriptionTier.TEAM,
-  ].includes(currentTier ?? SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED);
-
-  const [createStripePortalSession, { loading: stripeSessionLoading }] =
-    useMutation(CreateStripePortalSessionMutation as any);
-
-  const [createStripeCheckoutSession, { loading: checkoutLoading }] =
-    useMutation(CreateStripeCheckoutSessionMutation as any);
-
-  const anythingLoading = stripeSessionLoading || checkoutLoading;
-
-  const [frequency, setFrequency] = useState(freqs[0]);
-
-  const pricingTable = (
+  return (
     <Box
       sx={{
         display: {
@@ -425,7 +426,7 @@ export function CustomPricingTable(props: CustomPricingTableProps) {
           lg: "unset",
         },
         gridTemplateColumns: {
-          lg: props.hideFreeTier ? "repeat(3, 1fr)" : "repeat(4, 1fr)",
+          lg: hideFreeTier ? "repeat(3, 1fr)" : "repeat(4, 1fr)",
         },
         pb: 4,
         width: "100%",
@@ -434,7 +435,7 @@ export function CustomPricingTable(props: CustomPricingTableProps) {
       {plans
         .filter((plan) => {
           // if hideFreeTier is true, we filter out the Hobby plan
-          if (props.hideFreeTier && plan.tier === SubscriptionTier.HOBBY) {
+          if (hideFreeTier && plan.tier === SubscriptionTier.HOBBY) {
             return false;
           }
           return true;
@@ -611,9 +612,85 @@ export function CustomPricingTable(props: CustomPricingTableProps) {
         })}
     </Box>
   );
+}
+
+export function CustomPricingTable(props: CustomPricingTableProps) {
+  const { data: whoami, isLoading: whoamiLoading } = useWhoami();
+  const { data: tableQuery, loading: tableQueryLoading } =
+    useCustomPricingTableQuery();
+  let currentTier = whoami?.tier;
+
+  if (
+    currentTier === undefined ||
+    currentTier === SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED
+  ) {
+    currentTier = SubscriptionTier.HOBBY;
+  }
+
+  // if the user has a paid plan already, we send them to the portal
+  // otherwise we create a checkout linke when they click
+  const linkToStripePortal = [
+    SubscriptionTier.PERSONAL,
+    SubscriptionTier.PRO,
+    SubscriptionTier.TEAM,
+  ].includes(currentTier ?? SubscriptionTier.SUBSCRIPTION_TIER_UNSPECIFIED);
+
+  const [createStripePortalSession, { loading: stripeSessionLoading }] =
+    useMutation(CreateStripePortalSessionMutation as any);
+
+  const [createStripeCheckoutSession, { loading: checkoutLoading }] =
+    useMutation(CreateStripeCheckoutSessionMutation as any);
+
+  const anythingLoading =
+    stripeSessionLoading || checkoutLoading || tableQueryLoading;
+
+  const [frequency, setFrequency] = useState(freqs[0]);
+
+  if (whoamiLoading || tableQueryLoading) {
+    return <PageLoading />;
+  }
+
+  const pricingTable = (
+    <PricingTableGrid
+      hideFreeTier={props.hideFreeTier}
+      frequency={frequency}
+      currentTier={currentTier}
+      linkToStripePortal={linkToStripePortal}
+      createStripePortalSession={createStripePortalSession}
+      createStripeCheckoutSession={createStripeCheckoutSession}
+      anythingLoading={anythingLoading}
+    />
+  );
 
   if (props.embedded) {
     return pricingTable;
+  }
+
+  if (!tableQueryLoading && tableQuery?.tenant?.awsMarketplaceAccountId) {
+    // basic UI pointing people to the AWS Marketplace
+    return (
+      <Container
+        id="pricing"
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          py: 5,
+        }}
+      >
+        <Stack>
+          <Typography variant="h2">Subscription</Typography>
+          <Typography>
+            You subscribed to Defang in the AWS Marketplace.
+          </Typography>
+          <Link href="https://aws.amazon.com/marketplace/" target="_blank">
+            <Button variant="outlined" sx={{ mt: 2, width: "fit-content" }}>
+              Manage your subscription in AWS Marketplace
+            </Button>
+          </Link>
+        </Stack>
+      </Container>
+    );
   }
 
   return (

@@ -9,7 +9,7 @@
  * the application react to the change.  A small settings icon sits next to the
  * tenant name and links to the account page.
  */
-import { useCurrentTenant } from "@/modules/tenants/hooks/use-current-tenant";
+import { useCurrentTenantId } from "@/modules/tenants/hooks/use-current-tenant-id";
 import { useFeatureFlag } from "@/modules/feature-flags/hooks/use-feature-flag";
 import { useTenantsQuery } from "@/modules/tenants/hooks/use-tenants-query";
 import { Business, ManageAccounts, ArrowDropDown } from "@mui/icons-material";
@@ -54,19 +54,19 @@ const TenantLabel = styled(Typography)`
 export function TenantSwitcher() {
   const showSwitcher = useFeatureFlag("TENANT_SWITCHER");
   const { data } = useTenantsQuery();
-  const { currentTenant, setCurrentTenant } = useCurrentTenant();
+  const { currentTenantId, setCurrentTenantId } = useCurrentTenantId();
   const { setSidebarOpen } = useSidebarOpen();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
 
   const tenants = data?.tenants || [];
-  const selected = tenants.find((t) => t.id === currentTenant) || tenants[0];
+  const selected = tenants.find((t) => t.id === currentTenantId) || tenants[0];
 
   useEffect(() => {
-    if (!currentTenant && selected) {
-      setCurrentTenant(selected.id);
+    if (!currentTenantId && selected) {
+      setCurrentTenantId(selected.id);
     }
-  }, [currentTenant, selected, setCurrentTenant]);
+  }, [currentTenantId, selected, setCurrentTenantId]);
 
   return (
     <>
@@ -126,7 +126,7 @@ export function TenantSwitcher() {
             key={t.id}
             selected={t.id === selected?.id}
             onClick={() => {
-              setCurrentTenant(t.id);
+              setCurrentTenantId(t.id);
               setAnchorEl(null);
               setSidebarOpen(false);
               router.push(`/projects`);

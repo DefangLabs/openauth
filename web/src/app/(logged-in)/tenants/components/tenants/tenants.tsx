@@ -2,7 +2,7 @@
 
 import DeleteWithConfirmationButton from "@/components/delete-with-confirmation-button";
 import { initiateTenantDeletionMutation } from "@/modules/tenants/graphql/mutations/initiate-tenant-deletion-mutation";
-import { useCurrentTenant } from "@/modules/tenants/hooks/use-current-tenant";
+import { useCurrentTenantId } from "@/modules/tenants/hooks/use-current-tenant-id";
 import { useTenantsQuery } from "@/modules/tenants/hooks/use-tenants-query";
 import { useMutation } from "@apollo/client";
 import { Add, Business } from "@mui/icons-material";
@@ -22,15 +22,15 @@ import Link from "next/link";
 export function Tenants() {
   const { data, refetch } = useTenantsQuery();
   const [deleteTenant] = useMutation(initiateTenantDeletionMutation);
-  const { currentTenant, setCurrentTenant } = useCurrentTenant();
+  const { currentTenantId, setCurrentTenantId } = useCurrentTenantId();
   const theme = useTheme();
 
   const handleDelete = async (id: string) => {
     await deleteTenant({ variables: { tenantId: id } });
     const refetchedTenants = await refetch();
     // if current tenant was deleted, set the first tenant as current
-    if (currentTenant === id && refetchedTenants?.data?.tenants?.length > 0) {
-      setCurrentTenant(refetchedTenants.data?.tenants?.[0].id);
+    if (currentTenantId === id && refetchedTenants?.data?.tenants?.length > 0) {
+      setCurrentTenantId(refetchedTenants.data?.tenants?.[0].id);
     }
   };
 
@@ -122,7 +122,7 @@ export function Tenants() {
                 // eventually we will have a tenant-specific URL
                 // href={`/tenants/${t.id}`}
                 onClick={() => {
-                  setCurrentTenant(t.id);
+                  setCurrentTenantId(t.id);
                 }}
                 sx={{
                   flexGrow: 1,

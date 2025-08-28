@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { GetServicesResponse } from "../../generated/fabric_pb";
 import { useDefangClient } from "../use-defang-client/use-defang-client";
 import { atom, useAtom } from "jotai";
-import { useCurrentTenant } from "@/modules/tenants/hooks/use-current-tenant";
+import { useCurrentTenantId } from "@/modules/tenants/hooks/use-current-tenant-id";
 
 interface UseServicesOpts {
   skip?: boolean;
@@ -17,11 +17,11 @@ export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
   const [project, setProject] = useState("");
   const [expiresAt, setExpiresAt] = useState(0);
   const client = useDefangClient();
-  const { currentTenant } = useCurrentTenant();
+  const { currentTenantId } = useCurrentTenantId();
 
   useEffect(() => {
     if (skip) return;
-    console.log("@@ getting services", currentTenant);
+    console.log("@@ getting services", currentTenantId);
     setLoading(true);
     client?.getServices({}, (err, res) => {
       if (err) {
@@ -34,7 +34,7 @@ export function useServices({ skip, poll }: UseServicesOpts | undefined = {}) {
       setExpiresAt(res.expiresAt?.toDate().getTime() ?? 0);
       setLoading(false);
     });
-  }, [client, setServices, skip, setProject, currentTenant]);
+  }, [client, setServices, skip, setProject, currentTenantId]);
 
   useEffect(() => {
     if (!poll) return;

@@ -14,6 +14,8 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
+  "\n  query CustomPricingTableQuery($tenantId: uuid!) {\n    tenant: tenantsByPk(id: $tenantId) {\n      awsMarketplaceAccountId\n    }\n  }\n":
+    types.CustomPricingTableQueryDocument,
   "\n  mutation DeleteUserMutation {\n    deleteUser {\n      message\n    }\n  }\n":
     types.DeleteUserMutationDocument,
   "\n  mutation ResolveAwsMarketplaceCustomer(\n    $input: ResolveAwsMarketplaceCustomerInput!\n  ) {\n    resolveAwsMarketplaceCustomer(input: $input) {\n      customerAWSAccountId\n      customerIdentifier\n      productCode\n    }\n  }\n":
@@ -56,6 +58,12 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query CustomPricingTableQuery($tenantId: uuid!) {\n    tenant: tenantsByPk(id: $tenantId) {\n      awsMarketplaceAccountId\n    }\n  }\n",
+): (typeof documents)["\n  query CustomPricingTableQuery($tenantId: uuid!) {\n    tenant: tenantsByPk(id: $tenantId) {\n      awsMarketplaceAccountId\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

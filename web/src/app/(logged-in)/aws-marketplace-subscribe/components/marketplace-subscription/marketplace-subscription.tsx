@@ -4,6 +4,7 @@ import { ResolveAwsMarketplaceCustomerMutation } from "@/modules/aws-marketplace
 import { useMutation } from "@apollo/client";
 import useSWR from "swr";
 import { getMarketplaceToken } from "./actions";
+import { redirect } from "next/navigation";
 
 export default function AwsMarketplaceSubscribeComponent() {
   const [
@@ -15,15 +16,16 @@ export default function AwsMarketplaceSubscribeComponent() {
     "marketplaceToken",
     getMarketplaceToken,
     {
-      onSuccess(registrationToken, key, config) {
+      async onSuccess(registrationToken, key, config) {
         if (registrationToken) {
-          resolveAwsMarketplaceCustomer({
+          await resolveAwsMarketplaceCustomer({
             variables: {
               input: {
                 registrationToken,
               },
             },
           });
+          redirect("/pricing/success");
         } else {
           throw Error("No AWS Marketplace registration token found");
         }
@@ -74,15 +76,8 @@ export default function AwsMarketplaceSubscribeComponent() {
   }
 
   if (customerData?.resolveAwsMarketplaceCustomer) {
-    const result = customerData.resolveAwsMarketplaceCustomer;
-    return (
-      <div style={{ padding: "20px" }}>
-        <h1>AWS Marketplace Subscription</h1>
-        <p>AWS Account ID: {result.customerAWSAccountId}</p>
-        <p>Customer ID: {result.customerIdentifier}</p>
-        <p>Product Code: {result.productCode}</p>
-      </div>
-    );
+    // blank page as we redirect
+    return null;
   }
 
   return (

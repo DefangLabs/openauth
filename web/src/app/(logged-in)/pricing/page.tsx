@@ -1,10 +1,10 @@
-import { requireAuth } from "@/modules/auth/lib/require-auth";
+import { RequireAuth } from "@/modules/auth/components/require-auth/require-auth";
 import { Pricing } from "./components/pricing/pricing";
 
 export default async function PricingPage() {
-  await requireAuth({
-    redirectPath: "/pricing",
-  });
-
-  return <Pricing />;
+  return (
+    <RequireAuth redirectPath="/pricing">
+      <Pricing />
+    </RequireAuth>
+  );
 }

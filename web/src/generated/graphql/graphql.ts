@@ -295,11 +295,15 @@ export type TenantsBoolExp = {
   _and?: InputMaybe<Array<TenantsBoolExp>>;
   _not?: InputMaybe<TenantsBoolExp>;
   _or?: InputMaybe<Array<TenantsBoolExp>>;
+  awsMarketplaceAccountId?: InputMaybe<StringComparisonExp>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<StringComparisonExp>;
+  awsMarketplaceProductCode?: InputMaybe<StringComparisonExp>;
   createdAt?: InputMaybe<TimestamptzComparisonExp>;
   id?: InputMaybe<UuidComparisonExp>;
   name?: InputMaybe<StringComparisonExp>;
   owner?: InputMaybe<UsersBoolExp>;
   ownerId?: InputMaybe<UuidComparisonExp>;
+  provider?: InputMaybe<StringComparisonExp>;
   tenantMembers?: InputMaybe<TenantMembersBoolExp>;
   updatedAt?: InputMaybe<TimestamptzComparisonExp>;
 };
@@ -322,19 +326,27 @@ export type TenantsInsertInput = {
 
 /** order by max() on columns of table "tenants" */
 export type TenantsMaxOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
   ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
 };
 
 /** order by min() on columns of table "tenants" */
 export type TenantsMinOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
   ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
 };
 
@@ -354,17 +366,27 @@ export type TenantsOnConflict = {
 
 /** Ordering options when selecting data from "tenants". */
 export type TenantsOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
   owner?: InputMaybe<UsersOrderBy>;
   ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
   tenantMembersAggregate?: InputMaybe<TenantMembersAggregateOrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
 };
 
 /** select columns of table "tenants" */
 export enum TenantsSelectColumn {
+  /** column name */
+  AwsMarketplaceAccountId = "awsMarketplaceAccountId",
+  /** column name */
+  AwsMarketplaceCustomerIdentifier = "awsMarketplaceCustomerIdentifier",
+  /** column name */
+  AwsMarketplaceProductCode = "awsMarketplaceProductCode",
   /** column name */
   CreatedAt = "createdAt",
   /** column name */
@@ -373,6 +395,8 @@ export enum TenantsSelectColumn {
   Name = "name",
   /** column name */
   OwnerId = "ownerId",
+  /** column name */
+  Provider = "provider",
   /** column name */
   UpdatedAt = "updatedAt",
 }
@@ -387,10 +411,14 @@ export type TenantsStreamCursorInput = {
 
 /** Initial value of the column from where the streaming should start */
 export type TenantsStreamCursorValueInput = {
+  awsMarketplaceAccountId?: InputMaybe<Scalars["String"]["input"]>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<Scalars["String"]["input"]>;
+  awsMarketplaceProductCode?: InputMaybe<Scalars["String"]["input"]>;
   createdAt?: InputMaybe<Scalars["timestamptz"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   name?: InputMaybe<Scalars["String"]["input"]>;
   ownerId?: InputMaybe<Scalars["uuid"]["input"]>;
+  provider?: InputMaybe<Scalars["String"]["input"]>;
   updatedAt?: InputMaybe<Scalars["timestamptz"]["input"]>;
 };
 
@@ -520,6 +548,18 @@ export type UuidComparisonExp = {
   _lte?: InputMaybe<Scalars["uuid"]["input"]>;
   _neq?: InputMaybe<Scalars["uuid"]["input"]>;
   _nin?: InputMaybe<Array<Scalars["uuid"]["input"]>>;
+};
+
+export type CustomPricingTableQueryQueryVariables = Exact<{
+  tenantId: Scalars["uuid"]["input"];
+}>;
+
+export type CustomPricingTableQueryQuery = {
+  __typename?: "query_root";
+  tenant?: {
+    __typename?: "Tenants";
+    awsMarketplaceAccountId?: string | null;
+  } | null;
 };
 
 export type DeleteUserMutationMutationVariables = Exact<{
@@ -675,6 +715,61 @@ export type UserByEmailQuery = {
   }>;
 };
 
+export const CustomPricingTableQueryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "CustomPricingTableQuery" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tenantId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "uuid" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            alias: { kind: "Name", value: "tenant" },
+            name: { kind: "Name", value: "tenantsByPk" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "tenantId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "awsMarketplaceAccountId" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CustomPricingTableQueryQuery,
+  CustomPricingTableQueryQueryVariables
+>;
 export const DeleteUserMutationDocument = {
   kind: "Document",
   definitions: [

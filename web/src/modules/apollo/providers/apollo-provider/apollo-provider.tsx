@@ -6,7 +6,7 @@
  * the backend finalizes the API contract.
  */
 import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
-import { useCurrentTenant } from "@/modules/tenants/hooks/use-current-tenant";
+import { useCurrentTenantId } from "@/modules/tenants/hooks/use-current-tenant-id";
 import {
   ApolloProvider as AP,
   ApolloClient,
@@ -23,14 +23,14 @@ const TOKEN_CLEANUP_TIMEOUT_MS = 60 * 1000;
 
 export function ApolloProvider({ children }: { children: React.ReactNode }) {
   const { token, refresh } = useAccessToken();
-  const { currentTenant } = useCurrentTenant();
+  const { currentTenantId } = useCurrentTenantId();
   const tokenRef = useRef(token);
-  const tenantRef = useRef(currentTenant);
+  const tenantRef = useRef(currentTenantId);
   const refreshRef = useRef(refresh);
   // Map to track which operations have been retried
   const retriedOperations = useRef(new Map<string, boolean>());
   tokenRef.current = token;
-  tenantRef.current = currentTenant;
+  tenantRef.current = currentTenantId;
   refreshRef.current = refresh;
 
   const client = useMemo(() => {

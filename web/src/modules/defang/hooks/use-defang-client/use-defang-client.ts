@@ -7,7 +7,7 @@
  *
  */
 import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
-import { useCurrentTenant } from "@/modules/tenants/hooks/use-current-tenant";
+import { useCurrentTenantId } from "@/modules/tenants/hooks/use-current-tenant-id";
 import { createCallbackClient } from "@bufbuild/connect";
 import { createGrpcWebTransport } from "@bufbuild/connect-web";
 import { useMemo, useRef, useEffect } from "react";
@@ -20,9 +20,9 @@ type Client =
 
 export function useDefangClient() {
   const { token, refetch } = useAccessToken();
-  const { currentTenant } = useCurrentTenant();
+  const { currentTenantId } = useCurrentTenantId();
   const tokenRef = useRef(token);
-  const tenantRef = useRef(currentTenant);
+  const tenantRef = useRef(currentTenantId);
   const clientRef = useRef<Client>();
 
   // Update tokenRef whenever token changes
@@ -32,8 +32,8 @@ export function useDefangClient() {
 
   // Keep tenantRef in sync with atom state
   useEffect(() => {
-    tenantRef.current = currentTenant;
-  }, [currentTenant]);
+    tenantRef.current = currentTenantId;
+  }, [currentTenantId]);
 
   const memoClient = useMemo(() => {
     if (process.env.NODE_ENV === "development") {
