@@ -1005,6 +1005,11 @@ export function issuer<
         )
       }
 
+      // TODO: Using JWTs as Authorization Grants
+      if (grantType === "urn:ietf:params:oauth:grant-type:jwt-bearer") {
+        
+      }
+
       throw new Error("Invalid grant_type")
     },
   )
