@@ -8,7 +8,7 @@ interface RequireAuthOptions {
 }
 
 export async function requireAuth({ redirectPath }: RequireAuthOptions = {}) {
-  const auth = await getAuth();
+  const auth = await getAuth({ refresh: true });
   if (!auth) {
     // Add the redirect path as a query parameter to the login URL
     if (redirectPath) {

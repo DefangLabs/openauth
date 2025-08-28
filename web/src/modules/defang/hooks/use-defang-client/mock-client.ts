@@ -59,7 +59,7 @@ import {
 type Client = ReturnType<typeof createCallbackClient<typeof FabricController>>;
 
 /** All available mock scenarios */
-export type MockScenario = "default" | "empty";
+export type MockScenario = "default" | "empty" | "paid";
 
 /** Obtain the active scenario from URL, localStorage or env vars */
 export function getMockScenario(): MockScenario {
@@ -244,7 +244,7 @@ export function createMockClient(
         userId: "mock-user-id",
         region: "mock-region",
         tenant: "mock-tenant",
-        tier: SubscriptionTier.HOBBY,
+        tier: scenario === "paid" ? SubscriptionTier.PRO : SubscriptionTier.HOBBY,
       });
       cb(undefined, resp);
       return () => {};

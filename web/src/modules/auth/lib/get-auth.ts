@@ -15,16 +15,28 @@ export async function getAuth({ refresh = false }: getAuthOptions = {}) {
     return false;
   }
 
-  const verified = await authClient.verify(subjects, accessToken.value, {
-    refresh: refresh ? refreshToken?.value : undefined,
-  });
+  let verified;
+  try {
+    verified = await authClient.verify(subjects, accessToken.value, {
+      refresh: refresh ? refreshToken?.value : undefined,
+    });
+  } catch (err) {
+    console.error("@@ Verification threw an exception:", err);
+    return false;
+  }
 
   if (verified.err) {
     console.error("@@ Verification error: ", verified.err);
     return false;
   }
   if (verified.tokens) {
-    await setTokens(verified.tokens.access, verified.tokens.refresh);
+    try {
+      await setTokens(verified.tokens.access, verified.tokens.refresh);
+    } catch (err) {
+      console.error("@@ setTokens error:", err);
+      // even if setting cookies fails, we treat as unauthenticated so upstream redirect occurs
+      return false;
+    }
   }
 
   return verified.subject;

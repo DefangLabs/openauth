@@ -1,19 +1,28 @@
 "use client";
 
-import { DeleteAccountMutation } from "@/modules/accounts/graphql/mutations/delete-account-mutation";
+import { DeleteUserMutation } from "@/modules/accounts/graphql/mutations/delete-user-mutation";
 import { logoutAction } from "@/modules/auth/actions/actions";
 import { useMutation } from "@apollo/client";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Stack,
+  TextField,
+  Typography,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { FormEvent, useCallback, useState } from "react";
 
-const VERIFY_TEXT = "Delete *all* my data and services";
+const VERIFY_TEXT = "Delete *all* my data and playground services";
 
 export function DangerZone() {
-  const [deleteAccount, { loading, data }] = useMutation(DeleteAccountMutation);
+  const [deleteUser, { loading, data }] = useMutation(DeleteUserMutation);
 
   const [form, setForm] = useState({
     verifyText: "",
   });
+  const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   const isValid = form.verifyText === VERIFY_TEXT;
 
@@ -31,14 +40,16 @@ export function DangerZone() {
         return;
       }
       try {
-        const response = await deleteAccount();
+        const response = await deleteUser();
         logoutAction();
         window.location.href = "/";
-      } catch (e) {
+      } catch (e: any) {
+        setError(e?.message || "Failed to delete account");
+        setOpen(true);
         console.error("@@ error deleting account", e);
       }
     },
-    [deleteAccount, isValid],
+    [deleteUser, isValid],
   );
 
   return (
@@ -61,7 +72,7 @@ export function DangerZone() {
           >
             {VERIFY_TEXT}
           </span>{" "}
-          and submit to delete your account and any Playground project. This
+          and submit to delete your account and any Playground services. This
           action is irreversible.
         </Typography>
         <TextField
@@ -80,6 +91,16 @@ export function DangerZone() {
             Delete Account
           </Button>
         </Stack>
+        <Snackbar
+          open={open}
+          autoHideDuration={4000}
+          onClose={() => setOpen(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert severity="error" onClose={() => setOpen(false)}>
+            {error}
+          </Alert>
+        </Snackbar>
       </Stack>
     </form>
   );

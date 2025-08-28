@@ -323,8 +323,13 @@ export enum CursorOrdering {
   Desc = 'DESC'
 }
 
-export type DeleteAccountOutput = {
-  __typename?: 'DeleteAccountOutput';
+export type DeleteUserOutput = {
+  __typename?: 'DeleteUserOutput';
+  message: Scalars['String']['output'];
+};
+
+export type InitiateTenantDeletionOutput = {
+  __typename?: 'InitiateTenantDeletionOutput';
   message: Scalars['String']['output'];
 };
 
@@ -841,6 +846,8 @@ export type Tenants = {
   createdAt: Scalars['timestamptz']['output'];
   id: Scalars['uuid']['output'];
   name: Scalars['String']['output'];
+  /** An object relationship */
+  owner: Users;
   ownerId: Scalars['uuid']['output'];
   provider: Scalars['String']['output'];
   /** An array relationship */
@@ -848,8 +855,6 @@ export type Tenants = {
   /** An aggregate relationship */
   tenantMembersAggregate: TenantMembersAggregate;
   updatedAt: Scalars['timestamptz']['output'];
-  /** An object relationship */
-  user: Users;
 };
 
 
@@ -923,12 +928,12 @@ export type TenantsBoolExp = {
   createdAt?: InputMaybe<TimestamptzComparisonExp>;
   id?: InputMaybe<UuidComparisonExp>;
   name?: InputMaybe<StringComparisonExp>;
+  owner?: InputMaybe<UsersBoolExp>;
   ownerId?: InputMaybe<UuidComparisonExp>;
   provider?: InputMaybe<StringComparisonExp>;
   tenantMembers?: InputMaybe<TenantMembersBoolExp>;
   tenantMembersAggregate?: InputMaybe<TenantMembersAggregateBoolExp>;
   updatedAt?: InputMaybe<TimestamptzComparisonExp>;
-  user?: InputMaybe<UsersBoolExp>;
 };
 
 /** unique or primary key constraints on table "tenants" */
@@ -947,11 +952,11 @@ export type TenantsInsertInput = {
   createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  owner?: InputMaybe<UsersObjRelInsertInput>;
   ownerId?: InputMaybe<Scalars['uuid']['input']>;
   provider?: InputMaybe<Scalars['String']['input']>;
   tenantMembers?: InputMaybe<TenantMembersArrRelInsertInput>;
   updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
-  user?: InputMaybe<UsersObjRelInsertInput>;
 };
 
 /** aggregate max on columns */
@@ -1039,11 +1044,11 @@ export type TenantsOrderBy = {
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
+  owner?: InputMaybe<UsersOrderBy>;
   ownerId?: InputMaybe<OrderBy>;
   provider?: InputMaybe<OrderBy>;
   tenantMembersAggregate?: InputMaybe<TenantMembersAggregateOrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
-  user?: InputMaybe<UsersOrderBy>;
 };
 
 /** primary key columns input for table: tenants */
@@ -1634,7 +1639,6 @@ export type Mutation_Root = {
   createStripePortalSession?: Maybe<CreateStripePortalSessionOutput>;
   /** Create a Stripe client secret */
   createStripeSecret?: Maybe<CreateStripeSecretOutput>;
-  deleteAccount?: Maybe<DeleteAccountOutput>;
   /** delete data from the table: "accounts" */
   deleteAccounts?: Maybe<AccountsMutationResponse>;
   /** delete single row from the table: "accounts" */
@@ -1651,6 +1655,7 @@ export type Mutation_Root = {
   deleteTenants?: Maybe<TenantsMutationResponse>;
   /** delete single row from the table: "tenants" */
   deleteTenantsByPk?: Maybe<Tenants>;
+  deleteUser?: Maybe<DeleteUserOutput>;
   /** delete data from the table: "userAccounts" */
   deleteUserAccounts?: Maybe<UserAccountsMutationResponse>;
   /** delete single row from the table: "userAccounts" */
@@ -1659,6 +1664,7 @@ export type Mutation_Root = {
   deleteUsers?: Maybe<UsersMutationResponse>;
   /** delete single row from the table: "users" */
   deleteUsersByPk?: Maybe<Users>;
+  initiateTenantDeletion?: Maybe<InitiateTenantDeletionOutput>;
   /** insert data into the table: "accounts" */
   insertAccounts?: Maybe<AccountsMutationResponse>;
   /** insert a single row into the table: "accounts" */
@@ -1800,6 +1806,12 @@ export type Mutation_RootDeleteUsersArgs = {
 /** mutation root */
 export type Mutation_RootDeleteUsersByPkArgs = {
   id: Scalars['uuid']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootInitiateTenantDeletionArgs = {
+  tenantId: Scalars['uuid']['input'];
 };
 
 
@@ -2457,6 +2469,13 @@ export type UserAccountsAggregateBoolExpCount = {
   predicate: IntComparisonExp;
 };
 
+export type UserIdForTenantQueryVariables = Exact<{
+  tenantId: Scalars['uuid']['input'];
+}>;
+
+
+export type UserIdForTenantQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'Users', id: string }> };
+
 export type UpdateTenantAwsMarketplaceMutationVariables = Exact<{
   tenantId: Scalars['uuid']['input'];
   customerIdentifier: Scalars['String']['input'];
@@ -2467,12 +2486,42 @@ export type UpdateTenantAwsMarketplaceMutationVariables = Exact<{
 
 export type UpdateTenantAwsMarketplaceMutation = { __typename?: 'mutation_root', updateTenants?: { __typename?: 'TenantsMutationResponse', affectedRows: number } | null };
 
-export type FetchHasuraUsersQueryVariables = Exact<{
-  ids?: InputMaybe<Array<Scalars['uuid']['input']> | Scalars['uuid']['input']>;
+export type TenantOwnerEmailQueryVariables = Exact<{
+  tenantId: Scalars['uuid']['input'];
 }>;
 
 
-export type FetchHasuraUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'Users', id: string, email?: string | null }> };
+export type TenantOwnerEmailQuery = { __typename?: 'query_root', tenants: Array<{ __typename?: 'Tenants', id: string, owner: { __typename?: 'Users', email?: string | null } }> };
+
+export type TenantOwnershipQueryVariables = Exact<{
+  tenantId: Scalars['uuid']['input'];
+  ownerId: Scalars['uuid']['input'];
+}>;
+
+
+export type TenantOwnershipQuery = { __typename?: 'query_root', tenants: Array<{ __typename?: 'Tenants', id: string }> };
+
+export type DeleteTenantMutationVariables = Exact<{
+  tenantId: Scalars['uuid']['input'];
+  ownerId: Scalars['uuid']['input'];
+}>;
+
+
+export type DeleteTenantMutation = { __typename?: 'mutation_root', deleteTenants?: { __typename?: 'TenantsMutationResponse', affectedRows: number } | null };
+
+export type DeleteUserMutationVariables = Exact<{
+  id: Scalars['uuid']['input'];
+}>;
+
+
+export type DeleteUserMutation = { __typename?: 'mutation_root', deleteUsersByPk?: { __typename?: 'Users', id: string } | null };
+
+export type OwnedTenantsQueryVariables = Exact<{
+  ownerId: Scalars['uuid']['input'];
+}>;
+
+
+export type OwnedTenantsQuery = { __typename?: 'query_root', tenants: Array<{ __typename?: 'Tenants', id: string }> };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -2489,6 +2538,13 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const UserIdForTenantDocument = new TypedDocumentString(`
+    query UserIdForTenant($tenantId: uuid!) {
+  users(where: {tenants: {id: {_eq: $tenantId}}}) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<UserIdForTenantQuery, UserIdForTenantQueryVariables>;
 export const UpdateTenantAwsMarketplaceDocument = new TypedDocumentString(`
     mutation UpdateTenantAwsMarketplace($tenantId: uuid!, $customerIdentifier: String!, $accountId: String!, $productCode: String!) {
   updateTenants(
@@ -2499,11 +2555,41 @@ export const UpdateTenantAwsMarketplaceDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<UpdateTenantAwsMarketplaceMutation, UpdateTenantAwsMarketplaceMutationVariables>;
-export const FetchHasuraUsersDocument = new TypedDocumentString(`
-    query fetchHasuraUsers($ids: [uuid!]) {
-  users(limit: 10000, where: {id: {_nin: $ids}}) {
+export const TenantOwnerEmailDocument = new TypedDocumentString(`
+    query TenantOwnerEmail($tenantId: uuid!) {
+  tenants(where: {id: {_eq: $tenantId}}) {
     id
-    email
+    owner {
+      email
+    }
   }
 }
-    `) as unknown as TypedDocumentString<FetchHasuraUsersQuery, FetchHasuraUsersQueryVariables>;
+    `) as unknown as TypedDocumentString<TenantOwnerEmailQuery, TenantOwnerEmailQueryVariables>;
+export const TenantOwnershipDocument = new TypedDocumentString(`
+    query TenantOwnership($tenantId: uuid!, $ownerId: uuid!) {
+  tenants(where: {id: {_eq: $tenantId}, ownerId: {_eq: $ownerId}}) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<TenantOwnershipQuery, TenantOwnershipQueryVariables>;
+export const DeleteTenantDocument = new TypedDocumentString(`
+    mutation DeleteTenant($tenantId: uuid!, $ownerId: uuid!) {
+  deleteTenants(where: {id: {_eq: $tenantId}, ownerId: {_eq: $ownerId}}) {
+    affectedRows
+  }
+}
+    `) as unknown as TypedDocumentString<DeleteTenantMutation, DeleteTenantMutationVariables>;
+export const DeleteUserDocument = new TypedDocumentString(`
+    mutation DeleteUser($id: uuid!) {
+  deleteUsersByPk(id: $id) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<DeleteUserMutation, DeleteUserMutationVariables>;
+export const OwnedTenantsDocument = new TypedDocumentString(`
+    query OwnedTenants($ownerId: uuid!) {
+  tenants(where: {ownerId: {_eq: $ownerId}}) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<OwnedTenantsQuery, OwnedTenantsQueryVariables>;

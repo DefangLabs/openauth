@@ -1,29 +1,59 @@
 import { Context } from "hono";
 import { env } from "hono/adapter";
+import Stripe from "stripe";
 import { analytics } from "../../lib/analytics/analytics";
-import { authorizeRequest } from "../../lib/auth/authorize-request";
 import { fetchUserinfo } from "../../lib/auth/fetch-userinfo";
 import { getJwtFromRequest } from "../../lib/auth/get-jwt-from-request";
+import { UserinfoResponse } from "../../lib/auth/userinfo-schema";
 import { getStripeClient } from "../../lib/stripe/get-stripe-client";
 import { upsertStripeCustomer } from "../../lib/stripe/upsert-stripe-customer";
+import { getTenantIdFromHeader } from "../../lib/tenants/get-tenant-id-from-header";
+import { getUserIdForTenant } from "../../lib/users/get-user-id-for-tenant";
+
+/**
+ * Returns true if the user is the owner of the tenant or has a tenant 
+ * billing role for the given tenant.
+ */
+function userHasTenantBillingPermission(userinfo: UserinfoResponse, tenantId: string) {
+  return userinfo.userinfo.ownedTenants.some(tenant => tenant.id === tenantId) ||
+         userinfo.userinfo.tenantMemberships.some(membership =>
+           membership.tenant.id === tenantId &&
+           membership.role === "billing"
+         );
+}
 
 /**
  * This function takes an authed request and returns the Stripe customer for the user.
  * If the customer doesn't exist, it will create it.
  */
-async function authorizeCustomer(req: Context["req"]) {
-  const claims = await authorizeRequest(req);
-  const defangUserId = claims.sub;
+async function getAuthorizedCustomer(c: Context) {
+  const customer = await authorizeCustomer(c.req);
+  if (!customer) {
+    return {
+      customer: null,
+      errorResponse: c.json({ error: "Failed to create customer" }, 500),
+    };
+  }
+  return { customer, errorResponse: null };
+}
 
-  if (!defangUserId) {
-    throw new Error("No subject found in JWT");
+async function authorizeCustomer(req: Context["req"]) {
+  const defangTenantId = getTenantIdFromHeader(req);
+
+  if (!defangTenantId) {
+    throw new Error("No tenant ID found in header");
   }
 
   const jwt = getJwtFromRequest(req);
   const userinfo = await fetchUserinfo(jwt!); // jwt is guaranteed to be defined here since we just checked it in authorizeRequest
-  const email = userinfo.userinfo.email;
+  const hasPermission = userHasTenantBillingPermission(userinfo, defangTenantId);
 
-  const customer = await upsertStripeCustomer(defangUserId, { email });
+  if (!hasPermission) {
+    throw new Error("User does not have permission to access this tenant");
+  }
+
+  const email = userinfo.userinfo.email;
+  const customer = await upsertStripeCustomer(defangTenantId, { email });
 
   return customer;
 }
@@ -34,10 +64,9 @@ async function authorizeCustomer(req: Context["req"]) {
  * in the Stripe-managed pricing table.
  */
 export async function createStripeClientSecret(c: Context) {
-  const req = c.req;
-  const customer = await authorizeCustomer(req);
-  if (!customer) {
-    return c.json({ message: "Failed to create customer" }, 500);
+  const { customer, errorResponse } = await getAuthorizedCustomer(c);
+  if (errorResponse) {
+    return errorResponse;
   }
 
   const stripe = getStripeClient();
@@ -59,10 +88,9 @@ export async function createStripeClientSecret(c: Context) {
  * in the Stripe-managed portal.
  */
 export async function createStripePortalSession(c: Context) {
-  const req = c.req;
-  const customer = await authorizeCustomer(req);
-  if (!customer) {
-    return c.json({ message: "Failed to create customer" }, 500);
+  const { customer, errorResponse } = await getAuthorizedCustomer(c);
+  if (errorResponse) {
+    return errorResponse;
   }
 
   const stripeClient = getStripeClient();
@@ -82,6 +110,58 @@ export async function createStripePortalSession(c: Context) {
   });
 
   return c.json({ url: session.url }, 201);
+}
+
+async function handleWebhookEventAnalytics(
+  stripe: Stripe,
+  event: Stripe.Event,
+  getAnalyticsProperties: (object: any) => Record<string, any>
+) {
+  const eventObject = event.data.object as { customer?: string | Stripe.Customer | null };
+  const customerId = typeof eventObject.customer === 'string' ? eventObject.customer : eventObject.customer?.id;
+
+  if (!customerId) {
+    throw new Error(`No customer ID found in event: ${event.id}`);
+  }
+
+  const customer = await stripe.customers.retrieve(customerId);
+
+  if (customer.deleted) {
+    console.info(`Customer ${customerId} is deleted. Skipping webhook event.`);
+    return;
+  }
+
+  const { defangTenantId, defangUserId: initialDefangUserId } = customer.metadata;
+  let defangUserId = initialDefangUserId;
+
+  if (!defangUserId && defangTenantId) {
+    const userResult = (await getUserIdForTenant(defangTenantId)).data.users[0]?.id;
+    if (!userResult) {
+      throw new Error(`No user found for tenant ID: ${defangTenantId}`);
+    }
+    defangUserId = userResult;
+  }
+
+  if (!defangUserId) {
+    throw new Error(`Could not determine defangUserId for customer ${customerId}`);
+  }
+
+  analytics.identify({
+    userId: defangUserId,
+    traits: {
+      email: customer.email,
+      stripeCustomerId: customer.id,
+    },
+  });
+
+  analytics.track({
+    userId: defangUserId,
+    event: `stripe.${event.type}`,
+    properties: {
+      customerId: customer.id,
+      ...getAnalyticsProperties(event.data.object),
+    },
+  });
 }
 
 /**
@@ -125,83 +205,28 @@ export async function webhookHandler(c: Context) {
      * 7.	payment_intent.succeeded
      */
     switch (event.type) {
-      case "customer.subscription.created":
-      case "customer.subscription.deleted":
-      case "customer.subscription.paused":
-      case "customer.subscription.resumed":
-      case "customer.subscription.trial_will_end":
-      case "customer.subscription.updated":
-        const customerId = event.data.object.customer as string;
-        const customer = await stripe.customers.retrieve(customerId);
-
-        if (customer.deleted) break;
-
-        const defangUserId = customer.metadata.defangUserId;
-        if (!defangUserId) {
-          throw new Error("No defangUserId found in customer metadata");
-        }
-
-        analytics.identify({
-          userId: defangUserId,
-          traits: {
-            email: customer.email,
-            stripeCustomerId: customerId,
-          },
-        });
-
-        analytics.track({
-          userId: defangUserId,
-          event: `stripe.${event.type}`,
-          properties: {
-            subscriptionId: event.data.object.id,
-            customerId: customerId,
-            status: event.data.object.status,
-            priceId: event.data.object.items.data[0]?.price?.id,
-            priceName: event.data.object.items.data[0]?.price?.nickname,
-            productId: event.data.object.items.data[0]?.price?.product,
-          },
-        });
-
+      case 'customer.subscription.created':
+      case 'customer.subscription.deleted':
+      case 'customer.subscription.paused':
+      case 'customer.subscription.resumed':
+      case 'customer.subscription.trial_will_end':
+      case 'customer.subscription.updated':
+        await handleWebhookEventAnalytics(stripe, event, (subscription: Stripe.Subscription) => ({
+          subscriptionId: subscription.id,
+          status: subscription.status,
+          priceId: subscription.items.data[0]?.price?.id,
+          priceName: subscription.items.data[0]?.price?.nickname,
+          productId: subscription.items.data[0]?.price?.product,
+        }));
         break;
 
-      case "payment_intent.succeeded":
-        const paymentIntent = event.data.object;
-        const paymentCustomerId = paymentIntent.customer as string;
-
-        if (!paymentCustomerId) {
-          throw new Error("No customer ID found in payment intent");
-        }
-
-        const paymentCustomer = await stripe.customers.retrieve(
-          paymentCustomerId
-        );
-
-        if (paymentCustomer.deleted) break;
-
-        const paymentDefangUserId = paymentCustomer.metadata.defangUserId;
-        if (!paymentDefangUserId) {
-          throw new Error("No defangUserId found in customer metadata");
-        }
-
-        analytics.identify({
-          userId: paymentDefangUserId,
-          traits: {
-            email: paymentCustomer.email,
-            stripeCustomerId: paymentCustomer.id,
-          },
-        });
-
-        analytics.track({
-          userId: paymentDefangUserId,
-          event: `stripe.${event.type}`,
-          properties: {
-            paymentIntentId: paymentIntent.id,
-            customerId: paymentCustomerId,
-            revenue: paymentIntent.amount,
-            currency: paymentIntent.currency,
-            status: paymentIntent.status,
-          },
-        });
+      case 'payment_intent.succeeded':
+        await handleWebhookEventAnalytics(stripe, event, (paymentIntent: Stripe.PaymentIntent) => ({
+          paymentIntentId: paymentIntent.id,
+          revenue: paymentIntent.amount,
+          currency: paymentIntent.currency,
+          status: paymentIntent.status,
+        }));
         break;
 
       default:
@@ -221,10 +246,9 @@ export async function webhookHandler(c: Context) {
  * do not have a subscription yet. (replaces createStripeClientSecret)
  */
 export async function generateCheckoutLink(c: Context) {
-  const req = c.req;
-  const customer = await authorizeCustomer(req);
-  if (!customer) {
-    return c.json({ message: "Failed to create customer" }, 500);
+  const { customer, errorResponse } = await getAuthorizedCustomer(c);
+  if (errorResponse) {
+    return errorResponse;
   }
 
   const stripeClient = getStripeClient();

@@ -5,6 +5,9 @@ import {
   HasuraEvent,
   hasuraEventSchema,
 } from "../../../lib/hasura/hasura-event-schema";
+import { tenantDeleted } from "./event-handlers/tenant-deleted";
+import { tenantInserted } from "./event-handlers/tenant-inserted";
+import { tenantUpdated } from "./event-handlers/tenant-updated";
 import { userInserted } from "./event-handlers/user-inserted";
 import { userUpdated } from "./event-handlers/user-updated";
 
@@ -13,6 +16,9 @@ const eventHandlers: {
 } = {
   userInserted,
   userUpdated,
+  tenantInserted,
+  tenantUpdated,
+  tenantDeleted,
 };
 
 export async function handleEvent(c: Context) {

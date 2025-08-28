@@ -15,10 +15,19 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
+    "\n query UserIdForTenant($tenantId: uuid!) {\n  users(\n    where: {\n      tenants: {\n        id: {\n          _eq: $tenantId\n        }\n      }\n    }\n  ) {\n    id\n  }\n}\n": types.UserIdForTenantDocument,
     "\n  mutation UpdateTenantAwsMarketplace(\n    $tenantId: uuid!\n    $customerIdentifier: String!\n    $accountId: String!\n    $productCode: String!\n  ) {\n    updateTenants(\n      where: {\n        id: { _eq: $tenantId }\n        _or: [\n          {\n            awsMarketplaceCustomerIdentifier: { _isNull: true }\n            awsMarketplaceAccountId: { _isNull: true }\n            awsMarketplaceProductCode: { _isNull: true }\n          }\n          {\n            awsMarketplaceCustomerIdentifier: { _eq: $customerIdentifier }\n            awsMarketplaceAccountId: { _eq: $accountId }\n            awsMarketplaceProductCode: { _eq: $productCode }\n          }\n        ]\n      }\n      _set: {\n        awsMarketplaceCustomerIdentifier: $customerIdentifier\n        awsMarketplaceAccountId: $accountId\n        awsMarketplaceProductCode: $productCode\n      }\n    ) {\n      affectedRows\n    }\n  }\n": types.UpdateTenantAwsMarketplaceDocument,
-    "\n  query fetchHasuraUsers($ids: [uuid!]) {\n    users(limit: 10000, where: { id: { _nin: $ids } }) {\n      id\n      email\n    }\n  }\n": types.FetchHasuraUsersDocument,
+    "\n  query TenantOwnerEmail($tenantId: uuid!) {\n    tenants(where: { id: { _eq: $tenantId } }) {\n      id\n      owner {\n        email\n      }\n    }\n  }\n": types.TenantOwnerEmailDocument,
+    "\n  query TenantOwnership($tenantId: uuid!, $ownerId: uuid!) {\n    tenants(where: { id: { _eq: $tenantId }, ownerId: { _eq: $ownerId } }) {\n      id\n    }\n  }\n": types.TenantOwnershipDocument,
+    "\n  mutation DeleteTenant($tenantId: uuid!, $ownerId: uuid!) {\n    deleteTenants(where: { id: { _eq: $tenantId }, ownerId: { _eq: $ownerId } }) {\n      affectedRows\n    }\n  }\n": types.DeleteTenantDocument,
+    "\n    mutation DeleteUser($id: uuid!) {\n        deleteUsersByPk(id: $id) {\n            id\n        }\n    }\n": types.DeleteUserDocument,
+    "\n    query OwnedTenants($ownerId: uuid!) {\n        tenants(where: { ownerId: { _eq: $ownerId } }) {\n            id\n        }\n    }\n": types.OwnedTenantsDocument,
 };
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n query UserIdForTenant($tenantId: uuid!) {\n  users(\n    where: {\n      tenants: {\n        id: {\n          _eq: $tenantId\n        }\n      }\n    }\n  ) {\n    id\n  }\n}\n"): typeof import('./graphql').UserIdForTenantDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -26,7 +35,23 @@ export function graphql(source: "\n  mutation UpdateTenantAwsMarketplace(\n    $
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query fetchHasuraUsers($ids: [uuid!]) {\n    users(limit: 10000, where: { id: { _nin: $ids } }) {\n      id\n      email\n    }\n  }\n"): typeof import('./graphql').FetchHasuraUsersDocument;
+export function graphql(source: "\n  query TenantOwnerEmail($tenantId: uuid!) {\n    tenants(where: { id: { _eq: $tenantId } }) {\n      id\n      owner {\n        email\n      }\n    }\n  }\n"): typeof import('./graphql').TenantOwnerEmailDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query TenantOwnership($tenantId: uuid!, $ownerId: uuid!) {\n    tenants(where: { id: { _eq: $tenantId }, ownerId: { _eq: $ownerId } }) {\n      id\n    }\n  }\n"): typeof import('./graphql').TenantOwnershipDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeleteTenant($tenantId: uuid!, $ownerId: uuid!) {\n    deleteTenants(where: { id: { _eq: $tenantId }, ownerId: { _eq: $ownerId } }) {\n      affectedRows\n    }\n  }\n"): typeof import('./graphql').DeleteTenantDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation DeleteUser($id: uuid!) {\n        deleteUsersByPk(id: $id) {\n            id\n        }\n    }\n"): typeof import('./graphql').DeleteUserDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query OwnedTenants($ownerId: uuid!) {\n        tenants(where: { ownerId: { _eq: $ownerId } }) {\n            id\n        }\n    }\n"): typeof import('./graphql').OwnedTenantsDocument;
 
 
 export function graphql(source: string) {

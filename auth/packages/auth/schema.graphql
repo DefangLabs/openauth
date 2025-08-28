@@ -342,7 +342,11 @@ enum CursorOrdering {
   DESC
 }
 
-type DeleteAccountOutput {
+type DeleteUserOutput {
+  message: String!
+}
+
+type InitiateTenantDeletionOutput {
   message: String!
 }
 
@@ -911,6 +915,8 @@ type Tenants {
   createdAt: timestamptz!
   id: uuid!
   name: String!
+  """An object relationship"""
+  owner: Users!
   ownerId: uuid!
   provider: String!
   """An array relationship"""
@@ -940,8 +946,6 @@ type Tenants {
     where: TenantMembersBoolExp
   ): TenantMembersAggregate!
   updatedAt: timestamptz!
-  """An object relationship"""
-  user: Users!
 }
 
 """
@@ -996,12 +1000,12 @@ input TenantsBoolExp {
   createdAt: TimestamptzComparisonExp
   id: UuidComparisonExp
   name: StringComparisonExp
+  owner: UsersBoolExp
   ownerId: UuidComparisonExp
   provider: StringComparisonExp
   tenantMembers: TenantMembersBoolExp
   tenantMembersAggregate: TenantMembersAggregateBoolExp
   updatedAt: TimestamptzComparisonExp
-  user: UsersBoolExp
 }
 
 """
@@ -1028,11 +1032,11 @@ input TenantsInsertInput {
   createdAt: timestamptz
   id: uuid
   name: String
+  owner: UsersObjRelInsertInput
   ownerId: uuid
   provider: String
   tenantMembers: TenantMembersArrRelInsertInput
   updatedAt: timestamptz
-  user: UsersObjRelInsertInput
 }
 
 """aggregate max on columns"""
@@ -1127,11 +1131,11 @@ input TenantsOrderBy {
   createdAt: OrderBy
   id: OrderBy
   name: OrderBy
+  owner: UsersOrderBy
   ownerId: OrderBy
   provider: OrderBy
   tenantMembersAggregate: TenantMembersAggregateOrderBy
   updatedAt: OrderBy
-  user: UsersOrderBy
 }
 
 """primary key columns input for table: tenants"""
@@ -1777,7 +1781,6 @@ type mutation_root {
   createStripePortalSession: CreateStripePortalSessionOutput
   """Create a Stripe client secret"""
   createStripeSecret: CreateStripeSecretOutput
-  deleteAccount: DeleteAccountOutput
   """
   delete data from the table: "accounts"
   """
@@ -1822,6 +1825,7 @@ type mutation_root {
   delete single row from the table: "tenants"
   """
   deleteTenantsByPk(id: uuid!): Tenants
+  deleteUser: DeleteUserOutput
   """
   delete data from the table: "userAccounts"
   """
@@ -1844,6 +1848,7 @@ type mutation_root {
   delete single row from the table: "users"
   """
   deleteUsersByPk(id: uuid!): Users
+  initiateTenantDeletion(tenantId: uuid!): InitiateTenantDeletionOutput
   """
   insert data into the table: "accounts"
   """

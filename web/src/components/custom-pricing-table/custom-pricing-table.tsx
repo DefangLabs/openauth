@@ -1,8 +1,16 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+/**
+ * Renders the pricing options used on both the subscription page and during
+ * tenant onboarding. GraphQL mutations invoked here rely on the global Apollo
+ * provider to attach the currently selected tenant ID via the `X-Defang-Tenant-Id`
+ * header.
+ */
+import { ReactNode, useState } from "react";
 // Replace imports with MUI components
+import { SubscriptionTier } from "@/modules/defang/generated/fabric_pb";
 import { useWhoami } from "@/modules/defang/hooks/use-whoami/use-whoami";
+import { CreateStripeCheckoutSessionMutation } from "@/modules/stripe/graphql/mutations/create-stripe-checkout-mutation";
 import { CreateStripePortalSessionMutation } from "@/modules/stripe/graphql/mutations/create-stripe-portal-session-mutation";
 import { useMutation } from "@apollo/client";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -18,8 +26,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { SubscriptionTier } from "@/modules/defang/generated/fabric_pb";
-import { CreateStripeCheckoutSessionMutation } from "@/modules/stripe/graphql/mutations/create-stripe-checkout-mutation";
 
 const freqs: {
   value: "monthly" | "annually";
@@ -369,10 +375,14 @@ if (!process.env.NEXT_PUBLIC_PRICE_IDS) {
   throw new Error("NEXT_PUBLIC_PRICE_IDS is not defined");
 }
 
-console.log("@@ PLAN_PRICES", process.env.NEXT_PUBLIC_PRICE_IDS);
 const prices = JSON.parse(process.env.NEXT_PUBLIC_PRICE_IDS) as PlanPrices;
 
-export function CustomPricingTable() {
+export interface CustomPricingTableProps {
+  embedded?: boolean;
+  hideFreeTier?: boolean;
+}
+
+export function CustomPricingTable(props: CustomPricingTableProps) {
   const { data } = useWhoami();
   let currentTier = data?.tier;
 
@@ -401,56 +411,35 @@ export function CustomPricingTable() {
 
   const [frequency, setFrequency] = useState(freqs[0]);
 
-  return (
-    <Container
-      id="pricing"
+  const pricingTable = (
+    <Box
       sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        py: 5,
+        display: {
+          xs: "flex",
+          lg: "grid",
+        },
+        gap: 2,
+        mt: 4,
+        overflowX: {
+          xs: "auto",
+          lg: "unset",
+        },
+        gridTemplateColumns: {
+          lg: props.hideFreeTier ? "repeat(3, 1fr)" : "repeat(4, 1fr)",
+        },
+        pb: 4,
+        width: "100%",
       }}
     >
-      <Stack>
-        <Typography variant="h1" fontSize={16} fontWeight={400}>
-          Subscription
-        </Typography>
-        <Typography variant="h2">Introductory Limited Time Offer</Typography>
-        {linkToStripePortal && (
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              const { data } = await createStripePortalSession();
-              window.location.href = data?.createStripePortalSession?.url;
-            }}
-            sx={{ mt: 2, width: "fit-content" }}
-          >
-            Manage your subscription
-          </Button>
-        )}
-      </Stack>
-
-      {/* PRICING TABLE */}
-      <Box
-        sx={{
-          display: {
-            xs: "flex",
-            lg: "grid",
-          },
-          gap: 2,
-          mt: 4,
-          overflowX: {
-            xs: "auto",
-            lg: "unset",
-          },
-          gridTemplateColumns: {
-            lg: "repeat(4, 1fr)",
-          },
-          pb: 4,
-          width: "100%",
-        }}
-      >
-        {plans.map((plan, idx) => {
+      {plans
+        .filter((plan) => {
+          // if hideFreeTier is true, we filter out the Hobby plan
+          if (props.hideFreeTier && plan.tier === SubscriptionTier.HOBBY) {
+            return false;
+          }
+          return true;
+        })
+        .map((plan, idx) => {
           const price = plan.price[frequency.value];
           const currentPlan =
             !!currentTier && plan.matchTiers.includes(currentTier);
@@ -620,7 +609,42 @@ export function CustomPricingTable() {
             </Box>
           );
         })}
-      </Box>
+    </Box>
+  );
+
+  if (props.embedded) {
+    return pricingTable;
+  }
+
+  return (
+    <Container
+      id="pricing"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        py: 5,
+      }}
+    >
+      <Stack>
+        <Typography variant="h1" fontSize={16} fontWeight={400}>
+          Subscription
+        </Typography>
+        <Typography variant="h2">Introductory Limited Time Offer</Typography>
+        {linkToStripePortal && (
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const { data } = await createStripePortalSession();
+              window.location.href = data?.createStripePortalSession?.url;
+            }}
+            sx={{ mt: 2, width: "fit-content" }}
+          >
+            Manage your subscription
+          </Button>
+        )}
+      </Stack>
+      {pricingTable}
       <Box sx={{ mt: 8, maxWidth: "lg", mx: "auto" }}>
         <Typography variant="h4" fontWeight="bold" gutterBottom>
           Frequently Asked Questions

@@ -1,3 +1,11 @@
+/**
+ * OAuth2 issuer router responsible for issuing JWTs on successful logins.
+ *
+ * During the login flow we fetch organizations from the provider (GitHub for
+ * now) and upsert corresponding tenants. The resulting token includes both
+ * the deterministic tenant IDs under `externalTenants` and a list of GitHub
+ * organization names under `githubOrgs` for older clients.
+ */
 import { issuer } from "@openauthjs/openauth"
 import * as v from 'valibot'
 import { upsertAccount } from "../accounts/upsert-account"
@@ -11,6 +19,7 @@ import { providers } from "../providers/providers"
 import { subjects } from "../subjects"
 import { upsertAccountUser } from "../users/upsert-account-user"
 import { upsertUserTenant } from "../tenants/upsert-user-tenant"
+import { upsertExternalTenants } from "../tenants/upsert-external-tenants"
 import { storage } from "./storage"
 import { Select } from "./select"
 
@@ -46,6 +55,13 @@ export const issuerRouter = issuer({
     const { account } = await upsertAccount(validProviderData, value.provider)
     const { user } = await upsertAccountUser(account);
     const { tenants } = await upsertUserTenant(user);
+    const externalTenants = providerData?.orgs
+      ? await upsertExternalTenants(value.provider, providerData.orgs, user.id)
+      : [];
+    // Keep the list of GitHub org names in the token for backwards
+    // compatibility with older clients. Newer logic should rely on the
+    // `externalTenants` claim which only includes UUIDs.
+    const githubOrgs = value.provider === "github" ? providerData?.orgs?.map((org) => org.name) : []
     const tenant = account?.extra?.username ?? tenants[0]?.name ?? "";
 
     analytics.track({
@@ -55,8 +71,6 @@ export const issuerRouter = issuer({
         provider: value.provider,
       }
     })
-
-    const githubOrgs = value.provider === "github" ? providerData?.orgs?.map((org) => org.name) : []
 
     return ctx.subject(
       "user",
@@ -68,6 +82,7 @@ export const issuerRouter = issuer({
           "x-hasura-default-role": "user",
           "x-hasura-user-id": user.id,
         },
+        externalTenants: externalTenants.map(t => t.id),
         githubOrgs,
       },
       {

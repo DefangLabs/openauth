@@ -23,15 +23,28 @@ actions:
     permissions:
       - role: user
     comment: Create a Stripe client secret
-  - name: deleteAccount
+  - name: deleteUser
     definition:
       kind: synchronous
-      handler: '{{DEFANG_FN_ENDPOINT}}/accounts'
+      handler: '{{DEFANG_FN_ENDPOINT}}/users'
       forward_client_headers: true
       request_transform:
         method: DELETE
         query_params: {}
         template_engine: Kriti
+        version: 2
+    permissions:
+      - role: user
+  - name: initiateTenantDeletion
+    definition:
+      kind: synchronous
+      handler: '{{DEFANG_FN_ENDPOINT}}/tenants'
+      forward_client_headers: true
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.tenantId}}'
         version: 2
     permissions:
       - role: user
@@ -48,9 +61,10 @@ custom_types:
     - name: CreateStripeCheckoutSessionInput
     - name: ResolveAwsMarketplaceCustomerInput
   objects:
-    - name: DeleteAccountOutput
+    - name: DeleteUserOutput
     - name: CreateStripeSecretOutput
     - name: CreateStripePortalSessionOutput
     - name: CreateStripeCheckoutSessionOutput
+    - name: InitiateTenantDeletionOutput
     - name: ResolveAwsMarketplaceCustomerOutput
   scalars: []

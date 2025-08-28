@@ -131,7 +131,35 @@
       },
       {
         "kind": "OBJECT",
-        "name": "DeleteAccountOutput",
+        "name": "DeleteUserOutput",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "message",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "InitiateTenantDeletionOutput",
         "description": null,
         "isOneOf": null,
         "fields": [
@@ -2203,6 +2231,22 @@
             "deprecationReason": null
           },
           {
+            "name": "owner",
+            "description": "An object relationship",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Users",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ownerId",
             "description": null,
             "args": [],
@@ -2329,22 +2373,6 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "timestamptz",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "user",
-            "description": "An object relationship",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Users",
                 "ofType": null
               }
             },
@@ -2549,6 +2577,18 @@
             "deprecationReason": null
           },
           {
+            "name": "owner",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "UsersBoolExp",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ownerId",
             "description": null,
             "type": {
@@ -2578,18 +2618,6 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "TimestamptzComparisonExp",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "user",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "UsersBoolExp",
               "ofType": null
             },
             "defaultValue": null,
@@ -2657,11 +2685,11 @@
             "deprecationReason": null
           },
           {
-            "name": "tenantMembers",
+            "name": "owner",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "TenantMembersArrRelInsertInput",
+              "name": "UsersObjRelInsertInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -2669,11 +2697,11 @@
             "deprecationReason": null
           },
           {
-            "name": "user",
+            "name": "tenantMembers",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "UsersObjRelInsertInput",
+              "name": "TenantMembersArrRelInsertInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -3029,6 +3057,18 @@
             "deprecationReason": null
           },
           {
+            "name": "owner",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "UsersOrderBy",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ownerId",
             "description": null,
             "type": {
@@ -3058,18 +3098,6 @@
             "type": {
               "kind": "ENUM",
               "name": "OrderBy",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "user",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "UsersOrderBy",
               "ofType": null
             },
             "defaultValue": null,
@@ -5412,18 +5440,6 @@
             "deprecationReason": null
           },
           {
-            "name": "deleteAccount",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "DeleteAccountOutput",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "deleteTenantMembers",
             "description": "delete data from the table: \"tenantMembers\"",
             "args": [
@@ -5498,58 +5514,12 @@
             "deprecationReason": null
           },
           {
-            "name": "deleteTenants",
-            "description": "delete data from the table: \"tenants\"",
-            "args": [
-              {
-                "name": "where",
-                "description": "filter the rows which have to be deleted",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "TenantsBoolExp",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
+            "name": "deleteUser",
+            "description": null,
+            "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "TenantsMutationResponse",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "deleteTenantsByPk",
-            "description": "delete single row from the table: \"tenants\"",
-            "args": [
-              {
-                "name": "id",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "uuid",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Tenants",
+              "name": "DeleteUserOutput",
               "ofType": null
             },
             "isDeprecated": false,
@@ -5608,6 +5578,35 @@
             "type": {
               "kind": "OBJECT",
               "name": "Users",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "initiateTenantDeletion",
+            "description": null,
+            "args": [
+              {
+                "name": "tenantId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "uuid",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "InitiateTenantDeletionOutput",
               "ofType": null
             },
             "isDeprecated": false,

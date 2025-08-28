@@ -1,18 +1,20 @@
+import Stripe from "stripe";
 import { getStripeClient } from "./get-stripe-client";
 
 export async function getStripeCustomer(
-  defangUserId: string,
-) {
+  defangId: string
+): Promise<Stripe.Customer | null> {
   const stripe = getStripeClient();
-
-  const customers = await stripe.customers.search({
+  const res = await stripe.customers.search({
     limit: 1,
-    query: `metadata["defangUserId"]:"${defangUserId}"`,
-  })
+    query: `metadata["defangUserId"]:"${defangId}" OR metadata["defangTenantId"]:"${defangId}"`,
+  });
 
-  if (customers.data.length === 0) {
-    return null;
+  // We should only return non-deleted customers.
+  const customer = res.data.find((c) => !c.deleted);
+  if (customer) {
+    return customer;
   }
 
-  return customers.data[0];
+  return null;
 }

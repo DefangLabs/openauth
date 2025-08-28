@@ -85,7 +85,7 @@ export async function upsertUserTenant(
   const username = githubUsername || emailUsername || "user";
 
   // Create tenant name
-  const name = `${username}'s Tenant`;
+  const name = `${username}-tenant`;
 
   // Create new tenant
   const { data: insertData, errors: insertErrors } = await hasuraAdminClient(

@@ -298,10 +298,10 @@ export type TenantsBoolExp = {
   createdAt?: InputMaybe<TimestamptzComparisonExp>;
   id?: InputMaybe<UuidComparisonExp>;
   name?: InputMaybe<StringComparisonExp>;
+  owner?: InputMaybe<UsersBoolExp>;
   ownerId?: InputMaybe<UuidComparisonExp>;
   tenantMembers?: InputMaybe<TenantMembersBoolExp>;
   updatedAt?: InputMaybe<TimestamptzComparisonExp>;
-  user?: InputMaybe<UsersBoolExp>;
 };
 
 /** unique or primary key constraints on table "tenants" */
@@ -316,8 +316,8 @@ export enum TenantsConstraint {
 export type TenantsInsertInput = {
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   name?: InputMaybe<Scalars["String"]["input"]>;
+  owner?: InputMaybe<UsersObjRelInsertInput>;
   tenantMembers?: InputMaybe<TenantMembersArrRelInsertInput>;
-  user?: InputMaybe<UsersObjRelInsertInput>;
 };
 
 /** order by max() on columns of table "tenants" */
@@ -357,10 +357,10 @@ export type TenantsOrderBy = {
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
+  owner?: InputMaybe<UsersOrderBy>;
   ownerId?: InputMaybe<OrderBy>;
   tenantMembersAggregate?: InputMaybe<TenantMembersAggregateOrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
-  user?: InputMaybe<UsersOrderBy>;
 };
 
 /** select columns of table "tenants" */
@@ -522,16 +522,13 @@ export type UuidComparisonExp = {
   _nin?: InputMaybe<Array<Scalars["uuid"]["input"]>>;
 };
 
-export type DeleteAccountMutationMutationVariables = Exact<{
+export type DeleteUserMutationMutationVariables = Exact<{
   [key: string]: never;
 }>;
 
-export type DeleteAccountMutationMutation = {
+export type DeleteUserMutationMutation = {
   __typename?: "mutation_root";
-  deleteAccount?: {
-    __typename?: "DeleteAccountOutput";
-    message: string;
-  } | null;
+  deleteUser?: { __typename?: "DeleteUserOutput"; message: string } | null;
 };
 
 export type ResolveAwsMarketplaceCustomerMutationVariables = Exact<{
@@ -607,19 +604,90 @@ export type CreateStripeSecretMutation = {
   } | null;
 };
 
-export const DeleteAccountMutationDocument = {
+export type CreateTenantMutationVariables = Exact<{
+  name: Scalars["String"]["input"];
+}>;
+
+export type CreateTenantMutation = {
+  __typename?: "mutation_root";
+  tenant?: { __typename?: "Tenants"; id: any; name: string } | null;
+};
+
+export type InitiateTenantDeletionMutationVariables = Exact<{
+  tenantId: Scalars["uuid"]["input"];
+}>;
+
+export type InitiateTenantDeletionMutation = {
+  __typename?: "mutation_root";
+  initiateTenantDeletion?: {
+    __typename?: "InitiateTenantDeletionOutput";
+    message: string;
+  } | null;
+};
+
+export type InviteTenantMemberMutationVariables = Exact<{
+  tenantId: Scalars["uuid"]["input"];
+  userId: Scalars["uuid"]["input"];
+  role?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type InviteTenantMemberMutation = {
+  __typename?: "mutation_root";
+  member?: { __typename?: "TenantMembers"; tenantId: any; userId: any } | null;
+};
+
+export type TenantMembersQueryVariables = Exact<{
+  tenantId: Scalars["uuid"]["input"];
+}>;
+
+export type TenantMembersQuery = {
+  __typename?: "query_root";
+  tenantMembers: Array<{
+    __typename?: "TenantMembers";
+    role?: string | null;
+    user: {
+      __typename?: "Users";
+      id: any;
+      name?: string | null;
+      email?: string | null;
+    };
+  }>;
+};
+
+export type TenantsQueryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type TenantsQueryQuery = {
+  __typename?: "query_root";
+  tenants: Array<{ __typename?: "Tenants"; id: any; name: string }>;
+};
+
+export type UserByEmailQueryVariables = Exact<{
+  email: Scalars["String"]["input"];
+}>;
+
+export type UserByEmailQuery = {
+  __typename?: "query_root";
+  users: Array<{
+    __typename?: "Users";
+    id: any;
+    email?: string | null;
+    name?: string | null;
+  }>;
+};
+
+export const DeleteUserMutationDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "DeleteAccountMutation" },
+      name: { kind: "Name", value: "DeleteUserMutation" },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "deleteAccount" },
+            name: { kind: "Name", value: "deleteUser" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
@@ -632,8 +700,8 @@ export const DeleteAccountMutationDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  DeleteAccountMutationMutation,
-  DeleteAccountMutationMutationVariables
+  DeleteUserMutationMutation,
+  DeleteUserMutationMutationVariables
 >;
 export const ResolveAwsMarketplaceCustomerDocument = {
   kind: "Document",
@@ -945,3 +1013,391 @@ export const CreateStripeSecretDocument = {
   CreateStripeSecretMutation,
   CreateStripeSecretMutationVariables
 >;
+export const CreateTenantDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateTenant" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "name" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            alias: { kind: "Name", value: "tenant" },
+            name: { kind: "Name", value: "insertTenantsOne" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "object" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "name" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "name" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateTenantMutation,
+  CreateTenantMutationVariables
+>;
+export const InitiateTenantDeletionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "InitiateTenantDeletion" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tenantId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "uuid" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "initiateTenantDeletion" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "tenantId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "tenantId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  InitiateTenantDeletionMutation,
+  InitiateTenantDeletionMutationVariables
+>;
+export const InviteTenantMemberDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "InviteTenantMember" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tenantId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "uuid" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "userId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "uuid" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "role" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+          defaultValue: { kind: "StringValue", value: "member", block: false },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            alias: { kind: "Name", value: "member" },
+            name: { kind: "Name", value: "insertTenantMembersOne" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "object" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "tenantId" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "tenantId" },
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "userId" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "userId" },
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "role" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "role" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "tenantId" } },
+                { kind: "Field", name: { kind: "Name", value: "userId" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  InviteTenantMemberMutation,
+  InviteTenantMemberMutationVariables
+>;
+export const TenantMembersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "TenantMembers" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tenantId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "uuid" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tenantMembers" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "tenantId" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "_eq" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "tenantId" },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "role" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "user" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TenantMembersQuery, TenantMembersQueryVariables>;
+export const TenantsQueryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "TenantsQuery" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tenants" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TenantsQueryQuery, TenantsQueryQueryVariables>;
+export const UserByEmailDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "UserByEmail" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "email" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "users" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "email" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "_eq" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "email" },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "limit" },
+                value: { kind: "IntValue", value: "1" },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "email" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserByEmailQuery, UserByEmailQueryVariables>;

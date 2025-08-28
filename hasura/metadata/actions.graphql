@@ -13,7 +13,13 @@ type Mutation {
 }
 
 type Mutation {
-  deleteAccount: DeleteAccountOutput
+  deleteUser: DeleteUserOutput
+}
+
+type Mutation {
+  initiateTenantDeletion(
+    tenantId: uuid!
+  ): InitiateTenantDeletionOutput
 }
 
 type Mutation {
@@ -30,7 +36,7 @@ input ResolveAwsMarketplaceCustomerInput {
   registrationToken: String!
 }
 
-type DeleteAccountOutput {
+type DeleteUserOutput {
   message: String!
 }
 
@@ -44,6 +50,10 @@ type CreateStripePortalSessionOutput {
 
 type CreateStripeCheckoutSessionOutput {
   url: String!
+}
+
+type InitiateTenantDeletionOutput {
+  message: String!
 }
 
 type ResolveAwsMarketplaceCustomerOutput {

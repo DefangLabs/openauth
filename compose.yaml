@@ -82,7 +82,6 @@ services:
       - HASURA_ENDPOINT=https://graphql.${DOMAIN_NAME}
       - PUBLIC_ROOT_URL=https://portal.${DOMAIN_NAME}
       - HASURA_GRAPHQL_ADMIN_SECRET
-      - STRIPE_DEFAULT_PRICE_ID
       - STRIPE_SECRET_KEY
       - STRIPE_WEBHOOK_SECRET
       - SEGMENT_WRITE_KEY
@@ -105,8 +104,6 @@ services:
         # DEFANG CONFIG
         - NEXT_PUBLIC_SEGMENT_WRITE_KEY
         - NEXT_PUBLIC_VERSION
-        - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-        - NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID
     ports:
       - mode: ingress
         target: 3000

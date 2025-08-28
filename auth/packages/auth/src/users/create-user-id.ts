@@ -11,9 +11,8 @@ interface createUserIdOptions {
 }
 
 export function createUserId(opts: createUserIdOptions = {}) {
-  if (opts.githubUsername) {
-    console.log("@@ creating legacy: ", opts.githubUsername);
-    return createLegacyId(opts.githubUsername);
+  if(opts.githubUsername) {
+      return createLegacyId(opts.githubUsername);
   }
   return uuidv4();
 }

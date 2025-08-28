@@ -9,15 +9,20 @@ import { setTokens } from "../lib/set-tokens";
 import { subjects } from "../lib/subjects";
 import { loginCompleteCookie, loginRedirectCookie } from "../constants";
 
-export async function getAuthAction() {
-  return getAuth();
+interface GetAuthActionOptions {
+  refresh?: boolean;
+}
+export async function getAuthAction(opts?: GetAuthActionOptions) {
+  const refresh = opts?.refresh ?? false;
+  return getAuth({ refresh });
 }
 
 export async function getAccessTokenAction(
   ...options: Parameters<typeof getAuth>
 ) {
-  const accessToken = (await cookies()).get("access_token");
   const auth = await getAuth(...options);
+
+  const accessToken = (await cookies()).get("access_token");
 
   if (!accessToken || !auth) {
     return null;
@@ -89,4 +94,32 @@ export async function setLoginCompleteCookie() {
 export async function unsetLoginCompleteCookie() {
   (await cookies()).delete(loginCompleteCookie);
   return true;
+}
+
+/**
+ * Refresh the user's tokens using only the refresh token.
+ */
+export async function refreshAccessTokenAction(): ReturnType<
+  typeof getAccessTokenAction
+> {
+  const cookieStore = await cookies();
+  const refreshToken = cookieStore.get("refresh_token");
+  if (!refreshToken) return null;
+
+  const refreshed = await authClient.refresh(refreshToken.value);
+  if (refreshed.err || !refreshed.tokens) {
+    console.error("@@ Token refresh error:", refreshed.err);
+    return null;
+  }
+
+  const verified = await authClient.verify(subjects, refreshed.tokens.access);
+
+  if (verified.err || !verified.subject) {
+    console.error("@@ Token refresh error:", refreshed.err);
+    return null;
+  }
+
+  await setTokens(refreshed.tokens.access, refreshed.tokens.refresh);
+
+  return { token: refreshed.tokens.access, claims: verified.subject };
 }

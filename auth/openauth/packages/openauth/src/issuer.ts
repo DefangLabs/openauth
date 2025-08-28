@@ -909,7 +909,6 @@ export function issuer<
             },
             400,
           )
-        console.log('@@ has token? ', refreshToken)
         const splits = refreshToken.toString().split(":")
         const token = splits.pop()!
         const subject = splits.join(":")

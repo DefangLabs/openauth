@@ -26,6 +26,38 @@
 				"ms-azuretools.vscode-docker"
 			]
 		}
+	},
+	"forwardPorts": [
+		3000, // Next.js
+		3001, // OpenAuth
+		3002, // Hasura
+		3003, // API
+		6499, // API Debug
+		9693, // Hasura Console API
+		9695  // Hasura Console
+	],
+	"portsAttributes": {
+		"3000": {
+			"label": "Next.js"
+		},
+		"3001": {
+			"label": "OpenAuth"
+		},
+		"3002": {
+			"label": "Hasura"
+		},
+		"3003": {
+			"label": "API"
+		},
+		"6499": {
+			"label": "API Debug"
+		},
+		"9693": {
+			"label": "Hasura Console API"
+		},
+		"9695": {
+			"label": "Hasura Console"
+		}
 	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.

@@ -23,4 +23,5 @@ export async function userInserted(event: HasuraEvent, c: Context){
     await upsertStripeCustomer(userId, {
         email: event.event.data.new.email,
     });
+
 }
