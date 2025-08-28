@@ -1,6 +1,6 @@
 import { graphql } from "@/generated/graphql";
 
-export const userQuery = graphql(`
+export const UserQuery = graphql(`
   query UserQuery($id: uuid!) {
     user: usersByPk(id: $id) {
       id

@@ -14,19 +14,41 @@ import * as types from './graphql';
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
-const documents = {
+type Documents = {
+    "\n    mutation UpsertAccount($object: AccountsInsertInput!, $onConflict: AccountsOnConflict) {\n        account: insertAccountsOne(object: $object, onConflict: $onConflict) {\n            id\n            name\n            email\n            extra\n        }\n    }\n": typeof types.UpsertAccountDocument,
+    "\n  query TenantByPk($id: uuid!) {\n    tenant: tenantsByPk(id: $id) {\n      id\n      name\n    }\n  }\n": typeof types.TenantByPkDocument,
+    "\n  mutation InsertTenant(\n    $id: uuid!\n    $name: String!\n    $ownerId: uuid!\n    $provider: String!\n  ) {\n    tenant: insertTenantsOne(\n      object: { id: $id, name: $name, ownerId: $ownerId, provider: $provider }\n    ) {\n      id\n      name\n    }\n  }\n": typeof types.InsertTenantDocument,
+    "\n  query ListTenants($ownerId: uuid!) {\n     tenants(where: { ownerId: { _eq: $ownerId } }, orderBy: { createdAt: ASC }) {\n       id\n       name\n     }\n  }\n": typeof types.ListTenantsDocument,
+    "\n  mutation CreateDefaultTenant($name: String!, $ownerId: uuid!) {\n     tenant: insertTenantsOne(object: { id: $ownerId, name: $name, ownerId: $ownerId }) {\n       id\n       name\n     }\n   }\n": typeof types.CreateDefaultTenantDocument,
+    "\n  query ExternalTenants($ids: [uuid!]!) {\n    tenants(where: { id: { _in: $ids } }) {\n      id\n      name\n    }\n  }\n": typeof types.ExternalTenantsDocument,
+    "\n  query UserInfo($id: uuid!) {\n    userinfo: usersByPk(id: $id) {\n      id\n      email\n      name\n      createdAt\n      updatedAt\n      accounts: usersUserAccounts {\n        account: userAccountsAccount {\n          id\n          provider\n          providerId\n          name\n          email\n          createdAt\n          updatedAt\n        }\n      }\n      ownedTenants: tenants {\n        id\n        name\n      }\n      tenantMemberships: tenantMembers {\n        role\n        tenant {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.UserInfoDocument,
+    "\n  query UsersForAccount($accountId: uuid!) {\n    users(where: { usersUserAccounts: { accountId: { _eq: $accountId } } }) {\n      id\n    }\n  }\n": typeof types.UsersForAccountDocument,
+    "\n  mutation UpsertAccountUser(\n    $object: UsersInsertInput!\n    $onConflict: UsersOnConflict!\n  ) {\n    user: insertUsersOne(object: $object, onConflict: $onConflict) {\n      id\n      name\n      email\n      usersUserAccounts {\n        userAccountsAccount {\n          provider\n          extra\n        }\n      }\n    }\n  }\n": typeof types.UpsertAccountUserDocument,
+};
+const documents: Documents = {
     "\n    mutation UpsertAccount($object: AccountsInsertInput!, $onConflict: AccountsOnConflict) {\n        account: insertAccountsOne(object: $object, onConflict: $onConflict) {\n            id\n            name\n            email\n            extra\n        }\n    }\n": types.UpsertAccountDocument,
+    "\n  query TenantByPk($id: uuid!) {\n    tenant: tenantsByPk(id: $id) {\n      id\n      name\n    }\n  }\n": types.TenantByPkDocument,
+    "\n  mutation InsertTenant(\n    $id: uuid!\n    $name: String!\n    $ownerId: uuid!\n    $provider: String!\n  ) {\n    tenant: insertTenantsOne(\n      object: { id: $id, name: $name, ownerId: $ownerId, provider: $provider }\n    ) {\n      id\n      name\n    }\n  }\n": types.InsertTenantDocument,
     "\n  query ListTenants($ownerId: uuid!) {\n     tenants(where: { ownerId: { _eq: $ownerId } }, orderBy: { createdAt: ASC }) {\n       id\n       name\n     }\n  }\n": types.ListTenantsDocument,
     "\n  mutation CreateDefaultTenant($name: String!, $ownerId: uuid!) {\n     tenant: insertTenantsOne(object: { id: $ownerId, name: $name, ownerId: $ownerId }) {\n       id\n       name\n     }\n   }\n": types.CreateDefaultTenantDocument,
-    "\n    query UserInfo($id: uuid!) {\n        userinfo: usersByPk(\n            id: $id\n        ) {\n            id\n            email\n            name\n            createdAt\n            updatedAt\n            accounts: usersUserAccounts {\n                account: userAccountsAccount {\n                    id\n                    provider\n                    providerId\n                    name\n                    email\n                    createdAt\n                    updatedAt\n                }\n            }\n        }\n    }\n": types.UserInfoDocument,
-    "\n    query UsersForAccount($accountId: uuid!) {\n        users(\n            where: { \n                usersUserAccounts: {\n                    accountId: { _eq: $accountId }\n                }\n             }\n        ) {\n            id\n        }\n    }    \n": types.UsersForAccountDocument,
-    "\n    mutation UpsertAccountUser($object: UsersInsertInput!, $onConflict: UsersOnConflict!) {\n        user: insertUsersOne(object: $object, onConflict: $onConflict) {\n            id\n            name\n            email\n            usersUserAccounts {\n                userAccountsAccount {\n                    provider\n                    extra\n                }\n            }\n        }\n    }    \n": types.UpsertAccountUserDocument,
+    "\n  query ExternalTenants($ids: [uuid!]!) {\n    tenants(where: { id: { _in: $ids } }) {\n      id\n      name\n    }\n  }\n": types.ExternalTenantsDocument,
+    "\n  query UserInfo($id: uuid!) {\n    userinfo: usersByPk(id: $id) {\n      id\n      email\n      name\n      createdAt\n      updatedAt\n      accounts: usersUserAccounts {\n        account: userAccountsAccount {\n          id\n          provider\n          providerId\n          name\n          email\n          createdAt\n          updatedAt\n        }\n      }\n      ownedTenants: tenants {\n        id\n        name\n      }\n      tenantMemberships: tenantMembers {\n        role\n        tenant {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.UserInfoDocument,
+    "\n  query UsersForAccount($accountId: uuid!) {\n    users(where: { usersUserAccounts: { accountId: { _eq: $accountId } } }) {\n      id\n    }\n  }\n": types.UsersForAccountDocument,
+    "\n  mutation UpsertAccountUser(\n    $object: UsersInsertInput!\n    $onConflict: UsersOnConflict!\n  ) {\n    user: insertUsersOne(object: $object, onConflict: $onConflict) {\n      id\n      name\n      email\n      usersUserAccounts {\n        userAccountsAccount {\n          provider\n          extra\n        }\n      }\n    }\n  }\n": types.UpsertAccountUserDocument,
 };
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    mutation UpsertAccount($object: AccountsInsertInput!, $onConflict: AccountsOnConflict) {\n        account: insertAccountsOne(object: $object, onConflict: $onConflict) {\n            id\n            name\n            email\n            extra\n        }\n    }\n"): typeof import('./graphql').UpsertAccountDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query TenantByPk($id: uuid!) {\n    tenant: tenantsByPk(id: $id) {\n      id\n      name\n    }\n  }\n"): typeof import('./graphql').TenantByPkDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation InsertTenant(\n    $id: uuid!\n    $name: String!\n    $ownerId: uuid!\n    $provider: String!\n  ) {\n    tenant: insertTenantsOne(\n      object: { id: $id, name: $name, ownerId: $ownerId, provider: $provider }\n    ) {\n      id\n      name\n    }\n  }\n"): typeof import('./graphql').InsertTenantDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -38,15 +60,19 @@ export function graphql(source: "\n  mutation CreateDefaultTenant($name: String!
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query UserInfo($id: uuid!) {\n        userinfo: usersByPk(\n            id: $id\n        ) {\n            id\n            email\n            name\n            createdAt\n            updatedAt\n            accounts: usersUserAccounts {\n                account: userAccountsAccount {\n                    id\n                    provider\n                    providerId\n                    name\n                    email\n                    createdAt\n                    updatedAt\n                }\n            }\n        }\n    }\n"): typeof import('./graphql').UserInfoDocument;
+export function graphql(source: "\n  query ExternalTenants($ids: [uuid!]!) {\n    tenants(where: { id: { _in: $ids } }) {\n      id\n      name\n    }\n  }\n"): typeof import('./graphql').ExternalTenantsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query UsersForAccount($accountId: uuid!) {\n        users(\n            where: { \n                usersUserAccounts: {\n                    accountId: { _eq: $accountId }\n                }\n             }\n        ) {\n            id\n        }\n    }    \n"): typeof import('./graphql').UsersForAccountDocument;
+export function graphql(source: "\n  query UserInfo($id: uuid!) {\n    userinfo: usersByPk(id: $id) {\n      id\n      email\n      name\n      createdAt\n      updatedAt\n      accounts: usersUserAccounts {\n        account: userAccountsAccount {\n          id\n          provider\n          providerId\n          name\n          email\n          createdAt\n          updatedAt\n        }\n      }\n      ownedTenants: tenants {\n        id\n        name\n      }\n      tenantMemberships: tenantMembers {\n        role\n        tenant {\n          id\n          name\n        }\n      }\n    }\n  }\n"): typeof import('./graphql').UserInfoDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    mutation UpsertAccountUser($object: UsersInsertInput!, $onConflict: UsersOnConflict!) {\n        user: insertUsersOne(object: $object, onConflict: $onConflict) {\n            id\n            name\n            email\n            usersUserAccounts {\n                userAccountsAccount {\n                    provider\n                    extra\n                }\n            }\n        }\n    }    \n"): typeof import('./graphql').UpsertAccountUserDocument;
+export function graphql(source: "\n  query UsersForAccount($accountId: uuid!) {\n    users(where: { usersUserAccounts: { accountId: { _eq: $accountId } } }) {\n      id\n    }\n  }\n"): typeof import('./graphql').UsersForAccountDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UpsertAccountUser(\n    $object: UsersInsertInput!\n    $onConflict: UsersOnConflict!\n  ) {\n    user: insertUsersOne(object: $object, onConflict: $onConflict) {\n      id\n      name\n      email\n      usersUserAccounts {\n        userAccountsAccount {\n          provider\n          extra\n        }\n      }\n    }\n  }\n"): typeof import('./graphql').UpsertAccountUserDocument;
 
 
 export function graphql(source: string) {

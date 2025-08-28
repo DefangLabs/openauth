@@ -3,6 +3,7 @@ import * as v from "valibot";
 
 export const userPropertiesSchema = v.object({
   id: v.string(),
+  tenant: v.string(),
   hasura: v.object({
     "x-hasura-user-id": v.string(),
     "x-hasura-allowed-roles": v.array(v.string()),

@@ -301,6 +301,10 @@ export type AccountsUpdates = {
   where: AccountsBoolExp;
 };
 
+export type CreateStripeCheckoutSessionInput = {
+  priceId: Scalars['String']['input'];
+};
+
 export type CreateStripePortalSessionOutput = {
   __typename?: 'CreateStripePortalSessionOutput';
   url: Scalars['String']['output'];
@@ -319,8 +323,13 @@ export enum CursorOrdering {
   Desc = 'DESC'
 }
 
-export type DeleteAccountOutput = {
-  __typename?: 'DeleteAccountOutput';
+export type DeleteUserOutput = {
+  __typename?: 'DeleteUserOutput';
+  message: Scalars['String']['output'];
+};
+
+export type InitiateTenantDeletionOutput = {
+  __typename?: 'InitiateTenantDeletionOutput';
   message: Scalars['String']['output'];
 };
 
@@ -381,6 +390,17 @@ export enum OrderBy {
   DescNullsLast = 'DESC_NULLS_LAST'
 }
 
+export type ResolveAwsMarketplaceCustomerInput = {
+  registrationToken: Scalars['String']['input'];
+};
+
+export type ResolveAwsMarketplaceCustomerOutput = {
+  __typename?: 'ResolveAwsMarketplaceCustomerOutput';
+  customerAWSAccountId: Scalars['String']['output'];
+  customerIdentifier: Scalars['String']['output'];
+  productCode: Scalars['String']['output'];
+};
+
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type StringComparisonExp = {
   _eq?: InputMaybe<Scalars['String']['input']>;
@@ -412,6 +432,713 @@ export type StringComparisonExp = {
   _regex?: InputMaybe<Scalars['String']['input']>;
   /** does the column match the given SQL regular expression */
   _similar?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** columns and relationships of "tenantMembers" */
+export type TenantMembers = {
+  __typename?: 'TenantMembers';
+  createdAt: Scalars['timestamptz']['output'];
+  role?: Maybe<Scalars['String']['output']>;
+  /** An object relationship */
+  tenant: Tenants;
+  tenantId: Scalars['uuid']['output'];
+  /** An object relationship */
+  tenantRole?: Maybe<TenantRoles>;
+  updatedAt: Scalars['timestamptz']['output'];
+  /** An object relationship */
+  user: Users;
+  userId: Scalars['uuid']['output'];
+};
+
+/** aggregated selection of "tenantMembers" */
+export type TenantMembersAggregate = {
+  __typename?: 'TenantMembersAggregate';
+  aggregate?: Maybe<TenantMembersAggregateFields>;
+  nodes: Array<TenantMembers>;
+};
+
+export type TenantMembersAggregateBoolExp = {
+  count?: InputMaybe<TenantMembersAggregateBoolExpCount>;
+};
+
+/** aggregate fields of "tenantMembers" */
+export type TenantMembersAggregateFields = {
+  __typename?: 'TenantMembersAggregateFields';
+  count: Scalars['Int']['output'];
+  max?: Maybe<TenantMembersMaxFields>;
+  min?: Maybe<TenantMembersMinFields>;
+};
+
+
+/** aggregate fields of "tenantMembers" */
+export type TenantMembersAggregateFieldsCountArgs = {
+  columns?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** order by aggregate values of table "tenantMembers" */
+export type TenantMembersAggregateOrderBy = {
+  count?: InputMaybe<OrderBy>;
+  max?: InputMaybe<TenantMembersMaxOrderBy>;
+  min?: InputMaybe<TenantMembersMinOrderBy>;
+};
+
+/** input type for inserting array relation for remote table "tenantMembers" */
+export type TenantMembersArrRelInsertInput = {
+  data: Array<TenantMembersInsertInput>;
+  /** upsert condition */
+  onConflict?: InputMaybe<TenantMembersOnConflict>;
+};
+
+/** Boolean expression to filter rows from the table "tenantMembers". All fields are combined with a logical 'AND'. */
+export type TenantMembersBoolExp = {
+  _and?: InputMaybe<Array<TenantMembersBoolExp>>;
+  _not?: InputMaybe<TenantMembersBoolExp>;
+  _or?: InputMaybe<Array<TenantMembersBoolExp>>;
+  createdAt?: InputMaybe<TimestamptzComparisonExp>;
+  role?: InputMaybe<StringComparisonExp>;
+  tenant?: InputMaybe<TenantsBoolExp>;
+  tenantId?: InputMaybe<UuidComparisonExp>;
+  tenantRole?: InputMaybe<TenantRolesBoolExp>;
+  updatedAt?: InputMaybe<TimestamptzComparisonExp>;
+  user?: InputMaybe<UsersBoolExp>;
+  userId?: InputMaybe<UuidComparisonExp>;
+};
+
+/** unique or primary key constraints on table "tenantMembers" */
+export enum TenantMembersConstraint {
+  /** unique or primary key constraint on columns "tenantId", "userId" */
+  TenantMembersPkey = 'tenantMembers_pkey'
+}
+
+/** input type for inserting data into table "tenantMembers" */
+export type TenantMembersInsertInput = {
+  createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
+  role?: InputMaybe<Scalars['String']['input']>;
+  tenant?: InputMaybe<TenantsObjRelInsertInput>;
+  tenantId?: InputMaybe<Scalars['uuid']['input']>;
+  tenantRole?: InputMaybe<TenantRolesObjRelInsertInput>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
+  user?: InputMaybe<UsersObjRelInsertInput>;
+  userId?: InputMaybe<Scalars['uuid']['input']>;
+};
+
+/** aggregate max on columns */
+export type TenantMembersMaxFields = {
+  __typename?: 'TenantMembersMaxFields';
+  createdAt?: Maybe<Scalars['timestamptz']['output']>;
+  role?: Maybe<Scalars['String']['output']>;
+  tenantId?: Maybe<Scalars['uuid']['output']>;
+  updatedAt?: Maybe<Scalars['timestamptz']['output']>;
+  userId?: Maybe<Scalars['uuid']['output']>;
+};
+
+/** order by max() on columns of table "tenantMembers" */
+export type TenantMembersMaxOrderBy = {
+  createdAt?: InputMaybe<OrderBy>;
+  role?: InputMaybe<OrderBy>;
+  tenantId?: InputMaybe<OrderBy>;
+  updatedAt?: InputMaybe<OrderBy>;
+  userId?: InputMaybe<OrderBy>;
+};
+
+/** aggregate min on columns */
+export type TenantMembersMinFields = {
+  __typename?: 'TenantMembersMinFields';
+  createdAt?: Maybe<Scalars['timestamptz']['output']>;
+  role?: Maybe<Scalars['String']['output']>;
+  tenantId?: Maybe<Scalars['uuid']['output']>;
+  updatedAt?: Maybe<Scalars['timestamptz']['output']>;
+  userId?: Maybe<Scalars['uuid']['output']>;
+};
+
+/** order by min() on columns of table "tenantMembers" */
+export type TenantMembersMinOrderBy = {
+  createdAt?: InputMaybe<OrderBy>;
+  role?: InputMaybe<OrderBy>;
+  tenantId?: InputMaybe<OrderBy>;
+  updatedAt?: InputMaybe<OrderBy>;
+  userId?: InputMaybe<OrderBy>;
+};
+
+/** response of any mutation on the table "tenantMembers" */
+export type TenantMembersMutationResponse = {
+  __typename?: 'TenantMembersMutationResponse';
+  /** number of rows affected by the mutation */
+  affectedRows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<TenantMembers>;
+};
+
+/** on_conflict condition type for table "tenantMembers" */
+export type TenantMembersOnConflict = {
+  constraint: TenantMembersConstraint;
+  updateColumns?: Array<TenantMembersUpdateColumn>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+/** Ordering options when selecting data from "tenantMembers". */
+export type TenantMembersOrderBy = {
+  createdAt?: InputMaybe<OrderBy>;
+  role?: InputMaybe<OrderBy>;
+  tenant?: InputMaybe<TenantsOrderBy>;
+  tenantId?: InputMaybe<OrderBy>;
+  tenantRole?: InputMaybe<TenantRolesOrderBy>;
+  updatedAt?: InputMaybe<OrderBy>;
+  user?: InputMaybe<UsersOrderBy>;
+  userId?: InputMaybe<OrderBy>;
+};
+
+/** primary key columns input for table: tenantMembers */
+export type TenantMembersPkColumnsInput = {
+  tenantId: Scalars['uuid']['input'];
+  userId: Scalars['uuid']['input'];
+};
+
+/** select columns of table "tenantMembers" */
+export enum TenantMembersSelectColumn {
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Role = 'role',
+  /** column name */
+  TenantId = 'tenantId',
+  /** column name */
+  UpdatedAt = 'updatedAt',
+  /** column name */
+  UserId = 'userId'
+}
+
+/** input type for updating data in table "tenantMembers" */
+export type TenantMembersSetInput = {
+  createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
+  role?: InputMaybe<Scalars['String']['input']>;
+  tenantId?: InputMaybe<Scalars['uuid']['input']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
+  userId?: InputMaybe<Scalars['uuid']['input']>;
+};
+
+/** Streaming cursor of the table "tenantMembers" */
+export type TenantMembersStreamCursorInput = {
+  /** Stream column input with initial value */
+  initialValue: TenantMembersStreamCursorValueInput;
+  /** cursor ordering */
+  ordering?: InputMaybe<CursorOrdering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type TenantMembersStreamCursorValueInput = {
+  createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
+  role?: InputMaybe<Scalars['String']['input']>;
+  tenantId?: InputMaybe<Scalars['uuid']['input']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
+  userId?: InputMaybe<Scalars['uuid']['input']>;
+};
+
+/** update columns of table "tenantMembers" */
+export enum TenantMembersUpdateColumn {
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Role = 'role',
+  /** column name */
+  TenantId = 'tenantId',
+  /** column name */
+  UpdatedAt = 'updatedAt',
+  /** column name */
+  UserId = 'userId'
+}
+
+export type TenantMembersUpdates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<TenantMembersSetInput>;
+  /** filter the rows which have to be updated */
+  where: TenantMembersBoolExp;
+};
+
+/** columns and relationships of "tenantRoles" */
+export type TenantRoles = {
+  __typename?: 'TenantRoles';
+  description: Scalars['String']['output'];
+  label: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  /** An array relationship */
+  tenantMembers: Array<TenantMembers>;
+  /** An aggregate relationship */
+  tenantMembersAggregate: TenantMembersAggregate;
+};
+
+
+/** columns and relationships of "tenantRoles" */
+export type TenantRolesTenantMembersArgs = {
+  distinctOn?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantMembersOrderBy>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+
+/** columns and relationships of "tenantRoles" */
+export type TenantRolesTenantMembersAggregateArgs = {
+  distinctOn?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantMembersOrderBy>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+/** aggregated selection of "tenantRoles" */
+export type TenantRolesAggregate = {
+  __typename?: 'TenantRolesAggregate';
+  aggregate?: Maybe<TenantRolesAggregateFields>;
+  nodes: Array<TenantRoles>;
+};
+
+/** aggregate fields of "tenantRoles" */
+export type TenantRolesAggregateFields = {
+  __typename?: 'TenantRolesAggregateFields';
+  count: Scalars['Int']['output'];
+  max?: Maybe<TenantRolesMaxFields>;
+  min?: Maybe<TenantRolesMinFields>;
+};
+
+
+/** aggregate fields of "tenantRoles" */
+export type TenantRolesAggregateFieldsCountArgs = {
+  columns?: InputMaybe<Array<TenantRolesSelectColumn>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Boolean expression to filter rows from the table "tenantRoles". All fields are combined with a logical 'AND'. */
+export type TenantRolesBoolExp = {
+  _and?: InputMaybe<Array<TenantRolesBoolExp>>;
+  _not?: InputMaybe<TenantRolesBoolExp>;
+  _or?: InputMaybe<Array<TenantRolesBoolExp>>;
+  description?: InputMaybe<StringComparisonExp>;
+  label?: InputMaybe<StringComparisonExp>;
+  name?: InputMaybe<StringComparisonExp>;
+  tenantMembers?: InputMaybe<TenantMembersBoolExp>;
+  tenantMembersAggregate?: InputMaybe<TenantMembersAggregateBoolExp>;
+};
+
+/** unique or primary key constraints on table "tenantRoles" */
+export enum TenantRolesConstraint {
+  /** unique or primary key constraint on columns "name" */
+  TenantRolesPkey = 'tenantRoles_pkey'
+}
+
+/** input type for inserting data into table "tenantRoles" */
+export type TenantRolesInsertInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  tenantMembers?: InputMaybe<TenantMembersArrRelInsertInput>;
+};
+
+/** aggregate max on columns */
+export type TenantRolesMaxFields = {
+  __typename?: 'TenantRolesMaxFields';
+  description?: Maybe<Scalars['String']['output']>;
+  label?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+/** aggregate min on columns */
+export type TenantRolesMinFields = {
+  __typename?: 'TenantRolesMinFields';
+  description?: Maybe<Scalars['String']['output']>;
+  label?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+/** response of any mutation on the table "tenantRoles" */
+export type TenantRolesMutationResponse = {
+  __typename?: 'TenantRolesMutationResponse';
+  /** number of rows affected by the mutation */
+  affectedRows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<TenantRoles>;
+};
+
+/** input type for inserting object relation for remote table "tenantRoles" */
+export type TenantRolesObjRelInsertInput = {
+  data: TenantRolesInsertInput;
+  /** upsert condition */
+  onConflict?: InputMaybe<TenantRolesOnConflict>;
+};
+
+/** on_conflict condition type for table "tenantRoles" */
+export type TenantRolesOnConflict = {
+  constraint: TenantRolesConstraint;
+  updateColumns?: Array<TenantRolesUpdateColumn>;
+  where?: InputMaybe<TenantRolesBoolExp>;
+};
+
+/** Ordering options when selecting data from "tenantRoles". */
+export type TenantRolesOrderBy = {
+  description?: InputMaybe<OrderBy>;
+  label?: InputMaybe<OrderBy>;
+  name?: InputMaybe<OrderBy>;
+  tenantMembersAggregate?: InputMaybe<TenantMembersAggregateOrderBy>;
+};
+
+/** primary key columns input for table: tenantRoles */
+export type TenantRolesPkColumnsInput = {
+  name: Scalars['String']['input'];
+};
+
+/** select columns of table "tenantRoles" */
+export enum TenantRolesSelectColumn {
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Label = 'label',
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "tenantRoles" */
+export type TenantRolesSetInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Streaming cursor of the table "tenantRoles" */
+export type TenantRolesStreamCursorInput = {
+  /** Stream column input with initial value */
+  initialValue: TenantRolesStreamCursorValueInput;
+  /** cursor ordering */
+  ordering?: InputMaybe<CursorOrdering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type TenantRolesStreamCursorValueInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** update columns of table "tenantRoles" */
+export enum TenantRolesUpdateColumn {
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Label = 'label',
+  /** column name */
+  Name = 'name'
+}
+
+export type TenantRolesUpdates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<TenantRolesSetInput>;
+  /** filter the rows which have to be updated */
+  where: TenantRolesBoolExp;
+};
+
+/** columns and relationships of "tenants" */
+export type Tenants = {
+  __typename?: 'Tenants';
+  awsMarketplaceAccountId?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceCustomerIdentifier?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceProductCode?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['timestamptz']['output'];
+  id: Scalars['uuid']['output'];
+  name: Scalars['String']['output'];
+  /** An object relationship */
+  owner: Users;
+  ownerId: Scalars['uuid']['output'];
+  provider: Scalars['String']['output'];
+  /** An array relationship */
+  tenantMembers: Array<TenantMembers>;
+  /** An aggregate relationship */
+  tenantMembersAggregate: TenantMembersAggregate;
+  updatedAt: Scalars['timestamptz']['output'];
+};
+
+
+/** columns and relationships of "tenants" */
+export type TenantsTenantMembersArgs = {
+  distinctOn?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantMembersOrderBy>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+
+/** columns and relationships of "tenants" */
+export type TenantsTenantMembersAggregateArgs = {
+  distinctOn?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantMembersOrderBy>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+/** aggregated selection of "tenants" */
+export type TenantsAggregate = {
+  __typename?: 'TenantsAggregate';
+  aggregate?: Maybe<TenantsAggregateFields>;
+  nodes: Array<Tenants>;
+};
+
+export type TenantsAggregateBoolExp = {
+  count?: InputMaybe<TenantsAggregateBoolExpCount>;
+};
+
+/** aggregate fields of "tenants" */
+export type TenantsAggregateFields = {
+  __typename?: 'TenantsAggregateFields';
+  count: Scalars['Int']['output'];
+  max?: Maybe<TenantsMaxFields>;
+  min?: Maybe<TenantsMinFields>;
+};
+
+
+/** aggregate fields of "tenants" */
+export type TenantsAggregateFieldsCountArgs = {
+  columns?: InputMaybe<Array<TenantsSelectColumn>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** order by aggregate values of table "tenants" */
+export type TenantsAggregateOrderBy = {
+  count?: InputMaybe<OrderBy>;
+  max?: InputMaybe<TenantsMaxOrderBy>;
+  min?: InputMaybe<TenantsMinOrderBy>;
+};
+
+/** input type for inserting array relation for remote table "tenants" */
+export type TenantsArrRelInsertInput = {
+  data: Array<TenantsInsertInput>;
+  /** upsert condition */
+  onConflict?: InputMaybe<TenantsOnConflict>;
+};
+
+/** Boolean expression to filter rows from the table "tenants". All fields are combined with a logical 'AND'. */
+export type TenantsBoolExp = {
+  _and?: InputMaybe<Array<TenantsBoolExp>>;
+  _not?: InputMaybe<TenantsBoolExp>;
+  _or?: InputMaybe<Array<TenantsBoolExp>>;
+  awsMarketplaceAccountId?: InputMaybe<StringComparisonExp>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<StringComparisonExp>;
+  awsMarketplaceProductCode?: InputMaybe<StringComparisonExp>;
+  createdAt?: InputMaybe<TimestamptzComparisonExp>;
+  id?: InputMaybe<UuidComparisonExp>;
+  name?: InputMaybe<StringComparisonExp>;
+  owner?: InputMaybe<UsersBoolExp>;
+  ownerId?: InputMaybe<UuidComparisonExp>;
+  provider?: InputMaybe<StringComparisonExp>;
+  tenantMembers?: InputMaybe<TenantMembersBoolExp>;
+  tenantMembersAggregate?: InputMaybe<TenantMembersAggregateBoolExp>;
+  updatedAt?: InputMaybe<TimestamptzComparisonExp>;
+};
+
+/** unique or primary key constraints on table "tenants" */
+export enum TenantsConstraint {
+  /** unique or primary key constraint on columns "awsMarketplaceCustomerIdentifier" */
+  TenantsAwsMarketplaceCustomerIdentifierKey = 'tenants_awsMarketplaceCustomerIdentifier_key',
+  /** unique or primary key constraint on columns "id" */
+  TenantsPkey = 'tenants_pkey'
+}
+
+/** input type for inserting data into table "tenants" */
+export type TenantsInsertInput = {
+  awsMarketplaceAccountId?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceProductCode?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['uuid']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  owner?: InputMaybe<UsersObjRelInsertInput>;
+  ownerId?: InputMaybe<Scalars['uuid']['input']>;
+  provider?: InputMaybe<Scalars['String']['input']>;
+  tenantMembers?: InputMaybe<TenantMembersArrRelInsertInput>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
+};
+
+/** aggregate max on columns */
+export type TenantsMaxFields = {
+  __typename?: 'TenantsMaxFields';
+  awsMarketplaceAccountId?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceCustomerIdentifier?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceProductCode?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['uuid']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  ownerId?: Maybe<Scalars['uuid']['output']>;
+  provider?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['timestamptz']['output']>;
+};
+
+/** order by max() on columns of table "tenants" */
+export type TenantsMaxOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
+  createdAt?: InputMaybe<OrderBy>;
+  id?: InputMaybe<OrderBy>;
+  name?: InputMaybe<OrderBy>;
+  ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
+  updatedAt?: InputMaybe<OrderBy>;
+};
+
+/** aggregate min on columns */
+export type TenantsMinFields = {
+  __typename?: 'TenantsMinFields';
+  awsMarketplaceAccountId?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceCustomerIdentifier?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceProductCode?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['uuid']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  ownerId?: Maybe<Scalars['uuid']['output']>;
+  provider?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['timestamptz']['output']>;
+};
+
+/** order by min() on columns of table "tenants" */
+export type TenantsMinOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
+  createdAt?: InputMaybe<OrderBy>;
+  id?: InputMaybe<OrderBy>;
+  name?: InputMaybe<OrderBy>;
+  ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
+  updatedAt?: InputMaybe<OrderBy>;
+};
+
+/** response of any mutation on the table "tenants" */
+export type TenantsMutationResponse = {
+  __typename?: 'TenantsMutationResponse';
+  /** number of rows affected by the mutation */
+  affectedRows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Tenants>;
+};
+
+/** input type for inserting object relation for remote table "tenants" */
+export type TenantsObjRelInsertInput = {
+  data: TenantsInsertInput;
+  /** upsert condition */
+  onConflict?: InputMaybe<TenantsOnConflict>;
+};
+
+/** on_conflict condition type for table "tenants" */
+export type TenantsOnConflict = {
+  constraint: TenantsConstraint;
+  updateColumns?: Array<TenantsUpdateColumn>;
+  where?: InputMaybe<TenantsBoolExp>;
+};
+
+/** Ordering options when selecting data from "tenants". */
+export type TenantsOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
+  createdAt?: InputMaybe<OrderBy>;
+  id?: InputMaybe<OrderBy>;
+  name?: InputMaybe<OrderBy>;
+  owner?: InputMaybe<UsersOrderBy>;
+  ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
+  tenantMembersAggregate?: InputMaybe<TenantMembersAggregateOrderBy>;
+  updatedAt?: InputMaybe<OrderBy>;
+};
+
+/** primary key columns input for table: tenants */
+export type TenantsPkColumnsInput = {
+  id: Scalars['uuid']['input'];
+};
+
+/** select columns of table "tenants" */
+export enum TenantsSelectColumn {
+  /** column name */
+  AwsMarketplaceAccountId = 'awsMarketplaceAccountId',
+  /** column name */
+  AwsMarketplaceCustomerIdentifier = 'awsMarketplaceCustomerIdentifier',
+  /** column name */
+  AwsMarketplaceProductCode = 'awsMarketplaceProductCode',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  OwnerId = 'ownerId',
+  /** column name */
+  Provider = 'provider',
+  /** column name */
+  UpdatedAt = 'updatedAt'
+}
+
+/** input type for updating data in table "tenants" */
+export type TenantsSetInput = {
+  awsMarketplaceAccountId?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceProductCode?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['uuid']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  ownerId?: InputMaybe<Scalars['uuid']['input']>;
+  provider?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
+};
+
+/** Streaming cursor of the table "tenants" */
+export type TenantsStreamCursorInput = {
+  /** Stream column input with initial value */
+  initialValue: TenantsStreamCursorValueInput;
+  /** cursor ordering */
+  ordering?: InputMaybe<CursorOrdering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type TenantsStreamCursorValueInput = {
+  awsMarketplaceAccountId?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceProductCode?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['uuid']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  ownerId?: InputMaybe<Scalars['uuid']['input']>;
+  provider?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
+};
+
+/** update columns of table "tenants" */
+export enum TenantsUpdateColumn {
+  /** column name */
+  AwsMarketplaceAccountId = 'awsMarketplaceAccountId',
+  /** column name */
+  AwsMarketplaceCustomerIdentifier = 'awsMarketplaceCustomerIdentifier',
+  /** column name */
+  AwsMarketplaceProductCode = 'awsMarketplaceProductCode',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  OwnerId = 'ownerId',
+  /** column name */
+  Provider = 'provider',
+  /** column name */
+  UpdatedAt = 'updatedAt'
+}
+
+export type TenantsUpdates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<TenantsSetInput>;
+  /** filter the rows which have to be updated */
+  where: TenantsBoolExp;
 };
 
 /** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
@@ -637,11 +1364,59 @@ export type Users = {
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['uuid']['output'];
   name?: Maybe<Scalars['String']['output']>;
+  /** An array relationship */
+  tenantMembers: Array<TenantMembers>;
+  /** An aggregate relationship */
+  tenantMembersAggregate: TenantMembersAggregate;
+  /** An array relationship */
+  tenants: Array<Tenants>;
+  /** An aggregate relationship */
+  tenantsAggregate: TenantsAggregate;
   updatedAt?: Maybe<Scalars['timestamptz']['output']>;
   /** An array relationship */
   usersUserAccounts: Array<UserAccounts>;
   /** An aggregate relationship */
   usersUserAccountsAggregate: UserAccountsAggregate;
+};
+
+
+/** columns and relationships of "users" */
+export type UsersTenantMembersArgs = {
+  distinctOn?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantMembersOrderBy>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+
+/** columns and relationships of "users" */
+export type UsersTenantMembersAggregateArgs = {
+  distinctOn?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantMembersOrderBy>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+
+/** columns and relationships of "users" */
+export type UsersTenantsArgs = {
+  distinctOn?: InputMaybe<Array<TenantsSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantsOrderBy>>;
+  where?: InputMaybe<TenantsBoolExp>;
+};
+
+
+/** columns and relationships of "users" */
+export type UsersTenantsAggregateArgs = {
+  distinctOn?: InputMaybe<Array<TenantsSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantsOrderBy>>;
+  where?: InputMaybe<TenantsBoolExp>;
 };
 
 
@@ -695,6 +1470,10 @@ export type UsersBoolExp = {
   email?: InputMaybe<StringComparisonExp>;
   id?: InputMaybe<UuidComparisonExp>;
   name?: InputMaybe<StringComparisonExp>;
+  tenantMembers?: InputMaybe<TenantMembersBoolExp>;
+  tenantMembersAggregate?: InputMaybe<TenantMembersAggregateBoolExp>;
+  tenants?: InputMaybe<TenantsBoolExp>;
+  tenantsAggregate?: InputMaybe<TenantsAggregateBoolExp>;
   updatedAt?: InputMaybe<TimestamptzComparisonExp>;
   usersUserAccounts?: InputMaybe<UserAccountsBoolExp>;
   usersUserAccountsAggregate?: InputMaybe<UserAccountsAggregateBoolExp>;
@@ -712,6 +1491,8 @@ export type UsersInsertInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  tenantMembers?: InputMaybe<TenantMembersArrRelInsertInput>;
+  tenants?: InputMaybe<TenantsArrRelInsertInput>;
   updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
   usersUserAccounts?: InputMaybe<UserAccountsArrRelInsertInput>;
 };
@@ -765,6 +1546,8 @@ export type UsersOrderBy = {
   email?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
+  tenantMembersAggregate?: InputMaybe<TenantMembersAggregateOrderBy>;
+  tenantsAggregate?: InputMaybe<TenantsAggregateOrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
   usersUserAccountsAggregate?: InputMaybe<UserAccountsAggregateOrderBy>;
 };
@@ -851,15 +1634,28 @@ export type UuidComparisonExp = {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
+  createStripeCheckoutSession?: Maybe<CreateStripePortalSessionOutput>;
   /** Create a Stripe portal session */
   createStripePortalSession?: Maybe<CreateStripePortalSessionOutput>;
   /** Create a Stripe client secret */
   createStripeSecret?: Maybe<CreateStripeSecretOutput>;
-  deleteAccount?: Maybe<DeleteAccountOutput>;
   /** delete data from the table: "accounts" */
   deleteAccounts?: Maybe<AccountsMutationResponse>;
   /** delete single row from the table: "accounts" */
   deleteAccountsByPk?: Maybe<Accounts>;
+  /** delete data from the table: "tenantMembers" */
+  deleteTenantMembers?: Maybe<TenantMembersMutationResponse>;
+  /** delete single row from the table: "tenantMembers" */
+  deleteTenantMembersByPk?: Maybe<TenantMembers>;
+  /** delete data from the table: "tenantRoles" */
+  deleteTenantRoles?: Maybe<TenantRolesMutationResponse>;
+  /** delete single row from the table: "tenantRoles" */
+  deleteTenantRolesByPk?: Maybe<TenantRoles>;
+  /** delete data from the table: "tenants" */
+  deleteTenants?: Maybe<TenantsMutationResponse>;
+  /** delete single row from the table: "tenants" */
+  deleteTenantsByPk?: Maybe<Tenants>;
+  deleteUser?: Maybe<DeleteUserOutput>;
   /** delete data from the table: "userAccounts" */
   deleteUserAccounts?: Maybe<UserAccountsMutationResponse>;
   /** delete single row from the table: "userAccounts" */
@@ -868,10 +1664,23 @@ export type Mutation_Root = {
   deleteUsers?: Maybe<UsersMutationResponse>;
   /** delete single row from the table: "users" */
   deleteUsersByPk?: Maybe<Users>;
+  initiateTenantDeletion?: Maybe<InitiateTenantDeletionOutput>;
   /** insert data into the table: "accounts" */
   insertAccounts?: Maybe<AccountsMutationResponse>;
   /** insert a single row into the table: "accounts" */
   insertAccountsOne?: Maybe<Accounts>;
+  /** insert data into the table: "tenantMembers" */
+  insertTenantMembers?: Maybe<TenantMembersMutationResponse>;
+  /** insert a single row into the table: "tenantMembers" */
+  insertTenantMembersOne?: Maybe<TenantMembers>;
+  /** insert data into the table: "tenantRoles" */
+  insertTenantRoles?: Maybe<TenantRolesMutationResponse>;
+  /** insert a single row into the table: "tenantRoles" */
+  insertTenantRolesOne?: Maybe<TenantRoles>;
+  /** insert data into the table: "tenants" */
+  insertTenants?: Maybe<TenantsMutationResponse>;
+  /** insert a single row into the table: "tenants" */
+  insertTenantsOne?: Maybe<Tenants>;
   /** insert data into the table: "userAccounts" */
   insertUserAccounts?: Maybe<UserAccountsMutationResponse>;
   /** insert a single row into the table: "userAccounts" */
@@ -880,12 +1689,31 @@ export type Mutation_Root = {
   insertUsers?: Maybe<UsersMutationResponse>;
   /** insert a single row into the table: "users" */
   insertUsersOne?: Maybe<Users>;
+  resolveAwsMarketplaceCustomer?: Maybe<ResolveAwsMarketplaceCustomerOutput>;
   /** update data of the table: "accounts" */
   updateAccounts?: Maybe<AccountsMutationResponse>;
   /** update single row of the table: "accounts" */
   updateAccountsByPk?: Maybe<Accounts>;
   /** update multiples rows of table: "accounts" */
   updateAccountsMany?: Maybe<Array<Maybe<AccountsMutationResponse>>>;
+  /** update data of the table: "tenantMembers" */
+  updateTenantMembers?: Maybe<TenantMembersMutationResponse>;
+  /** update single row of the table: "tenantMembers" */
+  updateTenantMembersByPk?: Maybe<TenantMembers>;
+  /** update multiples rows of table: "tenantMembers" */
+  updateTenantMembersMany?: Maybe<Array<Maybe<TenantMembersMutationResponse>>>;
+  /** update data of the table: "tenantRoles" */
+  updateTenantRoles?: Maybe<TenantRolesMutationResponse>;
+  /** update single row of the table: "tenantRoles" */
+  updateTenantRolesByPk?: Maybe<TenantRoles>;
+  /** update multiples rows of table: "tenantRoles" */
+  updateTenantRolesMany?: Maybe<Array<Maybe<TenantRolesMutationResponse>>>;
+  /** update data of the table: "tenants" */
+  updateTenants?: Maybe<TenantsMutationResponse>;
+  /** update single row of the table: "tenants" */
+  updateTenantsByPk?: Maybe<Tenants>;
+  /** update multiples rows of table: "tenants" */
+  updateTenantsMany?: Maybe<Array<Maybe<TenantsMutationResponse>>>;
   /** update data of the table: "userAccounts" */
   updateUserAccounts?: Maybe<UserAccountsMutationResponse>;
   /** update single row of the table: "userAccounts" */
@@ -902,6 +1730,12 @@ export type Mutation_Root = {
 
 
 /** mutation root */
+export type Mutation_RootCreateStripeCheckoutSessionArgs = {
+  input: CreateStripeCheckoutSessionInput;
+};
+
+
+/** mutation root */
 export type Mutation_RootDeleteAccountsArgs = {
   where: AccountsBoolExp;
 };
@@ -909,6 +1743,43 @@ export type Mutation_RootDeleteAccountsArgs = {
 
 /** mutation root */
 export type Mutation_RootDeleteAccountsByPkArgs = {
+  id: Scalars['uuid']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteTenantMembersArgs = {
+  where: TenantMembersBoolExp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteTenantMembersByPkArgs = {
+  tenantId: Scalars['uuid']['input'];
+  userId: Scalars['uuid']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteTenantRolesArgs = {
+  where: TenantRolesBoolExp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteTenantRolesByPkArgs = {
+  name: Scalars['String']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteTenantsArgs = {
+  where: TenantsBoolExp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteTenantsByPkArgs = {
   id: Scalars['uuid']['input'];
 };
 
@@ -939,6 +1810,12 @@ export type Mutation_RootDeleteUsersByPkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInitiateTenantDeletionArgs = {
+  tenantId: Scalars['uuid']['input'];
+};
+
+
+/** mutation root */
 export type Mutation_RootInsertAccountsArgs = {
   objects: Array<AccountsInsertInput>;
   onConflict?: InputMaybe<AccountsOnConflict>;
@@ -949,6 +1826,48 @@ export type Mutation_RootInsertAccountsArgs = {
 export type Mutation_RootInsertAccountsOneArgs = {
   object: AccountsInsertInput;
   onConflict?: InputMaybe<AccountsOnConflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertTenantMembersArgs = {
+  objects: Array<TenantMembersInsertInput>;
+  onConflict?: InputMaybe<TenantMembersOnConflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertTenantMembersOneArgs = {
+  object: TenantMembersInsertInput;
+  onConflict?: InputMaybe<TenantMembersOnConflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertTenantRolesArgs = {
+  objects: Array<TenantRolesInsertInput>;
+  onConflict?: InputMaybe<TenantRolesOnConflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertTenantRolesOneArgs = {
+  object: TenantRolesInsertInput;
+  onConflict?: InputMaybe<TenantRolesOnConflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertTenantsArgs = {
+  objects: Array<TenantsInsertInput>;
+  onConflict?: InputMaybe<TenantsOnConflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsertTenantsOneArgs = {
+  object: TenantsInsertInput;
+  onConflict?: InputMaybe<TenantsOnConflict>;
 };
 
 
@@ -981,6 +1900,12 @@ export type Mutation_RootInsertUsersOneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootResolveAwsMarketplaceCustomerArgs = {
+  input: ResolveAwsMarketplaceCustomerInput;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdateAccountsArgs = {
   _append?: InputMaybe<AccountsAppendInput>;
   _deleteAtPath?: InputMaybe<AccountsDeleteAtPathInput>;
@@ -1007,6 +1932,66 @@ export type Mutation_RootUpdateAccountsByPkArgs = {
 /** mutation root */
 export type Mutation_RootUpdateAccountsManyArgs = {
   updates: Array<AccountsUpdates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateTenantMembersArgs = {
+  _set?: InputMaybe<TenantMembersSetInput>;
+  where: TenantMembersBoolExp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateTenantMembersByPkArgs = {
+  _set?: InputMaybe<TenantMembersSetInput>;
+  pkColumns: TenantMembersPkColumnsInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateTenantMembersManyArgs = {
+  updates: Array<TenantMembersUpdates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateTenantRolesArgs = {
+  _set?: InputMaybe<TenantRolesSetInput>;
+  where: TenantRolesBoolExp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateTenantRolesByPkArgs = {
+  _set?: InputMaybe<TenantRolesSetInput>;
+  pkColumns: TenantRolesPkColumnsInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateTenantRolesManyArgs = {
+  updates: Array<TenantRolesUpdates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateTenantsArgs = {
+  _set?: InputMaybe<TenantsSetInput>;
+  where: TenantsBoolExp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateTenantsByPkArgs = {
+  _set?: InputMaybe<TenantsSetInput>;
+  pkColumns: TenantsPkColumnsInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateTenantsManyArgs = {
+  updates: Array<TenantsUpdates>;
 };
 
 
@@ -1057,6 +2042,24 @@ export type Query_Root = {
   accountsAggregate: AccountsAggregate;
   /** fetch data from the table: "accounts" using primary key columns */
   accountsByPk?: Maybe<Accounts>;
+  /** An array relationship */
+  tenantMembers: Array<TenantMembers>;
+  /** An aggregate relationship */
+  tenantMembersAggregate: TenantMembersAggregate;
+  /** fetch data from the table: "tenantMembers" using primary key columns */
+  tenantMembersByPk?: Maybe<TenantMembers>;
+  /** fetch data from the table: "tenantRoles" */
+  tenantRoles: Array<TenantRoles>;
+  /** fetch aggregated fields from the table: "tenantRoles" */
+  tenantRolesAggregate: TenantRolesAggregate;
+  /** fetch data from the table: "tenantRoles" using primary key columns */
+  tenantRolesByPk?: Maybe<TenantRoles>;
+  /** An array relationship */
+  tenants: Array<Tenants>;
+  /** An aggregate relationship */
+  tenantsAggregate: TenantsAggregate;
+  /** fetch data from the table: "tenants" using primary key columns */
+  tenantsByPk?: Maybe<Tenants>;
   /** fetch data from the table: "userAccounts" */
   userAccounts: Array<UserAccounts>;
   /** fetch aggregated fields from the table: "userAccounts" */
@@ -1091,6 +2094,76 @@ export type Query_RootAccountsAggregateArgs = {
 
 
 export type Query_RootAccountsByPkArgs = {
+  id: Scalars['uuid']['input'];
+};
+
+
+export type Query_RootTenantMembersArgs = {
+  distinctOn?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantMembersOrderBy>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+
+export type Query_RootTenantMembersAggregateArgs = {
+  distinctOn?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantMembersOrderBy>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+
+export type Query_RootTenantMembersByPkArgs = {
+  tenantId: Scalars['uuid']['input'];
+  userId: Scalars['uuid']['input'];
+};
+
+
+export type Query_RootTenantRolesArgs = {
+  distinctOn?: InputMaybe<Array<TenantRolesSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantRolesOrderBy>>;
+  where?: InputMaybe<TenantRolesBoolExp>;
+};
+
+
+export type Query_RootTenantRolesAggregateArgs = {
+  distinctOn?: InputMaybe<Array<TenantRolesSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantRolesOrderBy>>;
+  where?: InputMaybe<TenantRolesBoolExp>;
+};
+
+
+export type Query_RootTenantRolesByPkArgs = {
+  name: Scalars['String']['input'];
+};
+
+
+export type Query_RootTenantsArgs = {
+  distinctOn?: InputMaybe<Array<TenantsSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantsOrderBy>>;
+  where?: InputMaybe<TenantsBoolExp>;
+};
+
+
+export type Query_RootTenantsAggregateArgs = {
+  distinctOn?: InputMaybe<Array<TenantsSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantsOrderBy>>;
+  where?: InputMaybe<TenantsBoolExp>;
+};
+
+
+export type Query_RootTenantsByPkArgs = {
   id: Scalars['uuid']['input'];
 };
 
@@ -1151,6 +2224,30 @@ export type Subscription_Root = {
   accountsByPk?: Maybe<Accounts>;
   /** fetch data from the table in a streaming manner: "accounts" */
   accountsStream: Array<Accounts>;
+  /** An array relationship */
+  tenantMembers: Array<TenantMembers>;
+  /** An aggregate relationship */
+  tenantMembersAggregate: TenantMembersAggregate;
+  /** fetch data from the table: "tenantMembers" using primary key columns */
+  tenantMembersByPk?: Maybe<TenantMembers>;
+  /** fetch data from the table in a streaming manner: "tenantMembers" */
+  tenantMembersStream: Array<TenantMembers>;
+  /** fetch data from the table: "tenantRoles" */
+  tenantRoles: Array<TenantRoles>;
+  /** fetch aggregated fields from the table: "tenantRoles" */
+  tenantRolesAggregate: TenantRolesAggregate;
+  /** fetch data from the table: "tenantRoles" using primary key columns */
+  tenantRolesByPk?: Maybe<TenantRoles>;
+  /** fetch data from the table in a streaming manner: "tenantRoles" */
+  tenantRolesStream: Array<TenantRoles>;
+  /** An array relationship */
+  tenants: Array<Tenants>;
+  /** An aggregate relationship */
+  tenantsAggregate: TenantsAggregate;
+  /** fetch data from the table: "tenants" using primary key columns */
+  tenantsByPk?: Maybe<Tenants>;
+  /** fetch data from the table in a streaming manner: "tenants" */
+  tenantsStream: Array<Tenants>;
   /** fetch data from the table: "userAccounts" */
   userAccounts: Array<UserAccounts>;
   /** fetch aggregated fields from the table: "userAccounts" */
@@ -1197,6 +2294,97 @@ export type Subscription_RootAccountsStreamArgs = {
   batchSize: Scalars['Int']['input'];
   cursor: Array<InputMaybe<AccountsStreamCursorInput>>;
   where?: InputMaybe<AccountsBoolExp>;
+};
+
+
+export type Subscription_RootTenantMembersArgs = {
+  distinctOn?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantMembersOrderBy>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+
+export type Subscription_RootTenantMembersAggregateArgs = {
+  distinctOn?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantMembersOrderBy>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+
+export type Subscription_RootTenantMembersByPkArgs = {
+  tenantId: Scalars['uuid']['input'];
+  userId: Scalars['uuid']['input'];
+};
+
+
+export type Subscription_RootTenantMembersStreamArgs = {
+  batchSize: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<TenantMembersStreamCursorInput>>;
+  where?: InputMaybe<TenantMembersBoolExp>;
+};
+
+
+export type Subscription_RootTenantRolesArgs = {
+  distinctOn?: InputMaybe<Array<TenantRolesSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantRolesOrderBy>>;
+  where?: InputMaybe<TenantRolesBoolExp>;
+};
+
+
+export type Subscription_RootTenantRolesAggregateArgs = {
+  distinctOn?: InputMaybe<Array<TenantRolesSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantRolesOrderBy>>;
+  where?: InputMaybe<TenantRolesBoolExp>;
+};
+
+
+export type Subscription_RootTenantRolesByPkArgs = {
+  name: Scalars['String']['input'];
+};
+
+
+export type Subscription_RootTenantRolesStreamArgs = {
+  batchSize: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<TenantRolesStreamCursorInput>>;
+  where?: InputMaybe<TenantRolesBoolExp>;
+};
+
+
+export type Subscription_RootTenantsArgs = {
+  distinctOn?: InputMaybe<Array<TenantsSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantsOrderBy>>;
+  where?: InputMaybe<TenantsBoolExp>;
+};
+
+
+export type Subscription_RootTenantsAggregateArgs = {
+  distinctOn?: InputMaybe<Array<TenantsSelectColumn>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<TenantsOrderBy>>;
+  where?: InputMaybe<TenantsBoolExp>;
+};
+
+
+export type Subscription_RootTenantsByPkArgs = {
+  id: Scalars['uuid']['input'];
+};
+
+
+export type Subscription_RootTenantsStreamArgs = {
+  batchSize: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<TenantsStreamCursorInput>>;
+  where?: InputMaybe<TenantsBoolExp>;
 };
 
 
@@ -1260,6 +2448,20 @@ export type Subscription_RootUsersStreamArgs = {
   where?: InputMaybe<UsersBoolExp>;
 };
 
+export type TenantMembersAggregateBoolExpCount = {
+  arguments?: InputMaybe<Array<TenantMembersSelectColumn>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<TenantMembersBoolExp>;
+  predicate: IntComparisonExp;
+};
+
+export type TenantsAggregateBoolExpCount = {
+  arguments?: InputMaybe<Array<TenantsSelectColumn>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<TenantsBoolExp>;
+  predicate: IntComparisonExp;
+};
+
 export type UserAccountsAggregateBoolExpCount = {
   arguments?: InputMaybe<Array<UserAccountsSelectColumn>>;
   distinct?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1267,12 +2469,59 @@ export type UserAccountsAggregateBoolExpCount = {
   predicate: IntComparisonExp;
 };
 
-export type FetchHasuraUsersQueryVariables = Exact<{
-  ids?: InputMaybe<Array<Scalars['uuid']['input']> | Scalars['uuid']['input']>;
+export type UserIdForTenantQueryVariables = Exact<{
+  tenantId: Scalars['uuid']['input'];
 }>;
 
 
-export type FetchHasuraUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'Users', id: string, email?: string | null }> };
+export type UserIdForTenantQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'Users', id: string }> };
+
+export type UpdateTenantAwsMarketplaceMutationVariables = Exact<{
+  tenantId: Scalars['uuid']['input'];
+  customerIdentifier: Scalars['String']['input'];
+  accountId: Scalars['String']['input'];
+  productCode: Scalars['String']['input'];
+}>;
+
+
+export type UpdateTenantAwsMarketplaceMutation = { __typename?: 'mutation_root', updateTenants?: { __typename?: 'TenantsMutationResponse', affectedRows: number } | null };
+
+export type TenantOwnerEmailQueryVariables = Exact<{
+  tenantId: Scalars['uuid']['input'];
+}>;
+
+
+export type TenantOwnerEmailQuery = { __typename?: 'query_root', tenants: Array<{ __typename?: 'Tenants', id: string, owner: { __typename?: 'Users', email?: string | null } }> };
+
+export type TenantOwnershipQueryVariables = Exact<{
+  tenantId: Scalars['uuid']['input'];
+  ownerId: Scalars['uuid']['input'];
+}>;
+
+
+export type TenantOwnershipQuery = { __typename?: 'query_root', tenants: Array<{ __typename?: 'Tenants', id: string }> };
+
+export type DeleteTenantMutationVariables = Exact<{
+  tenantId: Scalars['uuid']['input'];
+  ownerId: Scalars['uuid']['input'];
+}>;
+
+
+export type DeleteTenantMutation = { __typename?: 'mutation_root', deleteTenants?: { __typename?: 'TenantsMutationResponse', affectedRows: number } | null };
+
+export type DeleteUserMutationVariables = Exact<{
+  id: Scalars['uuid']['input'];
+}>;
+
+
+export type DeleteUserMutation = { __typename?: 'mutation_root', deleteUsersByPk?: { __typename?: 'Users', id: string } | null };
+
+export type OwnedTenantsQueryVariables = Exact<{
+  ownerId: Scalars['uuid']['input'];
+}>;
+
+
+export type OwnedTenantsQuery = { __typename?: 'query_root', tenants: Array<{ __typename?: 'Tenants', id: string }> };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -1289,11 +2538,58 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
-export const FetchHasuraUsersDocument = new TypedDocumentString(`
-    query fetchHasuraUsers($ids: [uuid!]) {
-  users(limit: 10000, where: {id: {_nin: $ids}}) {
+export const UserIdForTenantDocument = new TypedDocumentString(`
+    query UserIdForTenant($tenantId: uuid!) {
+  users(where: {tenants: {id: {_eq: $tenantId}}}) {
     id
-    email
   }
 }
-    `) as unknown as TypedDocumentString<FetchHasuraUsersQuery, FetchHasuraUsersQueryVariables>;
+    `) as unknown as TypedDocumentString<UserIdForTenantQuery, UserIdForTenantQueryVariables>;
+export const UpdateTenantAwsMarketplaceDocument = new TypedDocumentString(`
+    mutation UpdateTenantAwsMarketplace($tenantId: uuid!, $customerIdentifier: String!, $accountId: String!, $productCode: String!) {
+  updateTenants(
+    where: {id: {_eq: $tenantId}, _or: [{awsMarketplaceCustomerIdentifier: {_isNull: true}, awsMarketplaceAccountId: {_isNull: true}, awsMarketplaceProductCode: {_isNull: true}}, {awsMarketplaceCustomerIdentifier: {_eq: $customerIdentifier}, awsMarketplaceAccountId: {_eq: $accountId}, awsMarketplaceProductCode: {_eq: $productCode}}]}
+    _set: {awsMarketplaceCustomerIdentifier: $customerIdentifier, awsMarketplaceAccountId: $accountId, awsMarketplaceProductCode: $productCode}
+  ) {
+    affectedRows
+  }
+}
+    `) as unknown as TypedDocumentString<UpdateTenantAwsMarketplaceMutation, UpdateTenantAwsMarketplaceMutationVariables>;
+export const TenantOwnerEmailDocument = new TypedDocumentString(`
+    query TenantOwnerEmail($tenantId: uuid!) {
+  tenants(where: {id: {_eq: $tenantId}}) {
+    id
+    owner {
+      email
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<TenantOwnerEmailQuery, TenantOwnerEmailQueryVariables>;
+export const TenantOwnershipDocument = new TypedDocumentString(`
+    query TenantOwnership($tenantId: uuid!, $ownerId: uuid!) {
+  tenants(where: {id: {_eq: $tenantId}, ownerId: {_eq: $ownerId}}) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<TenantOwnershipQuery, TenantOwnershipQueryVariables>;
+export const DeleteTenantDocument = new TypedDocumentString(`
+    mutation DeleteTenant($tenantId: uuid!, $ownerId: uuid!) {
+  deleteTenants(where: {id: {_eq: $tenantId}, ownerId: {_eq: $ownerId}}) {
+    affectedRows
+  }
+}
+    `) as unknown as TypedDocumentString<DeleteTenantMutation, DeleteTenantMutationVariables>;
+export const DeleteUserDocument = new TypedDocumentString(`
+    mutation DeleteUser($id: uuid!) {
+  deleteUsersByPk(id: $id) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<DeleteUserMutation, DeleteUserMutationVariables>;
+export const OwnedTenantsDocument = new TypedDocumentString(`
+    query OwnedTenants($ownerId: uuid!) {
+  tenants(where: {ownerId: {_eq: $ownerId}}) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<OwnedTenantsQuery, OwnedTenantsQueryVariables>;

@@ -1,6 +1,6 @@
 import { graphql } from "@/generated/graphql";
 
-export const insertUserMutation = graphql(`
+export const InsertUserMutation = graphql(`
   mutation InsertUserMutation($object: UsersInsertInput!) {
     user: insertUsersOne(
       object: $object

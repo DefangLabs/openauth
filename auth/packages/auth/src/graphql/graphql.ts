@@ -323,8 +323,13 @@ export enum CursorOrdering {
   Desc = 'DESC'
 }
 
-export type DeleteAccountOutput = {
-  __typename?: 'DeleteAccountOutput';
+export type DeleteUserOutput = {
+  __typename?: 'DeleteUserOutput';
+  message: Scalars['String']['output'];
+};
+
+export type InitiateTenantDeletionOutput = {
+  __typename?: 'InitiateTenantDeletionOutput';
   message: Scalars['String']['output'];
 };
 
@@ -384,6 +389,17 @@ export enum OrderBy {
   /** in descending order, nulls last */
   DescNullsLast = 'DESC_NULLS_LAST'
 }
+
+export type ResolveAwsMarketplaceCustomerInput = {
+  registrationToken: Scalars['String']['input'];
+};
+
+export type ResolveAwsMarketplaceCustomerOutput = {
+  __typename?: 'ResolveAwsMarketplaceCustomerOutput';
+  customerAWSAccountId: Scalars['String']['output'];
+  customerIdentifier: Scalars['String']['output'];
+  productCode: Scalars['String']['output'];
+};
 
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type StringComparisonExp = {
@@ -824,17 +840,21 @@ export type TenantRolesUpdates = {
 /** columns and relationships of "tenants" */
 export type Tenants = {
   __typename?: 'Tenants';
+  awsMarketplaceAccountId?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceCustomerIdentifier?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceProductCode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['timestamptz']['output'];
   id: Scalars['uuid']['output'];
   name: Scalars['String']['output'];
+  /** An object relationship */
+  owner: Users;
   ownerId: Scalars['uuid']['output'];
+  provider: Scalars['String']['output'];
   /** An array relationship */
   tenantMembers: Array<TenantMembers>;
   /** An aggregate relationship */
   tenantMembersAggregate: TenantMembersAggregate;
   updatedAt: Scalars['timestamptz']['output'];
-  /** An object relationship */
-  user: Users;
 };
 
 
@@ -902,68 +922,94 @@ export type TenantsBoolExp = {
   _and?: InputMaybe<Array<TenantsBoolExp>>;
   _not?: InputMaybe<TenantsBoolExp>;
   _or?: InputMaybe<Array<TenantsBoolExp>>;
+  awsMarketplaceAccountId?: InputMaybe<StringComparisonExp>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<StringComparisonExp>;
+  awsMarketplaceProductCode?: InputMaybe<StringComparisonExp>;
   createdAt?: InputMaybe<TimestamptzComparisonExp>;
   id?: InputMaybe<UuidComparisonExp>;
   name?: InputMaybe<StringComparisonExp>;
+  owner?: InputMaybe<UsersBoolExp>;
   ownerId?: InputMaybe<UuidComparisonExp>;
+  provider?: InputMaybe<StringComparisonExp>;
   tenantMembers?: InputMaybe<TenantMembersBoolExp>;
   tenantMembersAggregate?: InputMaybe<TenantMembersAggregateBoolExp>;
   updatedAt?: InputMaybe<TimestamptzComparisonExp>;
-  user?: InputMaybe<UsersBoolExp>;
 };
 
 /** unique or primary key constraints on table "tenants" */
 export enum TenantsConstraint {
+  /** unique or primary key constraint on columns "awsMarketplaceCustomerIdentifier" */
+  TenantsAwsMarketplaceCustomerIdentifierKey = 'tenants_awsMarketplaceCustomerIdentifier_key',
   /** unique or primary key constraint on columns "id" */
   TenantsPkey = 'tenants_pkey'
 }
 
 /** input type for inserting data into table "tenants" */
 export type TenantsInsertInput = {
+  awsMarketplaceAccountId?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceProductCode?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  owner?: InputMaybe<UsersObjRelInsertInput>;
   ownerId?: InputMaybe<Scalars['uuid']['input']>;
+  provider?: InputMaybe<Scalars['String']['input']>;
   tenantMembers?: InputMaybe<TenantMembersArrRelInsertInput>;
   updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
-  user?: InputMaybe<UsersObjRelInsertInput>;
 };
 
 /** aggregate max on columns */
 export type TenantsMaxFields = {
   __typename?: 'TenantsMaxFields';
+  awsMarketplaceAccountId?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceCustomerIdentifier?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceProductCode?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['timestamptz']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   ownerId?: Maybe<Scalars['uuid']['output']>;
+  provider?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['timestamptz']['output']>;
 };
 
 /** order by max() on columns of table "tenants" */
 export type TenantsMaxOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
   ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
 };
 
 /** aggregate min on columns */
 export type TenantsMinFields = {
   __typename?: 'TenantsMinFields';
+  awsMarketplaceAccountId?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceCustomerIdentifier?: Maybe<Scalars['String']['output']>;
+  awsMarketplaceProductCode?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['timestamptz']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   ownerId?: Maybe<Scalars['uuid']['output']>;
+  provider?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['timestamptz']['output']>;
 };
 
 /** order by min() on columns of table "tenants" */
 export type TenantsMinOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
   ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
 };
 
@@ -992,13 +1038,17 @@ export type TenantsOnConflict = {
 
 /** Ordering options when selecting data from "tenants". */
 export type TenantsOrderBy = {
+  awsMarketplaceAccountId?: InputMaybe<OrderBy>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<OrderBy>;
+  awsMarketplaceProductCode?: InputMaybe<OrderBy>;
   createdAt?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
   name?: InputMaybe<OrderBy>;
+  owner?: InputMaybe<UsersOrderBy>;
   ownerId?: InputMaybe<OrderBy>;
+  provider?: InputMaybe<OrderBy>;
   tenantMembersAggregate?: InputMaybe<TenantMembersAggregateOrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
-  user?: InputMaybe<UsersOrderBy>;
 };
 
 /** primary key columns input for table: tenants */
@@ -1009,6 +1059,12 @@ export type TenantsPkColumnsInput = {
 /** select columns of table "tenants" */
 export enum TenantsSelectColumn {
   /** column name */
+  AwsMarketplaceAccountId = 'awsMarketplaceAccountId',
+  /** column name */
+  AwsMarketplaceCustomerIdentifier = 'awsMarketplaceCustomerIdentifier',
+  /** column name */
+  AwsMarketplaceProductCode = 'awsMarketplaceProductCode',
+  /** column name */
   CreatedAt = 'createdAt',
   /** column name */
   Id = 'id',
@@ -1017,15 +1073,21 @@ export enum TenantsSelectColumn {
   /** column name */
   OwnerId = 'ownerId',
   /** column name */
+  Provider = 'provider',
+  /** column name */
   UpdatedAt = 'updatedAt'
 }
 
 /** input type for updating data in table "tenants" */
 export type TenantsSetInput = {
+  awsMarketplaceAccountId?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceProductCode?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   ownerId?: InputMaybe<Scalars['uuid']['input']>;
+  provider?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
 };
 
@@ -1039,15 +1101,25 @@ export type TenantsStreamCursorInput = {
 
 /** Initial value of the column from where the streaming should start */
 export type TenantsStreamCursorValueInput = {
+  awsMarketplaceAccountId?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceCustomerIdentifier?: InputMaybe<Scalars['String']['input']>;
+  awsMarketplaceProductCode?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   ownerId?: InputMaybe<Scalars['uuid']['input']>;
+  provider?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
 };
 
 /** update columns of table "tenants" */
 export enum TenantsUpdateColumn {
+  /** column name */
+  AwsMarketplaceAccountId = 'awsMarketplaceAccountId',
+  /** column name */
+  AwsMarketplaceCustomerIdentifier = 'awsMarketplaceCustomerIdentifier',
+  /** column name */
+  AwsMarketplaceProductCode = 'awsMarketplaceProductCode',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -1056,6 +1128,8 @@ export enum TenantsUpdateColumn {
   Name = 'name',
   /** column name */
   OwnerId = 'ownerId',
+  /** column name */
+  Provider = 'provider',
   /** column name */
   UpdatedAt = 'updatedAt'
 }
@@ -1565,7 +1639,6 @@ export type Mutation_Root = {
   createStripePortalSession?: Maybe<CreateStripePortalSessionOutput>;
   /** Create a Stripe client secret */
   createStripeSecret?: Maybe<CreateStripeSecretOutput>;
-  deleteAccount?: Maybe<DeleteAccountOutput>;
   /** delete data from the table: "accounts" */
   deleteAccounts?: Maybe<AccountsMutationResponse>;
   /** delete single row from the table: "accounts" */
@@ -1582,6 +1655,7 @@ export type Mutation_Root = {
   deleteTenants?: Maybe<TenantsMutationResponse>;
   /** delete single row from the table: "tenants" */
   deleteTenantsByPk?: Maybe<Tenants>;
+  deleteUser?: Maybe<DeleteUserOutput>;
   /** delete data from the table: "userAccounts" */
   deleteUserAccounts?: Maybe<UserAccountsMutationResponse>;
   /** delete single row from the table: "userAccounts" */
@@ -1590,6 +1664,7 @@ export type Mutation_Root = {
   deleteUsers?: Maybe<UsersMutationResponse>;
   /** delete single row from the table: "users" */
   deleteUsersByPk?: Maybe<Users>;
+  initiateTenantDeletion?: Maybe<InitiateTenantDeletionOutput>;
   /** insert data into the table: "accounts" */
   insertAccounts?: Maybe<AccountsMutationResponse>;
   /** insert a single row into the table: "accounts" */
@@ -1614,6 +1689,7 @@ export type Mutation_Root = {
   insertUsers?: Maybe<UsersMutationResponse>;
   /** insert a single row into the table: "users" */
   insertUsersOne?: Maybe<Users>;
+  resolveAwsMarketplaceCustomer?: Maybe<ResolveAwsMarketplaceCustomerOutput>;
   /** update data of the table: "accounts" */
   updateAccounts?: Maybe<AccountsMutationResponse>;
   /** update single row of the table: "accounts" */
@@ -1734,6 +1810,12 @@ export type Mutation_RootDeleteUsersByPkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInitiateTenantDeletionArgs = {
+  tenantId: Scalars['uuid']['input'];
+};
+
+
+/** mutation root */
 export type Mutation_RootInsertAccountsArgs = {
   objects: Array<AccountsInsertInput>;
   onConflict?: InputMaybe<AccountsOnConflict>;
@@ -1814,6 +1896,12 @@ export type Mutation_RootInsertUsersArgs = {
 export type Mutation_RootInsertUsersOneArgs = {
   object: UsersInsertInput;
   onConflict?: InputMaybe<UsersOnConflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootResolveAwsMarketplaceCustomerArgs = {
+  input: ResolveAwsMarketplaceCustomerInput;
 };
 
 
@@ -2389,6 +2477,23 @@ export type UpsertAccountMutationVariables = Exact<{
 
 export type UpsertAccountMutation = { __typename?: 'mutation_root', account?: { __typename?: 'Accounts', id: string, name: string, email: string, extra: any } | null };
 
+export type TenantByPkQueryVariables = Exact<{
+  id: Scalars['uuid']['input'];
+}>;
+
+
+export type TenantByPkQuery = { __typename?: 'query_root', tenant?: { __typename?: 'Tenants', id: string, name: string } | null };
+
+export type InsertTenantMutationVariables = Exact<{
+  id: Scalars['uuid']['input'];
+  name: Scalars['String']['input'];
+  ownerId: Scalars['uuid']['input'];
+  provider: Scalars['String']['input'];
+}>;
+
+
+export type InsertTenantMutation = { __typename?: 'mutation_root', tenant?: { __typename?: 'Tenants', id: string, name: string } | null };
+
 export type ListTenantsQueryVariables = Exact<{
   ownerId: Scalars['uuid']['input'];
 }>;
@@ -2404,12 +2509,19 @@ export type CreateDefaultTenantMutationVariables = Exact<{
 
 export type CreateDefaultTenantMutation = { __typename?: 'mutation_root', tenant?: { __typename?: 'Tenants', id: string, name: string } | null };
 
+export type ExternalTenantsQueryVariables = Exact<{
+  ids: Array<Scalars['uuid']['input']> | Scalars['uuid']['input'];
+}>;
+
+
+export type ExternalTenantsQuery = { __typename?: 'query_root', tenants: Array<{ __typename?: 'Tenants', id: string, name: string }> };
+
 export type UserInfoQueryVariables = Exact<{
   id: Scalars['uuid']['input'];
 }>;
 
 
-export type UserInfoQuery = { __typename?: 'query_root', userinfo?: { __typename?: 'Users', id: string, email?: string | null, name?: string | null, createdAt?: any | null, updatedAt?: any | null, accounts: Array<{ __typename?: 'UserAccounts', account: { __typename?: 'Accounts', id: string, provider: string, providerId: string, name: string, email: string, createdAt?: any | null, updatedAt?: any | null } }> } | null };
+export type UserInfoQuery = { __typename?: 'query_root', userinfo?: { __typename?: 'Users', id: string, email?: string | null, name?: string | null, createdAt?: any | null, updatedAt?: any | null, accounts: Array<{ __typename?: 'UserAccounts', account: { __typename?: 'Accounts', id: string, provider: string, providerId: string, name: string, email: string, createdAt?: any | null, updatedAt?: any | null } }>, ownedTenants: Array<{ __typename?: 'Tenants', id: string, name: string }>, tenantMemberships: Array<{ __typename?: 'TenantMembers', role?: string | null, tenant: { __typename?: 'Tenants', id: string, name: string } }> } | null };
 
 export type UsersForAccountQueryVariables = Exact<{
   accountId: Scalars['uuid']['input'];
@@ -2430,13 +2542,17 @@ export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
 {
-  __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
+  __apiType?: NonNullable<DocumentTypeDecoration<TResult, TVariables>['__apiType']>;
+  private value: string;
+  public __meta__?: Record<string, any> | undefined;
 
-  constructor(private value: string, public __meta__?: Record<string, any> | undefined) {
+  constructor(value: string, __meta__?: Record<string, any> | undefined) {
     super(value);
+    this.value = value;
+    this.__meta__ = __meta__;
   }
 
-  toString(): string & DocumentTypeDecoration<TResult, TVariables> {
+  override toString(): string & DocumentTypeDecoration<TResult, TVariables> {
     return this.value;
   }
 }
@@ -2451,6 +2567,24 @@ export const UpsertAccountDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<UpsertAccountMutation, UpsertAccountMutationVariables>;
+export const TenantByPkDocument = new TypedDocumentString(`
+    query TenantByPk($id: uuid!) {
+  tenant: tenantsByPk(id: $id) {
+    id
+    name
+  }
+}
+    `) as unknown as TypedDocumentString<TenantByPkQuery, TenantByPkQueryVariables>;
+export const InsertTenantDocument = new TypedDocumentString(`
+    mutation InsertTenant($id: uuid!, $name: String!, $ownerId: uuid!, $provider: String!) {
+  tenant: insertTenantsOne(
+    object: {id: $id, name: $name, ownerId: $ownerId, provider: $provider}
+  ) {
+    id
+    name
+  }
+}
+    `) as unknown as TypedDocumentString<InsertTenantMutation, InsertTenantMutationVariables>;
 export const ListTenantsDocument = new TypedDocumentString(`
     query ListTenants($ownerId: uuid!) {
   tenants(where: {ownerId: {_eq: $ownerId}}, orderBy: {createdAt: ASC}) {
@@ -2467,6 +2601,14 @@ export const CreateDefaultTenantDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<CreateDefaultTenantMutation, CreateDefaultTenantMutationVariables>;
+export const ExternalTenantsDocument = new TypedDocumentString(`
+    query ExternalTenants($ids: [uuid!]!) {
+  tenants(where: {id: {_in: $ids}}) {
+    id
+    name
+  }
+}
+    `) as unknown as TypedDocumentString<ExternalTenantsQuery, ExternalTenantsQueryVariables>;
 export const UserInfoDocument = new TypedDocumentString(`
     query UserInfo($id: uuid!) {
   userinfo: usersByPk(id: $id) {
@@ -2484,6 +2626,17 @@ export const UserInfoDocument = new TypedDocumentString(`
         email
         createdAt
         updatedAt
+      }
+    }
+    ownedTenants: tenants {
+      id
+      name
+    }
+    tenantMemberships: tenantMembers {
+      role
+      tenant {
+        id
+        name
       }
     }
   }

@@ -26,6 +26,14 @@
 
 import { Layout } from "./layout"
 
+function getLastUsedProvider(request: Request): string | undefined {
+  const cookieHeader = request.headers.get('cookie')
+  if (!cookieHeader) return undefined
+  
+  const match = cookieHeader.match(/lastUsedProvider=([^;]+)/)
+  return match ? match[1] : undefined
+}
+
 export interface SelectProps {
   /**
    * An object with all the providers and their config; where the key is the provider name.
@@ -61,8 +69,10 @@ export interface SelectProps {
 export function Select(props?: SelectProps) {
   return async (
     providers: Record<string, string>,
-    _req: Request,
+    req: Request,
   ): Promise<Response> => {
+    const lastUsedProvider = getLastUsedProvider(req)
+
     const jsx = (
       <Layout>
         <div data-component="form">
@@ -70,13 +80,17 @@ export function Select(props?: SelectProps) {
             const match = props?.providers?.[key]
             if (match?.hide) return
             const icon = ICON[key]
+            const isLastUsed = lastUsedProvider === key
             return (
               <a
                 href={`/${key}/authorize`}
                 data-component="button"
+                data-last-used={isLastUsed || undefined}
+                onclick={`document.cookie = 'lastUsedProvider=${key}; path=/; max-age=31536000'`}
               >
                 {icon && <i data-slot="icon">{icon}</i>}
                 Continue with {match?.display || DISPLAY[type] || type}
+                {isLastUsed && <span data-slot="hint">Previously used</span>}
               </a>
             )
           })}

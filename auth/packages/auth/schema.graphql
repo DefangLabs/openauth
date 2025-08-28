@@ -342,7 +342,11 @@ enum CursorOrdering {
   DESC
 }
 
-type DeleteAccountOutput {
+type DeleteUserOutput {
+  message: String!
+}
+
+type InitiateTenantDeletionOutput {
   message: String!
 }
 
@@ -405,6 +409,16 @@ enum OrderBy {
   DESC_NULLS_FIRST
   """in descending order, nulls last"""
   DESC_NULLS_LAST
+}
+
+input ResolveAwsMarketplaceCustomerInput {
+  registrationToken: String!
+}
+
+type ResolveAwsMarketplaceCustomerOutput {
+  customerAWSAccountId: String!
+  customerIdentifier: String!
+  productCode: String!
 }
 
 """
@@ -895,10 +909,16 @@ input TenantRolesUpdates {
 columns and relationships of "tenants"
 """
 type Tenants {
+  awsMarketplaceAccountId: String
+  awsMarketplaceCustomerIdentifier: String
+  awsMarketplaceProductCode: String
   createdAt: timestamptz!
   id: uuid!
   name: String!
+  """An object relationship"""
+  owner: Users!
   ownerId: uuid!
+  provider: String!
   """An array relationship"""
   tenantMembers(
     """distinct select on columns"""
@@ -926,8 +946,6 @@ type Tenants {
     where: TenantMembersBoolExp
   ): TenantMembersAggregate!
   updatedAt: timestamptz!
-  """An object relationship"""
-  user: Users!
 }
 
 """
@@ -976,20 +994,28 @@ input TenantsBoolExp {
   _and: [TenantsBoolExp!]
   _not: TenantsBoolExp
   _or: [TenantsBoolExp!]
+  awsMarketplaceAccountId: StringComparisonExp
+  awsMarketplaceCustomerIdentifier: StringComparisonExp
+  awsMarketplaceProductCode: StringComparisonExp
   createdAt: TimestamptzComparisonExp
   id: UuidComparisonExp
   name: StringComparisonExp
+  owner: UsersBoolExp
   ownerId: UuidComparisonExp
+  provider: StringComparisonExp
   tenantMembers: TenantMembersBoolExp
   tenantMembersAggregate: TenantMembersAggregateBoolExp
   updatedAt: TimestamptzComparisonExp
-  user: UsersBoolExp
 }
 
 """
 unique or primary key constraints on table "tenants"
 """
 enum TenantsConstraint {
+  """
+  unique or primary key constraint on columns "awsMarketplaceCustomerIdentifier"
+  """
+  tenants_awsMarketplaceCustomerIdentifier_key
   """
   unique or primary key constraint on columns "id"
   """
@@ -1000,21 +1026,29 @@ enum TenantsConstraint {
 input type for inserting data into table "tenants"
 """
 input TenantsInsertInput {
+  awsMarketplaceAccountId: String
+  awsMarketplaceCustomerIdentifier: String
+  awsMarketplaceProductCode: String
   createdAt: timestamptz
   id: uuid
   name: String
+  owner: UsersObjRelInsertInput
   ownerId: uuid
+  provider: String
   tenantMembers: TenantMembersArrRelInsertInput
   updatedAt: timestamptz
-  user: UsersObjRelInsertInput
 }
 
 """aggregate max on columns"""
 type TenantsMaxFields {
+  awsMarketplaceAccountId: String
+  awsMarketplaceCustomerIdentifier: String
+  awsMarketplaceProductCode: String
   createdAt: timestamptz
   id: uuid
   name: String
   ownerId: uuid
+  provider: String
   updatedAt: timestamptz
 }
 
@@ -1022,19 +1056,27 @@ type TenantsMaxFields {
 order by max() on columns of table "tenants"
 """
 input TenantsMaxOrderBy {
+  awsMarketplaceAccountId: OrderBy
+  awsMarketplaceCustomerIdentifier: OrderBy
+  awsMarketplaceProductCode: OrderBy
   createdAt: OrderBy
   id: OrderBy
   name: OrderBy
   ownerId: OrderBy
+  provider: OrderBy
   updatedAt: OrderBy
 }
 
 """aggregate min on columns"""
 type TenantsMinFields {
+  awsMarketplaceAccountId: String
+  awsMarketplaceCustomerIdentifier: String
+  awsMarketplaceProductCode: String
   createdAt: timestamptz
   id: uuid
   name: String
   ownerId: uuid
+  provider: String
   updatedAt: timestamptz
 }
 
@@ -1042,10 +1084,14 @@ type TenantsMinFields {
 order by min() on columns of table "tenants"
 """
 input TenantsMinOrderBy {
+  awsMarketplaceAccountId: OrderBy
+  awsMarketplaceCustomerIdentifier: OrderBy
+  awsMarketplaceProductCode: OrderBy
   createdAt: OrderBy
   id: OrderBy
   name: OrderBy
   ownerId: OrderBy
+  provider: OrderBy
   updatedAt: OrderBy
 }
 
@@ -1079,13 +1125,17 @@ input TenantsOnConflict {
 
 """Ordering options when selecting data from "tenants"."""
 input TenantsOrderBy {
+  awsMarketplaceAccountId: OrderBy
+  awsMarketplaceCustomerIdentifier: OrderBy
+  awsMarketplaceProductCode: OrderBy
   createdAt: OrderBy
   id: OrderBy
   name: OrderBy
+  owner: UsersOrderBy
   ownerId: OrderBy
+  provider: OrderBy
   tenantMembersAggregate: TenantMembersAggregateOrderBy
   updatedAt: OrderBy
-  user: UsersOrderBy
 }
 
 """primary key columns input for table: tenants"""
@@ -1098,6 +1148,12 @@ select columns of table "tenants"
 """
 enum TenantsSelectColumn {
   """column name"""
+  awsMarketplaceAccountId
+  """column name"""
+  awsMarketplaceCustomerIdentifier
+  """column name"""
+  awsMarketplaceProductCode
+  """column name"""
   createdAt
   """column name"""
   id
@@ -1106,6 +1162,8 @@ enum TenantsSelectColumn {
   """column name"""
   ownerId
   """column name"""
+  provider
+  """column name"""
   updatedAt
 }
 
@@ -1113,10 +1171,14 @@ enum TenantsSelectColumn {
 input type for updating data in table "tenants"
 """
 input TenantsSetInput {
+  awsMarketplaceAccountId: String
+  awsMarketplaceCustomerIdentifier: String
+  awsMarketplaceProductCode: String
   createdAt: timestamptz
   id: uuid
   name: String
   ownerId: uuid
+  provider: String
   updatedAt: timestamptz
 }
 
@@ -1132,10 +1194,14 @@ input TenantsStreamCursorInput {
 
 """Initial value of the column from where the streaming should start"""
 input TenantsStreamCursorValueInput {
+  awsMarketplaceAccountId: String
+  awsMarketplaceCustomerIdentifier: String
+  awsMarketplaceProductCode: String
   createdAt: timestamptz
   id: uuid
   name: String
   ownerId: uuid
+  provider: String
   updatedAt: timestamptz
 }
 
@@ -1144,6 +1210,12 @@ update columns of table "tenants"
 """
 enum TenantsUpdateColumn {
   """column name"""
+  awsMarketplaceAccountId
+  """column name"""
+  awsMarketplaceCustomerIdentifier
+  """column name"""
+  awsMarketplaceProductCode
+  """column name"""
   createdAt
   """column name"""
   id
@@ -1151,6 +1223,8 @@ enum TenantsUpdateColumn {
   name
   """column name"""
   ownerId
+  """column name"""
+  provider
   """column name"""
   updatedAt
 }
@@ -1707,7 +1781,6 @@ type mutation_root {
   createStripePortalSession: CreateStripePortalSessionOutput
   """Create a Stripe client secret"""
   createStripeSecret: CreateStripeSecretOutput
-  deleteAccount: DeleteAccountOutput
   """
   delete data from the table: "accounts"
   """
@@ -1752,6 +1825,7 @@ type mutation_root {
   delete single row from the table: "tenants"
   """
   deleteTenantsByPk(id: uuid!): Tenants
+  deleteUser: DeleteUserOutput
   """
   delete data from the table: "userAccounts"
   """
@@ -1774,6 +1848,7 @@ type mutation_root {
   delete single row from the table: "users"
   """
   deleteUsersByPk(id: uuid!): Users
+  initiateTenantDeletion(tenantId: uuid!): InitiateTenantDeletionOutput
   """
   insert data into the table: "accounts"
   """
@@ -1882,6 +1957,7 @@ type mutation_root {
     """upsert condition"""
     onConflict: UsersOnConflict
   ): Users
+  resolveAwsMarketplaceCustomer(input: ResolveAwsMarketplaceCustomerInput!): ResolveAwsMarketplaceCustomerOutput
   """
   update data of the table: "accounts"
   """

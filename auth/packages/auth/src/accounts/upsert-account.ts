@@ -6,7 +6,7 @@ import { EnabledProviders } from "../providers/providers";
 import { createAccountId } from "./create-account-id";
 
 
-const upsertAccountMutation = graphql(`
+const UpsertAccountMutation = graphql(`
     mutation UpsertAccount($object: AccountsInsertInput!, $onConflict: AccountsOnConflict) {
         account: insertAccountsOne(object: $object, onConflict: $onConflict) {
             id
@@ -17,40 +17,43 @@ const upsertAccountMutation = graphql(`
     }
 `)
 
-export async function upsertAccount(providerData: ProviderData, provider: EnabledProviders) {
-    const accountId = createAccountId(provider, providerData.id)
-    const { id: providerId, email, name, ...extra } = providerData
+export async function upsertAccount(
+  providerData: ProviderData,
+  provider: EnabledProviders
+) {
+  const accountId = createAccountId(provider, providerData.id);
+  const { id: providerId, email, name, ...extra } = providerData;
 
-    const { data, errors } = await hasuraAdminClient(upsertAccountMutation, {
-        object: {
-            id: accountId,
-            provider,
-            providerId,
-            email,
-            name,
-            extra,
-        },
-        onConflict: {
-            constraint: AccountsConstraint.AccountsPkey,
-            updateColumns: [
-                AccountsUpdateColumn.Email,
-                AccountsUpdateColumn.Name,
-                AccountsUpdateColumn.Extra,
-            ]
-        },
-    })
+  const { data, errors } = await hasuraAdminClient(UpsertAccountMutation, {
+    object: {
+      id: accountId,
+      provider,
+      providerId,
+      email,
+      name,
+      extra,
+    },
+    onConflict: {
+      constraint: AccountsConstraint.AccountsPkey,
+      updateColumns: [
+        AccountsUpdateColumn.Email,
+        AccountsUpdateColumn.Name,
+        AccountsUpdateColumn.Extra,
+      ],
+    },
+  });
 
-    if (errors) {
-        throw new Error(errors[0].message)
-    }
+  if (errors) {
+    throw new Error(errors[0].message);
+  }
 
-    const { account } = data || {};
+  const { account } = data || {};
 
-    if (!account) {
-        throw new Error('Failed to upsert account')
-    }
+  if (!account) {
+    throw new Error("Failed to upsert account");
+  }
 
-    return {
-        account,
-    };
+  return {
+    account,
+  };
 }

@@ -2,7 +2,7 @@
 
 import { analytics } from "@/modules/analytics/lib/analytics";
 import { EVENTS } from "@/modules/analytics/lib/constants";
-import { insertUserMutation } from "@/modules/profiles/graphql/mutations/insert-user-mutation";
+import { InsertUserMutation } from "@/modules/profiles/graphql/mutations/insert-user-mutation";
 import { useCurrentUserProfileQuery } from "@/modules/profiles/hooks/use-current-user-profile-query/use-current-user-profile-query";
 import { useMutation } from "@apollo/client";
 import {
@@ -24,8 +24,8 @@ export function Account() {
   } = useCurrentUserProfileQuery();
   const profile = profileData?.user;
   const { form, setForm } = useAccountForm();
-  const [insertProfileMutation, { loading: mutationLoading }] =
-    useMutation(insertUserMutation);
+  const [insertUserMutation, { loading: mutationLoading }] =
+    useMutation(InsertUserMutation);
 
   useEffect(() => {
     if (profile) {
@@ -39,7 +39,7 @@ export function Account() {
     async (e: FormEvent) => {
       e.preventDefault();
       analytics.track(EVENTS.updateProfile);
-      const { errors } = await insertProfileMutation({
+      const { errors } = await insertUserMutation({
         variables: { object: form },
       });
       if (!errors) {
@@ -48,7 +48,7 @@ export function Account() {
         window.alert("Error saving profile: " + errors[0].message);
       }
     },
-    [form, insertProfileMutation, refetch],
+    [form, insertUserMutation, refetch],
   );
 
   const loading = profileLoading || mutationLoading;

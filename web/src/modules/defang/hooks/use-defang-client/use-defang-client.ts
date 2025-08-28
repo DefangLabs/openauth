@@ -1,4 +1,13 @@
+/**
+ * Hook returning a configured gRPC client for talking to Fabric.
+ *
+ * The client attaches the user's JWT and the currently selected tenant ID
+ * to every request. This allows the backend to authorize actions on behalf of
+ * a specific tenant without components needing to manually manage headers.
+ *
+ */
 import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
+import { useCurrentTenant } from "@/modules/tenants/hooks/use-current-tenant";
 import { createCallbackClient } from "@bufbuild/connect";
 import { createGrpcWebTransport } from "@bufbuild/connect-web";
 import { useMemo, useRef, useEffect } from "react";
@@ -11,13 +20,20 @@ type Client =
 
 export function useDefangClient() {
   const { token, refetch } = useAccessToken();
+  const { currentTenant } = useCurrentTenant();
   const tokenRef = useRef(token);
+  const tenantRef = useRef(currentTenant);
   const clientRef = useRef<Client>();
 
   // Update tokenRef whenever token changes
   useEffect(() => {
     tokenRef.current = token;
   }, [token]);
+
+  // Keep tenantRef in sync with atom state
+  useEffect(() => {
+    tenantRef.current = currentTenant;
+  }, [currentTenant]);
 
   const memoClient = useMemo(() => {
     if (process.env.NODE_ENV === "development") {
@@ -39,6 +55,9 @@ export function useDefangClient() {
         interceptors: [
           (next) => async (req) => {
             req.header.append("authorization", "Bearer " + tokenRef.current);
+            if (tenantRef.current) {
+              req.header.append("X-Defang-Tenant-Id", tenantRef.current);
+            }
             return await next(req).catch((err) => {
               if (err.code === 16) {
                 refetch();

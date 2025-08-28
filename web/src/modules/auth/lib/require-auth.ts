@@ -1,15 +1,14 @@
-import { redirect } from "next/navigation";
-
 import { LOGIN_ROUTE } from "@/app/auth/constants";
-import { getAuth } from "./get-auth";
+import { redirect } from "next/navigation";
 import { loginRedirectParam } from "../constants";
+import { getAuth } from "./get-auth";
 
 interface RequireAuthOptions {
   redirectPath?: string;
 }
 
 export async function requireAuth({ redirectPath }: RequireAuthOptions = {}) {
-  const auth = await getAuth();
+  const auth = await getAuth({ refresh: true });
   if (!auth) {
     // Add the redirect path as a query parameter to the login URL
     if (redirectPath) {

@@ -2,7 +2,7 @@ table:
   name: tenants
   schema: public
 object_relationships:
-  - name: user
+  - name: owner
     using:
       foreign_key_constraint_on: ownerId
 array_relationships:
@@ -37,9 +37,61 @@ select_permissions:
         _or:
           - ownerId:
               _eq: X-Hasura-User-Id
-delete_permissions:
-  - role: user
-    permission:
-      filter:
-        ownerId:
-          _eq: X-Hasura-User-Id
+event_triggers:
+  - name: tenantDeleted
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+    retry_conf:
+      interval_sec: 15
+      num_retries: 3
+      timeout_sec: 30
+    webhook: '{{DEFANG_FN_ENDPOINT}}/hasura/events'
+    headers:
+      - name: Authorization
+        value_from_env: DEFANG_API_SECRET
+  - name: tenantInserted
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 15
+      num_retries: 3
+      timeout_sec: 30
+    webhook: '{{DEFANG_FN_ENDPOINT}}/hasura/events'
+    headers:
+      - name: Authorization
+        value_from_env: DEFANG_API_SECRET
+  - name: tenantUpdated
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - ownerId
+    retry_conf:
+      interval_sec: 15
+      num_retries: 3
+      timeout_sec: 30
+    webhook: '{{DEFANG_FN_ENDPOINT}}/hasura/events'
+    headers:
+      - name: Authorization
+        value_from_env: DEFANG_API_SECRET
+  - name: tenantAwsMarketplaceUpdated
+    definition:
+      enable_manual: true
+      update:
+        columns:
+          - id
+          - awsMarketplaceProductCode
+          - awsMarketplaceCustomerIdentifier
+          - awsMarketplaceAccountId
+    retry_conf:
+      interval_sec: 10
+      num_retries: 4
+      timeout_sec: 60
+    webhook: "{{DEFANG_FABRIC}}/aws-marketplace"
+    headers:
+      - name: Authorization
+        value_from_env: DEFANG_FABRIC_SHARED_SECRET

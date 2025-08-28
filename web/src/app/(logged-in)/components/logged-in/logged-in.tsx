@@ -1,17 +1,21 @@
 "use client";
 
+import { analytics } from "@/modules/analytics/lib/analytics";
 import { logoutAction } from "@/modules/auth/actions/actions";
+import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
+import { useTrackLogin } from "@/modules/auth/hooks/use-track-login";
 import { useSignTos } from "@/modules/defang/hooks/use-sign-tos/use-sign-tos";
 import { COLORS, GRADIENTS } from "@/modules/mui/constants";
 import {
+  AccountCircle,
   Article,
   ChevronRight,
   Download,
   Forum,
   GitHub,
   Layers,
-  Publish,
   OpenInNew,
+  Publish,
   TipsAndUpdates,
 } from "@mui/icons-material";
 import Menu from "@mui/icons-material/Menu";
@@ -20,6 +24,7 @@ import {
   Avatar,
   Box,
   Chip,
+  Divider,
   Drawer,
   IconButton,
   Stack,
@@ -28,50 +33,15 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import md5 from "md5";
-import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { SIDEBAR_WIDTH } from "../../../../components/layout/constants";
 import { NavButton } from "./components/nav-button/nav-button";
+import { TenantSwitcher } from "./components/tenant-switcher/tenant-switcher";
 import { NAV_SURFACE } from "./constants";
 import { useSidebarOpen } from "./hooks/use-sidebar-open/use-sidebar-open";
-import { useCurrentUserProfileQuery } from "@/modules/profiles/hooks/use-current-user-profile-query/use-current-user-profile-query";
-import { useEffect, useRef } from "react";
-import { useAccessToken } from "@/modules/auth/hooks/use-access-token";
-import { analytics } from "@/modules/analytics/lib/analytics";
-import { useTrackLogin } from "@/modules/auth/hooks/use-track-login";
-
-const UserChip = styled(Chip)`
-  ${NAV_SURFACE}
-  height: 50px;
-  border-radius: 25px;
-  width: 100%;
-  color: white;
-
-  & .MuiChip-label {
-    color: white;
-  }
-`;
 
 const LogoutChip = styled(Chip)`
   ${NAV_SURFACE}
-`;
-
-const UserLabel = styled(Typography)`
-  min-width: 100px;
-  font-size: 1rem;
-  div {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  div:first-child {
-    font-size: 0.8rem;
-  }
-` as typeof Typography;
-
-const UserAvatar = styled(Avatar)`
-  width: 60px;
-  height: 60px;
 `;
 
 const Grow = styled("div")`
@@ -79,13 +49,12 @@ const Grow = styled("div")`
 `;
 
 export function LoggedIn({ children }: { children: React.ReactNode }) {
-  const { data } = useCurrentUserProfileQuery();
-  const user = data?.user;
-  const { name, email } = user || {};
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { sidebarOpen, setSidebarOpen } = useSidebarOpen();
-  const { claims } = useAccessToken();
+  const { claims } = useAccessToken({
+    refresh: false,
+  });
   const userId = claims?.properties?.id;
   const { trackLogin } = useTrackLogin();
   const trackedRef = useRef(false);
@@ -116,42 +85,7 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
         onClose={() => setSidebarOpen(false)}
       >
         <Stack direction="column" p={1} flexGrow={1} spacing={4}>
-          <div>
-            <Link href="/account" onClick={() => setSidebarOpen(false)}>
-              <UserChip
-                avatar={
-                  <UserAvatar
-                    style={{ width: 40, height: 40, backgroundColor: "white" }}
-                    src={`//www.gravatar.com/avatar/${md5(
-                      (email || "").toLowerCase().trim(),
-                    )}?d=identicon`}
-                  >
-                    <div>{(name || "U").charAt(0)}</div>
-                  </UserAvatar>
-                }
-                label={
-                  <UserLabel component="div" variant="h5" color="white">
-                    <div>{name}</div>
-                    <div
-                      style={{
-                        fontSize: "x-small",
-                        opacity: 0.75,
-                      }}
-                    >
-                      My Account
-                    </div>
-                  </UserLabel>
-                }
-                onClick={() => null}
-                sx={{
-                  "& .MuiChip-label": {
-                    flexGrow: 1,
-                  },
-                }}
-              />
-            </Link>
-          </div>
-          {/* <ServiceStats /> */}
+          <TenantSwitcher />
           <Stack direction="column" spacing={1}>
             <NavButton
               href="/service"
@@ -177,6 +111,13 @@ export function LoggedIn({ children }: { children: React.ReactNode }) {
             >
               Subscription
             </NavButton>
+            <NavButton
+              href="/account"
+              iconLeft={<AccountCircle sx={{ mr: 1 }} fontSize="small" />}
+            >
+              Account
+            </NavButton>
+            <Divider sx={{ backgroundColor: "rgba(255,255,255,0.5)" }} />
             <NavButton
               href="https://docs.defang.io/docs/intro"
               iconLeft={<Article sx={{ mr: 1 }} fontSize="small" />}

@@ -8,11 +8,6 @@ on:
       - v*
   pull_request:
     branches: [main, intermediate-auth]
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: "Branch to deploy"
-        required: false
 
 permissions:
   contents: read
@@ -20,7 +15,7 @@ permissions:
 
 jobs:
   deploy-dev:
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request'
     environment: dev
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -31,7 +26,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch || 'main' }}
+          ref: ${{ github.event.pull_request.head.sha || github.event.inputs.branch || 'main' }}
 
       # create a short sha and make it available to the next steps
       - name: Set short sha
@@ -53,16 +48,14 @@ jobs:
           github_client_secret: ${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}
           hasura_graphql_admin_secret: ${{ secrets.HASURA_GRAPHQL_ADMIN_SECRET }}
           next_public_segment_write_key: ${{ secrets.NEXT_PUBLIC_SEGMENT_WRITE_KEY }}
-          next_public_stripe_pricing_table_id: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID }}
-          next_public_stripe_publishable_key: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
           next_public_version: ${{ env.SHORT_SHA }}
           postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
           segment_write_key: ${{ secrets.SEGMENT_WRITE_KEY }}
           stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
           next_public_fabric: ${{ vars.NEXT_PUBLIC_FABRIC }}
           defang_api_secret: ${{ secrets.DEFANG_API_SECRET }}
+          defang_fabric_shared_secret: ${{ secrets.DEFANG_FABRIC_SHARED_SECRET }}
           stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          stripe_default_price_id: ${{ secrets.STRIPE_DEFAULT_PRICE_ID }}
           next_public_price_ids: ${{ vars.NEXT_PUBLIC_PRICE_IDS }}
           gitlab_client_id: ${{ secrets.AUTH_GITLAB_CLIENT_ID }}
           gitlab_client_secret: ${{ secrets.AUTH_GITLAB_CLIENT_SECRET }}
@@ -94,16 +87,14 @@ jobs:
           github_client_secret: ${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}
           hasura_graphql_admin_secret: ${{ secrets.HASURA_GRAPHQL_ADMIN_SECRET }}
           next_public_segment_write_key: ${{ secrets.NEXT_PUBLIC_SEGMENT_WRITE_KEY }}
-          next_public_stripe_pricing_table_id: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID }}
-          next_public_stripe_publishable_key: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
           next_public_version: ${{ env.SHORT_SHA }}
           postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
           segment_write_key: ${{ secrets.SEGMENT_WRITE_KEY }}
           stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
           next_public_fabric: ${{ vars.NEXT_PUBLIC_FABRIC }}
           defang_api_secret: ${{ secrets.DEFANG_API_SECRET }}
+          defang_fabric_shared_secret: ${{ secrets.DEFANG_FABRIC_SHARED_SECRET }}
           stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          stripe_default_price_id: ${{ secrets.STRIPE_DEFAULT_PRICE_ID }}
           next_public_price_ids: ${{ vars.NEXT_PUBLIC_PRICE_IDS }}
           gitlab_client_id: ${{ secrets.AUTH_GITLAB_CLIENT_ID }}
           gitlab_client_secret: ${{ secrets.AUTH_GITLAB_CLIENT_SECRET }}
@@ -128,7 +119,6 @@ jobs:
         with:
           mode: production
           compose_file: compose.production.yaml
-          # TODO: Update the AWS account ID to the corp account when ready
           aws_account_id: 407839483216
           aws_region: us-west-2
           domain_name: ${{ vars.DOMAIN_NAME }}
@@ -136,16 +126,14 @@ jobs:
           github_client_secret: ${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}
           hasura_graphql_admin_secret: ${{ secrets.HASURA_GRAPHQL_ADMIN_SECRET }}
           next_public_segment_write_key: ${{ secrets.NEXT_PUBLIC_SEGMENT_WRITE_KEY }}
-          next_public_stripe_pricing_table_id: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID }}
-          next_public_stripe_publishable_key: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
           next_public_version: ${{ env.SHORT_SHA }}
           postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
           segment_write_key: ${{ secrets.SEGMENT_WRITE_KEY }}
           stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
           next_public_fabric: ${{ vars.NEXT_PUBLIC_FABRIC }}
           defang_api_secret: ${{ secrets.DEFANG_API_SECRET }}
+          defang_fabric_shared_secret: ${{ secrets.DEFANG_FABRIC_SHARED_SECRET }}
           stripe_webhook_secret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          stripe_default_price_id: ${{ secrets.STRIPE_DEFAULT_PRICE_ID }}
           next_public_price_ids: ${{ vars.NEXT_PUBLIC_PRICE_IDS }}
           gitlab_client_id: ${{ secrets.AUTH_GITLAB_CLIENT_ID }}
           gitlab_client_secret: ${{ secrets.AUTH_GITLAB_CLIENT_SECRET }}

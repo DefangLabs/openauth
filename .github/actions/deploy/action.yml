@@ -27,12 +27,6 @@ inputs:
   next_public_segment_write_key:
     description: "Next Public Segment Write Key"
     required: true
-  next_public_stripe_pricing_table_id:
-    description: "Next Public Stripe Pricing Table ID"
-    required: true
-  next_public_stripe_publishable_key:
-    description: "Next Public Stripe Publishable Key"
-    required: true
   next_public_version:
     description: "Next Public Version"
     required: true
@@ -60,15 +54,18 @@ inputs:
   stripe_webhook_secret:
     description: "Stripe Webhook Secret"
     required: true
-  stripe_default_price_id:
-    description: "Stripe Default Price ID"
-    required: true
   compose_file:
     description: "Compose file"
     required: true
   mode:
     description: "Deployment mode (development | staging | production)"
     default: development
+    required: true
+  gitlab_client_id:
+    description: "Gitlab Client ID"
+    required: true
+  gitlab_client_secret:
+    description: "Gitlab Client Secret"
     required: true
 
 runs:
@@ -93,8 +90,6 @@ runs:
         echo "NEXT_PUBLIC_FABRIC=${{ inputs.next_public_fabric }}" >> .env
         echo "NEXT_PUBLIC_SEGMENT_WRITE_KEY=${{ inputs.next_public_segment_write_key }}" >> .env
         echo "NEXT_PUBLIC_VERSION=${{ inputs.next_public_version }}" >> .env
-        echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ inputs.next_public_stripe_publishable_key }}" >> .env
-        echo "NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID=${{ inputs.next_public_stripe_pricing_table_id }}" >> .env
         echo 'NEXT_PUBLIC_PRICE_IDS=${{ inputs.next_public_price_ids }}' >> .env
         cat .env
     - name: Deploy
@@ -102,7 +97,7 @@ runs:
       with:
         mode: ${{ inputs.mode }}
         compose-files: ${{ inputs.compose_file }}
-        config-env-vars: DOMAIN_NAME GITHUB_CLIENT_ID GITHUB_CLIENT_SECRET GITLAB_CLIENT_ID GITLAB_CLIENT_SECRET HASURA_GRAPHQL_ADMIN_SECRET NEXT_PUBLIC_SEGMENT_WRITE_KEY NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY NEXT_PUBLIC_VERSION POSTGRES_PASSWORD SEGMENT_WRITE_KEY STRIPE_SECRET_KEY DEFANG_API_SECRET STRIPE_DEFAULT_PRICE_ID STRIPE_WEBHOOK_SECRET
+        config-env-vars: DOMAIN_NAME GITHUB_CLIENT_ID GITHUB_CLIENT_SECRET HASURA_GRAPHQL_ADMIN_SECRET NEXT_PUBLIC_SEGMENT_WRITE_KEY NEXT_PUBLIC_VERSION POSTGRES_PASSWORD SEGMENT_WRITE_KEY STRIPE_SECRET_KEY DEFANG_API_SECRET STRIPE_WEBHOOK_SECRET DEFANG_FABRIC_SHARED_SECRET GITLAB_CLIENT_ID GITLAB_CLIENT_SECRET
       env:
         DEFANG_PROVIDER: aws
         DOMAIN_NAME: ${{ inputs.domain_name }}
@@ -112,13 +107,11 @@ runs:
         GITLAB_CLIENT_SECRET: ${{ inputs.gitlab_client_secret }}
         HASURA_GRAPHQL_ADMIN_SECRET: ${{ inputs.hasura_graphql_admin_secret }}
         NEXT_PUBLIC_SEGMENT_WRITE_KEY: ${{ inputs.next_public_segment_write_key }}
-        NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID: ${{ inputs.next_public_stripe_pricing_table_id }}
-        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ inputs.next_public_stripe_publishable_key }}
         NEXT_PUBLIC_VERSION: ${{ inputs.next_public_version }}
         POSTGRES_PASSWORD: ${{ inputs.postgres_password }}
         SEGMENT_WRITE_KEY: ${{ inputs.segment_write_key }}
         STRIPE_SECRET_KEY: ${{ inputs.stripe_secret_key }}
         NEXT_PUBLIC_FABRIC: ${{ inputs.next_public_fabric }}
         DEFANG_API_SECRET: ${{ inputs.defang_api_secret }}
+        DEFANG_FABRIC_SHARED_SECRET: ${{ inputs.defang_fabric_shared_secret }}
         STRIPE_WEBHOOK_SECRET: ${{ inputs.stripe_webhook_secret }}
-        STRIPE_DEFAULT_PRICE_ID: ${{ inputs.stripe_default_price_id }}

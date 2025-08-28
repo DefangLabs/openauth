@@ -23,7 +23,7 @@ Once the frontend is running, you can access the site at `http://localhost:3000`
 
 ## Auth
 
-We're using a [Defang fork of OpenAUTH](https://github.com/DefangLabs/openauth). We merge our own features into a branch called `defang` in that repo, which is pulled into a git subtree at `/auth/openauth` in this repo. To update the auth code, you can run `git subtree pull --prefix auth/openauth --squash https://github.com/DefangLabs/openauth defang`
+We're using a [Defang fork of OpenAUTH](https://github.com/DefangLabs/openauth). We merge our own features into a branch called `defang` in that repo, which is pulled into a git subtree at `/auth/openauth` in this repo. To update the auth code, you can run `git subtree pull --prefix auth/openauth https://github.com/DefangLabs/openauth defang`
 
 ## Secrets
 
@@ -80,3 +80,15 @@ sequenceDiagram
   hasura->>heimdall: 10. responds with data
   heimdall->>browser: -
 ```
+
+### Tenants
+
+We pass the tenant ID in the `X-Defang-Tenant-Id` header. See
+[docs/tenants.md](docs/tenants.md) for a detailed overview of how tenant
+management works inside the portal.
+
+### Feature Flags
+
+Feature flags are client-side only and can be toggled via query parameters or
+`localStorage`. Refer to [docs/feature-flags.md](docs/feature-flags.md) for usage
+instructions.
