@@ -51,7 +51,7 @@ export async function upsertStripeCustomer(
       },
     },
     {
-      idempotencyKey: `idem3_${defangTenantId}`,
+      idempotencyKey: `idem4_${defangTenantId}`,
     },
   );
 }
