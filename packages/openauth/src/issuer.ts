@@ -192,7 +192,7 @@ import {
   UnauthorizedClientError,
   UnknownStateError,
 } from "./error.js"
-import { compactDecrypt, CompactEncrypt, jwtVerify, SignJWT } from "jose"
+import { compactDecrypt, CompactEncrypt, createRemoteJWKSet, decodeJwt, jwtVerify, SignJWT } from "jose"
 import { Storage, StorageAdapter } from "./storage/storage.js"
 import { encryptionKeys, legacySigningKeys, signingKeys } from "./keys.js"
 import { validatePKCE } from "./pkce.js"
@@ -1032,6 +1032,68 @@ export function issuer<
         )
       }
 
+      // see https://datatracker.ietf.org/doc/html/rfc7521 and https://datatracker.ietf.org/doc/html/rfc7523 for jwt assertion grant-types spec
+      if (grantType === "urn:ietf:params:oauth:grant-type:jwt-bearer") {
+        const assertion = form.get("assertion")
+        if (!assertion) {
+          return c.json({ error: "missing `assertion` form value" }, 400)
+        }
+
+        const claims = decodeJwt(assertion.toString())
+        if (!claims) {
+          return c.json({ error: "missing jwt claims" }, 400)
+        }
+
+        if (!claims.iss) {
+          return c.json({ error: "missing issuer in jwt claims" }, 400)
+        }
+
+        // get the jwks for the assertion
+        const jwks = createRemoteJWKSet(new URL(`${claims.iss}/.well-known/jwks.json`))
+        try {
+          const result = await jwtVerify(assertion.toString(), jwks, {
+            subject: claims.sub,
+            issuer: claims.iss,
+            audience: claims.aud
+          })
+        } catch (err) {
+          return c.json({ error: "invalid jwt" }, 400)
+        }
+        
+        // Call the success callback to handle JWT bearer token validation
+        return input.success(
+          {
+            async subject(type, properties, opts) {
+              const tokens = await generateTokens(c, {
+                type: type as string,
+                subject: opts?.subject || claims.sub as string,
+                properties,
+                clientID: claims.aud as string,
+                scopes: parseScopes(scope),
+                ttl: {
+                  access: opts?.ttl?.access ?? ((claims.exp as number) - Math.floor(Date.now() / 1000)),
+                  refresh: opts?.ttl?.refresh ?? ttlRefresh,
+                },
+              })
+              return c.json({
+                access_token: tokens.access,
+                refresh_token: tokens.refresh,
+                scope: parseScopes(scope)?.join(" "),
+                expires_in: tokens.expiresIn,
+              })
+            },
+          },
+          {
+            provider: "jwt-bearer",
+            claims: claims,
+            issuer: claims.iss,
+            subject: claims.sub,
+            audience: claims.aud,
+          } as Result,
+          c.req.raw,
+        )
+      }      
+
       throw new Error("Invalid grant_type")
     },
   )
@@ -1155,8 +1217,15 @@ export function issuer<
       "~standard"
     ].validate(result.payload.properties)
 
-    if (!validated.issues && result.payload.mode === "access") {
-      return c.json(validated.value as SubjectSchema)
+    if (validated.issues) {
+      return c.json({
+        error: "invalid_token", 
+        error_description: "Invalid token",
+      })
+    }
+
+    if (result.payload.mode === "access" && 'value' in validated) {
+      return c.json(validated.value)
     }
 
     return c.json({
