@@ -18,8 +18,15 @@
  */
 
 import { Oauth2Provider, Oauth2WrappedConfig } from "./oauth2.js"
+<<<<<<< HEAD
 
 export interface GitlabConfig extends Oauth2WrappedConfig {}
+=======
+import { OidcProvider, OidcWrappedConfig } from "./oidc.js"
+
+export interface GitlabConfig extends Oauth2WrappedConfig {}
+export interface GitlabOidcConfig extends OidcWrappedConfig {}
+>>>>>>> 11b1227 (add gitlab and github actions oidc)
 
 /**
  * Create a Gitlab OAuth2 provider.
@@ -43,3 +50,25 @@ export function GitlabProvider(config: GitlabConfig) {
     },
   })
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * Create a Gitlab OIDC provider.
+ *
+ * @param config - The config for the provider.
+ * @example
+ * ```ts
+ * GitlabOidcProvider({
+ *   clientId: "1234567890"
+ * })
+ * ```
+ */
+export function GitlabOidcProvider(config: GitlabOidcConfig) {
+  return OidcProvider({
+    ...config,
+    type: "gitlab",
+    issuer: "https://gitlab.com",
+  })
+}
+>>>>>>> 11b1227 (add gitlab and github actions oidc)
