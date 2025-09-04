@@ -597,10 +597,14 @@ export function issuer<
       )
     },
     forward(ctx, response) {
+      const headers: Record<string, string> = {}
+      response.headers.forEach((value, name) => {
+        headers[name] = value
+      })
       return ctx.newResponse(
         response.body,
         response.status as any,
-        Object.fromEntries(response.headers.entries()),
+        headers,
       )
     },
     async set(ctx, key, maxAge, value) {
@@ -1001,7 +1005,7 @@ export function issuer<
         const response = await match.client({
           clientID: clientID.toString(),
           clientSecret: clientSecret.toString(),
-          params: Object.fromEntries(form) as Record<string, string>,
+          params: Object.fromEntries(Array.from(form.entries())) as Record<string, string>,
         })
         return input.success(
           {
@@ -1225,7 +1229,7 @@ export function issuer<
     }
 
     if (result.payload.mode === "access" && 'value' in validated) {
-      return c.json(validated.value)
+      return c.json(validated.value as Record<string, any>)
     }
 
     return c.json({
