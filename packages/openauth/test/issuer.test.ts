@@ -167,6 +167,79 @@ describe("client credentials flow", () => {
   })
 })
 
+describe("jwt-bearer grant type", () => {
+  test("success", async () => {
+    // Create a JWT assertion for the test
+    const { SignJWT } = await import("jose")
+    const now = Math.floor(Date.now() / 1000)
+    const jwt = await new SignJWT({
+      sub: "123",
+      iss: "myuser",
+      aud: "https://auth.example.com/token",
+      exp: now + 60,
+      provider: "dummy",
+      email: "foo@bar.com",
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .sign(new TextEncoder().encode("test-secret"))
+
+    const response = await auth.request("https://auth.example.com/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        assertion: jwt,
+        provider: "dummy",
+      }).toString(),
+    })
+
+    expect(response.status).toBe(200)
+    const tokens = await response.json()
+    expect(tokens).toStrictEqual({
+      access_token: expectNonEmptyString,
+      refresh_token: expectNonEmptyString,
+      expires_in: expect.any(Number),
+    })
+
+    const client = createClient({
+      issuer: "https://auth.example.com",
+      clientID: "myuser",
+      fetch: (a, b) => Promise.resolve(auth.request(a, b)),
+    })
+    const verified = await client.verify(subjects, tokens.access_token)
+    if (verified.err) throw verified.err
+    expect(verified).toStrictEqual({
+      aud: "myuser",
+      subject: {
+        type: "user",
+        properties: {
+          userID: "123",
+        },
+      },
+    })
+  })
+
+  test("failure with invalid assertion", async () => {
+    const response = await auth.request("https://auth.example.com/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        assertion: "invalid.jwt.token",
+        provider: "dummy",
+      }).toString(),
+    })
+
+    expect(response.status).toBe(400)
+    const error = await response.json()
+    expect(error.error).toBe("invalid_grant")
+  })
+})
+
 describe("refresh token", () => {
   let tokens: { access: string; refresh: string }
   let client: ReturnType<typeof createClient>
