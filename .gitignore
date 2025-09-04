@@ -1,6 +1,9 @@
-.pnpm-store
-node_modules
-.data
-.DS_Store
-.direnv
+/node_modules
+.sst
 .env
+dist
+persist.json
+.DS_Store
+notes
+.nvim.lua
+.svelte-kit

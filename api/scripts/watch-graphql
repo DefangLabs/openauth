@@ -1,8 +1,0 @@
-#!/bin/bash
-
-until curl -I -X POST http://localhost:3002/v1/graphql -H "x-hasura-admin-secret: password" -H "x-hasura-role: user" 2>/dev/null | grep "HTTP/1.1 200"; do
-    >&2 echo "Hasura is unavailable - waiting"
-    sleep 3
-done
-
-npm run graphql-codegen -- --watch

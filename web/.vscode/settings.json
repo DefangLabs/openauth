@@ -1,6 +1,0 @@
-{
-    "files.exclude": {
-        "web": false,
-        "hasura": false,
-    }
-}

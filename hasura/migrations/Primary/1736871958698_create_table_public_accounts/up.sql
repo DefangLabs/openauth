@@ -1,1 +1,0 @@
-CREATE TABLE "public"."accounts" ("id" uuid NOT NULL, "provider" text NOT NULL, "providerId" text NOT NULL, "email" text NOT NULL, "name" text NOT NULL, "extra" jsonb NOT NULL, PRIMARY KEY ("id") , UNIQUE ("provider", "providerId"));

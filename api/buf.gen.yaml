@@ -1,7 +1,0 @@
-version: v2
-inputs:
-  - directory: src/lib/defang/proto
-plugins:
-  - local: protoc-gen-es
-    out: src/lib/defang/generated
-    opt: target=ts,import_extension=.ts
