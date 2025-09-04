@@ -11,8 +11,9 @@
     "release": "bun run --filter=\"@openauthjs/openauth\" build && changeset publish"
   },
   "devDependencies": {
-    "@tsconfig/node22": "22.0.0",
-    "@types/bun": "latest"
+    "@tsconfig/node22": "22.0.2",
+    "@types/bun": "1.2.21",
+    "@types/node": "22"
   },
   "dependencies": {
     "@changesets/cli": "2.27.10",
