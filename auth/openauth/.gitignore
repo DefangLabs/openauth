@@ -1,8 +1,0 @@
-/node_modules
-.sst
-.env
-dist
-persist.json
-.DS_Store
-notes
-.nvim.lua
