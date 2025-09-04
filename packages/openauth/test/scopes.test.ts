@@ -28,13 +28,13 @@ describe("validate", () => {
     expect(validateScopes(undefined, ["foo"])).toEqual(["foo"])
     expect(validateScopes(null, ["foo"])).toEqual(["foo"])
     expect(validateScopes("foo", ["foo"])).toEqual(["foo"])
-    expect(validateScopes("foo bar", ["foo","bar"])).toEqual(["foo", "bar"])
-    expect(validateScopes("bar foo", ["foo","bar"])).toEqual(["bar", "foo"])
+    expect(validateScopes("foo bar", ["foo", "bar"])).toEqual(["foo", "bar"])
+    expect(validateScopes("bar foo", ["foo", "bar"])).toEqual(["bar", "foo"])
   })
 
   test("narrower scopes", () => {
     expect(validateScopes("", ["foo"])).toBeEmpty()
-    expect(validateScopes("foo", ["foo","bar"])).toEqual(["foo"])
+    expect(validateScopes("foo", ["foo", "bar"])).toEqual(["foo"])
     expect(validateScopes("foo", ["foo", "bar"])).toEqual(["foo"])
   })
 

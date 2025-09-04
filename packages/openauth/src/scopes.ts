@@ -2,7 +2,10 @@ export function parseScopes(scope: string | null | undefined) {
   return scope?.split(" ").filter((s) => s)
 }
 
-export function validateScopes(tokenReq?: string | null, authorizeReq?: string[]) {
+export function validateScopes(
+  tokenReq?: string | null,
+  authorizeReq?: string[],
+) {
   if (!authorizeReq?.length || tokenReq === null || tokenReq === undefined) {
     return authorizeReq
   }
