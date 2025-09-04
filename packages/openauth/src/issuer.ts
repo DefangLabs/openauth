@@ -1055,13 +1055,13 @@ export function issuer<
         // get the jwks for the assertion
         const jwks = createRemoteJWKSet(new URL(`${claims.iss}/.well-known/jwks.json`))
         try {
-          const result = await jwtVerify(assertion.toString(), jwks, {
+          await jwtVerify(assertion.toString(), jwks, {
             subject: claims.sub,
             issuer: claims.iss,
-            audience: claims.aud
+            audience: claims.aud,
           })
         } catch (err) {
-          return c.json({ error: "invalid jwt" }, 400)
+          return c.json({ error: `invalid jwt - ${err instanceof Error ? err.message : String(err)}` }, 400)
         }
         
         // Call the success callback to handle JWT bearer token validation
