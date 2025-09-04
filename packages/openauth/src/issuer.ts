@@ -363,6 +363,24 @@ export interface IssuerInput<
     retention?: number
   }
   /**
+   * List of trusted JWT issuers for JWT bearer token flow.
+   *
+   * When specified, only JWTs from these issuers will be accepted for the
+   * urn:ietf:params:oauth:grant-type:jwt-bearer grant type.
+   *
+   * @example
+   * ```ts
+   * {
+   *   trustedIssuers: [
+   *     "https://gitlab.com",
+   *     "https://github.com",
+   *     "https://accounts.google.com"
+   *   ]
+   * }
+   * ```
+   */
+  trustedIssuers?: string[]
+  /**
    * Optionally, configure the UI that's displayed when the user visits the root URL of the
    * of the OpenAuth server.
    *
@@ -1050,6 +1068,13 @@ export function issuer<
 
         if (!claims.iss) {
           return c.json({ error: "missing issuer in jwt claims" }, 400)
+        }
+
+        // Validate trusted issuers if configured
+        if (input.trustedIssuers && input.trustedIssuers.length > 0) {
+          if (!input.trustedIssuers.includes(claims.iss)) {
+            return c.json({ error: `untrusted issuer: ${claims.iss}` }, 400)
+          }
         }
 
         // get the jwks for the assertion

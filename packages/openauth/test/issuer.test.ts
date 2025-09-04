@@ -7,6 +7,7 @@ import {
   test,
 } from "bun:test"
 import { object, string } from "valibot"
+import { generateKeyPair, SignJWT, exportJWK } from "jose"
 import { createClient } from "../src/client.js"
 import { issuer } from "../src/issuer.js"
 import { Provider } from "../src/provider/provider.js"
@@ -24,6 +25,7 @@ const issuerConfig = {
   storage,
   subjects,
   allow: async () => true,
+  trustedIssuers: ["https://external-issuer.com"], // Add trusted issuers configuration
   ttl: {
     access: 60,
     refresh: 6000,
@@ -57,11 +59,7 @@ const issuerConfig = {
       })
     }
     if (value.provider === "jwt-bearer") {
-      // Validate trusted issuers
-      const trustedIssuers = ["https://trusted-issuer.example.com"]
-      if (!trustedIssuers.includes(value.issuer)) {
-        throw new Error(`Untrusted issuer: ${value.issuer}`)
-      }
+      // No need to validate issuers here since we're using trustedIssuers config
       return ctx.subject("user", {
         userID: value.subject,
       })
@@ -179,39 +177,40 @@ describe("client credentials flow", () => {
 
 describe("jwt-bearer grant type", () => {
   test("success", async () => {
+    const encryptAlgo = "RS256"
     // Generate a key pair for testing
-    const { generateKeyPair, SignJWT } = await import("jose")
-    const { privateKey, publicKey } = await generateKeyPair("RS256", {
+    const { privateKey, publicKey } = await generateKeyPair(encryptAlgo, {
       modulusLength: 2048,
     })
     
     // Mock the JWKS endpoint
     const originalFetch = global.fetch
+
+    // Override global fetch to mock the JWKS endpoint
     ;(global as any).fetch = async (url: string | URL, init?: RequestInit): Promise<Response> => {
-      if (url.toString() === "https://trusted-issuer.example.com/.well-known/jwks.json") {
-        const jwks = await import("jose").then(jose => 
-          jose.exportJWK(publicKey).then(jwk => ({
-            keys: [{ ...jwk, kid: "test-key", use: "sig", alg: "RS256" }]
-          }))
-        )
+      if (url.toString() === "https://external-issuer.com/.well-known/jwks.json") {
+        const jwk = await exportJWK(publicKey)
+        const jwks = {
+          keys: [{ ...jwk, kid: "test-key", use: "sig", alg: encryptAlgo }]
+        }
         return new Response(JSON.stringify(jwks), {
           headers: { "Content-Type": "application/json" }
         })
       }
-      return originalFetch(url, init)
+      return originalFetch.call(global, url, init)
     }
 
     try {
       const now = Math.floor(Date.now() / 1000)
       const jwt = await new SignJWT({
         sub: "123",
-        iss: "https://trusted-issuer.example.com",
+        iss: "https://external-issuer.com",
         aud: "https://auth.example.com/token", 
         exp: now + 60,
         provider: "dummy",
         email: "foo@bar.com",
       })
-        .setProtectedHeader({ alg: "RS256", kid: "test-key" })
+        .setProtectedHeader({ alg: encryptAlgo, kid: "test-key" })
         .sign(privateKey)
 
       const response = await auth.request("https://auth.example.com/token", {
@@ -250,7 +249,7 @@ describe("jwt-bearer grant type", () => {
         },
       })
     } finally {
-      ;(global as any).fetch = originalFetch
+      (global as any).fetch = originalFetch
     }
   })
 
