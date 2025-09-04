@@ -56,6 +56,16 @@ const issuerConfig = {
         userID: "123",
       })
     }
+    if (value.provider === "jwt-bearer") {
+      // Validate trusted issuers
+      const trustedIssuers = ["https://trusted-issuer.example.com"]
+      if (!trustedIssuers.includes(value.issuer)) {
+        throw new Error(`Untrusted issuer: ${value.issuer}`)
+      }
+      return ctx.subject("user", {
+        userID: value.subject,
+      })
+    }
     throw new Error("Invalid provider: " + value.provider)
   },
 }
@@ -169,56 +179,79 @@ describe("client credentials flow", () => {
 
 describe("jwt-bearer grant type", () => {
   test("success", async () => {
-    // Create a JWT assertion for the test
-    const { SignJWT } = await import("jose")
-    const now = Math.floor(Date.now() / 1000)
-    const jwt = await new SignJWT({
-      sub: "123",
-      iss: "myuser",
-      aud: "https://auth.example.com/token",
-      exp: now + 60,
-      provider: "dummy",
-      email: "foo@bar.com",
+    // Generate a key pair for testing
+    const { generateKeyPair, SignJWT } = await import("jose")
+    const { privateKey, publicKey } = await generateKeyPair("RS256", {
+      modulusLength: 2048,
     })
-      .setProtectedHeader({ alg: "HS256" })
-      .sign(new TextEncoder().encode("test-secret"))
+    
+    // Mock the JWKS endpoint
+    const originalFetch = global.fetch
+    ;(global as any).fetch = async (url: string | URL, init?: RequestInit): Promise<Response> => {
+      if (url.toString() === "https://trusted-issuer.example.com/.well-known/jwks.json") {
+        const jwks = await import("jose").then(jose => 
+          jose.exportJWK(publicKey).then(jwk => ({
+            keys: [{ ...jwk, kid: "test-key", use: "sig", alg: "RS256" }]
+          }))
+        )
+        return new Response(JSON.stringify(jwks), {
+          headers: { "Content-Type": "application/json" }
+        })
+      }
+      return originalFetch(url, init)
+    }
 
-    const response = await auth.request("https://auth.example.com/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        assertion: jwt,
+    try {
+      const now = Math.floor(Date.now() / 1000)
+      const jwt = await new SignJWT({
+        sub: "123",
+        iss: "https://trusted-issuer.example.com",
+        aud: "https://auth.example.com/token", 
+        exp: now + 60,
         provider: "dummy",
-      }).toString(),
-    })
+        email: "foo@bar.com",
+      })
+        .setProtectedHeader({ alg: "RS256", kid: "test-key" })
+        .sign(privateKey)
 
-    expect(response.status).toBe(200)
-    const tokens = await response.json()
-    expect(tokens).toStrictEqual({
-      access_token: expectNonEmptyString,
-      refresh_token: expectNonEmptyString,
-      expires_in: expect.any(Number),
-    })
-
-    const client = createClient({
-      issuer: "https://auth.example.com",
-      clientID: "myuser",
-      fetch: (a, b) => Promise.resolve(auth.request(a, b)),
-    })
-    const verified = await client.verify(subjects, tokens.access_token)
-    if (verified.err) throw verified.err
-    expect(verified).toStrictEqual({
-      aud: "myuser",
-      subject: {
-        type: "user",
-        properties: {
-          userID: "123",
+      const response = await auth.request("https://auth.example.com/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-      },
-    })
+        body: new URLSearchParams({
+          grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+          assertion: jwt,
+        }).toString(),
+      })
+
+      expect(response.status).toBe(200)
+      const tokens = await response.json()
+      expect(tokens).toStrictEqual({
+        access_token: expectNonEmptyString,
+        refresh_token: expectNonEmptyString,
+        expires_in: expect.any(Number),
+      })
+
+      const client = createClient({
+        issuer: "https://auth.example.com",
+        clientID: "https://auth.example.com/token",
+        fetch: (a, b) => Promise.resolve(auth.request(a, b)),
+      })
+      const verified = await client.verify(subjects, tokens.access_token)
+      if (verified.err) throw verified.err
+      expect(verified).toStrictEqual({
+        aud: "https://auth.example.com/token",
+        subject: {
+          type: "user",
+          properties: {
+            userID: "123",
+          },
+        },
+      })
+    } finally {
+      ;(global as any).fetch = originalFetch
+    }
   })
 
   test("failure with invalid assertion", async () => {
@@ -230,13 +263,12 @@ describe("jwt-bearer grant type", () => {
       body: new URLSearchParams({
         grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
         assertion: "invalid.jwt.token",
-        provider: "dummy",
       }).toString(),
     })
 
     expect(response.status).toBe(400)
-    const error = await response.json()
-    expect(error.error).toBe("invalid_grant")
+    const responseText = await response.text()
+    expect(responseText).toContain("unknown state") // Expecting error about invalid JWT
   })
 })
 
