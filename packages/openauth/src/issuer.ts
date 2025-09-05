@@ -192,7 +192,7 @@ import {
   UnauthorizedClientError,
   UnknownStateError,
 } from "./error.js"
-import { compactDecrypt, CompactEncrypt, createRemoteJWKSet, decodeJwt, jwtVerify, SignJWT } from "jose"
+import { compactDecrypt, CompactEncrypt, decodeJwt, jwtVerify, SignJWT } from "jose"
 import { Storage, StorageAdapter } from "./storage/storage.js"
 import { encryptionKeys, legacySigningKeys, signingKeys } from "./keys.js"
 import { validatePKCE } from "./pkce.js"
@@ -204,13 +204,22 @@ import { setTheme, Theme } from "./ui/theme.js"
 import { getRelativeUrl, isDomainMatch, lazy } from "./util.js"
 import { cors } from "hono/cors"
 import { logger } from "hono/logger"
+import { OidcProvider } from "./provider/oidc.js"
 
 /** @internal */
 export const aws = awsHandle
 
+interface ResponseLike {
+  json(): Promise<unknown>
+  ok: Response["ok"]
+}
+type FetchLike = (...args: any[]) => Promise<ResponseLike>
+
+
 export interface IssuerInput<
   Providers extends Record<string, Provider<any>>,
   Subjects extends SubjectSchema,
+  OidcProviders extends Record<string, OidcProvider<any>>,
   Result = {
     [key in keyof Providers]: Prettify<
       {
@@ -283,6 +292,37 @@ export interface IssuerInput<
    * ```
    */
   providers: Providers
+
+  /**
+   * The Oidc Providers that you want your OpenAuth server to support.
+   *
+   * @example
+   *
+   * ```ts title="issuer.ts"
+   * import { GithubProvider } from "@openauthjs/openauth/provider/github"
+   *
+   * issuer({
+   *   oidcProviders: {
+   *     github: GithubActionOidcProvider()
+   *   }
+   * })
+   * ```
+   *
+   * The key is just a string that you can use to identify the provider. It's passed back to
+   * the `success` callback.
+   *
+   * You can also specify multiple providers.
+   *
+   * ```ts
+   * {
+   *   oidcProviders: {
+   *     github: GithubActionOidcProvider(),
+   *   }
+   * }
+   * ```
+   */
+  oidcProviders?: OidcProviders
+
   /**
    * Array containing a list of the OAuth 2.0 [RFC6749] "scope" values that this authorization server advertises.
    *
@@ -361,25 +401,9 @@ export interface IssuerInput<
      * @default 0s
      */
     retention?: number
+
+    fetch?: FetchLike
   }
-  /**
-   * List of trusted JWT issuers for JWT bearer token flow.
-   *
-   * When specified, only JWTs from these issuers will be accepted for the
-   * urn:ietf:params:oauth:grant-type:jwt-bearer grant type.
-   *
-   * @example
-   * ```ts
-   * {
-   *   trustedIssuers: [
-   *     "https://gitlab.com",
-   *     "https://github.com",
-   *     "https://accounts.google.com"
-   *   ]
-   * }
-   * ```
-   */
-  trustedIssuers?: string[]
   /**
    * Optionally, configure the UI that's displayed when the user visits the root URL of the
    * of the OpenAuth server.
@@ -475,6 +499,7 @@ export interface IssuerInput<
 export function issuer<
   Providers extends Record<string, Provider<any>>,
   Subjects extends SubjectSchema,
+  OidcProviders extends Record<string, OidcProvider<any>>,
   Result = {
     [key in keyof Providers]: Prettify<
       {
@@ -482,7 +507,7 @@ export function issuer<
       } & (Providers[key] extends Provider<infer T> ? T : {})
     >
   }[keyof Providers],
->(input: IssuerInput<Providers, Subjects, Result>) {
+>(input: IssuerInput<Providers, Subjects, OidcProviders, Result>) {
   const error =
     input.error ??
     function (err) {
@@ -1070,25 +1095,19 @@ export function issuer<
           return c.json({ error: "missing issuer in jwt claims" }, 400)
         }
 
-        // Validate trusted issuers if configured
-        if (input.trustedIssuers && input.trustedIssuers.length > 0) {
-          if (!input.trustedIssuers.includes(claims.iss)) {
-            return c.json({ error: `untrusted issuer: ${claims.iss}` }, 400)
+        let oidcProvider
+        for (const provider in input.oidcProviders) {
+          if (input.oidcProviders[provider]?.issuer === claims.iss) {
+            oidcProvider = input.oidcProviders[provider]
+            break
           }
         }
 
-        // get the jwks for the assertion
-        const jwks = createRemoteJWKSet(new URL(`${claims.iss}/.well-known/jwks.json`))
-        try {
-          await jwtVerify(assertion.toString(), jwks, {
-            subject: claims.sub,
-            issuer: claims.iss,
-            audience: claims.aud,
-          })
-        } catch (err) {
-          return c.json({ error: `invalid jwt - ${err instanceof Error ? err.message : String(err)}` }, 400)
+        if (!oidcProvider) {
+          return c.json({ error: "no matching oidc provider found for issuer" }, 400)
         }
-        
+
+        await oidcProvider.verifyIdToken(assertion.toString())
         // Call the success callback to handle JWT bearer token validation
         return input.success(
           {
@@ -1098,7 +1117,7 @@ export function issuer<
                 subject: opts?.subject || claims.sub as string,
                 properties,
                 clientID: claims.aud as string,
-                scopes: parseScopes(scope),
+                // scopes: parseScopes(scope), validated?
                 ttl: {
                   access: opts?.ttl?.access ?? ((claims.exp as number) - Math.floor(Date.now() / 1000)),
                   refresh: opts?.ttl?.refresh ?? ttlRefresh,
@@ -1107,7 +1126,7 @@ export function issuer<
               return c.json({
                 access_token: tokens.access,
                 refresh_token: tokens.refresh,
-                scope: parseScopes(scope)?.join(" "),
+                // scope: parseScopes(scope)?.join(" "),
                 expires_in: tokens.expiresIn,
               })
             },
@@ -1184,7 +1203,7 @@ export function issuer<
     await auth.set(c, "authorization", 60 * 60 * 24, authorization)
     if (provider) return c.redirect(`/${provider}/authorize`)
     const providers = Object.keys(input.providers)
-    // if (providers.length === 1) return c.redirect(`/${providers[0]}/authorize`)
+    if (providers.length === 1) return c.redirect(`/${providers[0]}/authorize`)
     return auth.forward(
       c,
       await select()(

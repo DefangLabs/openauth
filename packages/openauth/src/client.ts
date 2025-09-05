@@ -49,6 +49,7 @@ import {
 import {
   InvalidAccessTokenError,
   InvalidAuthorizationCodeError,
+  InvalidJWTError,
   InvalidRefreshTokenError,
   InvalidSubjectError,
 } from "./error.js"
@@ -451,6 +452,60 @@ export interface Client {
     redirectURI: string,
     verifier?: string,
   ): Promise<ExchangeSuccess | ExchangeError>
+   /**
+   * Exchange the jwt for access and refresh tokens.
+   *
+   * ```ts
+   * const exchanged = await client.exchange(<code>, <redirect_uri>)
+   * ```
+   *
+   * You call this after the user has been redirected back to your app after the OAuth flow.
+   *
+   * :::tip
+   * For SSR sites, the code is returned in the query parameter.
+   * :::
+   *
+   * So the code comes from the query parameter in the redirect URI. The redirect URI here is
+   * the one that you passed in to the `authorize` call when starting the flow.
+   *
+   * :::tip
+   * For SPA sites, the code is returned through the URL hash.
+   * :::
+   *
+   * If you used the PKCE flow for an SPA app, the code is returned as a part of the redirect URL
+   * hash.
+   *
+   * ```ts {4}
+   * const exchanged = await client.exchange(
+   *   <code>,
+   *   <redirect_uri>,
+   *   <challenge.verifier>
+   * )
+   * ```
+   *
+   * You also need to pass in the previously stored challenge verifier.
+   *
+   * This method returns the access and refresh tokens. Or if it fails, it returns an error that
+   * you can handle depending on the error.
+   *
+   * ```ts
+   * import { InvalidAuthorizationCodeError } from "@openauthjs/openauth/error"
+   *
+   * if (exchanged.err) {
+   *   if (exchanged.err instanceof InvalidAuthorizationCodeError) {
+   *     // handle invalid code error
+   *   }
+   *   else {
+   *     // handle other errors
+   *   }
+   * }
+   *
+   * const { access, refresh } = exchanged.tokens
+   * ```
+   */
+  exchangeJWT(
+    assertion: string,
+  ): Promise<ExchangeSuccess | ExchangeError>
   /**
    * Refreshes the tokens if they have expired. This is used in an SPA app to maintain the
    * session, without logging the user out.
@@ -655,6 +710,34 @@ export function createClient(input: ClientInput): Client {
       if (!tokens.ok) {
         return {
           err: new InvalidAuthorizationCodeError(),
+        }
+      }
+      return {
+        err: false,
+        tokens: {
+          access: json.access_token as string,
+          refresh: json.refresh_token as string,
+          expiresIn: json.expires_in as number,
+        },
+      }
+    },
+    async exchangeJWT(
+      assertion: string,
+    ): Promise<ExchangeSuccess | ExchangeError> {
+      const tokens = await f(issuer + "/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          assertion,
+          grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        }).toString(),
+      })
+      const json = (await tokens.json()) as any
+      if (!tokens.ok) {
+        return {
+          err: new InvalidJWTError(),
         }
       }
       return {

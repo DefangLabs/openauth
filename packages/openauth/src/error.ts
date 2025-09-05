@@ -118,3 +118,12 @@ export class InvalidAuthorizationCodeError extends Error {
     super("Invalid authorization code")
   }
 }
+
+/**
+ * The JWT is invalid.
+ */
+export class InvalidJWTError extends Error {
+  constructor() {
+    super("Invalid JWT")
+  }
+}

@@ -13,6 +13,7 @@ import { issuer } from "../src/issuer.js"
 import { Provider } from "../src/provider/provider.js"
 import { MemoryStorage } from "../src/storage/memory.js"
 import { createSubjects } from "../src/subject.js"
+import { OidcProvider } from "../src/provider/oidc.js"
 
 const subjects = createSubjects({
   user: object({
@@ -21,17 +22,50 @@ const subjects = createSubjects({
 })
 
 let storage = MemoryStorage()
+
+const encryptAlgo = "RS256"
+// Generate a key pair for testing
+const { privateKey, publicKey } = await generateKeyPair(encryptAlgo, {
+  modulusLength: 2048,
+})
+
+const mockProvider: OidcProvider = OidcProvider({
+    clientID: "https://auth.example.com/token",
+    issuer: "https://external-issuer.com",
+    fetch: async (url: string | URL, init?: RequestInit): Promise<Response> => {
+      if (url.toString() === "https://external-issuer.com/.well-known/openid-configuration") {
+        return new Response(JSON.stringify({
+          issuer: "https://external-issuer.com",
+          authorization_endpoint: "https://external-issuer.com/authorize",
+          jwks_uri: "https://external-issuer.com/.well-known/jwks.json",
+        }))
+      }
+
+      if (url.toString() === "https://external-issuer.com/.well-known/jwks.json") {
+        const jwk = await exportJWK(publicKey)
+        const jwks = {
+          keys: [{ ...jwk, kid: "test-key", use: "sig", alg: encryptAlgo }]
+        }
+        return new Response(JSON.stringify(jwks), {
+          headers: { "Content-Type": "application/json" }
+        })
+      }
+      return new Response("Not Found", { status: 404 })
+}})
+  
 const issuerConfig = {
   storage,
   subjects,
   allow: async () => true,
-  trustedIssuers: ["https://external-issuer.com"], // Add trusted issuers configuration
+  oidcProviders: {mockProvider},
   ttl: {
     access: 60,
     refresh: 6000,
     refreshReuse: 60,
     refreshRetention: 6000,
+
   },
+
   providers: {
     dummy: {
       type: "dummy",
@@ -50,7 +84,7 @@ const issuerConfig = {
           email: "foo@bar.com",
         }
       },
-    } satisfies Provider<{ email: string }>,
+    }
   },
   success: async (ctx, value) => {
     if (value.provider === "dummy") {
@@ -177,80 +211,47 @@ describe("client credentials flow", () => {
 
 describe("jwt-bearer grant type", () => {
   test("success", async () => {
-    const encryptAlgo = "RS256"
-    // Generate a key pair for testing
-    const { privateKey, publicKey } = await generateKeyPair(encryptAlgo, {
-      modulusLength: 2048,
-    })
-    
+  
     // Mock the JWKS endpoint
-    const originalFetch = global.fetch
+    const client = createClient({
+      issuer: "https://external-issuer.com",
+      clientID: "https://auth.example.com/token", // This should match the 'aud' claim in the JWT
+      fetch:  async (url: string | URL, init?: RequestInit): Promise<Response> => {
+      return auth.request(url, init)
+    }})
 
-    // Override global fetch to mock the JWKS endpoint
-    ;(global as any).fetch = async (url: string | URL, init?: RequestInit): Promise<Response> => {
-      if (url.toString() === "https://external-issuer.com/.well-known/jwks.json") {
-        const jwk = await exportJWK(publicKey)
-        const jwks = {
-          keys: [{ ...jwk, kid: "test-key", use: "sig", alg: encryptAlgo }]
-        }
-        return new Response(JSON.stringify(jwks), {
-          headers: { "Content-Type": "application/json" }
-        })
-      }
-      return originalFetch.call(global, url, init)
-    }
+    const now = Math.floor(Date.now() / 1000)
+    const jwt = await new SignJWT({
+      sub: "123",
+      iss: "https://external-issuer.com",
+      aud: "https://auth.example.com/token", 
+      exp: now + 60,
+      provider: "dummy",
+      email: "foo@bar.com",
+    })
+      .setProtectedHeader({ alg: encryptAlgo, kid: "test-key" })
+      .sign(privateKey)
 
-    try {
-      const now = Math.floor(Date.now() / 1000)
-      const jwt = await new SignJWT({
-        sub: "123",
-        iss: "https://external-issuer.com",
-        aud: "https://auth.example.com/token", 
-        exp: now + 60,
-        provider: "dummy",
-        email: "foo@bar.com",
-      })
-        .setProtectedHeader({ alg: encryptAlgo, kid: "test-key" })
-        .sign(privateKey)
+    const result = await client.exchangeJWT(jwt)
+    if (result.err) throw result.err
+    const tokens = result.tokens
+    expect(tokens).toStrictEqual({
+      access: expectNonEmptyString,
+      refresh: expectNonEmptyString,
+      expiresIn: expect.any(Number),
+    })
 
-      const response = await auth.request("https://auth.example.com/token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+    const verified = await client.verify(subjects, tokens.access)
+    if (verified.err) throw verified.err
+    expect(verified).toStrictEqual({
+      aud: "https://auth.example.com/token",
+      subject: {
+        type: "user",
+        properties: {
+          userID: "123",
         },
-        body: new URLSearchParams({
-          grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-          assertion: jwt,
-        }).toString(),
-      })
-
-      expect(response.status).toBe(200)
-      const tokens = await response.json()
-      expect(tokens).toStrictEqual({
-        access_token: expectNonEmptyString,
-        refresh_token: expectNonEmptyString,
-        expires_in: expect.any(Number),
-      })
-
-      const client = createClient({
-        issuer: "https://auth.example.com",
-        clientID: "https://auth.example.com/token",
-        fetch: (a, b) => Promise.resolve(auth.request(a, b)),
-      })
-      const verified = await client.verify(subjects, tokens.access_token)
-      if (verified.err) throw verified.err
-      expect(verified).toStrictEqual({
-        aud: "https://auth.example.com/token",
-        subject: {
-          type: "user",
-          properties: {
-            userID: "123",
-          },
-        },
-      })
-    } finally {
-      (global as any).fetch = originalFetch
-    }
+      },
+    })
   })
 
   test("failure with invalid assertion", async () => {

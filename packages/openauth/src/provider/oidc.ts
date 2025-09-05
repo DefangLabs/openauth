@@ -24,6 +24,14 @@ import { OauthError } from "../error.js"
 import { Provider } from "./provider.js"
 import { JWTPayload } from "hono/utils/jwt/types"
 import { getRelativeUrl, lazy } from "../util.js"
+import { verify } from "crypto"
+
+interface ResponseLike {
+  json(): Promise<unknown>
+  ok: Response["ok"]
+  text(): Promise<string>
+}
+type FetchLike = (...args: any[]) => Promise<ResponseLike>
 
 export interface OidcConfig {
   /**
@@ -77,6 +85,8 @@ export interface OidcConfig {
    * ```
    */
   query?: Record<string, string>
+  
+  fetch?: FetchLike
 }
 
 /**
@@ -99,14 +109,20 @@ export interface IdTokenResponse {
   raw: Record<string, any>
 }
 
+export interface OidcProvider<Properties = any> extends Provider<Properties> {
+  issuer: string
+  verifyIdToken: (id_token: string) => Promise<{ payload: JWTPayload; protectedHeader: Record<string, any> }>
+}
+
 export function OidcProvider(
   config: OidcConfig,
-): Provider<{ id: JWTPayload; clientID: string }> {
+): OidcProvider<{ id: JWTPayload; clientID: string }> {
   const query = config.query || {}
   const scopes = config.scopes || []
+  const f = config.fetch || fetch
 
   const wk = lazy(() =>
-    fetch(config.issuer + "/.well-known/openid-configuration").then(
+    f(config.issuer + "/.well-known/openid-configuration").then(
       async (r) => {
         if (!r.ok) throw new Error(await r.text())
         return r.json() as Promise<WellKnown>
@@ -118,14 +134,22 @@ export function OidcProvider(
     wk()
       .then((r) => r.jwks_uri)
       .then(async (uri) => {
-        const r = await fetch(uri)
+        const r = await f(uri)
         if (!r.ok) throw new Error(await r.text())
         return createLocalJWKSet((await r.json()) as JSONWebKeySet)
       }),
   )
 
+  const verifyIdToken = async (id_token: string) => {
+    return jwtVerify(id_token, await jwks(), {
+      audience: config.clientID,
+      issuer: config.issuer,
+    })
+  }
+
   return {
     type: config.type || "oidc",
+    issuer: config.issuer,
     init(routes, ctx) {
       routes.get("/authorize", async (c) => {
         const provider: ProviderState = {
@@ -163,9 +187,8 @@ export function OidcProvider(
         const idToken = body.get("id_token")
         if (!idToken)
           throw new OauthError("invalid_request", "Missing id_token")
-        const result = await jwtVerify(idToken.toString(), await jwks(), {
-          audience: config.clientID,
-        })
+
+        const result = await verifyIdToken(idToken.toString())        
         if (result.payload.nonce !== provider.nonce) {
           throw new OauthError("invalid_request", "Invalid nonce")
         }
@@ -175,5 +198,6 @@ export function OidcProvider(
         })
       })
     },
+    verifyIdToken,
   }
 }
