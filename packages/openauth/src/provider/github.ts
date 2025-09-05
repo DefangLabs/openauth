@@ -61,6 +61,6 @@ export function GithubActionsOidcProvider(config: GithubOidcConfig) {
   return OidcProvider({
     ...config,
     type: "github",
-    issuer: "https://token.actions.githubusercontent.com/",
+    issuer: "https://token.actions.githubusercontent.com",
   })
 }
