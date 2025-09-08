@@ -452,7 +452,7 @@ export interface Client {
     redirectURI: string,
     verifier?: string,
   ): Promise<ExchangeSuccess | ExchangeError>
-   /**
+  /**
    * Exchange the jwt for access and refresh tokens.
    *
    * ```ts
@@ -503,9 +503,7 @@ export interface Client {
    * const { access, refresh } = exchanged.tokens
    * ```
    */
-  exchangeJWT(
-    assertion: string,
-  ): Promise<ExchangeSuccess | ExchangeError>
+  exchangeJWT(assertion: string): Promise<ExchangeSuccess | ExchangeError>
   /**
    * Refreshes the tokens if they have expired. This is used in an SPA app to maintain the
    * session, without logging the user out.

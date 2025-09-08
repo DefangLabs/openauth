@@ -97,7 +97,7 @@ export interface OidcConfig {
    * ```
    */
   query?: Record<string, string>
-  
+
   fetch?: FetchLike
 }
 
@@ -123,7 +123,9 @@ export interface IdTokenResponse {
 
 export interface OidcProvider<Properties = any> extends Provider<Properties> {
   issuer: string
-  verifyIdToken: (id_token: string) => Promise<{ payload: JWTPayload; protectedHeader: Record<string, any> }>
+  verifyIdToken: (
+    id_token: string,
+  ) => Promise<{ payload: JWTPayload; protectedHeader: Record<string, any> }>
 }
 
 export function OidcProvider(
@@ -134,12 +136,10 @@ export function OidcProvider(
   const f = config.fetch || fetch
 
   const wk = lazy(() =>
-    f(config.issuer + "/.well-known/openid-configuration").then(
-      async (r) => {
-        if (!r.ok) throw new Error(await r.text())
-        return r.json() as Promise<WellKnown>
-      },
-    ),
+    f(config.issuer + "/.well-known/openid-configuration").then(async (r) => {
+      if (!r.ok) throw new Error(await r.text())
+      return r.json() as Promise<WellKnown>
+    }),
   )
 
   const jwks = lazy(() =>
@@ -200,7 +200,7 @@ export function OidcProvider(
         if (!idToken)
           throw new OauthError("invalid_request", "Missing id_token")
 
-        const result = await verifyIdToken(idToken.toString())        
+        const result = await verifyIdToken(idToken.toString())
         if (result.payload.nonce !== provider.nonce) {
           throw new OauthError("invalid_request", "Invalid nonce")
         }

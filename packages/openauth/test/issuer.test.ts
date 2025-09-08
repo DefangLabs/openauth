@@ -30,41 +30,48 @@ const { privateKey, publicKey } = await generateKeyPair(encryptAlgo, {
 })
 
 const mockProvider: OidcProvider = OidcProvider({
-    clientID: "https://auth.example.com/token",
-    issuer: "https://external-issuer.com",
-    type: "jwt-bearer",
-    fetch: async (url: string | URL, init?: RequestInit): Promise<Response> => {
-      if (url.toString() === "https://external-issuer.com/.well-known/openid-configuration") {
-        return new Response(JSON.stringify({
+  clientID: "https://auth.example.com/token",
+  issuer: "https://external-issuer.com",
+  type: "jwt-bearer",
+  fetch: async (url: string | URL, init?: RequestInit): Promise<Response> => {
+    if (
+      url.toString() ===
+      "https://external-issuer.com/.well-known/openid-configuration"
+    ) {
+      return new Response(
+        JSON.stringify({
           issuer: "https://external-issuer.com",
           authorization_endpoint: "https://external-issuer.com/authorize",
           jwks_uri: "https://external-issuer.com/.well-known/jwks.json",
-        }))
-      }
+        }),
+      )
+    }
 
-      if (url.toString() === "https://external-issuer.com/.well-known/jwks.json") {
-        const jwk = await exportJWK(publicKey)
-        const jwks = {
-          keys: [{ ...jwk, kid: "test-key", use: "sig", alg: encryptAlgo }]
-        }
-        return new Response(JSON.stringify(jwks), {
-          headers: { "Content-Type": "application/json" }
-        })
+    if (
+      url.toString() === "https://external-issuer.com/.well-known/jwks.json"
+    ) {
+      const jwk = await exportJWK(publicKey)
+      const jwks = {
+        keys: [{ ...jwk, kid: "test-key", use: "sig", alg: encryptAlgo }],
       }
-      return new Response("Not Found", { status: 404 })
-}})
-  
+      return new Response(JSON.stringify(jwks), {
+        headers: { "Content-Type": "application/json" },
+      })
+    }
+    return new Response("Not Found", { status: 404 })
+  },
+})
+
 const issuerConfig = {
   storage,
   subjects,
   allow: async () => true,
-  oidcProviders: {mockProvider},
+  oidcProviders: { mockProvider },
   ttl: {
     access: 60,
     refresh: 6000,
     refreshReuse: 60,
     refreshRetention: 6000,
-
   },
 
   providers: {
@@ -85,7 +92,7 @@ const issuerConfig = {
           email: "foo@bar.com",
         }
       },
-    }
+    },
   },
   success: async (ctx, value) => {
     if (value.provider === "dummy") {
@@ -212,20 +219,23 @@ describe("client credentials flow", () => {
 
 describe("jwt-bearer grant type", () => {
   test("success", async () => {
-  
     // Mock the JWKS endpoint
     const client = createClient({
       issuer: "https://external-issuer.com",
       clientID: "https://auth.example.com/token", // This should match the 'aud' claim in the JWT
-      fetch:  async (url: string | URL, init?: RequestInit): Promise<Response> => {
-      return auth.request(url, init)
-    }})
+      fetch: async (
+        url: string | URL,
+        init?: RequestInit,
+      ): Promise<Response> => {
+        return auth.request(url, init)
+      },
+    })
 
     const now = Math.floor(Date.now() / 1000)
     const jwt = await new SignJWT({
       sub: "123",
       iss: "https://external-issuer.com",
-      aud: "https://auth.example.com/token", 
+      aud: "https://auth.example.com/token",
       exp: now + 60,
       provider: "dummy",
       email: "foo@bar.com",

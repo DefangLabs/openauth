@@ -19,7 +19,7 @@ import { OidcProvider } from "@openauthjs/openauth/provider/oidc"
 const app = issuer({
   providers: {
     gitlab: OidcProvider({
-      clientID: "your-gitlab-app-id", 
+      clientID: "your-gitlab-app-id",
       issuer: "https://gitlab.com"
     })
   },
@@ -31,43 +31,43 @@ const app = issuer({
       const userID = /* map GitLab user to your system */
       return ctx.subject("user", { userID })
     }
-    
+
     if (value.provider === "jwt-bearer") {
       console.log("JWT Bearer token from:", value.issuer)
       console.log("Full claims:", value.claims)
-      
+
       // Validate the issuer - this is where YOU decide who to trust
       const trustedIssuers = [
         "https://gitlab.com",               // Your main GitLab instance
-        "https://accounts.google.com",      // Google service accounts  
+        "https://accounts.google.com",      // Google service accounts
         "https://login.microsoftonline.com" // Azure AD
       ]
-      
+
       if (!trustedIssuers.includes(value.issuer)) {
         throw new Error(`Untrusted issuer: ${value.issuer}`)
       }
-      
+
       // Handle different issuers differently
       if (value.issuer === "https://gitlab.com") {
         // JWT from GitLab (maybe from CI/CD pipeline)
         const userID = /* lookup user from GitLab subject */
         return ctx.subject("user", { userID })
       }
-      
+
       if (value.issuer === "https://accounts.google.com") {
         // JWT from Google service account
         const serviceID = /* extract service info */
         return ctx.subject("service", { serviceID })
       }
-      
+
       // Add validation for additional custom claims
       if (value.claims.custom_role !== "api_access") {
         throw new Error("JWT missing required role")
       }
-      
-      return ctx.subject("api_user", { 
+
+      return ctx.subject("api_user", {
         userID: value.subject,
-        issuer: value.issuer 
+        issuer: value.issuer
       })
     }
   }
@@ -91,7 +91,7 @@ const app = issuer({
      provider: "jwt-bearer",
      claims: JWTPayload, // Full JWT claims object
      issuer: string,     // The JWT issuer
-     subject: string,    // The JWT subject (sub claim)  
+     subject: string,    // The JWT subject (sub claim)
      audience: string    // The JWT audience (aud claim)
    }
    ```

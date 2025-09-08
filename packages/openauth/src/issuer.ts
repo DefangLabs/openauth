@@ -192,7 +192,13 @@ import {
   UnauthorizedClientError,
   UnknownStateError,
 } from "./error.js"
-import { compactDecrypt, CompactEncrypt, decodeJwt, jwtVerify, SignJWT } from "jose"
+import {
+  compactDecrypt,
+  CompactEncrypt,
+  decodeJwt,
+  jwtVerify,
+  SignJWT,
+} from "jose"
 import { Storage, StorageAdapter } from "./storage/storage.js"
 import { encryptionKeys, legacySigningKeys, signingKeys } from "./keys.js"
 import { validatePKCE } from "./pkce.js"
@@ -214,7 +220,6 @@ interface ResponseLike {
   ok: Response["ok"]
 }
 type FetchLike = (...args: any[]) => Promise<ResponseLike>
-
 
 export interface IssuerInput<
   Providers extends Record<string, Provider<any>>,
@@ -644,11 +649,7 @@ export function issuer<
       response.headers.forEach((value, name) => {
         headers[name] = value
       })
-      return ctx.newResponse(
-        response.body,
-        response.status as any,
-        headers,
-      )
+      return ctx.newResponse(response.body, response.status as any, headers)
     },
     async set(ctx, key, maxAge, value) {
       setCookie(ctx, key, await encrypt(value), {
@@ -1048,7 +1049,10 @@ export function issuer<
         const response = await match.client({
           clientID: clientID.toString(),
           clientSecret: clientSecret.toString(),
-          params: Object.fromEntries(Array.from(form.entries())) as Record<string, string>,
+          params: Object.fromEntries(Array.from(form.entries())) as Record<
+            string,
+            string
+          >,
         })
         return input.success(
           {
@@ -1104,7 +1108,10 @@ export function issuer<
         }
 
         if (!oidcProvider) {
-          return c.json({ error: "no matching oidc provider found for issuer" }, 400)
+          return c.json(
+            { error: "no matching oidc provider found for issuer" },
+            400,
+          )
         }
 
         await oidcProvider.verifyIdToken(assertion.toString())
@@ -1114,12 +1121,14 @@ export function issuer<
             async subject(type, properties, opts) {
               const tokens = await generateTokens(c, {
                 type: type as string,
-                subject: opts?.subject || claims.sub as string,
+                subject: opts?.subject || (claims.sub as string),
                 properties,
                 clientID: claims.aud as string,
                 // scopes: parseScopes(scope), validated?
                 ttl: {
-                  access: opts?.ttl?.access ?? ((claims.exp as number) - Math.floor(Date.now() / 1000)),
+                  access:
+                    opts?.ttl?.access ??
+                    (claims.exp as number) - Math.floor(Date.now() / 1000),
                   refresh: opts?.ttl?.refresh ?? ttlRefresh,
                 },
               })
@@ -1140,7 +1149,7 @@ export function issuer<
           } as Result,
           c.req.raw,
         )
-      }      
+      }
 
       throw new Error("Invalid grant_type")
     },
@@ -1267,12 +1276,12 @@ export function issuer<
 
     if (validated.issues) {
       return c.json({
-        error: "invalid_token", 
+        error: "invalid_token",
         error_description: "Invalid token",
       })
     }
 
-    if (result.payload.mode === "access" && 'value' in validated) {
+    if (result.payload.mode === "access" && "value" in validated) {
       return c.json(validated.value as Record<string, any>)
     }
 
