@@ -32,6 +32,7 @@ const { privateKey, publicKey } = await generateKeyPair(encryptAlgo, {
 const mockProvider: OidcProvider = OidcProvider({
     clientID: "https://auth.example.com/token",
     issuer: "https://external-issuer.com",
+    type: "jwt-bearer",
     fetch: async (url: string | URL, init?: RequestInit): Promise<Response> => {
       if (url.toString() === "https://external-issuer.com/.well-known/openid-configuration") {
         return new Response(JSON.stringify({
