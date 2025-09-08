@@ -1132,7 +1132,7 @@ export function issuer<
             },
           },
           {
-            provider: "jwt-bearer",
+            provider: oidcProvider.type,
             claims: claims,
             issuer: claims.iss,
             subject: claims.sub,

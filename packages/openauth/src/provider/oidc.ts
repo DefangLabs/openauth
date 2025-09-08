@@ -74,6 +74,18 @@ export interface OidcConfig {
    */
   scopes?: string[]
   /**
+   * The expected audience for JWT verification.
+   * If not provided, defaults to clientID.
+   *
+   * @example
+   * ```ts
+   * {
+   *   audience: "https://github.com/owner/repo"
+   * }
+   * ```
+   */
+  audience?: string
+  /**
    * Any additional parameters that you want to pass to the authorization endpoint.
    * @example
    * ```ts
@@ -142,7 +154,7 @@ export function OidcProvider(
 
   const verifyIdToken = async (id_token: string) => {
     return jwtVerify(id_token, await jwks(), {
-      audience: config.clientID,
+      audience: config.audience || config.clientID,
       issuer: config.issuer,
     })
   }
