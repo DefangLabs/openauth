@@ -1079,25 +1079,34 @@ export function issuer<
       if (grantType === "urn:ietf:params:oauth:grant-type:jwt-bearer") {
         const assertion = form.get("assertion")
         if (!assertion) {
-          return c.json({
-            error: "invalid_grant",
-            error_description: "Missing assertion parameter"
-          }, 400)
+          return c.json(
+            {
+              error: "invalid_grant",
+              error_description: "Missing assertion parameter",
+            },
+            400,
+          )
         }
 
         const claims = decodeJwt(assertion.toString())
         if (!claims) {
-          return c.json({
-            error: "invalid_grant",
-            error_description: "JWT assertion could not be decoded"
-          }, 400)
+          return c.json(
+            {
+              error: "invalid_grant",
+              error_description: "JWT assertion could not be decoded",
+            },
+            400,
+          )
         }
 
         if (!claims.iss) {
-          return c.json({
-            error: "invalid_grant",
-            error_description: "JWT assertion missing required issuer claim"
-          }, 400)
+          return c.json(
+            {
+              error: "invalid_grant",
+              error_description: "JWT assertion missing required issuer claim",
+            },
+            400,
+          )
         }
 
         let oidcProvider
@@ -1109,19 +1118,26 @@ export function issuer<
         }
 
         if (!oidcProvider) {
-          return c.json({
-            error: "invalid_grant",
-            error_description: "JWT assertion from untrusted issuer"
-          }, 400)
+          return c.json(
+            {
+              error: "invalid_grant",
+              error_description: "JWT assertion from untrusted issuer",
+            },
+            400,
+          )
         }
 
         try {
           await oidcProvider.verifyIdToken(assertion.toString())
         } catch (error) {
-          return c.json({
-            error: "invalid_grant",
-            error_description: "JWT assertion signature verification failed or token expired"
-          }, 400)
+          return c.json(
+            {
+              error: "invalid_grant",
+              error_description:
+                "JWT assertion signature verification failed or token expired",
+            },
+            400,
+          )
         }
 
         // Call the success callback to handle JWT bearer token validation

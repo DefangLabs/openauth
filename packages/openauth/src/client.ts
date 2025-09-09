@@ -459,14 +459,14 @@ export interface Client {
    * const exchanged = await client.exchangeJWT(<jwt_assertion>)
    * ```
    *
-   * This implements the JWT Bearer grant type (RFC 7523) where you exchange a signed JWT 
+   * This implements the JWT Bearer grant type (RFC 7523) where you exchange a signed JWT
    * for OpenAuth access and refresh tokens.
    *
    * :::tip
    * The JWT must be signed by a trusted issuer configured in your OpenAuth server.
    * :::
    *
-   * The JWT assertion should contain standard claims like `iss` (issuer), `sub` (subject), 
+   * The JWT assertion should contain standard claims like `iss` (issuer), `sub` (subject),
    * `aud` (audience), and `exp` (expiration). The issuer must match one of your configured
    * OIDC providers.
    *

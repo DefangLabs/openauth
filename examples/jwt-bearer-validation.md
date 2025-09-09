@@ -18,7 +18,7 @@ Configure `oidcProviders` for each JWT issuer you want to accept:
 
 ```typescript
 import { issuer } from "@openauthjs/openauth"
-import { OidcProvider } from "@openauthjs/openauth/provider/oidc" 
+import { OidcProvider } from "@openauthjs/openauth/provider/oidc"
 import { GitHubProvider } from "@openauthjs/openauth/provider/github"
 
 const app = issuer({
@@ -26,7 +26,7 @@ const app = issuer({
   oidcProviders: {
     gitlab: OidcProvider({
       clientID: "https://gitlab.com", // Must match JWT 'aud' claim
-      issuer: "https://gitlab.com",   // Must match JWT 'iss' claim  
+      issuer: "https://gitlab.com",   // Must match JWT 'iss' claim
       provider: "gitlab"              // Provider type identifier
     }),
     github: OidcProvider({
@@ -35,7 +35,7 @@ const app = issuer({
       provider: "github"
     })
   },
-  
+
   // Regular OAuth providers for interactive login
   providers: {
     github: GitHubProvider({
@@ -43,10 +43,10 @@ const app = issuer({
       clientSecret: process.env.GITHUB_CLIENT_SECRET!
     })
   },
-  
+
   subjects: { /* your subjects */ },
   storage: /* your storage */,
-  
+
   success: async (ctx, value) => {
     // Handle regular OAuth providers
     if (value.provider === "github") {
@@ -57,7 +57,7 @@ const app = issuer({
         tenant: user.defaultTenant,
         hasura: {
           "x-hasura-allowed-roles": ["user"],
-          "x-hasura-default-role": "user", 
+          "x-hasura-default-role": "user",
           "x-hasura-user-id": user.id,
         },
         externalTenants: user.tenants.map(t => t.id),
@@ -74,7 +74,7 @@ const app = issuer({
 
       // The JWT signature is already validated by OpenAuth using JWKS
       // Map different issuers to appropriate subjects
-      
+
       if (value.issuer === "https://gitlab.com") {
         // JWT from GitLab CI/CD pipeline
         return ctx.subject("service", {
@@ -98,7 +98,7 @@ const app = issuer({
         audience: value.audience
       })
     }
-    
+
     throw new Error(`Unsupported provider: ${value.provider}`)
   }
 })
@@ -123,7 +123,7 @@ const app = issuer({
      provider: string,        // OIDC provider type (from config.type)
      claims: JWTPayload,      // Full JWT claims object
      issuer: string,          // The JWT issuer (iss claim)
-     subject: string,         // The JWT subject (sub claim)  
+     subject: string,         // The JWT subject (sub claim)
      audience: string         // The JWT audience (aud claim)
    }
    ```
