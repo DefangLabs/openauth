@@ -215,12 +215,6 @@ import { OidcProvider } from "./provider/oidc.js"
 /** @internal */
 export const aws = awsHandle
 
-interface ResponseLike {
-  json(): Promise<unknown>
-  ok: Response["ok"]
-}
-type FetchLike = (...args: any[]) => Promise<ResponseLike>
-
 export interface IssuerInput<
   Providers extends Record<string, Provider<any>>,
   Subjects extends SubjectSchema,
@@ -406,8 +400,6 @@ export interface IssuerInput<
      * @default 0s
      */
     retention?: number
-
-    fetch?: FetchLike
   }
   /**
    * Optionally, configure the UI that's displayed when the user visits the root URL of the
@@ -1087,16 +1079,25 @@ export function issuer<
       if (grantType === "urn:ietf:params:oauth:grant-type:jwt-bearer") {
         const assertion = form.get("assertion")
         if (!assertion) {
-          return c.json({ error: "missing `assertion` form value" }, 400)
+          return c.json({
+            error: "invalid_grant",
+            error_description: "Missing assertion parameter"
+          }, 400)
         }
 
         const claims = decodeJwt(assertion.toString())
         if (!claims) {
-          return c.json({ error: "missing jwt claims" }, 400)
+          return c.json({
+            error: "invalid_grant",
+            error_description: "JWT assertion could not be decoded"
+          }, 400)
         }
 
         if (!claims.iss) {
-          return c.json({ error: "missing issuer in jwt claims" }, 400)
+          return c.json({
+            error: "invalid_grant",
+            error_description: "JWT assertion missing required issuer claim"
+          }, 400)
         }
 
         let oidcProvider
@@ -1108,13 +1109,21 @@ export function issuer<
         }
 
         if (!oidcProvider) {
-          return c.json(
-            { error: "no matching oidc provider found for issuer" },
-            400,
-          )
+          return c.json({
+            error: "invalid_grant",
+            error_description: "JWT assertion from untrusted issuer"
+          }, 400)
         }
 
-        await oidcProvider.verifyIdToken(assertion.toString())
+        try {
+          await oidcProvider.verifyIdToken(assertion.toString())
+        } catch (error) {
+          return c.json({
+            error: "invalid_grant",
+            error_description: "JWT assertion signature verification failed or token expired"
+          }, 400)
+        }
+
         // Call the success callback to handle JWT bearer token validation
         return input.success(
           {
@@ -1274,15 +1283,8 @@ export function issuer<
       "~standard"
     ].validate(result.payload.properties)
 
-    if (validated.issues) {
-      return c.json({
-        error: "invalid_token",
-        error_description: "Invalid token",
-      })
-    }
-
-    if (result.payload.mode === "access" && "value" in validated) {
-      return c.json(validated.value as Record<string, any>)
+    if (!validated.issues && result.payload.mode === "access") {
+      return c.json(validated.value as SubjectSchema)
     }
 
     return c.json({

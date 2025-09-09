@@ -98,6 +98,12 @@ export interface OidcConfig {
    */
   query?: Record<string, string>
 
+  /**
+   * Optionally, override the internally used fetch function.
+   *
+   * This is useful if you are using a polyfilled fetch function in your application and you
+   * want the client to use it too.
+   */
   fetch?: FetchLike
 }
 

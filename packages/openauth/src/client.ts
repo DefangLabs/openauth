@@ -453,47 +453,38 @@ export interface Client {
     verifier?: string,
   ): Promise<ExchangeSuccess | ExchangeError>
   /**
-   * Exchange the jwt for access and refresh tokens.
+   * Exchange a JWT assertion for access and refresh tokens using the JWT Bearer grant type.
    *
    * ```ts
-   * const exchanged = await client.exchange(<code>, <redirect_uri>)
+   * const exchanged = await client.exchangeJWT(<jwt_assertion>)
    * ```
    *
-   * You call this after the user has been redirected back to your app after the OAuth flow.
+   * This implements the JWT Bearer grant type (RFC 7523) where you exchange a signed JWT 
+   * for OpenAuth access and refresh tokens.
    *
    * :::tip
-   * For SSR sites, the code is returned in the query parameter.
+   * The JWT must be signed by a trusted issuer configured in your OpenAuth server.
    * :::
    *
-   * So the code comes from the query parameter in the redirect URI. The redirect URI here is
-   * the one that you passed in to the `authorize` call when starting the flow.
+   * The JWT assertion should contain standard claims like `iss` (issuer), `sub` (subject), 
+   * `aud` (audience), and `exp` (expiration). The issuer must match one of your configured
+   * OIDC providers.
    *
-   * :::tip
-   * For SPA sites, the code is returned through the URL hash.
-   * :::
-   *
-   * If you used the PKCE flow for an SPA app, the code is returned as a part of the redirect URL
-   * hash.
-   *
-   * ```ts {4}
-   * const exchanged = await client.exchange(
-   *   <code>,
-   *   <redirect_uri>,
-   *   <challenge.verifier>
-   * )
+   * ```ts
+   * // Example: exchanging a GitLab CI JWT
+   * const gitlabJWT = process.env.OIDC_TOKEN
+   * const exchanged = await client.exchangeJWT(gitlabJWT)
    * ```
-   *
-   * You also need to pass in the previously stored challenge verifier.
    *
    * This method returns the access and refresh tokens. Or if it fails, it returns an error that
    * you can handle depending on the error.
    *
    * ```ts
-   * import { InvalidAuthorizationCodeError } from "@openauthjs/openauth/error"
+   * import { InvalidJWTError } from "@openauthjs/openauth/error"
    *
    * if (exchanged.err) {
-   *   if (exchanged.err instanceof InvalidAuthorizationCodeError) {
-   *     // handle invalid code error
+   *   if (exchanged.err instanceof InvalidJWTError) {
+   *     // handle invalid JWT error (signature verification failed, untrusted issuer, etc.)
    *   }
    *   else {
    *     // handle other errors
