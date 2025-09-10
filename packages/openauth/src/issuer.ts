@@ -1088,12 +1088,33 @@ export function issuer<
           )
         }
 
-        const claims = decodeJwt(assertion.toString())
-        if (!claims) {
+        let claims
+        try {
+          claims = decodeJwt(assertion.toString())
+          if (!claims) {
+            return c.json(
+              {
+                error: "invalid_grant",
+                error_description: "JWT assertion could not be decoded",
+              },
+              400,
+            )
+          }
+        } catch (error) {
           return c.json(
             {
               error: "invalid_grant",
               error_description: "JWT assertion could not be decoded",
+            },
+            400,
+          )
+        }
+
+        if (claims == undefined) {
+          return c.json(
+            {
+              error: "invalid_grant",
+              error_description: "no claims found in JWT assertion",
             },
             400,
           )
