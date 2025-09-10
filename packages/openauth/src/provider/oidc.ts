@@ -159,7 +159,7 @@ export function OidcProvider(
   )
 
   const verifyIdToken = async (id_token: string) => {
-    console.log("Verifying ID token with config:", config);
+    console.log("Verifying ID token with config:", config)
     const verifyOptions: any = {
       issuer: config.issuer,
     }
