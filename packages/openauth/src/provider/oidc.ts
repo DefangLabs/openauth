@@ -159,10 +159,17 @@ export function OidcProvider(
   )
 
   const verifyIdToken = async (id_token: string) => {
-    return jwtVerify(id_token, await jwks(), {
-      audience: config.audience || config.clientID,
+    console.log("Verifying ID token with config:", config);
+    const verifyOptions: any = {
       issuer: config.issuer,
-    })
+    }
+
+    // Only include audience validation if audience is specified
+    if (config.audience) {
+      verifyOptions.audience = config.audience
+    }
+
+    return jwtVerify(id_token, await jwks(), verifyOptions)
   }
 
   return {
