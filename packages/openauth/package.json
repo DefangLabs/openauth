@@ -29,7 +29,7 @@
     }
   },
   "peerDependencies": {
-    "hono": "^4.0.0",
+    "hono": "~4.11.4",
     "arctic": "^2.2.2"
   },
   "dependencies": {
