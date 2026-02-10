@@ -172,6 +172,7 @@ export interface AuthorizationState {
   state: string
   client_id: string
   audience?: string
+  prompts?: string
   pkce?: {
     challenge: string
     method: "S256"
@@ -1018,12 +1019,14 @@ export function issuer<
     const audience = c.req.query("audience")
     const code_challenge = c.req.query("code_challenge")
     const code_challenge_method = c.req.query("code_challenge_method")
+    const prompt = c.req.query("prompt")
     const authorization: AuthorizationState = {
       response_type,
       redirect_uri,
       state,
       client_id,
       audience,
+      prompt,
       pkce:
         code_challenge && code_challenge_method
           ? {
@@ -1062,7 +1065,11 @@ export function issuer<
     )
       throw new UnauthorizedClientError(client_id, redirect_uri)
     await auth.set(c, "authorization", 60 * 60 * 24, authorization)
-    if (provider) return c.redirect(`/${provider}/authorize`)
+    if (provider) {
+      const providerUrl = new URL(`/${provider}/authorize`, c.req.url)
+      if (prompt) providerUrl.searchParams.set("prompt", prompt)
+      return c.redirect(providerUrl.pathname + providerUrl.search)
+    }
     const providers = Object.keys(input.providers)
     if (providers.length === 1) return c.redirect(`/${providers[0]}/authorize`)
     return auth.forward(
