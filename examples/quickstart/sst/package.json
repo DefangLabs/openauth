@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@openauthjs/openauth": "^0.3.2",
-    "hono": "~4.9.7",
+    "hono": "~4.12.23",
     "next": "15.4.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
