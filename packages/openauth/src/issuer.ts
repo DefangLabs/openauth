@@ -202,6 +202,18 @@ import { DynamoStorage } from "./storage/dynamo.js"
 import { MemoryStorage } from "./storage/memory.js"
 import { cors } from "hono/cors"
 import { logger } from "hono/logger"
+import { resolveTenant, Tenant, TenantsInput } from "./tenant.js"
+import {
+  AgentKeyError,
+  agentJWKS,
+  listAgentKeys,
+  registerAgentKey,
+  revokeAgentKey,
+} from "./agents/keys.js"
+import {
+  discoveryDocument,
+  JWKS_CACHE_CONTROL,
+} from "./agents/discovery.js"
 
 /** @internal */
 export const aws = awsHandle
@@ -436,6 +448,26 @@ export interface IssuerInput<
     },
     req: Request,
   ): Promise<boolean>
+  /**
+   * Enable multi-tenant agent identity on subdomains. See
+   * `docs/agent-identity.md`. Purely additive: hosts outside
+   * `*.<tenants.domain>` keep the existing OpenAuth behavior.
+   *
+   * @example
+   * ```ts
+   * issuer({
+   *   tenants: {
+   *     domain: "auth.example.com",
+   *     tenants: {
+   *       tenant1: {},
+   *       tenant2: {},
+   *     },
+   *   },
+   *   // ...
+   * })
+   * ```
+   */
+  tenants?: TenantsInput
 }
 
 /**
@@ -728,8 +760,111 @@ export function issuer<
   const app = new Hono<{
     Variables: {
       authorization: AuthorizationState
+      tenant?: Tenant
     }
   }>().use(logger())
+
+  if (input.tenants) {
+    const tenants = input.tenants
+    // Tenant subdomains are a separate namespace: only agent-identity
+    // endpoints exist there. Unknown subdomains of the tenant domain fail
+    // closed; hosts outside it fall through to normal OpenAuth behavior.
+    const TENANT_ROUTES = /^\/(\.well-known\/(openid-configuration|jwks\.json)|keys(\/.*)?)$/
+    app.use(async (c, next) => {
+      const host = c.req.header("x-forwarded-host") ?? c.req.header("host")
+      const resolved = resolveTenant(tenants, host)
+      if (resolved.kind === "not-tenant") return next()
+      if (resolved.kind === "unknown-tenant") return c.notFound()
+      if (!TENANT_ROUTES.test(new URL(c.req.url).pathname)) return c.notFound()
+      c.set("tenant", resolved.tenant)
+      return next()
+    })
+
+    const bearerSubject = async (c: Context): Promise<string> => {
+      const header = c.req.header("Authorization")
+      const [type, token] = header?.split(" ") ?? []
+      if (type !== "Bearer" || !token)
+        throw new AgentKeyError(401, "Bearer token required")
+      try {
+        const result = await jwtVerify<{ mode: string }>(
+          token,
+          async (header) => {
+            const all = await allSigning()
+            const match = all.find((item) => item.id === header.kid)
+            if (!match) throw new Error("unknown kid")
+            return match.public
+          },
+        )
+        if (result.payload.mode !== "access" || !result.payload.sub)
+          throw new Error("not an access token")
+        return result.payload.sub
+      } catch {
+        throw new AgentKeyError(401, "invalid or expired access token")
+      }
+    }
+
+    app.get("/.well-known/openid-configuration", cors({ origin: "*" }), async (c, next) => {
+      const tenant = c.get("tenant")
+      if (!tenant) return next()
+      return c.json(discoveryDocument(tenant.issuer))
+    })
+
+    app.get("/.well-known/jwks.json", cors({ origin: "*" }), async (c, next) => {
+      const tenant = c.get("tenant")
+      if (!tenant) return next()
+      c.header("Cache-Control", JWKS_CACHE_CONTROL)
+      return c.json(await agentJWKS(storage!, tenant.id))
+    })
+
+    const keys = new Hono<{ Variables: { tenant?: Tenant } }>()
+    keys.use(async (c, next) => {
+      if (!c.get("tenant")) return c.notFound()
+      return next()
+    })
+    keys.post("/", async (c) => {
+      const tenant = c.get("tenant")!
+      const owner = await bearerSubject(c)
+      const body = await c.req.json().catch(() => {
+        throw new AgentKeyError(400, "body must be JSON")
+      })
+      const record = await registerAgentKey(storage!, tenant.id, {
+        projectID: body.project_id,
+        stackID: body.stack_id,
+        jwk: body.jwk,
+        popJwt: body.pop_jwt,
+        ttlSeconds: body.ttl_seconds,
+        owner,
+      })
+      return c.json({
+        kid: record.kid,
+        sub: record.subject,
+        issuer: tenant.issuer,
+        exp: record.exp,
+      })
+    })
+    keys.get("/", async (c) => {
+      const tenant = c.get("tenant")!
+      const owner = await bearerSubject(c)
+      const records = await listAgentKeys(storage!, tenant.id, owner)
+      return c.json({
+        keys: records.map((record) => ({
+          kid: record.kid,
+          sub: record.subject,
+          project_id: record.projectID,
+          stack_id: record.stackID,
+          created: record.created,
+          exp: record.exp,
+        })),
+      })
+    })
+    keys.delete("/:kid", async (c) => {
+      const tenant = c.get("tenant")!
+      const owner = await bearerSubject(c)
+      await revokeAgentKey(storage!, tenant.id, owner, c.req.param("kid"))
+      return c.body(null, 204)
+    })
+    app.route("/keys", keys)
+  }
 
   for (const [name, value] of Object.entries(input.providers)) {
     const route = new Hono<any>()
@@ -1137,6 +1272,15 @@ export function issuer<
   })
 
   app.onError(async (err, c) => {
+    if (err instanceof AgentKeyError) {
+      const error = {
+        400: "invalid_request",
+        401: "unauthorized",
+        404: "not_found",
+        409: "conflict",
+      }[err.status]
+      return c.json({ error, error_description: err.message }, err.status)
+    }
     console.error(err)
     if (err instanceof UnknownStateError) {
       return auth.forward(c, await error(err, c.req.raw))
