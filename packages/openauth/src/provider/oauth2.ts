@@ -242,6 +242,10 @@ export function Oauth2Provider(
         for (const [key, value] of Object.entries(query)) {
           authorization.searchParams.set(key, value)
         }
+        const prompt = c.req.query("prompt")
+        if (prompt) {
+          authorization.searchParams.set("prompt", prompt)
+        }
         return c.redirect(authorization.toString())
       })
 

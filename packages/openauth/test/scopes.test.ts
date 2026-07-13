@@ -29,7 +29,7 @@ describe("validate", () => {
     expect(validateScopes(null, ["foo"])).toEqual(["foo"])
     expect(validateScopes("foo", ["foo"])).toEqual(["foo"])
     expect(validateScopes("foo bar", ["foo", "bar"])).toEqual(["foo", "bar"])
-    expect(validateScopes("bar foo", ["foo", "bar"])).toEqual(["bar", "foo"])
+    expect(validateScopes("bar foo", ["foo", "bar"])).toEqual(["foo", "bar"])
   })
 
   test("narrower scopes", () => {

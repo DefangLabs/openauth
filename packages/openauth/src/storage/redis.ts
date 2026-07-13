@@ -2,6 +2,7 @@ import { Redis, RedisOptions } from "ioredis"
 import { joinKey, splitKey, StorageAdapter } from "./storage.js"
 
 export interface RedisStorageOptions {
+  clusterMode: boolean
   connectionUrl: string
 }
 
@@ -19,7 +20,11 @@ export function RedisStorage<
   T extends RedisStorageOptions | RedisStorageCredentials,
 >(opts: OnlyOne<T>): StorageAdapter {
   const client =
-    "connectionUrl" in opts ? new Redis(opts.connectionUrl) : new Redis(opts)
+    "clusterMode" in opts && opts.clusterMode
+      ? new Redis.Cluster([opts.connectionUrl.replace(/rediss?:\/\//, "")]) // Cluster expects an array of host:port
+      : "connectionUrl" in opts
+        ? new Redis(opts.connectionUrl)
+        : new Redis(opts)
 
   return {
     async get(key: string[]) {
