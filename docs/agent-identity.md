@@ -165,6 +165,7 @@ defang:project:<project_id>:stack:<stack_id>
 
 - **Workspace/tenant** in `iss`, not in `sub`.
 - **Stack** in `sub` — stacks are Defang's natural cloud-permission boundary, and trust-config string match works uniformly across all clouds.
+- **Labeled segments (`project:`, `stack:`), not positional (`defang:<pid>:<sid>`).** The sub schema is frozen the moment customers write trust configs against it — those live in customer cloud accounts and can't be migrated from our side. Labels are self-describing, so future identity shapes (org-level, user-scoped) can coexist without making `defang:a:b` ambiguous, and wildcard trust configs document their own blast radius: `defang:project:*` visibly grants "any project" where the positional `defang:*` says nothing. Same road GitHub Actions (`repo:owner/name:ref:…`) and GitLab OIDC took. Cloud wildcards are greedy (`*` matches `:` too) — one more reason never to append segments after `stack:`.
 - **Key identity (kid) is NOT in sub.** The relying party (cloud STS) finds the right public key via the JWT header `kid`, then verifies the signature — that's the per-key gate. `sub` is the identity assertion the trust config matches, and at the granularity Defang customers actually want to manage, that's `(project, stack)`, not `(project, stack, individual-agent)`.
 
 A customer writing an Azure federated credential trust config:
